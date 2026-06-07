@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OnboardingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -12,9 +13,12 @@ Route::get('/playground', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('onboarding', [OnboardingController::class, 'show'])->name('onboarding.show');
+    Route::post('onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
+
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
-    })->name('dashboard');
+    })->middleware('onboarded')->name('dashboard');
 });
 
 require __DIR__.'/settings.php';

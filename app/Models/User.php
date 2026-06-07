@@ -3,13 +3,16 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -21,6 +24,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'status',
+        'onboarded_at',
     ];
 
     /**
@@ -43,6 +50,39 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'onboarded_at' => 'datetime',
+            'role' => UserRole::class,
         ];
+    }
+
+    /**
+     * The client profile associated with the user (for users who book sessions).
+     */
+    public function clientProfile(): HasOne
+    {
+        return $this->hasOne(ClientProfile::class);
+    }
+
+    public function isClient(): bool
+    {
+        return $this->role === UserRole::Client;
+    }
+
+    public function isPractitioner(): bool
+    {
+        return $this->role === UserRole::Practitioner;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin;
+    }
+
+    /**
+     * Whether the user has completed the onboarding questionnaire.
+     */
+    public function hasCompletedOnboarding(): bool
+    {
+        return $this->onboarded_at !== null;
     }
 }
