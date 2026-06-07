@@ -1,0 +1,150 @@
+
+1) Entry: Trauma Selection
+1) ENTRY: TRAUMA SELECTION
+User selects:👉 Accident / Sudden Shock
+Examples (internal only):
+Car accident 
+Injury 
+Witnessing sudden frightening event 
+
+2) VALIDATION SCREEN
+“You’ve just been through something sudden and overwhelming.”“It’s normal for your mind and body to still feel shaken after this.”“We’ll help you regain a sense of stability step by step.”
+👉 Button: “Continue”
+
+3) SAFETY REORIENTATION SCREEN
+“Right now, you don’t need to process everything that happened.”“For this moment, you are here and you are safe enough to continue.”
+👉 Button: “Continue”
+
+4) QUICK EMOTIONAL STATE CHECK
+Screen title:👉 “Right now, you might feel…”
+Options:
+Very anxious (panic) 
+Shaken or frozen 
+Thinking too much 
+Emotionally distant 
+Not sure 
+👉 Button: Continue
+1) PANIC PATH — ENRICHED FINAL VERSION
+
+🫶 Step 1: SAFETY ANCHOR
+“Right now, focus on where you are.”“You are not in immediate danger in this moment.”
+
+🧠 Step 2: THREAT REALITY CORRECTION
+“Your body may still be reacting as if danger is happening right now.”“But this moment is different, and the danger is not present anymore.”“Let’s help your system settle down together.”
+
+🧍 Step 3: FULL BODY RESET (ENRICHED — replaces “simple physical reset”)
+👉 goal: reduce physiological arousal + regain body control
+Guide the user step-by-step:
+Press both feet firmly into the ground for 5 seconds 
+Release your jaw (let teeth separate slightly) 
+Drop your shoulders down slowly 
+Place one hand on your chest or stomach 
+Notice the natural movement of your breath without changing it 
+If possible, gently stretch your fingers or open/close your hands once 
+✔ key effect:brings attention from “threat body” → “controlled body”
+
+👁 Step 4: STABILIZING ATTENTION LOCK (ENRICHED — replaces simple fixation)
+👉 goal: interrupt panic loop + stabilize attention
+Guide:
+Look at one object in front of you 
+Slowly notice 3 details: 
+its shape 
+its color 
+its texture or surface 
+Keep your eyes on it for a few moments 
+If your mind drifts, gently return to the object 
+Remind yourself silently: “I am here, right now.” 
+
+🔚 End:
+“Your body is beginning to settle back into safety.”
+B) SHAKEN / FROZEN PATH — ENRICHED FINAL VERSION
+
+🫶 Step 1: VALIDATION
+“After something sudden, the body can feel frozen or disconnected.”
+
+🧍 Step 2: BODY RESTART (ENRICHED — graded reactivation)
+👉 goal: gently re-engage the nervous system without overwhelm
+Guide slowly:
+Start by moving just one part of your body (fingers or toes) 
+Then gently shift your position slightly (no rush, small movement is enough) 
+Roll your shoulders once or gently tilt your head 
+Press your feet into the ground for a moment, then release 
+Notice: “I can still move, even a little” 
+
+🌍 Step 3: STABLE WORLD RE-ENTRY (ENRICHED)
+👉 goal: rebuild connection to external reality gradually
+Guide:
+Look around slowly, without searching for anything specific 
+Notice one thing that feels stable (an object, wall, surface, light) 
+Let your eyes rest on it without effort 
+Then notice one additional detail about it (color, shape, position) 
+Remind yourself: “The world is still here, and I am here in it.” 
+🔚 End:
+“You’re gently reconnecting with yourself.”
+C) THINKING TOO MUCH PATH — ENRICHED FINAL VERSION
+
+🫶 Step 1: NORMALIZATION
+“Your mind may be replaying or trying to understand what happened.”
+
+🧠 Step 2: THOUGHT SEPARATION
+“This is a thought, not something happening right now.”“You don’t need to follow it.”
+
+📦 Step 3: MENTAL RELEASE (ENRICHED — structured disengagement)
+👉 goal: actively interrupt the replay loop (not just “let it pass”)
+Guide:
+Imagine the thought moving further away from you 
+You are not pushing it away — just not holding it 
+If it returns, gently label it again as “just a thought” 
+Allow your attention to loosen around it, not fight it 
+✔ key effect:
+reduces cognitive fusion 
+weakens repetition loop 
+avoids suppression (important) 
+
+👁 Step 4: ATTENTION REFOCUS ANCHOR (ENRICHED)
+👉 goal: replace mental loop with structured present focus
+Guide:
+Choose one object in your environment 
+Look at it slowly for a few seconds 
+Notice 3 simple details: 
+shape 
+color 
+texture or surface 
+If your mind pulls back, gently return to the object 
+Say silently: “Right now, I am here.” 
+✔ key effect:
+breaks rumination cycle 
+stabilizes attention network 
+restores present-moment control 
+
+🔚 End:
+“Not every thought needs your attention.”
+4) OTHER / NOT SURE PATH — FINAL REFINED VERSION
+
+🫶 Validation
+“That’s okay — you don’t need to explain how you feel.”
+
+🧭 Step 1: LOW-PRESSURE STABILIZATION
+Pause for a moment 
+Let your body be as it is right now 
+You don’t need to fix, analyze, or change anything 
+
+🌫 Step 2: MIXED-STATE NORMALIZATION (IMPORTANT UPGRADE)
+It’s okay if things feel unclear, heavy, or slightly distant 
+You might not be able to name what you feel — and that’s okay 
+Sometimes after intense experiences, feelings don’t come in a clear way 
+
+🫶 Step 3: SIMPLIFIED PRESENCE SHIFT
+ Notice that you are here in this moment, even if things feel unclear 
+ You don’t need to understand what is happening internally right now 
+ Let your attention settle gently, without trying to guide it 
+ If thoughts or feelings appear, you don’t need to respond to them 
+ Just allow this moment to exist without pressure
+👁 Step 4: LIGHT ORIENTATION (non-intrusive)
+ Slowly become aware of the space around you 
+ Notice one neutral detail in your environment (light, color, shape, object) 
+ Let your eyes rest there without effort or focus pressure 
+ You don’t need to analyze it — just let it exist in your awareness 
+ If your attention moves away, that is completely fine
+🔚 End message
+“You don’t need clarity right now — just being here is enough.”
