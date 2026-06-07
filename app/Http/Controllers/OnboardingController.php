@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,6 +33,7 @@ class OnboardingController extends Controller
         $validated = $request->validate([
             'date_of_birth' => ['required', 'date', 'before:today'],
             'gender' => ['required', Rule::in(['female', 'male', 'non_binary', 'prefer_not_to_say'])],
+            'phone' => ['required', 'string', 'max:30'],
             'emergency_contact' => ['required', 'string', 'max:255'],
             'support_reason' => ['required', 'string', 'min:10', 'max:2000'],
             'preferred_language' => ['required', Rule::in(['arabic', 'english', 'french'])],
@@ -40,12 +42,16 @@ class OnboardingController extends Controller
 
         $user = $request->user();
 
+        // phone lives on the user record; the rest belongs to the client profile.
         $user->clientProfile()->updateOrCreate(
             ['user_id' => $user->id],
-            $validated,
+            Arr::except($validated, ['phone']),
         );
 
-        $user->forceFill(['onboarded_at' => now()])->save();
+        $user->forceFill([
+            'phone' => $validated['phone'],
+            'onboarded_at' => now(),
+        ])->save();
 
         return to_route('dashboard');
     }
