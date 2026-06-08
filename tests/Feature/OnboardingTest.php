@@ -33,7 +33,6 @@ test('submitting the questionnaire saves the profile and marks the user onboarde
         'date_of_birth' => '1995-04-12',
         'gender' => 'female',
         'phone' => '+961 70 123 456',
-        'emergency_contact' => 'Jane Doe · +961 70 000 000',
         'support_reason' => 'I have been feeling anxious lately and would like some support.',
         'preferred_language' => 'english',
         'preferred_approach' => 'cbt',
@@ -54,22 +53,22 @@ test('the questionnaire requires the core fields', function () {
 
     $this->actingAs($user)
         ->post('/onboarding', [])
-        ->assertSessionHasErrors(['date_of_birth', 'gender', 'phone', 'emergency_contact', 'support_reason', 'preferred_language']);
+        ->assertSessionHasErrors(['date_of_birth', 'gender', 'phone', 'preferred_language']);
 
     expect($user->fresh()->hasCompletedOnboarding())->toBeFalse();
 });
 
-test('preferred approach is optional', function () {
+test('the paragraph and preferred approach are optional', function () {
     $user = User::factory()->unonboarded()->create();
 
     $this->actingAs($user)->post('/onboarding', [
         'date_of_birth' => '1990-01-01',
         'gender' => 'prefer_not_to_say',
-        'phone' => '71 000 000',
-        'emergency_contact' => 'A friend · 71 000 000',
-        'support_reason' => 'Looking for a calm space to talk things through.',
+        'phone' => '+961 71 000 000',
         'preferred_language' => 'arabic',
     ])->assertSessionHasNoErrors();
 
-    expect($user->fresh()->clientProfile->preferred_approach)->toBeNull();
+    $profile = $user->fresh()->clientProfile;
+    expect($profile->preferred_approach)->toBeNull();
+    expect($profile->support_reason)->toBeNull();
 });

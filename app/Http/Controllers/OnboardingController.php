@@ -34,8 +34,7 @@ class OnboardingController extends Controller
             'date_of_birth' => ['required', 'date', 'before:today'],
             'gender' => ['required', Rule::in(['female', 'male', 'non_binary', 'prefer_not_to_say'])],
             'phone' => ['required', 'string', 'max:30'],
-            'emergency_contact' => ['required', 'string', 'max:255'],
-            'support_reason' => ['required', 'string', 'min:10', 'max:2000'],
+            'support_reason' => ['nullable', 'string', 'max:2000'],
             'preferred_language' => ['required', Rule::in(['arabic', 'english', 'french'])],
             'preferred_approach' => ['nullable', Rule::in(['cbt', 'emdr', 'psychoanalysis', 'unsure'])],
         ]);
