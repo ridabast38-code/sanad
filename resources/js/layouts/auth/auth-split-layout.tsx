@@ -7,9 +7,18 @@ interface AuthLayoutProps {
     title?: string;
     description?: string;
     photoSide?: 'left' | 'right';
+    quote?: string;
+    quoteFooter?: string;
 }
 
-export default function AuthSplitLayout({ children, title, description, photoSide = 'left' }: AuthLayoutProps) {
+export default function AuthSplitLayout({
+    children,
+    title,
+    description,
+    photoSide = 'left',
+    quote = 'A safe space for your mind.',
+    quoteFooter = 'Sanad',
+}: AuthLayoutProps) {
     const slide = { type: 'spring', stiffness: 200, damping: 30 } as const;
 
     // cinematic photo panel — slides side to side when navigating login <-> register
@@ -25,10 +34,8 @@ export default function AuthSplitLayout({ children, title, description, photoSid
                     <span className="font-display text-xl">Sanad</span>
                 </Link>
                 <blockquote>
-                    <p className="max-w-md font-display text-3xl leading-snug text-white">
-                        However you arrived here, you don't have to carry it alone.
-                    </p>
-                    <footer className="mt-4 text-sm tracking-wide text-white/70">A safe space for your mind</footer>
+                    <p className="max-w-md font-display text-3xl leading-snug text-white">{quote}</p>
+                    <footer className="mt-4 text-sm tracking-wide text-white/70">{quoteFooter}</footer>
                 </blockquote>
             </div>
         </motion.div>

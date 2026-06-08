@@ -126,7 +126,13 @@ function Register() {
 }
 
 Register.layout = (page: ReactNode) => (
-    <AuthSplitLayout title="Begin your journey" description="Welcome to Sanad — let's create your safe space together." photoSide="right">
+    <AuthSplitLayout
+        title="Begin your journey"
+        description="Welcome to Sanad — let's create your safe space together."
+        photoSide="right"
+        quote="Every journey inward begins with one gentle step."
+        quoteFooter="You've just taken yours."
+    >
         {page}
     </AuthSplitLayout>
 );

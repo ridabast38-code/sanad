@@ -60,14 +60,7 @@ function Login({ status, canResetPassword }: LoginProps) {
                     </div>
 
                     <div className="grid gap-2">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            {canResetPassword && (
-                                <TextLink href={route('password.request')} className="ml-auto text-sm text-sage-700" tabIndex={5}>
-                                    Forgot password?
-                                </TextLink>
-                            )}
-                        </div>
+                        <Label htmlFor="password">Password</Label>
                         <PasswordInput
                             id="password"
                             required
@@ -79,6 +72,13 @@ function Login({ status, canResetPassword }: LoginProps) {
                             className="bg-white/60"
                         />
                         <InputError message={errors.password} />
+                        {canResetPassword && (
+                            <div className="flex justify-end">
+                                <TextLink href={route('password.request')} className="text-sm text-sage-700" tabIndex={5}>
+                                    Forgot password?
+                                </TextLink>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex items-center space-x-3">
@@ -114,7 +114,13 @@ function Login({ status, canResetPassword }: LoginProps) {
 }
 
 Login.layout = (page: ReactNode) => (
-    <AuthSplitLayout title="Welcome back" description="It's good to see you again. Let's pick up where you left off." photoSide="left">
+    <AuthSplitLayout
+        title="Welcome back"
+        description="It's good to see you again. Let's pick up where you left off."
+        photoSide="left"
+        quote="Coming back is a quiet act of courage."
+        quoteFooter="We're glad you're here again."
+    >
         {page}
     </AuthSplitLayout>
 );
