@@ -43,8 +43,10 @@ export default function AuthSplitLayout({
 
     // form panel — the page content lands here
     const form = (
-        <motion.div key="auth-form" layout transition={slide} className="relative flex w-full items-center justify-center px-6 py-12 sm:px-10 lg:w-1/2">
-            <div aria-hidden className="pointer-events-none absolute -right-20 top-10 h-72 w-72 rounded-full bg-sage-300/20 blur-3xl" />
+        <motion.div key="auth-form" layout transition={slide} className="relative flex w-full items-center justify-center overflow-hidden px-6 py-12 sm:px-10 lg:w-1/2">
+            {/* soft, breathing glows for a calm atmosphere */}
+            <div aria-hidden className="pointer-events-none absolute -right-24 top-0 h-80 w-80 rounded-full bg-sage-300/25 blur-3xl" style={{ animation: 'breathe 9s ease-in-out infinite' }} />
+            <div aria-hidden className="pointer-events-none absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-amber-200/25 blur-3xl" style={{ animation: 'breathe 11s ease-in-out infinite', animationDelay: '-3s' }} />
 
             <div className="relative z-10 mx-auto w-full max-w-sm">
                 <Link href={route('home')} className="mb-8 flex items-center justify-center gap-2.5 text-stone-800 lg:hidden">

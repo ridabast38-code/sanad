@@ -21,7 +21,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<'i
                 whileTap={{ scale: 0.85 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                 aria-label={visible ? 'Hide password' : 'Show password'}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 transition-colors hover:text-stone-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-500 transition-colors hover:text-sage-700"
             >
                 {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </motion.button>

@@ -17,6 +17,10 @@ type RegisterForm = {
     password_confirmation: string;
 };
 
+// calm, glowy field style — explicit light colors so text/icons never disappear on cream
+const fieldClass =
+    'h-11 rounded-xl border-stone-300 bg-white/70 text-stone-800 placeholder:text-stone-400 transition-shadow focus-visible:border-sage-400 focus-visible:ring-2 focus-visible:ring-sage-500/25 focus-visible:ring-offset-0 focus-visible:shadow-[0_0_0_4px_rgba(125,160,128,0.12)]';
+
 function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
         name: '',
@@ -50,6 +54,7 @@ function Register() {
                             onChange={(e) => setData('name', e.target.value)}
                             disabled={processing}
                             placeholder="Full name"
+                            className={fieldClass}
                         />
                         <InputError message={errors.name} className="mt-2" />
                     </div>
@@ -66,6 +71,7 @@ function Register() {
                             onChange={(e) => setData('email', e.target.value)}
                             disabled={processing}
                             placeholder="email@example.com"
+                            className={fieldClass}
                         />
                         <InputError message={errors.email} />
                     </div>
@@ -81,6 +87,7 @@ function Register() {
                             onChange={(e) => setData('password', e.target.value)}
                             disabled={processing}
                             placeholder="Password"
+                            className={fieldClass}
                         />
                         <InputError message={errors.password} />
                     </div>
@@ -96,6 +103,7 @@ function Register() {
                             onChange={(e) => setData('password_confirmation', e.target.value)}
                             disabled={processing}
                             placeholder="Confirm password"
+                            className={fieldClass}
                         />
                         <InputError message={errors.password_confirmation} />
                     </div>
