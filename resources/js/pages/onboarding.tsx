@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import { motion } from 'motion/react';
+import { motion, useScroll } from 'motion/react';
 import { LoaderCircle, Phone, CalendarHeart, Sparkles } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
@@ -56,21 +56,21 @@ function ChoiceGroup({
                 const active = value === o.value;
                 const base = dark
                     ? active
-                        ? 'border-sage-400 bg-sage-500 text-white'
-                        : 'border-white/20 bg-white/5 text-stone-200 hover:border-sage-400/60'
+                        ? 'border-sage-400 bg-sage-500 text-white shadow-[0_10px_24px_-8px_rgba(125,160,128,0.7)]'
+                        : 'border-white/20 bg-white/5 text-stone-200 hover:border-sage-400/60 hover:bg-white/10'
                     : active
-                      ? 'border-sage-700 bg-sage-700 text-white'
-                      : 'border-stone-300 bg-white/60 text-stone-700 hover:border-sage-400';
+                      ? 'border-sage-700 bg-sage-700 text-white shadow-[0_10px_24px_-8px_rgba(79,111,82,0.7)]'
+                      : 'border-stone-300 bg-white/70 text-stone-700 shadow-sm hover:border-sage-400 hover:shadow-md';
                 return (
                     <motion.button
                         key={o.value}
                         type="button"
                         disabled={disabled}
                         onClick={() => onChange(o.value)}
-                        whileHover={{ scale: disabled ? 1 : 1.03 }}
-                        whileTap={{ scale: disabled ? 1 : 0.96 }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                        className={`rounded-full border px-4 py-2 text-sm transition-colors disabled:opacity-50 ${base}`}
+                        whileHover={{ scale: disabled ? 1 : 1.05, y: disabled ? 0 : -2 }}
+                        whileTap={{ scale: disabled ? 1 : 0.95 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                        className={`rounded-full border px-4 py-2 text-sm transition-[color,background-color,border-color,box-shadow] disabled:opacity-50 ${base}`}
                     >
                         {o.label}
                     </motion.button>
@@ -81,10 +81,10 @@ function ChoiceGroup({
 }
 
 const reveal = {
-    initial: { opacity: 0, y: 28 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-60px' },
-    transition: { duration: 0.6, ease: 'easeOut' as const },
+    initial: { opacity: 0, y: 34, scale: 0.98 },
+    whileInView: { opacity: 1, y: 0, scale: 1 },
+    viewport: { once: true, margin: '-70px' },
+    transition: { duration: 0.7, ease: 'easeOut' as const },
 };
 
 export default function Onboarding({ name }: { name: string }) {
@@ -108,10 +108,17 @@ export default function Onboarding({ name }: { name: string }) {
     };
 
     const firstName = name?.split(' ')[0] ?? '';
+    const { scrollYProgress } = useScroll();
 
     return (
         <div className="relative min-h-screen">
             <Head title="Welcome to Sanad" />
+
+            {/* glowing scroll-progress bar */}
+            <motion.div
+                style={{ scaleX: scrollYProgress }}
+                className="fixed left-0 top-0 z-50 h-1 w-full origin-left bg-gradient-to-r from-sage-400 via-sage-500 to-amber-300 shadow-[0_0_14px_2px_rgba(125,160,128,0.55)]"
+            />
 
             {/* ===== full-page cinematic background ===== */}
             <div className="fixed inset-0">
@@ -130,8 +137,11 @@ export default function Onboarding({ name }: { name: string }) {
                 <img src="/images/onboarding-poster.jpg" alt="" className="hidden h-full w-full scale-105 object-cover blur-[2px] motion-reduce:block" />
                 {/* darker, sage-tinted veil so it stays cinematic and on-brand */}
                 <div className="absolute inset-0 bg-gradient-to-b from-stone-950/60 via-sage-900/45 to-stone-950/70" />
-                <div aria-hidden className="pointer-events-none absolute -left-40 top-[8%] h-[34rem] w-[34rem] rounded-full bg-sage-300/30 blur-3xl" style={{ animation: 'aurora-1 24s ease-in-out infinite' }} />
-                <div aria-hidden className="pointer-events-none absolute -right-40 top-[55%] h-[36rem] w-[36rem] rounded-full bg-amber-200/30 blur-3xl" style={{ animation: 'aurora-2 28s ease-in-out infinite' }} />
+                {/* ambient glows drifting across the whole page */}
+                <div aria-hidden className="pointer-events-none absolute -left-40 top-[6%] h-[34rem] w-[34rem] rounded-full bg-sage-400/30 blur-3xl" style={{ animation: 'aurora-1 24s ease-in-out infinite' }} />
+                <div aria-hidden className="pointer-events-none absolute -right-40 top-[40%] h-[36rem] w-[36rem] rounded-full bg-amber-300/25 blur-3xl" style={{ animation: 'aurora-2 28s ease-in-out infinite' }} />
+                <div aria-hidden className="pointer-events-none absolute left-1/4 top-[72%] h-[30rem] w-[30rem] rounded-full bg-beige/25 blur-3xl" style={{ animation: 'aurora-3 30s ease-in-out infinite' }} />
+                <div aria-hidden className="pointer-events-none absolute right-1/3 top-[90%] h-[28rem] w-[28rem] rounded-full bg-sage-300/25 blur-3xl" style={{ animation: 'aurora-2 26s ease-in-out infinite', animationDelay: '-6s' }} />
             </div>
 
             <div className="relative z-10 mx-auto max-w-2xl px-6 py-14 md:py-20">
@@ -264,13 +274,17 @@ export default function Onboarding({ name }: { name: string }) {
                     <motion.button
                         type="submit"
                         disabled={processing}
-                        whileHover={{ scale: processing ? 1 : 1.015 }}
-                        whileTap={{ scale: processing ? 1 : 0.985 }}
-                        transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-                        className="flex w-full items-center justify-center gap-2 rounded-full bg-sage-700 py-3.5 text-sm font-medium text-white shadow-[0_18px_45px_-15px_rgba(79,111,82,0.9)] transition-colors hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-70"
+                        whileHover={{ scale: processing ? 1 : 1.02, y: processing ? 0 : -2 }}
+                        whileTap={{ scale: processing ? 1 : 0.98 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                        className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-sage-600 to-sage-700 py-3.5 text-sm font-medium text-white shadow-[0_18px_45px_-12px_rgba(79,111,82,0.95)] transition-shadow hover:shadow-[0_22px_55px_-12px_rgba(79,111,82,1)] disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                        {processing ? 'Saving your answers…' : 'Continue to my space'}
+                        {/* shine sweep on hover */}
+                        <span aria-hidden className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-full" />
+                        <span className="relative flex items-center gap-2">
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                            {processing ? 'Saving your answers…' : 'Continue to my space'}
+                        </span>
                     </motion.button>
                 </form>
             </div>
