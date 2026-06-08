@@ -1,11 +1,11 @@
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'motion/react';
-import { LoaderCircle, ChevronDown, Phone, CalendarHeart, Sparkles } from 'lucide-react';
-import { FormEventHandler, ReactNode, useState } from 'react';
+import { LoaderCircle, Phone, CalendarHeart, Sparkles } from 'lucide-react';
+import { FormEventHandler, useState } from 'react';
 
 import InputError from '@/components/input-error';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { BirthCalendar } from '@/components/ui/birth-calendar';
 
 type OnboardingForm = {
     date_of_birth: string;
@@ -35,13 +35,6 @@ const approaches = [
     { value: 'psychoanalysis', label: 'Psychoanalysis' },
     { value: 'unsure', label: 'Not sure — help me choose' },
 ];
-
-const countryCodes = ['+961', '+971', '+966', '+974', '+965', '+973', '+968', '+962', '+20', '+33', '+44', '+1'];
-
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 90 }, (_, i) => currentYear - 13 - i);
-const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
 /** A soft choice-pill group. `dark` switches it for use on dark panels. */
 function ChoiceGroup({
@@ -87,37 +80,6 @@ function ChoiceGroup({
     );
 }
 
-/** A polished select with a floating label and custom chevron (not a spreadsheet cell). */
-function SelectField({
-    label,
-    value,
-    onChange,
-    disabled,
-    children,
-}: {
-    label: string;
-    value: string;
-    onChange: (value: string) => void;
-    disabled?: boolean;
-    children: ReactNode;
-}) {
-    return (
-        <div className="relative">
-            <select
-                aria-label={label}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                disabled={disabled}
-                className="peer w-full appearance-none rounded-2xl border border-stone-300 bg-white/70 px-4 pb-2.5 pt-6 text-sm text-stone-800 transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/25 disabled:opacity-50"
-            >
-                {children}
-            </select>
-            <span className="pointer-events-none absolute left-4 top-2 text-[10px] font-medium uppercase tracking-wider text-stone-400">{label}</span>
-            <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-400" />
-        </div>
-    );
-}
-
 const reveal = {
     initial: { opacity: 0, y: 28 },
     whileInView: { opacity: 1, y: 0 },
@@ -135,22 +97,10 @@ export default function Onboarding({ name }: { name: string }) {
         preferred_approach: '',
     });
 
-    // date of birth — three styled dropdowns combined into YYYY-MM-DD
-    const [dob, setDob] = useState({ day: '', month: '', year: '' });
-    const updateDob = (part: 'day' | 'month' | 'year', value: string) => {
-        const next = { ...dob, [part]: value };
-        setDob(next);
-        if (next.day && next.month && next.year) {
-            setData('date_of_birth', `${next.year}-${String(Number(next.month)).padStart(2, '0')}-${String(Number(next.day)).padStart(2, '0')}`);
-        } else {
-            setData('date_of_birth', '');
-        }
-    };
-
-    // phone — country code + number combined into one value
+    // phone — typeable country code + number combined into one value
     const [countryCode, setCountryCode] = useState('+961');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const syncPhone = (code: string, num: string) => setData('phone', num.trim() ? `${code} ${num.trim()}` : '');
+    const syncPhone = (code: string, num: string) => setData('phone', num.trim() ? `${code.trim()} ${num.trim()}` : '');
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -160,41 +110,32 @@ export default function Onboarding({ name }: { name: string }) {
     const firstName = name?.split(' ')[0] ?? '';
 
     return (
-        <div className="relative min-h-screen overflow-hidden bg-cream">
+        <div className="relative min-h-screen">
             <Head title="Welcome to Sanad" />
 
-            {/* ambient glows (cheap: opacity/translate only) */}
-            <div aria-hidden className="pointer-events-none absolute -left-40 top-[8%] h-[34rem] w-[34rem] rounded-full bg-sage-300/30 blur-3xl" style={{ animation: 'aurora-1 24s ease-in-out infinite' }} />
-            <div aria-hidden className="pointer-events-none absolute -right-40 top-[45%] h-[36rem] w-[36rem] rounded-full bg-amber-200/30 blur-3xl" style={{ animation: 'aurora-2 28s ease-in-out infinite' }} />
+            {/* ===== full-page cinematic background ===== */}
+            <div className="fixed inset-0">
+                <img src="/images/team-bg.jpg" alt="" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-b from-cream/85 via-cream/72 to-cream/90" />
+                <div aria-hidden className="pointer-events-none absolute -left-40 top-[8%] h-[34rem] w-[34rem] rounded-full bg-sage-300/30 blur-3xl" style={{ animation: 'aurora-1 24s ease-in-out infinite' }} />
+                <div aria-hidden className="pointer-events-none absolute -right-40 top-[55%] h-[36rem] w-[36rem] rounded-full bg-amber-200/30 blur-3xl" style={{ animation: 'aurora-2 28s ease-in-out infinite' }} />
+            </div>
 
-            <div className="relative z-10 mx-auto max-w-2xl px-6 py-12 md:py-16">
-                {/* ===== HERO — cinematic photo panel ===== */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, ease: 'easeOut' }}
-                    className="relative overflow-hidden rounded-[2rem] bg-stone-900 p-8 text-white shadow-[0_30px_80px_-40px_rgba(58,59,55,0.7)] md:p-12"
-                >
-                    <img src="/images/support/ongoing.jpg" alt="" className="absolute inset-0 h-full w-full scale-105 object-cover opacity-50" />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-stone-950/85 via-stone-950/55 to-sage-900/40" />
-                    <div aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full bg-sage-500/40 blur-3xl animate-breathe" />
-
-                    <div className="relative z-10">
-                        <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-sage-300">
-                            <Sparkles className="h-3.5 w-3.5" /> A warm welcome
-                        </span>
-                        <h1 className="mt-4 font-display text-4xl leading-[1.05] tracking-tight md:text-5xl">
-                            Hello{firstName ? `, ${firstName}` : ''}.
-                        </h1>
-                        <p className="mt-4 max-w-md leading-relaxed text-stone-300">
-                            A few gentle questions so we can support you with care. There are no wrong answers, and everything you share stays private.
-                        </p>
-                    </div>
+            <div className="relative z-10 mx-auto max-w-2xl px-6 py-14 md:py-20">
+                {/* ===== HERO ===== */}
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }} className="mb-10 text-center">
+                    <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-sage-700">
+                        <Sparkles className="h-3.5 w-3.5" /> A warm welcome
+                    </span>
+                    <h1 className="mt-4 font-display text-4xl leading-[1.05] tracking-tight text-stone-800 md:text-5xl">Hello{firstName ? `, ${firstName}` : ''}.</h1>
+                    <p className="mx-auto mt-4 max-w-md leading-relaxed text-stone-600">
+                        A few gentle questions so we can support you with care. There are no wrong answers, and everything you share stays private.
+                    </p>
                 </motion.div>
 
-                <form onSubmit={submit} className="mt-8 space-y-8">
+                <form onSubmit={submit} className="space-y-8">
                     {/* ===== SECTION 1 — About you (light) ===== */}
-                    <motion.section {...reveal} className="rounded-[2rem] border border-stone-200/70 bg-white/60 p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9">
+                    <motion.section {...reveal} className="rounded-[2rem] border border-stone-200/70 bg-white/70 p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9">
                         <div className="mb-6 flex items-center gap-3">
                             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sage-100 text-sage-700">
                                 <CalendarHeart className="h-5 w-5" />
@@ -208,26 +149,7 @@ export default function Onboarding({ name }: { name: string }) {
                         <div className="grid gap-6">
                             <div className="grid gap-3">
                                 <Label>Date of birth</Label>
-                                <div className="grid grid-cols-3 gap-3">
-                                    <SelectField label="Day" value={dob.day} onChange={(v) => updateDob('day', v)} disabled={processing}>
-                                        <option value="" disabled></option>
-                                        {days.map((d) => (
-                                            <option key={d} value={d}>{d}</option>
-                                        ))}
-                                    </SelectField>
-                                    <SelectField label="Month" value={dob.month} onChange={(v) => updateDob('month', v)} disabled={processing}>
-                                        <option value="" disabled></option>
-                                        {months.map((m, i) => (
-                                            <option key={m} value={i + 1}>{m}</option>
-                                        ))}
-                                    </SelectField>
-                                    <SelectField label="Year" value={dob.year} onChange={(v) => updateDob('year', v)} disabled={processing}>
-                                        <option value="" disabled></option>
-                                        {years.map((y) => (
-                                            <option key={y} value={y}>{y}</option>
-                                        ))}
-                                    </SelectField>
-                                </div>
+                                <BirthCalendar value={data.date_of_birth} onChange={(v) => setData('date_of_birth', v)} disabled={processing} />
                                 <InputError message={errors.date_of_birth} />
                             </div>
 
@@ -255,28 +177,22 @@ export default function Onboarding({ name }: { name: string }) {
 
                             <Label className="text-stone-200">Phone number</Label>
                             <div className="mt-2 flex gap-3">
-                                <div className="relative w-32 shrink-0">
-                                    <select
-                                        aria-label="Country code"
-                                        value={countryCode}
-                                        onChange={(e) => {
-                                            setCountryCode(e.target.value);
-                                            syncPhone(e.target.value, phoneNumber);
-                                        }}
-                                        disabled={processing}
-                                        className="w-full appearance-none rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/30 disabled:opacity-50"
-                                    >
-                                        {countryCodes.map((c) => (
-                                            <option key={c} value={c} className="text-stone-800">
-                                                {c}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-300" />
-                                </div>
+                                <input
+                                    type="text"
+                                    inputMode="tel"
+                                    aria-label="Country code"
+                                    value={countryCode}
+                                    onChange={(e) => {
+                                        setCountryCode(e.target.value);
+                                        syncPhone(e.target.value, phoneNumber);
+                                    }}
+                                    disabled={processing}
+                                    className="w-20 rounded-2xl border border-white/15 bg-white/10 px-3 py-3 text-center text-sm text-white transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/30 disabled:opacity-50"
+                                />
                                 <input
                                     type="tel"
                                     inputMode="tel"
+                                    aria-label="Phone number"
                                     value={phoneNumber}
                                     onChange={(e) => {
                                         setPhoneNumber(e.target.value);
@@ -287,12 +203,13 @@ export default function Onboarding({ name }: { name: string }) {
                                     className="flex-1 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/30 disabled:opacity-50"
                                 />
                             </div>
+                            <p className="mt-2 text-xs text-stone-400">Country code is editable — just type it (e.g. +961).</p>
                             <InputError message={errors.phone} className="mt-2 text-red-300" />
                         </div>
                     </motion.section>
 
                     {/* ===== SECTION 3 — Your story (light) ===== */}
-                    <motion.section {...reveal} className="rounded-[2rem] border border-stone-200/70 bg-white/60 p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9">
+                    <motion.section {...reveal} className="rounded-[2rem] border border-stone-200/70 bg-white/70 p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9">
                         <div className="mb-6">
                             <h2 className="font-display text-xl text-stone-800">In your own words</h2>
                             <p className="text-sm text-stone-500">Only if you'd like to — there's no pressure.</p>
