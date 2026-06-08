@@ -8,6 +8,7 @@ import TextLink from '@/components/text-link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/ui/password-input';
 import AuthSplitLayout from '@/layouts/auth/auth-split-layout';
 
 type LoginForm = {
@@ -67,9 +68,8 @@ function Login({ status, canResetPassword }: LoginProps) {
                                 </TextLink>
                             )}
                         </div>
-                        <Input
+                        <PasswordInput
                             id="password"
-                            type="password"
                             required
                             tabIndex={2}
                             autoComplete="current-password"
@@ -114,7 +114,7 @@ function Login({ status, canResetPassword }: LoginProps) {
 }
 
 Login.layout = (page: ReactNode) => (
-    <AuthSplitLayout title="Welcome back" description="Log in to continue your space" photoSide="left">
+    <AuthSplitLayout title="Welcome back" description="It's good to see you again. Let's pick up where you left off." photoSide="left">
         {page}
     </AuthSplitLayout>
 );

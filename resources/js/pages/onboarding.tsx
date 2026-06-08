@@ -65,19 +65,21 @@ function ChoiceGroup({
             {options.map((o) => {
                 const active = value === o.value;
                 return (
-                    <button
+                    <motion.button
                         key={o.value}
                         type="button"
                         disabled={disabled}
                         onClick={() => onChange(o.value)}
-                        className={`rounded-full border px-4 py-2 text-sm transition disabled:opacity-50 ${
+                        whileTap={{ scale: disabled ? 1 : 0.96 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                        className={`rounded-full border px-4 py-2 text-sm transition-colors disabled:opacity-50 ${
                             active
                                 ? 'border-sage-700 bg-sage-700 text-white'
                                 : 'border-stone-300 bg-white/60 text-stone-700 hover:border-sage-400'
                         }`}
                     >
                         {o.label}
-                    </button>
+                    </motion.button>
                 );
             })}
         </div>

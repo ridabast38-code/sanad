@@ -1,11 +1,12 @@
 import { Head, useForm } from '@inertiajs/react';
+import { motion } from 'motion/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/ui/password-input';
 import AuthLayout from '@/layouts/auth-layout';
 
 interface ResetPasswordProps {
@@ -58,9 +59,8 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input
+                        <PasswordInput
                             id="password"
-                            type="password"
                             name="password"
                             autoComplete="new-password"
                             value={data.password}
@@ -74,9 +74,8 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
 
                     <div className="grid gap-2">
                         <Label htmlFor="password_confirmation">Confirm password</Label>
-                        <Input
+                        <PasswordInput
                             id="password_confirmation"
-                            type="password"
                             name="password_confirmation"
                             autoComplete="new-password"
                             value={data.password_confirmation}
@@ -87,10 +86,17 @@ export default function ResetPassword({ token, email }: ResetPasswordProps) {
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
 
-                    <Button type="submit" className="mt-4 w-full" disabled={processing}>
+                    <motion.button
+                        type="submit"
+                        disabled={processing}
+                        whileHover={{ scale: processing ? 1 : 1.01 }}
+                        whileTap={{ scale: processing ? 1 : 0.98 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                        className="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-sage-700 py-3 text-sm font-medium text-white shadow-[0_12px_30px_-12px_rgba(79,111,82,0.8)] transition-colors hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Reset password
-                    </Button>
+                    </motion.button>
                 </div>
             </form>
         </AuthLayout>

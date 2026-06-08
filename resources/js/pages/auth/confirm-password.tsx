@@ -1,11 +1,11 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
+import { motion } from 'motion/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
@@ -33,9 +33,8 @@ export default function ConfirmPassword() {
                 <div className="space-y-6">
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input
+                        <PasswordInput
                             id="password"
-                            type="password"
                             name="password"
                             placeholder="Password"
                             autoComplete="current-password"
@@ -48,10 +47,17 @@ export default function ConfirmPassword() {
                     </div>
 
                     <div className="flex items-center">
-                        <Button className="w-full" disabled={processing}>
+                        <motion.button
+                            type="submit"
+                            disabled={processing}
+                            whileHover={{ scale: processing ? 1 : 1.01 }}
+                            whileTap={{ scale: processing ? 1 : 0.98 }}
+                            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                            className="flex w-full items-center justify-center gap-2 rounded-full bg-sage-700 py-3 text-sm font-medium text-white shadow-[0_12px_30px_-12px_rgba(79,111,82,0.8)] transition-colors hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-70"
+                        >
                             {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Confirm password
-                        </Button>
+                        </motion.button>
                     </div>
                 </div>
             </form>
