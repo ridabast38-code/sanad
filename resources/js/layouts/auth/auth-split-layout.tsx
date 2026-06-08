@@ -15,7 +15,7 @@ export default function AuthSplitLayout({ children, title, description, photoSid
     // cinematic photo panel — slides side to side when navigating login <-> register
     const photo = (
         <motion.div key="auth-photo" layout transition={slide} className="relative hidden overflow-hidden lg:block lg:w-1/2">
-            <img src="/images/support/ongoing.jpg" alt="" className="absolute inset-0 h-full w-full scale-105 object-cover" />
+            <img src="/images/auth.jpg" alt="" className="absolute inset-0 h-full w-full scale-105 object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-stone-950/70 via-stone-950/45 to-stone-950/80" />
             <div aria-hidden className="pointer-events-none absolute -left-24 bottom-0 h-96 w-96 rounded-full bg-sage-600/30 blur-3xl" style={{ animation: 'aurora-1 26s ease-in-out infinite' }} />
 
