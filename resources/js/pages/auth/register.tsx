@@ -1,13 +1,13 @@
 import { Head, useForm } from '@inertiajs/react';
 import { motion } from 'motion/react';
 import { LoaderCircle } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AuthLayout from '@/layouts/auth-layout';
+import AuthSplitLayout from '@/layouts/auth/auth-split-layout';
 
 type RegisterForm = {
     name: string;
@@ -16,7 +16,7 @@ type RegisterForm = {
     password_confirmation: string;
 };
 
-export default function Register() {
+function Register() {
     const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
         name: '',
         email: '',
@@ -32,7 +32,7 @@ export default function Register() {
     };
 
     return (
-        <AuthLayout title="Create an account" description="Enter your details below to create your account">
+        <>
             <Head title="Register" />
             <form className="flex flex-col gap-6" onSubmit={submit}>
                 <div className="grid gap-6">
@@ -115,13 +115,21 @@ export default function Register() {
                     </motion.button>
                 </div>
 
-                <div className="text-muted-foreground text-center text-sm">
+                <div className="text-center text-sm text-stone-500">
                     Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={route('login')} className="font-medium text-sage-700" tabIndex={6}>
                         Log in
                     </TextLink>
                 </div>
             </form>
-        </AuthLayout>
+        </>
     );
 }
+
+Register.layout = (page: ReactNode) => (
+    <AuthSplitLayout title="Create your account" description="A calm space, just a few steps away" photoSide="right">
+        {page}
+    </AuthSplitLayout>
+);
+
+export default Register;

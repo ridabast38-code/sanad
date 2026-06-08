@@ -85,4 +85,12 @@ class User extends Authenticatable
     {
         return $this->onboarded_at !== null;
     }
+
+    /**
+     * The route name a user should land on after logging in.
+     */
+    public function homeRoute(): string
+    {
+        return 'dashboard';
+    }
 }

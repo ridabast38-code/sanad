@@ -53,6 +53,6 @@ class OnboardingController extends Controller
             'onboarded_at' => now(),
         ])->save();
 
-        return to_route('dashboard');
+        return to_route($user->homeRoute());
     }
 }
