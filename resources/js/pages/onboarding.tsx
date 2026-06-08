@@ -115,8 +115,21 @@ export default function Onboarding({ name }: { name: string }) {
 
             {/* ===== full-page cinematic background ===== */}
             <div className="fixed inset-0">
-                <img src="/images/team-bg.jpg" alt="" className="h-full w-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-b from-cream/85 via-cream/72 to-cream/90" />
+                {/* soft bokeh video — blurred + veiled so it stays calm behind the form */}
+                <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    poster="/images/onboarding-poster.jpg"
+                    className="h-full w-full scale-105 object-cover blur-[2px] motion-reduce:hidden"
+                >
+                    <source src="/videos/onboarding.mp4" type="video/mp4" />
+                </video>
+                {/* reduced-motion fallback: still poster instead of video */}
+                <img src="/images/onboarding-poster.jpg" alt="" className="hidden h-full w-full scale-105 object-cover blur-[2px] motion-reduce:block" />
+                {/* darker, sage-tinted veil so it stays cinematic and on-brand */}
+                <div className="absolute inset-0 bg-gradient-to-b from-stone-950/60 via-sage-900/45 to-stone-950/70" />
                 <div aria-hidden className="pointer-events-none absolute -left-40 top-[8%] h-[34rem] w-[34rem] rounded-full bg-sage-300/30 blur-3xl" style={{ animation: 'aurora-1 24s ease-in-out infinite' }} />
                 <div aria-hidden className="pointer-events-none absolute -right-40 top-[55%] h-[36rem] w-[36rem] rounded-full bg-amber-200/30 blur-3xl" style={{ animation: 'aurora-2 28s ease-in-out infinite' }} />
             </div>
@@ -124,11 +137,11 @@ export default function Onboarding({ name }: { name: string }) {
             <div className="relative z-10 mx-auto max-w-2xl px-6 py-14 md:py-20">
                 {/* ===== HERO ===== */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }} className="mb-10 text-center">
-                    <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-sage-700">
+                    <span className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-sage-300">
                         <Sparkles className="h-3.5 w-3.5" /> A warm welcome
                     </span>
-                    <h1 className="mt-4 font-display text-4xl leading-[1.05] tracking-tight text-stone-800 md:text-5xl">Hello{firstName ? `, ${firstName}` : ''}.</h1>
-                    <p className="mx-auto mt-4 max-w-md leading-relaxed text-stone-600">
+                    <h1 className="mt-4 font-display text-4xl leading-[1.05] tracking-tight text-white md:text-5xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">Hello{firstName ? `, ${firstName}` : ''}.</h1>
+                    <p className="mx-auto mt-4 max-w-md leading-relaxed text-stone-200">
                         A few gentle questions so we can support you with care. There are no wrong answers, and everything you share stays private.
                     </p>
                 </motion.div>
@@ -148,13 +161,13 @@ export default function Onboarding({ name }: { name: string }) {
 
                         <div className="grid gap-6">
                             <div className="grid gap-3">
-                                <Label>Date of birth</Label>
+                                <Label className="text-stone-700">Date of birth</Label>
                                 <BirthCalendar value={data.date_of_birth} onChange={(v) => setData('date_of_birth', v)} disabled={processing} />
                                 <InputError message={errors.date_of_birth} />
                             </div>
 
                             <div className="grid gap-3">
-                                <Label>How do you identify?</Label>
+                                <Label className="text-stone-700">How do you identify?</Label>
                                 <ChoiceGroup options={genders} value={data.gender} onChange={(v) => setData('gender', v)} disabled={processing} />
                                 <InputError message={errors.gender} />
                             </div>
@@ -203,7 +216,7 @@ export default function Onboarding({ name }: { name: string }) {
                                     className="flex-1 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/30 disabled:opacity-50"
                                 />
                             </div>
-                            <p className="mt-2 text-xs text-stone-400">Country code is editable — just type it (e.g. +961).</p>
+                            <p className="mt-2 text-xs text-stone-300">Country code is editable — just type it (e.g. +961).</p>
                             <InputError message={errors.phone} className="mt-2 text-red-300" />
                         </div>
                     </motion.section>
@@ -217,7 +230,7 @@ export default function Onboarding({ name }: { name: string }) {
 
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="support_reason">
+                                <Label htmlFor="support_reason" className="text-stone-700">
                                     What brings you here? <span className="font-normal text-stone-400">(optional)</span>
                                 </Label>
                                 <textarea
@@ -233,13 +246,13 @@ export default function Onboarding({ name }: { name: string }) {
                             </div>
 
                             <div className="grid gap-3">
-                                <Label>Which language feels most like home?</Label>
+                                <Label className="text-stone-700">Which language feels most like home?</Label>
                                 <ChoiceGroup options={languages} value={data.preferred_language} onChange={(v) => setData('preferred_language', v)} disabled={processing} />
                                 <InputError message={errors.preferred_language} />
                             </div>
 
                             <div className="grid gap-3">
-                                <Label>
+                                <Label className="text-stone-700">
                                     Any approach you're drawn to? <span className="font-normal text-stone-400">(optional)</span>
                                 </Label>
                                 <ChoiceGroup options={approaches} value={data.preferred_approach} onChange={(v) => setData('preferred_approach', v)} disabled={processing} />
