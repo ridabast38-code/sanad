@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
-import { motion } from 'motion/react';
 import { LoaderCircle } from 'lucide-react';
+import { motion } from 'motion/react';
 import { FormEventHandler, ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
@@ -24,7 +24,7 @@ interface LoginProps {
 
 // calm, glowy field style — explicit light colors so text/icons never disappear on cream
 const fieldClass =
-    'h-11 rounded-xl border-stone-300 bg-white/70 text-stone-800 placeholder:text-stone-400 transition-shadow focus-visible:border-sage-400 focus-visible:ring-2 focus-visible:ring-sage-500/25 focus-visible:ring-offset-0 focus-visible:shadow-[0_0_0_4px_rgba(125,160,128,0.12)]';
+    'h-11 rounded-xl border-ashen-300 bg-white/70 text-ashen-800 placeholder:text-ashen-400 transition-shadow focus-visible:border-sage-400 focus-visible:ring-2 focus-visible:ring-sage-500/25 focus-visible:ring-offset-0 focus-visible:shadow-[0_0_0_4px_rgba(125,160,128,0.12)]';
 
 function Login({ status, canResetPassword }: LoginProps) {
     const { data, setData, post, processing, errors, reset } = useForm<LoginForm>({
@@ -78,7 +78,7 @@ function Login({ status, canResetPassword }: LoginProps) {
                         <InputError message={errors.password} />
                         {canResetPassword && (
                             <div className="flex justify-end">
-                                <TextLink href={route('password.request')} className="text-sm text-sage-700" tabIndex={5}>
+                                <TextLink href={route('password.request')} className="text-sage-700 text-sm" tabIndex={5}>
                                     Forgot password?
                                 </TextLink>
                             </div>
@@ -92,9 +92,11 @@ function Login({ status, canResetPassword }: LoginProps) {
                             tabIndex={3}
                             checked={data.remember}
                             onCheckedChange={(checked) => setData('remember', checked === true)}
-                            className="border-stone-300 data-[state=checked]:border-sage-700 data-[state=checked]:bg-sage-700"
+                            className="border-ashen-300 data-[state=checked]:border-sage-700 data-[state=checked]:bg-sage-700"
                         />
-                        <Label htmlFor="remember" className="text-stone-600">Remember me</Label>
+                        <Label htmlFor="remember" className="text-ashen-600">
+                            Remember me
+                        </Label>
                     </div>
 
                     <motion.button
@@ -104,22 +106,22 @@ function Login({ status, canResetPassword }: LoginProps) {
                         whileHover={{ scale: processing ? 1 : 1.01 }}
                         whileTap={{ scale: processing ? 1 : 0.98 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                        className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-sage-700 py-3 text-sm font-medium text-white shadow-[0_12px_30px_-12px_rgba(79,111,82,0.8)] transition-colors hover:bg-sage-800 disabled:cursor-not-allowed disabled:opacity-70"
+                        className="bg-sage-700 hover:bg-sage-800 mt-2 flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-medium text-white shadow-[0_12px_30px_-12px_rgba(79,111,82,0.8)] transition-colors disabled:cursor-not-allowed disabled:opacity-70"
                     >
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Log in
                     </motion.button>
                 </div>
 
-                <div className="text-center text-sm text-stone-500">
+                <div className="text-ashen-500 text-center text-sm">
                     Don't have an account?{' '}
-                    <TextLink href={route('register')} className="font-medium text-sage-700" tabIndex={6}>
+                    <TextLink href={route('register')} className="text-sage-700 font-medium" tabIndex={6}>
                         Sign up
                     </TextLink>
                 </div>
             </form>
 
-            {status && <div className="mt-4 text-center text-sm font-medium text-green-600">{status}</div>}
+            {status && <div className="text-sage-600 mt-4 text-center text-sm font-medium">{status}</div>}
         </>
     );
 }

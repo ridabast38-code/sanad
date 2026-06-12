@@ -6,6 +6,8 @@ namespace App\Models;
 use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -61,6 +63,48 @@ class User extends Authenticatable
     public function clientProfile(): HasOne
     {
         return $this->hasOne(ClientProfile::class);
+    }
+
+    /**
+     * The practitioner profile (for users who deliver sessions).
+     */
+    public function practitionerProfile(): HasOne
+    {
+        return $this->hasOne(PractitionerProfile::class);
+    }
+
+    /**
+     * The weekly availability windows for a practitioner.
+     */
+    public function availabilities(): HasMany
+    {
+        return $this->hasMany(Availability::class);
+    }
+
+    /**
+     * The services a practitioner offers, each with their own price.
+     */
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class, 'practitioner_service')
+            ->withPivot('price')
+            ->withTimestamps();
+    }
+
+    /**
+     * Bookings where this user is the client.
+     */
+    public function clientBookings(): HasMany
+    {
+        return $this->hasMany(Booking::class, 'client_id');
+    }
+
+    /**
+     * Bookings where this user is the practitioner.
+     */
+    public function practitionerBookings(): HasMany
+    {
+        return $this->hasMany(Booking::class, 'practitioner_id');
     }
 
     public function isClient(): bool

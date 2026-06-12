@@ -15,28 +15,64 @@ html {
 
 /* Film grain — subtle flicker like 35mm, gives a cinematic, tactile feel */
 @keyframes grain {
-    0%, 100% { transform: translate(0, 0); }
-    10% { transform: translate(-5%, -10%); }
-    20% { transform: translate(-15%, 5%); }
-    30% { transform: translate(7%, -15%); }
-    40% { transform: translate(-5%, 15%); }
-    50% { transform: translate(-15%, 8%); }
-    60% { transform: translate(12%, 0); }
-    70% { transform: translate(0, 12%); }
-    80% { transform: translate(4%, 18%); }
-    90% { transform: translate(-8%, 8%); }
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+    10% {
+        transform: translate(-5%, -10%);
+    }
+    20% {
+        transform: translate(-15%, 5%);
+    }
+    30% {
+        transform: translate(7%, -15%);
+    }
+    40% {
+        transform: translate(-5%, 15%);
+    }
+    50% {
+        transform: translate(-15%, 8%);
+    }
+    60% {
+        transform: translate(12%, 0);
+    }
+    70% {
+        transform: translate(0, 12%);
+    }
+    80% {
+        transform: translate(4%, 18%);
+    }
+    90% {
+        transform: translate(-8%, 8%);
+    }
 }
 
 /* Hide scrollbar on the team carousel while keeping it scrollable */
-.scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
-.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
 
 /* Cinematic dust drifting slowly upward through light beams */
 @keyframes dust-drift {
-    0% { transform: translateY(50vh) translateX(0); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 0.9; }
-    100% { transform: translateY(-50vh) translateX(40px); opacity: 0; }
+    0% {
+        transform: translateY(50vh) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(-50vh) translateX(40px);
+        opacity: 0;
+    }
 }
 
 /* Aurora — slow watercolor-like flow of color blobs across the section.
@@ -44,31 +80,107 @@ html {
    the browser to re-render the expensive blur every frame; translate/opacity
    are GPU-composited and effectively free. */
 @keyframes aurora-1 {
-    0%, 100% { transform: translate(0, 0); opacity: 0.85; }
-    33% { transform: translate(8%, -6%); opacity: 1; }
-    66% { transform: translate(-6%, 8%); opacity: 0.7; }
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 0.85;
+    }
+    33% {
+        transform: translate(8%, -6%);
+        opacity: 1;
+    }
+    66% {
+        transform: translate(-6%, 8%);
+        opacity: 0.7;
+    }
 }
 @keyframes aurora-2 {
-    0%, 100% { transform: translate(0, 0); opacity: 0.85; }
-    33% { transform: translate(-7%, 5%); opacity: 1; }
-    66% { transform: translate(6%, -5%); opacity: 0.7; }
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 0.85;
+    }
+    33% {
+        transform: translate(-7%, 5%);
+        opacity: 1;
+    }
+    66% {
+        transform: translate(6%, -5%);
+        opacity: 0.7;
+    }
 }
 @keyframes aurora-3 {
-    0%, 100% { transform: translate(0, 0); opacity: 0.8; }
-    50% { transform: translate(10%, 10%); opacity: 1; }
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(10%, 10%);
+        opacity: 1;
+    }
 }
 
 /* Soft golden light ray slowly sweeping — rotate + opacity (no scale, see above) */
 @keyframes ray-sweep {
-    0%, 100% { opacity: 0.35; transform: rotate(-12deg); }
-    50% { opacity: 0.55; transform: rotate(-10deg); }
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: rotate(-12deg);
+    }
+    50% {
+        opacity: 0.55;
+        transform: rotate(-10deg);
+    }
 }
 
 /* The breathing recipe: brighten then dim, forever. Opacity-only (no scale)
    so the blurred glow never has to be re-rasterised. */
 @keyframes breathe {
-    0%, 100% { opacity: 0.45; }
-    50% { opacity: 0.8; }
+    0%,
+    100% {
+        opacity: 0.45;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Living photo — each vertical "frame" (slat) of a single image slowly zooms
+   in and out and drifts, so the faces breathe. Transform-only = GPU-cheap. */
+@keyframes strip-drift {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1.12);
+    }
+    50% {
+        transform: translate3d(0, -2%, 0) scale(1.28);
+    }
+}
+
+/* A crisp face "porthole" slowly zooming in and out on a smile. */
+@keyframes face-zoom {
+    0%,
+    100% {
+        transform: scale(1.08);
+    }
+    50% {
+        transform: scale(1.32);
+    }
+}
+
+/* Cinematic hero camera — a slow push-in toward the subject's smile with a
+   faint orbital sway (tiny rotate + lateral drift fake a camera arc around
+   him). Transform-only so the photo never re-rasterises; the zoom origin is
+   set inline on the element, anchored on the face. */
+@keyframes hero-orbit {
+    0%,
+    100% {
+        transform: scale(1.08) rotate(0.5deg) translateX(0.8%);
+    }
+    50% {
+        transform: scale(1.32) rotate(-0.6deg) translateX(-1%);
+    }
 }
 
 /* Performant animated glow border — a static conic gradient rotated on the GPU.
@@ -77,7 +189,9 @@ html {
    padded wrapper holds a full-bleed square with this class; real content sits on top
    in an inner rounded box, leaving only a glowing rim visible. */
 @keyframes spin-ring {
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 .spin-ring {
     background: conic-gradient(
@@ -96,30 +210,24 @@ html {
 /* Darker variant — a solid deep base with two travelling light glints, for a
    defined animated border around a whole panel. Same GPU-rotation (repaint-free). */
 .spin-ring-dark {
-    background: conic-gradient(
-        from 0deg,
-        #3a3b37 0deg,
-        #7da080 60deg,
-        #3a3b37 130deg,
-        #3a3b37 240deg,
-        #c9a978 300deg,
-        #3a3b37 360deg
-    );
+    background: conic-gradient(from 0deg, #3a3b37 0deg, #7da080 60deg, #3a3b37 130deg, #3a3b37 240deg, #c9a978 300deg, #3a3b37 360deg);
     animation: spin-ring 11s linear infinite;
     will-change: transform;
 }
 
 /* Animated soft-light border — a gentle glow drifting slowly along the edge. */
 @property --sanad-angle {
-    syntax: "<angle>";
+    syntax: '<angle>';
     initial-value: 0deg;
     inherits: false;
 }
 @keyframes sanad-border-spin {
-    to { --sanad-angle: 360deg; }
+    to {
+        --sanad-angle: 360deg;
+    }
 }
 .sanad-border::before {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
@@ -137,8 +245,27 @@ html {
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
+    mask-composite: exclude;
     animation: sanad-border-spin 12s linear infinite;
+    pointer-events: none;
+}
+
+/* Dark animated border — a deep ashen rim with sage/sand glints travelling along
+   it. Same masked-conic-gradient trick, on-brand and defined. Usage: a relative,
+   rounded element with class `sanad-border-dark`. */
+.sanad-border-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--sanad-angle), #494a45 0deg, #7da080 55deg, #494a45 130deg, #383935 240deg, #c9a978 300deg, #494a45 360deg);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: sanad-border-spin 14s linear infinite;
     pointer-events: none;
 }
 
@@ -171,13 +298,18 @@ html {
     --color-beige: #e8d9bf;
     --color-sand: #d4b483;
 
-    /* ashen — dusty neutral gray, slightly cool (use as bg-ashen, etc.) */
+    /* ashen — dusty warm-neutral gray, the brand neutral (use as bg-ashen, etc.) */
+    --color-ashen-50: #f6f6f4;
+    --color-ashen-100: #ececea;
+    --color-ashen-200: #d6d6d1;
     --color-ashen-300: #b0b1ab;
     --color-ashen-400: #92938d;
     --color-ashen-500: #76776f;
     --color-ashen-600: #5d5e58;
     --color-ashen-700: #494a45;
     --color-ashen-800: #383935;
+    --color-ashen-900: #25261f;
+    --color-ashen-950: #14150f;
 
     /* Sanad palette — sage green accent (use as bg-sage-500, text-sage-700, etc.) */
     --color-sage-50: #f3f6f3;
@@ -285,15 +417,18 @@ html {
     --chart-3: hsl(197, 37%, 24%);
     --chart-4: hsl(43, 74%, 66%);
     --chart-5: hsl(27, 87%, 67%);
-    --radius: 0.5rem;
-    --sidebar-background: hsl(0, 0%, 98%);
-    --sidebar-foreground: hsl(240, 5.3%, 30%);
-    --sidebar-primary: hsl(0, 0%, 10%);
-    --sidebar-primary-foreground: hsl(0, 0%, 98%);
-    --sidebar-accent: hsl(0, 0%, 94%);
-    --sidebar-accent-foreground: hsl(0, 0%, 30%);
-    --sidebar-border: hsl(0, 0%, 91%);
-    --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
+    --radius: 0.75rem;
+
+    /* Sanad shell — a soft warm-cream rail with sage accents, in the same
+       family as the page so it feels like one calm surface. */
+    --sidebar-background: hsl(42, 38%, 97%);
+    --sidebar-foreground: hsl(80, 6%, 28%);
+    --sidebar-primary: hsl(123, 16%, 38%);
+    --sidebar-primary-foreground: hsl(42, 38%, 97%);
+    --sidebar-accent: hsl(120, 24%, 91%);
+    --sidebar-accent-foreground: hsl(123, 20%, 24%);
+    --sidebar-border: hsl(40, 20%, 89%);
+    --sidebar-ring: hsl(123, 18%, 50%);
 }
 
 .dark {

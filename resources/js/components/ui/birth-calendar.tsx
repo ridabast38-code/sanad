@@ -33,10 +33,10 @@ export function BirthCalendar({ value, onChange, disabled }: { value: string; on
     const isSelected = (day: number) => !!selected && selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day;
     const isToday = (day: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
 
-    const navBtn = 'rounded-full p-1.5 text-stone-500 transition hover:bg-sage-100 hover:text-sage-700 disabled:opacity-40';
+    const navBtn = 'rounded-full p-1.5 text-ashen-500 transition hover:bg-sage-100 hover:text-sage-700 disabled:opacity-40';
 
     return (
-        <div className="relative overflow-hidden rounded-3xl border border-stone-200 bg-white/90 p-5 shadow-[0_18px_50px_-30px_rgba(79,111,82,0.5)]">
+        <div className="relative overflow-hidden rounded-3xl border border-ashen-200 bg-white/90 p-5 shadow-[0_18px_50px_-30px_rgba(79,111,82,0.5)]">
             {/* glowing sides */}
             <div aria-hidden className="pointer-events-none absolute -left-12 top-1/3 h-40 w-40 rounded-full bg-sage-300/40 blur-3xl animate-breathe" />
             <div aria-hidden className="pointer-events-none absolute -right-12 bottom-0 h-40 w-40 rounded-full bg-amber-200/40 blur-3xl animate-breathe [animation-delay:-3s]" />
@@ -52,7 +52,7 @@ export function BirthCalendar({ value, onChange, disabled }: { value: string; on
                             <ChevronLeft className="h-4 w-4" />
                         </button>
                     </div>
-                    <span className="font-display text-base text-stone-800">
+                    <span className="font-display text-base text-ashen-800">
                         {monthNames[month]} {year}
                     </span>
                     <div className="flex gap-1">
@@ -66,7 +66,7 @@ export function BirthCalendar({ value, onChange, disabled }: { value: string; on
                 </div>
 
                 {/* weekday labels */}
-                <div className="mb-1 grid grid-cols-7 text-center text-[11px] font-medium uppercase tracking-wide text-stone-400">
+                <div className="mb-1 grid grid-cols-7 text-center text-[11px] font-medium uppercase tracking-wide text-ashen-400">
                     {weekdays.map((w) => (
                         <span key={w} className="py-1">
                             {w}
@@ -94,12 +94,12 @@ export function BirthCalendar({ value, onChange, disabled }: { value: string; on
                                     disabled={disabled || isFuture(day)}
                                     onClick={() => onChange(toISO(new Date(year, month, day)))}
                                     whileTap={{ scale: 0.9 }}
-                                    className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors disabled:cursor-not-allowed disabled:text-stone-300 disabled:hover:bg-transparent ${
+                                    className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-sm transition-colors disabled:cursor-not-allowed disabled:text-ashen-300 disabled:hover:bg-transparent ${
                                         isSelected(day)
                                             ? 'bg-sage-700 text-white shadow-[0_6px_16px_-6px_rgba(79,111,82,0.9)]'
                                             : isToday(day)
-                                              ? 'text-stone-700 ring-1 ring-sage-400 hover:bg-sage-100'
-                                              : 'text-stone-700 hover:bg-sage-100'
+                                              ? 'text-ashen-700 ring-1 ring-sage-400 hover:bg-sage-100'
+                                              : 'text-ashen-700 hover:bg-sage-100'
                                     }`}
                                 >
                                     {day}
@@ -110,7 +110,7 @@ export function BirthCalendar({ value, onChange, disabled }: { value: string; on
                 </AnimatePresence>
 
                 {/* selected summary */}
-                <p className="mt-4 text-center text-xs text-stone-500">
+                <p className="mt-4 text-center text-xs text-ashen-500">
                     {selected ? selected.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Choose your date of birth'}
                 </p>
             </div>

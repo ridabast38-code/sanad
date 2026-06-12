@@ -1,13 +1,13 @@
-import AppLogoIcon from './app-logo-icon';
-
 export default function AppLogo() {
     return (
         <>
-            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
-                <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
+            {/* Sanad badge — the cream "S" on sage, matching our favicon */}
+            <div className="bg-sage-600 flex aspect-square size-9 items-center justify-center rounded-lg shadow-sm">
+                <span className="font-display text-cream text-xl leading-none">S</span>
             </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="mb-0.5 truncate leading-none font-semibold">Laravel Starter Kit</span>
+            <div className="ml-1 grid flex-1 text-left">
+                <span className="font-display text-sidebar-foreground text-base leading-tight">Sanad</span>
+                <span className="text-sidebar-foreground/60 truncate text-[10px] tracking-[0.12em] uppercase">Psychological support</span>
             </div>
         </>
     );

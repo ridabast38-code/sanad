@@ -1,0 +1,34 @@
+import { LegalPage } from '@/components/legal-page';
+
+export default function Terms() {
+    return (
+        <LegalPage title="Terms of Service">
+            <p>
+                Welcome to Sanad. By creating an account or booking a session, you agree to these terms — written plainly, because clarity is part of
+                care.
+            </p>
+            <h2>What Sanad is</h2>
+            <p>
+                Sanad connects you with psychological support specialists who hold a Master’s (M2) in Clinical Psychology and work under the
+                supervision of certified psychologists. Sanad provides psychological support — it is not a medical service and not a substitute for
+                professional or emergency care.
+            </p>
+            <h2>In an emergency</h2>
+            <p>If you are in danger or in crisis, do not wait for a session — contact your local emergency number immediately.</p>
+            <h2>Bookings &amp; payment</h2>
+            <p>
+                A booking is a request until your specialist confirms it. Payment is arranged after confirmation. If you need to cancel or reschedule,
+                please do so at least 24 hours before your session so the time can be offered to someone else.
+            </p>
+            <h2>Respect &amp; safety</h2>
+            <p>
+                Our specialists commit to treating you with care and confidentiality, and we ask the same respect toward them. Sanad may suspend
+                accounts that abuse the platform or the people on it.
+            </p>
+            <h2>Questions</h2>
+            <p>
+                Write to us at <a href="mailto:hello@sanad.com">hello@sanad.com</a>.
+            </p>
+        </LegalPage>
+    );
+}

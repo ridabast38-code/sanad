@@ -7,7 +7,15 @@ interface AppShellProps {
 }
 
 export function AppShell({ children, variant = 'header' }: AppShellProps) {
-    const [isOpen, setIsOpen] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('sidebar') !== 'false' : true));
+    // Open by default so navigation is always discoverable; remembers the user's last choice.
+    const [isOpen, setIsOpen] = useState(() => {
+        if (typeof window === 'undefined') {
+            return true;
+        }
+        const stored = localStorage.getItem('sidebar');
+
+        return stored === null ? true : stored === 'true';
+    });
 
     const handleSidebarChange = (open: boolean) => {
         setIsOpen(open);
