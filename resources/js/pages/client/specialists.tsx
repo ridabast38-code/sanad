@@ -1,8 +1,7 @@
 import { AmbientBackground } from '@/components/ambient-background';
 import { ClientFooter } from '@/components/client-footer';
 import { matchesPreferences, SpecialistCard, type MatchPreferences, type Specialist } from '@/components/specialist-card';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import ClientLayout from '@/layouts/client-layout';
 import { Head } from '@inertiajs/react';
 import { ShieldCheck, Users } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -12,11 +11,6 @@ interface SpecialistsProps {
     preferences: MatchPreferences;
 }
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Home', href: '/dashboard' },
-    { title: 'Specialists', href: '/specialists' },
-];
-
 const fadeUp = {
     initial: { opacity: 0, y: 18 },
     whileInView: { opacity: 1, y: 0 },
@@ -25,7 +19,7 @@ const fadeUp = {
 
 export default function Specialists({ practitioners, preferences }: SpecialistsProps) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <ClientLayout>
             <Head title="Our specialists" />
 
             <div className="bg-cream text-ashen-800 relative flex min-h-full flex-col overflow-hidden">
@@ -59,6 +53,6 @@ export default function Specialists({ practitioners, preferences }: SpecialistsP
 
                 <ClientFooter />
             </div>
-        </AppLayout>
+        </ClientLayout>
     );
 }

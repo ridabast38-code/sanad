@@ -1,8 +1,7 @@
 import { AmbientBackground } from '@/components/ambient-background';
 import { ClientFooter } from '@/components/client-footer';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import ClientLayout from '@/layouts/client-layout';
 import { Head, useForm } from '@inertiajs/react';
 import { ArrowUpRight, CalendarClock, Clock, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -33,12 +32,6 @@ interface SpecialistProfileProps {
 }
 
 export default function SpecialistProfile({ specialist, services, slots }: SpecialistProfileProps) {
-    const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Home', href: '/dashboard' },
-        { title: 'Specialists', href: '/specialists' },
-        { title: specialist.name, href: `/therapists/${specialist.id}` },
-    ];
-
     const { data, setData, post, processing, errors } = useForm({
         practitioner_id: specialist.id,
         service_id: services[0]?.id ?? 0,
@@ -54,7 +47,7 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <ClientLayout>
             <Head title={specialist.name} />
 
             <div className="bg-cream text-ashen-800 relative flex min-h-full flex-col overflow-hidden">
@@ -221,6 +214,6 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
 
                 <ClientFooter />
             </div>
-        </AppLayout>
+        </ClientLayout>
     );
 }

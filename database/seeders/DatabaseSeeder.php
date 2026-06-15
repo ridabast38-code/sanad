@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(TherapistSeeder::class);
+        $this->call(RealAccountsSeeder::class);
+        $this->call(DemoDataSeeder::class);
     }
 }

@@ -135,6 +135,10 @@ class User extends Authenticatable
      */
     public function homeRoute(): string
     {
-        return 'dashboard';
+        return match ($this->role) {
+            UserRole::Practitioner => 'practitioner.dashboard',
+            UserRole::Admin => 'admin.dashboard',
+            default => 'dashboard',
+        };
     }
 }

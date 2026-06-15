@@ -152,14 +152,19 @@ export default function Home() {
                         <nav className="flex w-full items-center justify-between px-6 py-6 md:px-12">
                             <div className="hidden flex-1 md:block" />
                             <ul className="hidden items-center gap-8 text-sm text-white/90 md:flex">
-                                <li className="cursor-pointer transition hover:text-white">Services</li>
-                                <li className="flex cursor-pointer items-center gap-1 transition hover:text-white">
-                                    About <ChevronRight className="h-4 w-4" />
-                                </li>
-                                <li className="cursor-pointer transition hover:text-white">Approach</li>
-                                <li className="flex cursor-pointer items-center gap-1 transition hover:text-white">
-                                    Contact <ChevronRight className="h-4 w-4" />
-                                </li>
+                                {[
+                                    { label: 'Services', href: '#support' },
+                                    { label: 'Our team', href: '#team' },
+                                    { label: 'Approach', href: '#approaches' },
+                                    { label: 'Contact', href: '#contact' },
+                                ].map((item) => (
+                                    <li key={item.href}>
+                                        <a href={item.href} className="group relative inline-block py-1 transition hover:text-white">
+                                            {item.label}
+                                            <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                                        </a>
+                                    </li>
+                                ))}
                             </ul>
                             <div className="text-xl text-white md:hidden">Sanad</div>
                             <div className="flex flex-1 justify-end">
@@ -349,7 +354,7 @@ export default function Home() {
                                         </h2>
                                     </div>
                                     <a
-                                        href="#how"
+                                        href="#faq"
                                         className="group text-ashen-900 inline-flex items-center gap-2.5 rounded-full bg-white py-2 pr-5 pl-2 text-sm font-medium transition hover:bg-white/90"
                                     >
                                         <span className="bg-ashen-900/10 group-hover:bg-ashen-900/20 flex h-6 w-6 items-center justify-center rounded-full transition">
@@ -362,7 +367,7 @@ export default function Home() {
                                 {/* two entry doors — alternating editorial rows */}
                                 <div className="space-y-16 md:space-y-24">
                                     {/* Emergency First Aid — text left, photo right */}
-                                    <a href="#" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
+                                    <a href="/register" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
                                         <motion.div
                                             initial={{ opacity: 0, x: -40 }}
                                             whileInView={{ opacity: 1, x: 0 }}
@@ -432,7 +437,7 @@ export default function Home() {
                                     </a>
 
                                     {/* Ongoing Support — photo left, text right */}
-                                    <a href="#" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
+                                    <a href="/register" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             whileInView={{ opacity: 1, scale: 1 }}
@@ -847,7 +852,7 @@ export default function Home() {
             </div>
 
             {/* ===== FOOTER — cinematic, Lebanese identity + trust ===== */}
-            <footer className="bg-ashen-950 relative overflow-hidden text-white">
+            <footer id="contact" className="bg-ashen-950 relative scroll-mt-20 overflow-hidden text-white">
                 {/* cinematic background photo — swap for a Lebanese shot (cedars / Beirut coast / mountains) */}
                 <img
                     src="/images/team-bg.jpg"
@@ -974,10 +979,10 @@ export default function Home() {
                     <div className="flex flex-col gap-4 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
                         <p className="text-xs text-white/50">© {new Date().getFullYear()} Sanad. All rights reserved.</p>
                         <div className="flex items-center gap-6 text-xs text-white/60">
-                            <a href="#" className="transition hover:text-white">
+                            <a href="/privacy" className="transition hover:text-white">
                                 Privacy
                             </a>
-                            <a href="#" className="transition hover:text-white">
+                            <a href="/terms" className="transition hover:text-white">
                                 Terms
                             </a>
                             <a href="#faq" className="transition hover:text-white">
