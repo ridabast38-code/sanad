@@ -159,6 +159,36 @@ test('accepting a booking confirms it and emails the client and practitioner', f
     Notification::assertSentTo($practitioner, SessionConfirmedForPractitioner::class);
 });
 
+test('a slot that is already booked cannot be booked again and is no longer offered', function () {
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+    $other = User::factory()->create();
+
+    $page = $this->actingAs($client)->get(route('specialists.show', $practitioner))->viewData('page');
+    $slotIso = $page['props']['slots'][0]['iso'];
+    $serviceId = $page['props']['services'][0]['id'];
+
+    // First client takes the slot.
+    $this->actingAs($client)->post(route('bookings.store'), [
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $serviceId,
+        'scheduled_at' => $slotIso,
+    ]);
+
+    // A second client trying the same slot is rejected.
+    $this->actingAs($other)->post(route('bookings.store'), [
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $serviceId,
+        'scheduled_at' => $slotIso,
+    ])->assertSessionHasErrors('scheduled_at');
+
+    expect(Booking::whereIn('status', ['pending', 'confirmed'])->count())->toBe(1);
+
+    // And the taken slot is no longer offered on the profile.
+    $slots = $this->actingAs($other)->get(route('specialists.show', $practitioner))->viewData('page')['props']['slots'];
+    expect(collect($slots)->pluck('iso'))->not->toContain($slotIso);
+});
+
 test('a slot the practitioner does not offer is rejected', function () {
     $practitioner = makeBookablePractitioner();
     $client = User::factory()->create();

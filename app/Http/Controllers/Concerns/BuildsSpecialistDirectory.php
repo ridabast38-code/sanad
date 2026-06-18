@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Concerns;
 
 use App\Enums\UserRole;
-use App\Models\Availability;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -22,7 +21,9 @@ trait BuildsSpecialistDirectory
             ->whereHas('practitionerProfile', function ($query) {
                 $query->where('approval_status', 'approved');
             })
-            ->with(['practitionerProfile', 'availabilities', 'services'])
+            ->with(['practitionerProfile', 'availabilities', 'services', 'practitionerBookings' => function ($query) {
+                $query->whereIn('status', ['pending', 'confirmed'])->where('scheduled_at', '>=', now());
+            }])
             ->get()
             ->map(fn (User $practitioner) => $this->transformPractitioner($practitioner))
             ->sortBy('next_available_at')
@@ -37,7 +38,7 @@ trait BuildsSpecialistDirectory
     private function transformPractitioner(User $practitioner): array
     {
         $profile = $practitioner->practitionerProfile;
-        $upcomingSlots = $this->upcomingSlots($practitioner->availabilities);
+        $upcomingSlots = $this->upcomingSlots($practitioner);
         $nextSlot = $upcomingSlots->first();
         $fromPrice = $practitioner->services->min(fn ($service) => (float) $service->pivot->price);
 
@@ -63,16 +64,17 @@ trait BuildsSpecialistDirectory
 
     /**
      * Concrete upcoming occurrences of the weekly availability windows (this
-     * week and the next), soonest first.
+     * week and the next), soonest first — with any slots that are already
+     * booked removed, so a time is never offered twice.
      *
-     * @param  Collection<int, Availability>  $availabilities
      * @return Collection<int, Carbon>
      */
-    private function upcomingSlots($availabilities): Collection
+    private function upcomingSlots(User $practitioner): Collection
     {
         $now = now();
+        $bookedTimestamps = $this->bookedTimestamps($practitioner);
 
-        return $availabilities
+        return $practitioner->availabilities
             ->flatMap(function ($availability) use ($now) {
                 $daysAhead = ($availability->day_of_week - $now->dayOfWeek + 7) % 7;
 
@@ -86,19 +88,39 @@ trait BuildsSpecialistDirectory
 
                 return [$candidate, $candidate->copy()->addWeek()];
             })
+            ->reject(fn (Carbon $slot) => in_array($slot->getTimestamp(), $bookedTimestamps, true))
             ->sort()
             ->values();
     }
 
     /**
+     * The start times of the practitioner's still-active future sessions, so
+     * already-booked slots are filtered out of what we offer.
+     *
+     * @return array<int, int>
+     */
+    private function bookedTimestamps(User $practitioner): array
+    {
+        $bookings = $practitioner->relationLoaded('practitionerBookings')
+            ? $practitioner->practitionerBookings
+            : $practitioner->practitionerBookings()
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->where('scheduled_at', '>=', now())
+                ->get();
+
+        return $bookings
+            ->map(fn ($booking) => $booking->scheduled_at->getTimestamp())
+            ->all();
+    }
+
+    /**
      * The next bookable slots as concrete datetimes with display labels.
      *
-     * @param  Collection<int, Availability>  $availabilities
      * @return array<int, array{iso: string, label: string}>
      */
-    private function upcomingSlotOptions($availabilities, int $count = 6): array
+    private function upcomingSlotOptions(User $practitioner, int $count = 6): array
     {
-        return $this->upcomingSlots($availabilities)
+        return $this->upcomingSlots($practitioner)
             ->take($count)
             ->map(fn (Carbon $slot) => [
                 'iso' => $slot->toIso8601String(),

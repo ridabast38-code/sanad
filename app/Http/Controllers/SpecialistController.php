@@ -61,7 +61,7 @@ class SpecialistController extends Controller
                 'duration_minutes' => $service->duration_minutes,
                 'price' => (float) $service->pivot->price,
             ])->values(),
-            'slots' => $this->upcomingSlotOptions($practitioner->availabilities),
+            'slots' => $this->upcomingSlotOptions($practitioner),
         ]);
     }
 }

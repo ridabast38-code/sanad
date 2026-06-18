@@ -53,11 +53,26 @@ class BookingController extends Controller
             ]);
         }
 
-        $offeredSlots = collect($this->upcomingSlotOptions($practitioner->availabilities))->pluck('iso');
+        $offeredSlots = collect($this->upcomingSlotOptions($practitioner))->pluck('iso');
 
         if (! $offeredSlots->contains($validated['scheduled_at'])) {
             throw ValidationException::withMessages([
                 'scheduled_at' => 'That time is no longer available — please pick another slot.',
+            ]);
+        }
+
+        $scheduledAt = Carbon::parse($validated['scheduled_at']);
+
+        // Guard against two clients racing for the same slot: never let an
+        // already-booked time be taken again.
+        $slotTaken = Booking::where('practitioner_id', $practitioner->id)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('scheduled_at', $scheduledAt)
+            ->exists();
+
+        if ($slotTaken) {
+            throw ValidationException::withMessages([
+                'scheduled_at' => 'That time was just booked — please choose another slot.',
             ]);
         }
 
@@ -67,7 +82,7 @@ class BookingController extends Controller
             'client_id' => $request->user()->id,
             'practitioner_id' => $practitioner->id,
             'service_id' => $service->id,
-            'scheduled_at' => Carbon::parse($validated['scheduled_at']),
+            'scheduled_at' => $scheduledAt,
             'status' => 'pending',
             'price' => $price,
             'platform_amount' => round($price * self::PLATFORM_SHARE, 2),
