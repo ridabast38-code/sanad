@@ -35,10 +35,10 @@ class SessionConfirmedForPractitioner extends Notification implements ShouldQueu
         $booking = $this->booking;
 
         return (new MailMessage)
-            ->subject('New confirmed session — '.$booking->client->name)
+            ->subject('New confirmed session — '.$booking->clientName())
             ->greeting('You have a confirmed session, '.$booking->practitioner->name)
             ->line('A client\'s payment has been confirmed, so this session is now on your schedule.')
-            ->line('Client: '.$booking->client->name)
+            ->line('Client: '.$booking->clientName())
             ->line('Service: '.$booking->service->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->line('Your share: $'.number_format((float) $booking->practitioner_amount, 2))

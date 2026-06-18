@@ -36,7 +36,7 @@ class BookingCancelledForClient extends Notification implements ShouldQueue
 
         $mail = (new MailMessage)
             ->subject('Your session has been cancelled')
-            ->greeting('Hello '.$booking->client->name)
+            ->greeting('Hello '.$booking->clientName())
             ->line('Your session with '.$booking->practitioner->name.' has been cancelled.')
             ->line('Service: '.$booking->service->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'));

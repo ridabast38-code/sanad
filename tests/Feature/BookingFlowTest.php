@@ -419,6 +419,80 @@ test('the meeting link must be a valid url', function () {
         ->assertSessionHasErrors('meeting_link');
 });
 
+test('an admin can create a booking for a registered client', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+
+    $page = $this->actingAs($admin)->get(route('admin.bookings.create'))->viewData('page');
+    $option = collect($page['props']['practitioners'])->firstWhere('id', $practitioner->id);
+
+    $this->actingAs($admin)->post(route('admin.bookings.store'), [
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $option['services'][0]['id'],
+        'scheduled_at' => $option['slots'][0]['iso'],
+        'client_type' => 'registered',
+        'client_id' => $client->id,
+    ])->assertRedirect(route('admin.bookings'));
+
+    $booking = Booking::sole();
+    expect($booking->client_id)->toBe($client->id)
+        ->and($booking->status)->toBe('pending')
+        ->and($booking->guest_name)->toBeNull();
+});
+
+test('an admin can create a guest (walk-in) booking without an account', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+
+    $page = $this->actingAs($admin)->get(route('admin.bookings.create'))->viewData('page');
+    $option = collect($page['props']['practitioners'])->firstWhere('id', $practitioner->id);
+
+    $this->actingAs($admin)->post(route('admin.bookings.store'), [
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $option['services'][0]['id'],
+        'scheduled_at' => $option['slots'][0]['iso'],
+        'client_type' => 'guest',
+        'guest_name' => 'Layla Walk-in',
+        'guest_email' => 'layla@example.com',
+        'guest_phone' => '+961 70 000 000',
+    ])->assertRedirect(route('admin.bookings'));
+
+    $booking = Booking::sole();
+    expect($booking->client_id)->toBeNull()
+        ->and($booking->guest_name)->toBe('Layla Walk-in')
+        ->and($booking->guest_email)->toBe('layla@example.com')
+        ->and($booking->clientName())->toBe('Layla Walk-in');
+});
+
+test('a guest booking emails the guest when it is accepted', function () {
+    Notification::fake();
+
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+
+    $booking = Booking::create([
+        'client_id' => null,
+        'guest_name' => 'Layla Walk-in',
+        'guest_email' => 'layla@example.com',
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $practitioner->services->first()->id,
+        'scheduled_at' => now()->addWeek()->setTime(17, 0),
+        'status' => 'pending',
+        'price' => 40,
+        'platform_amount' => 8,
+        'practitioner_amount' => 32,
+        'payment_status' => 'unpaid',
+    ]);
+
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.action', $booking), ['action' => 'paid'])
+        ->assertRedirect();
+
+    Notification::assertSentOnDemand(BookingConfirmedForClient::class);
+    Notification::assertSentTo($practitioner, SessionConfirmedForPractitioner::class);
+});
+
 test('privacy and terms pages are public', function () {
     $this->get(route('privacy'))->assertOk();
     $this->get(route('terms'))->assertOk();

@@ -36,7 +36,7 @@ class BookingConfirmedForClient extends Notification implements ShouldQueue
 
         $mail = (new MailMessage)
             ->subject('Your session is confirmed 🌿')
-            ->greeting('You\'re all set, '.$booking->client->name)
+            ->greeting('You\'re all set, '.$booking->clientName())
             ->line('Your payment has been received and your session is confirmed.')
             ->line('With: '.$booking->practitioner->name)
             ->line('Service: '.$booking->service->name)

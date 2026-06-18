@@ -39,7 +39,7 @@ class DashboardController extends Controller
                 ->map(fn (Transaction $transaction) => [
                     'id' => $transaction->id,
                     'date' => $transaction->paid_at?->format('M j'),
-                    'client' => $transaction->booking->client->name,
+                    'client' => $transaction->booking->clientName(),
                     'practitioner' => $transaction->booking->practitioner->name,
                     'amount' => (float) $transaction->amount,
                     'platform_fee' => (float) $transaction->platform_fee,
@@ -154,7 +154,7 @@ class DashboardController extends Controller
     {
         return [
             'id' => $booking->id,
-            'client' => $booking->client->name,
+            'client' => $booking->clientName(),
             'practitioner' => $booking->practitioner->name,
             'service' => $booking->service->name,
             'scheduled_label' => $booking->scheduled_at->format('M j, Y · g:i A'),
@@ -182,7 +182,7 @@ class DashboardController extends Controller
             ->map(fn (Transaction $transaction) => [
                 'id' => $transaction->id,
                 'date' => $transaction->paid_at?->format('M j, Y'),
-                'client' => $transaction->booking->client->name,
+                'client' => $transaction->booking->clientName(),
                 'practitioner' => $transaction->booking->practitioner->name,
                 'amount' => (float) $transaction->amount,
                 'refunded' => (float) $transaction->refunded_amount,

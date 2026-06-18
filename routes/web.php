@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BookingActionController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ManualBookingController;
 use App\Http\Controllers\Admin\PayoutController;
 use App\Http\Controllers\Admin\PractitionerApprovalController;
 use App\Http\Controllers\Admin\StaffController;
@@ -61,6 +62,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('staff', [StaffController::class, 'store'])->name('staff.store');
         Route::get('clients', [AdminDashboardController::class, 'clients'])->name('clients');
         Route::get('bookings', [AdminDashboardController::class, 'bookings'])->name('bookings');
+        Route::get('bookings/create', [ManualBookingController::class, 'create'])->name('bookings.create');
+        Route::post('bookings', [ManualBookingController::class, 'store'])->name('bookings.store');
         Route::patch('bookings/{booking}', [BookingActionController::class, 'update'])->name('bookings.action');
         Route::get('transactions', [AdminDashboardController::class, 'transactions'])->name('transactions');
         Route::patch('transactions/{transaction}/payout', [PayoutController::class, 'update'])->name('payouts.update');

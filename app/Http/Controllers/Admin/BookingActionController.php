@@ -44,7 +44,7 @@ class BookingActionController extends Controller
         $booking->settle();
         $booking->loadMissing(['client', 'practitioner', 'service']);
 
-        $booking->client->notify(new BookingConfirmedForClient($booking));
+        $booking->notifyClient(new BookingConfirmedForClient($booking));
         $booking->practitioner->notify(new SessionConfirmedForPractitioner($booking));
     }
 
@@ -71,7 +71,7 @@ class BookingActionController extends Controller
 
         $booking->loadMissing(['client', 'practitioner', 'service']);
 
-        $booking->client->notify(new BookingCancelledForClient($booking, $refundAmount));
+        $booking->notifyClient(new BookingCancelledForClient($booking, $refundAmount));
         $booking->practitioner->notify(new SessionCancelledForPractitioner($booking));
     }
 

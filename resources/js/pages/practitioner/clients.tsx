@@ -2,9 +2,9 @@ import { PageHeader, Table, Td } from '@/components/staff/kit';
 import StaffLayout from '@/layouts/staff-layout';
 
 interface Client {
-    id: number;
+    id: string;
     name: string;
-    email: string;
+    email: string | null;
     sessions: number;
     completed: number;
     next_at: string | null;

@@ -55,18 +55,20 @@ class DashboardController extends Controller
         $clients = $me->practitionerBookings()
             ->with('client')
             ->get()
-            ->groupBy('client_id')
-            ->map(function ($bookings) {
-                $client = $bookings->first()->client;
+            ->groupBy(fn (Booking $booking) => $booking->client_id
+                ? 'user-'.$booking->client_id
+                : 'guest-'.($booking->guest_email ?: $booking->guest_phone ?: $booking->id))
+            ->map(function ($bookings, $key) {
+                $first = $bookings->first();
                 $next = $bookings->where('status', 'confirmed')
                     ->where('scheduled_at', '>=', now())
                     ->sortBy('scheduled_at')
                     ->first();
 
                 return [
-                    'id' => $client->id,
-                    'name' => $client->name,
-                    'email' => $client->email,
+                    'id' => $key,
+                    'name' => $first->clientName(),
+                    'email' => $first->clientEmail(),
                     'sessions' => $bookings->count(),
                     'completed' => $bookings->where('status', 'completed')->count(),
                     'next_at' => $next?->scheduled_at?->format('D, M j · g:i A'),
@@ -101,7 +103,7 @@ class DashboardController extends Controller
                 'id' => $transaction->id,
                 'date' => $transaction->paid_at?->format('M j, Y'),
                 'month_key' => $transaction->paid_at?->format('Y-m'),
-                'client' => $transaction->booking->client->name,
+                'client' => $transaction->booking->clientName(),
                 'service' => $transaction->booking->service->name,
                 'amount' => (float) $transaction->amount,
                 'platform_fee' => (float) $transaction->platform_fee,
@@ -150,7 +152,7 @@ class DashboardController extends Controller
     {
         return [
             'id' => $booking->id,
-            'client' => $booking->client->name,
+            'client' => $booking->clientName(),
             'service' => $booking->service->name,
             'scheduled_label' => $booking->scheduled_at->format('D, M j · g:i A'),
             'status' => $booking->status,

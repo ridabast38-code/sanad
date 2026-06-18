@@ -35,9 +35,9 @@ class NewBookingRequested extends Notification implements ShouldQueue
         $booking = $this->booking;
 
         return (new MailMessage)
-            ->subject('New booking request — '.$booking->client->name)
+            ->subject('New booking request — '.$booking->clientName())
             ->greeting('A new session was booked')
-            ->line($booking->client->name.' booked a session with '.$booking->practitioner->name.'.')
+            ->line($booking->clientName().' booked a session with '.$booking->practitioner->name.'.')
             ->line('Service: '.$booking->service->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->line('Price: $'.number_format((float) $booking->price, 2))

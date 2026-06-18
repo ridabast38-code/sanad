@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Notification as FacadesNotification;
 
 class Booking extends Model
 {
@@ -26,6 +28,9 @@ class Booking extends Model
      */
     protected $fillable = [
         'client_id',
+        'guest_name',
+        'guest_email',
+        'guest_phone',
         'practitioner_id',
         'service_id',
         'scheduled_at',
@@ -84,6 +89,49 @@ class Booking extends Model
     public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class);
+    }
+
+    /**
+     * Whether this is a walk-in / WhatsApp booking with no registered account.
+     */
+    public function isGuest(): bool
+    {
+        return $this->client_id === null;
+    }
+
+    /**
+     * The booker's display name — the registered client, or the guest's name.
+     */
+    public function clientName(): string
+    {
+        return $this->client?->name ?? $this->guest_name ?? 'Guest';
+    }
+
+    /**
+     * The booker's email for notifications — the registered client's, or the
+     * one a guest provided (may be null if a walk-in left no email).
+     */
+    public function clientEmail(): ?string
+    {
+        return $this->client?->email ?? $this->guest_email;
+    }
+
+    /**
+     * Send a notification to the booker, whether they're a registered client or
+     * a guest. Guests are emailed on-demand at the address they gave; if a
+     * walk-in left no email, nothing is sent.
+     */
+    public function notifyClient(Notification $notification): void
+    {
+        if ($this->client) {
+            $this->client->notify($notification);
+
+            return;
+        }
+
+        if ($this->guest_email) {
+            FacadesNotification::route('mail', $this->guest_email)->notify($notification);
+        }
     }
 
     /**

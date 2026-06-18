@@ -36,7 +36,7 @@ class MeetingLinkReady extends Notification implements ShouldQueue
 
         return (new MailMessage)
             ->subject('Your session link is ready 🌿')
-            ->greeting('Everything\'s ready, '.$booking->client->name)
+            ->greeting('Everything\'s ready, '.$booking->clientName())
             ->line('The link to join your session is now waiting for you.')
             ->line('With: '.$booking->practitioner->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))

@@ -31,7 +31,7 @@ class MeetingLinkController extends Controller
 
         if ($isNewLink && $booking->status === 'confirmed') {
             $booking->loadMissing(['client', 'practitioner', 'service']);
-            $booking->client->notify(new MeetingLinkReady($booking));
+            $booking->notifyClient(new MeetingLinkReady($booking));
         }
 
         return back();

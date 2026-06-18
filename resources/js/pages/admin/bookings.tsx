@@ -2,8 +2,8 @@ import { DateFilter } from '@/components/staff/date-filter';
 import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
 import { MeetingLinkEditor } from '@/components/staff/meeting-link-editor';
 import StaffLayout from '@/layouts/staff-layout';
-import { router } from '@inertiajs/react';
-import { Check, CheckCheck, RotateCcw, UserX, X } from 'lucide-react';
+import { Link, router } from '@inertiajs/react';
+import { CalendarPlus, Check, CheckCheck, RotateCcw, UserX, X } from 'lucide-react';
 
 type BookingAction = 'paid' | 'cancelled' | 'completed' | 'no_show';
 
@@ -81,7 +81,18 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
 
     return (
         <StaffLayout title="Bookings">
-            <PageHeader title="Bookings" subtitle="Accept paid requests, reject unpaid ones, and review every session." />
+            <PageHeader
+                title="Bookings"
+                subtitle="Accept paid requests, reject unpaid ones, and review every session."
+                action={
+                    <Link
+                        href="/admin/bookings/create"
+                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition"
+                    >
+                        <CalendarPlus className="size-4" /> New booking
+                    </Link>
+                }
+            />
 
             {/* ===== Awaiting your decision ===== */}
             <div className="mb-10">
