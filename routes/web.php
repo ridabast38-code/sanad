@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingActionController;
+use App\Http\Controllers\Admin\BookingRescheduleController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ManualBookingController;
 use App\Http\Controllers\Admin\PayoutController;
@@ -64,6 +65,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('bookings', [AdminDashboardController::class, 'bookings'])->name('bookings');
         Route::get('bookings/create', [ManualBookingController::class, 'create'])->name('bookings.create');
         Route::post('bookings', [ManualBookingController::class, 'store'])->name('bookings.store');
+        Route::get('bookings/{booking}/reschedule', [BookingRescheduleController::class, 'edit'])->name('bookings.reschedule.edit');
+        Route::patch('bookings/{booking}/reschedule', [BookingRescheduleController::class, 'update'])->name('bookings.reschedule');
         Route::patch('bookings/{booking}', [BookingActionController::class, 'update'])->name('bookings.action');
         Route::get('transactions', [AdminDashboardController::class, 'transactions'])->name('transactions');
         Route::patch('transactions/{transaction}/payout', [PayoutController::class, 'update'])->name('payouts.update');

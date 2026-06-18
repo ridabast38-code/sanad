@@ -11,6 +11,8 @@ use App\Notifications\MeetingLinkReady;
 use App\Notifications\NewBookingRequested;
 use App\Notifications\SessionCancelledForPractitioner;
 use App\Notifications\SessionConfirmedForPractitioner;
+use App\Notifications\SessionRescheduledForClient;
+use App\Notifications\SessionRescheduledForPractitioner;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia;
 
@@ -491,6 +493,43 @@ test('a guest booking emails the guest when it is accepted', function () {
 
     Notification::assertSentOnDemand(BookingConfirmedForClient::class);
     Notification::assertSentTo($practitioner, SessionConfirmedForPractitioner::class);
+});
+
+test('an admin can reschedule a session to another free slot', function () {
+    Notification::fake();
+
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+
+    $page = $this->actingAs($client)->get(route('specialists.show', $practitioner))->viewData('page');
+    $slots = $page['props']['slots'];
+
+    $this->actingAs($client)->post(route('bookings.store'), [
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $page['props']['services'][0]['id'],
+        'scheduled_at' => $slots[0]['iso'],
+    ]);
+
+    $booking = Booking::sole();
+    $booking->settle();
+
+    // The reschedule form should offer other free times, not the taken one.
+    $editSlots = $this->actingAs($admin)
+        ->get(route('admin.bookings.reschedule.edit', $booking))
+        ->viewData('page')['props']['slots'];
+    $newIso = collect($editSlots)->pluck('iso')->first();
+
+    expect($newIso)->not->toBe($slots[0]['iso']);
+
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.reschedule', $booking), ['scheduled_at' => $newIso])
+        ->assertRedirect(route('admin.bookings'));
+
+    expect($booking->fresh()->scheduled_at->equalTo($newIso))->toBeTrue();
+
+    Notification::assertSentTo($client, SessionRescheduledForClient::class);
+    Notification::assertSentTo($practitioner, SessionRescheduledForPractitioner::class);
 });
 
 test('privacy and terms pages are public', function () {
