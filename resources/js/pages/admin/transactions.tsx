@@ -2,7 +2,7 @@ import { DateFilter } from '@/components/staff/date-filter';
 import { Badge, money, PageHeader, Section, StatCard, Table, Td } from '@/components/staff/kit';
 import StaffLayout from '@/layouts/staff-layout';
 import { router } from '@inertiajs/react';
-import { Coins, HandCoins, PiggyBank, Wallet } from 'lucide-react';
+import { Coins, HandCoins, PiggyBank, RotateCcw, Wallet } from 'lucide-react';
 
 interface Tx {
     id: number;
@@ -10,6 +10,7 @@ interface Tx {
     client: string;
     practitioner: string;
     amount: number;
+    refunded: number;
     platform_fee: number;
     payout: number;
     status: string;
@@ -17,7 +18,7 @@ interface Tx {
 }
 
 interface Props {
-    totals: { gross: number; platform_profit: number; payouts: number; pending_payout: number; count: number };
+    totals: { gross: number; refunded: number; platform_profit: number; payouts: number; pending_payout: number; count: number };
     transactions: Tx[];
     filters: { from: string | null; to: string | null };
 }
@@ -34,14 +35,18 @@ export default function AdminTransactions({ totals, transactions, filters }: Pro
 
             <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard label="Platform profit (20%)" value={money(totals.platform_profit)} icon={PiggyBank} />
-                <StatCard label="Gross billed" value={money(totals.gross)} icon={Coins} accent="ashen" />
+                <StatCard label="Net kept (after refunds)" value={money(totals.gross)} icon={Coins} accent="ashen" />
                 <StatCard label="Paid to specialists" value={money(totals.payouts)} icon={Wallet} accent="ashen" />
-                <StatCard label="Owed (pending payout)" value={money(totals.pending_payout)} icon={HandCoins} accent="sand" />
+                {totals.refunded > 0 ? (
+                    <StatCard label="Refunded to clients" value={money(totals.refunded)} icon={RotateCcw} accent="sand" />
+                ) : (
+                    <StatCard label="Owed (pending payout)" value={money(totals.pending_payout)} icon={HandCoins} accent="sand" />
+                )}
             </div>
 
             <Section title={`Transactions (${totals.count})`}>
                 <Table
-                    head={['Date', 'Client', 'Practitioner', 'Amount', 'Platform cut', 'Payout', 'Payment', 'Payout to specialist']}
+                    head={['Date', 'Client', 'Practitioner', 'Amount', 'Refunded', 'Platform cut', 'Payout', 'Payment', 'Payout to specialist']}
                     empty={transactions.length === 0 ? 'No transactions yet.' : undefined}
                 >
                     {transactions.map((t) => (
@@ -50,6 +55,7 @@ export default function AdminTransactions({ totals, transactions, filters }: Pro
                             <Td className="font-medium">{t.client}</Td>
                             <Td className="text-ashen-500">{t.practitioner}</Td>
                             <Td>{money(t.amount)}</Td>
+                            <Td className="text-ashen-400">{t.refunded > 0 ? money(t.refunded) : '—'}</Td>
                             <Td className="text-sage-700 font-semibold">{money(t.platform_fee)}</Td>
                             <Td className="text-ashen-500">{money(t.payout)}</Td>
                             <Td>

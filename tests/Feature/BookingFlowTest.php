@@ -212,6 +212,68 @@ test('cancelling a paid booking refunds it and notifies the client and practitio
     Notification::assertSentTo($practitioner, SessionCancelledForPractitioner::class);
 });
 
+test('a partial refund recomputes the platform and practitioner split on the kept amount', function () {
+    Notification::fake();
+
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+    $booking = makePendingBooking($client, $practitioner); // price 40
+    $booking->settle();
+
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.action', $booking), ['action' => 'cancelled', 'refund_amount' => 20])
+        ->assertRedirect();
+
+    $transaction = $booking->transaction->fresh();
+
+    // Kept $20 → platform $4, practitioner $16; still payable (partial).
+    expect((float) $transaction->refunded_amount)->toBe(20.0)
+        ->and((float) $transaction->platform_fee)->toBe(4.0)
+        ->and((float) $transaction->practitioner_payout)->toBe(16.0)
+        ->and($transaction->status)->toBe('completed')
+        ->and($booking->fresh()->payment_status)->toBe('partially_refunded');
+
+    Notification::assertSentTo($client, BookingCancelledForClient::class);
+});
+
+test('a full refund zeroes the practitioner payout', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+    $booking = makePendingBooking($client, $practitioner);
+    $booking->settle();
+
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.action', $booking), ['action' => 'cancelled'])
+        ->assertRedirect();
+
+    $transaction = $booking->transaction->fresh();
+
+    expect((float) $transaction->refunded_amount)->toBe(40.0)
+        ->and((float) $transaction->practitioner_payout)->toBe(0.0)
+        ->and($transaction->status)->toBe('refunded');
+});
+
+test('a no-show keeps the full payment unless a refund is given', function () {
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+    $booking = makePendingBooking($client, $practitioner);
+    $booking->settle();
+
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.action', $booking), ['action' => 'no_show'])
+        ->assertRedirect();
+
+    $transaction = $booking->transaction->fresh();
+
+    expect($booking->fresh()->status)->toBe('no_show')
+        ->and($transaction->status)->toBe('completed')
+        ->and((float) $transaction->refunded_amount)->toBe(0.0)
+        ->and((float) $transaction->practitioner_payout)->toBe(32.0);
+});
+
 test('a slot the practitioner does not offer is rejected', function () {
     $practitioner = makeBookablePractitioner();
     $client = User::factory()->create();

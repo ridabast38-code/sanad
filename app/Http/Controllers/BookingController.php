@@ -22,7 +22,7 @@ class BookingController extends Controller
     /**
      * The platform's share of every booking (the rest goes to the practitioner).
      */
-    private const PLATFORM_SHARE = 0.20;
+    private const PLATFORM_SHARE = Booking::PLATFORM_SHARE;
 
     /**
      * Book a session: validate the chosen slot is genuinely offered by the

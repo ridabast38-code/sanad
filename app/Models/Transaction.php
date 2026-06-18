@@ -22,10 +22,12 @@ class Transaction extends Model
         'amount',
         'platform_fee',
         'practitioner_payout',
+        'refunded_amount',
         'status',
         'payout_status',
         'paid_at',
         'payout_at',
+        'refunded_at',
     ];
 
     /**
@@ -39,8 +41,10 @@ class Transaction extends Model
             'amount' => 'decimal:2',
             'platform_fee' => 'decimal:2',
             'practitioner_payout' => 'decimal:2',
+            'refunded_amount' => 'decimal:2',
             'paid_at' => 'datetime',
             'payout_at' => 'datetime',
+            'refunded_at' => 'datetime',
         ];
     }
 

@@ -15,6 +15,11 @@ class Booking extends Model
     use HasFactory;
 
     /**
+     * The platform's share of every booking (the rest goes to the practitioner).
+     */
+    public const PLATFORM_SHARE = 0.20;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -98,6 +103,35 @@ class Booking extends Model
             'practitioner_payout' => $this->practitioner_amount,
             'status' => 'completed',
             'paid_at' => Carbon::now(),
+        ]);
+    }
+
+    /**
+     * Refund part or all of a paid booking. The kept amount (price minus the
+     * refund) keeps the same 80/20 split, so the platform fee and practitioner
+     * payout are recomputed on what the client actually paid in the end. A full
+     * refund zeroes the payout; a partial refund leaves the transaction payable
+     * for the reduced share.
+     */
+    public function refund(float $refundAmount): void
+    {
+        $price = (float) $this->price;
+        $refundAmount = round(max(0.0, min($refundAmount, $price)), 2);
+        $isFull = $refundAmount >= $price;
+
+        $kept = round($price - $refundAmount, 2);
+        $platformFee = round($kept * self::PLATFORM_SHARE, 2);
+
+        $this->update([
+            'payment_status' => $isFull ? 'refunded' : ($refundAmount > 0 ? 'partially_refunded' : $this->payment_status),
+        ]);
+
+        $this->transaction?->update([
+            'platform_fee' => $platformFee,
+            'practitioner_payout' => round($kept - $platformFee, 2),
+            'refunded_amount' => $refundAmount,
+            'refunded_at' => $refundAmount > 0 ? Carbon::now() : null,
+            'status' => $isFull ? 'refunded' : 'completed',
         ]);
     }
 }

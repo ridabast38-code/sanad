@@ -22,13 +22,14 @@ class BookingActionController extends Controller
     {
         $validated = $request->validate([
             'action' => ['required', 'in:paid,completed,no_show,cancelled'],
+            'refund_amount' => ['nullable', 'numeric', 'min:0', 'max:'.(float) $booking->price],
         ]);
 
         match ($validated['action']) {
             'paid' => $this->accept($booking),
             'completed' => $booking->update(['status' => 'completed']),
-            'no_show' => $booking->update(['status' => 'no_show']),
-            'cancelled' => $this->cancel($booking),
+            'no_show' => $this->markNoShow($booking, (float) ($validated['refund_amount'] ?? 0)),
+            'cancelled' => $this->cancel($booking, isset($validated['refund_amount']) ? (float) $validated['refund_amount'] : null),
         };
 
         return back();
@@ -48,24 +49,43 @@ class BookingActionController extends Controller
     }
 
     /**
-     * Cancel the booking — the session can no longer happen — refund any
-     * recorded transaction, and tell both the client and practitioner. We mark
-     * the transaction refunded (which removes it from the practitioner's
-     * earnings and payouts) but leave payout_status untouched, so an
-     * already-paid payout stays on record for the admin to reconcile.
+     * Cancel the booking — the session can no longer happen — refund the client
+     * (full unless a smaller amount is given), and tell both the client and
+     * practitioner. The refund recomputes the 80/20 split on whatever is kept,
+     * which also removes the refunded share from the practitioner's earnings.
      */
-    private function cancel(Booking $booking): void
+    private function cancel(Booking $booking, ?float $refundAmount): void
     {
-        $booking->update([
-            'status' => 'cancelled',
-            'payment_status' => $booking->payment_status === 'paid' ? 'refunded' : 'unpaid',
-        ]);
+        $wasPaid = $booking->payment_status === 'paid';
 
-        $booking->transaction?->update(['status' => 'refunded']);
+        $booking->update(['status' => 'cancelled']);
+
+        if ($wasPaid) {
+            // No amount given means a full refund of what was paid.
+            $refundAmount ??= (float) $booking->price;
+            $booking->refund($refundAmount);
+        } else {
+            $booking->update(['payment_status' => 'unpaid']);
+            $refundAmount = 0.0;
+        }
 
         $booking->loadMissing(['client', 'practitioner', 'service']);
 
-        $booking->client->notify(new BookingCancelledForClient($booking));
+        $booking->client->notify(new BookingCancelledForClient($booking, $refundAmount));
         $booking->practitioner->notify(new SessionCancelledForPractitioner($booking));
+    }
+
+    /**
+     * Mark a no-show. The client forfeits the payment by default (the slot was
+     * held for them), but the admin may still choose to refund part or all of
+     * it — which recomputes the split just like a cancellation.
+     */
+    private function markNoShow(Booking $booking, float $refundAmount): void
+    {
+        $booking->update(['status' => 'no_show']);
+
+        if ($refundAmount > 0 && $booking->payment_status === 'paid') {
+            $booking->refund($refundAmount);
+        }
     }
 }

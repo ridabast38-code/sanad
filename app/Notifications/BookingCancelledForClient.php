@@ -15,7 +15,7 @@ class BookingCancelledForClient extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Booking $booking) {}
+    public function __construct(public Booking $booking, public float $refundedAmount = 0) {}
 
     /**
      * Get the notification's delivery channels.
@@ -41,8 +41,8 @@ class BookingCancelledForClient extends Notification implements ShouldQueue
             ->line('Service: '.$booking->service->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'));
 
-        if ($booking->payment_status === 'refunded') {
-            $mail->line('Your payment is being refunded — please allow a little time for it to reach you.');
+        if ($this->refundedAmount > 0) {
+            $mail->line('We\'re refunding $'.number_format($this->refundedAmount, 2).' to you — please allow a little time for it to reach you.');
         }
 
         return $mail

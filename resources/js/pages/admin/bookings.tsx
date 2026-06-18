@@ -27,14 +27,56 @@ interface Props {
 }
 
 export default function AdminBookings({ pending, confirmed, bookings, filters }: Props) {
-    const act = (id: number, action: BookingAction) => {
-        if (
-            action === 'cancelled' &&
-            !window.confirm('Cancel this session and refund the client? The client and practitioner will both be emailed.')
-        ) {
-            return;
+    // Ask for a refund amount (0 to the full price). Returns the amount, or
+    // null if the admin backed out. The 80/20 split recalculates on what's kept.
+    const askRefund = (price: number, message: string, fallback: string): number | null => {
+        const input = window.prompt(message, fallback);
+        if (input === null) {
+            return null;
         }
-        router.patch(`/admin/bookings/${id}`, { action }, { preserveScroll: true });
+        const amount = Number(input);
+        if (!Number.isFinite(amount) || amount < 0 || amount > price) {
+            window.alert(`Please enter an amount between 0 and ${price}.`);
+            return null;
+        }
+        return amount;
+    };
+
+    const act = (id: number, action: BookingAction, price?: number) => {
+        let refund_amount: number | undefined;
+
+        if (action === 'cancelled') {
+            if (price === undefined) {
+                // Rejecting a request that was never paid — nothing to refund.
+                if (!window.confirm('Reject this unpaid request?')) {
+                    return;
+                }
+            } else {
+                const amount = askRefund(
+                    price,
+                    `Refund how much to the client? Up to $${price}. Leave the full amount for a full refund — the 80/20 split recalculates on what's kept.`,
+                    String(price),
+                );
+                if (amount === null) {
+                    return;
+                }
+                refund_amount = amount;
+            }
+        }
+
+        if (action === 'no_show' && price !== undefined) {
+            const amount = askRefund(
+                price,
+                `No-show. Keep the full payment (enter 0) or refund up to $${price} as goodwill?`,
+                '0',
+            );
+            if (amount === null) {
+                return;
+            }
+            refund_amount = amount;
+        }
+
+        router.patch(`/admin/bookings/${id}`, { action, refund_amount }, { preserveScroll: true });
     };
 
     return (
@@ -110,14 +152,14 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => act(b.id, 'no_show')}
+                                            onClick={() => act(b.id, 'no_show', b.price)}
                                             className="border-ashen-300 text-ashen-600 hover:bg-ashen-100 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
                                         >
                                             <UserX className="size-3.5" /> No-show
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => act(b.id, 'cancelled')}
+                                            onClick={() => act(b.id, 'cancelled', b.price)}
                                             className="inline-flex items-center gap-1.5 rounded-full border border-red-200 px-3.5 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50"
                                         >
                                             <RotateCcw className="size-3.5" /> Cancel & refund

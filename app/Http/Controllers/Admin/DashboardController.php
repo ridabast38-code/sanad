@@ -185,6 +185,7 @@ class DashboardController extends Controller
                 'client' => $transaction->booking->client->name,
                 'practitioner' => $transaction->booking->practitioner->name,
                 'amount' => (float) $transaction->amount,
+                'refunded' => (float) $transaction->refunded_amount,
                 'platform_fee' => (float) $transaction->platform_fee,
                 'payout' => (float) $transaction->practitioner_payout,
                 'status' => $transaction->status,
@@ -193,7 +194,10 @@ class DashboardController extends Controller
 
         return Inertia::render('admin/transactions', [
             'totals' => [
-                'gross' => round((float) $transactions->sum('amount'), 2),
+                // Gross is what the platform actually kept (price minus refunds),
+                // so it always equals platform profit + practitioner payouts.
+                'gross' => round((float) $transactions->sum(fn ($t) => $t['amount'] - $t['refunded']), 2),
+                'refunded' => round((float) $transactions->sum('refunded'), 2),
                 'platform_profit' => round((float) $transactions->sum('platform_fee'), 2),
                 'payouts' => round((float) $transactions->sum('payout'), 2),
                 'pending_payout' => round((float) $transactions->where('payout_status', 'pending')->sum('payout'), 2),
