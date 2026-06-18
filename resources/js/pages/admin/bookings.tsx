@@ -3,7 +3,9 @@ import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components
 import { MeetingLinkEditor } from '@/components/staff/meeting-link-editor';
 import StaffLayout from '@/layouts/staff-layout';
 import { router } from '@inertiajs/react';
-import { Check, X } from 'lucide-react';
+import { Check, CheckCheck, RotateCcw, UserX, X } from 'lucide-react';
+
+type BookingAction = 'paid' | 'cancelled' | 'completed' | 'no_show';
 
 interface BookingRow {
     id: number;
@@ -25,7 +27,15 @@ interface Props {
 }
 
 export default function AdminBookings({ pending, confirmed, bookings, filters }: Props) {
-    const act = (id: number, action: 'paid' | 'cancelled') => router.patch(`/admin/bookings/${id}`, { action }, { preserveScroll: true });
+    const act = (id: number, action: BookingAction) => {
+        if (
+            action === 'cancelled' &&
+            !window.confirm('Cancel this session and refund the client? The client and practitioner will both be emailed.')
+        ) {
+            return;
+        }
+        router.patch(`/admin/bookings/${id}`, { action }, { preserveScroll: true });
+    };
 
     return (
         <StaffLayout title="Bookings">
@@ -77,16 +87,42 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                     {confirmed.length > 0 ? (
                         <div className="space-y-3">
                             {confirmed.map((b) => (
-                                <div key={b.id} className={`flex flex-wrap items-center gap-4 p-4 ${CARD}`}>
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-ashen-800 font-medium">
-                                            {b.client} <span className="text-ashen-400 font-normal">with</span> {b.practitioner}
-                                        </p>
-                                        <p className="text-ashen-500 text-sm">
-                                            {b.service} · {b.scheduled_label}
-                                        </p>
+                                <div key={b.id} className={`p-4 ${CARD}`}>
+                                    <div className="flex flex-wrap items-center gap-4">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="text-ashen-800 font-medium">
+                                                {b.client} <span className="text-ashen-400 font-normal">with</span> {b.practitioner}
+                                            </p>
+                                            <p className="text-ashen-500 text-sm">
+                                                {b.service} · {b.scheduled_label} · {money(b.price)}
+                                            </p>
+                                        </div>
+                                        <MeetingLinkEditor bookingId={b.id} meetingLink={b.meeting_link} />
                                     </div>
-                                    <MeetingLinkEditor bookingId={b.id} meetingLink={b.meeting_link} />
+                                    <div className="border-sage-100 mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
+                                        <span className="text-ashen-400 mr-auto text-xs">After the session:</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => act(b.id, 'completed')}
+                                            className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
+                                        >
+                                            <CheckCheck className="size-3.5" /> Mark completed
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => act(b.id, 'no_show')}
+                                            className="border-ashen-300 text-ashen-600 hover:bg-ashen-100 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
+                                        >
+                                            <UserX className="size-3.5" /> No-show
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => act(b.id, 'cancelled')}
+                                            className="inline-flex items-center gap-1.5 rounded-full border border-red-200 px-3.5 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-50"
+                                        >
+                                            <RotateCcw className="size-3.5" /> Cancel & refund
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

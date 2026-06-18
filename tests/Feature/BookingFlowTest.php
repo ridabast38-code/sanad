@@ -5,9 +5,11 @@ use App\Models\Availability;
 use App\Models\Booking;
 use App\Models\Service;
 use App\Models\User;
+use App\Notifications\BookingCancelledForClient;
 use App\Notifications\BookingConfirmedForClient;
 use App\Notifications\MeetingLinkReady;
 use App\Notifications\NewBookingRequested;
+use App\Notifications\SessionCancelledForPractitioner;
 use App\Notifications\SessionConfirmedForPractitioner;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia;
@@ -187,6 +189,27 @@ test('a slot that is already booked cannot be booked again and is no longer offe
     // And the taken slot is no longer offered on the profile.
     $slots = $this->actingAs($other)->get(route('specialists.show', $practitioner))->viewData('page')['props']['slots'];
     expect(collect($slots)->pluck('iso'))->not->toContain($slotIso);
+});
+
+test('cancelling a paid booking refunds it and notifies the client and practitioner', function () {
+    Notification::fake();
+
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+    $booking = makePendingBooking($client, $practitioner);
+    $booking->settle(); // paid + confirmed, with a transaction
+
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.action', $booking), ['action' => 'cancelled'])
+        ->assertRedirect();
+
+    expect($booking->fresh()->status)->toBe('cancelled')
+        ->and($booking->fresh()->payment_status)->toBe('refunded')
+        ->and($booking->transaction->fresh()->status)->toBe('refunded');
+
+    Notification::assertSentTo($client, BookingCancelledForClient::class);
+    Notification::assertSentTo($practitioner, SessionCancelledForPractitioner::class);
 });
 
 test('a slot the practitioner does not offer is rejected', function () {

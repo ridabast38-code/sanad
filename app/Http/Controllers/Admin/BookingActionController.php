@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Notifications\BookingCancelledForClient;
 use App\Notifications\BookingConfirmedForClient;
+use App\Notifications\SessionCancelledForPractitioner;
 use App\Notifications\SessionConfirmedForPractitioner;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,8 +48,11 @@ class BookingActionController extends Controller
     }
 
     /**
-     * Cancel the booking — the session can no longer happen — and refund any
-     * recorded transaction.
+     * Cancel the booking — the session can no longer happen — refund any
+     * recorded transaction, and tell both the client and practitioner. We mark
+     * the transaction refunded (which removes it from the practitioner's
+     * earnings and payouts) but leave payout_status untouched, so an
+     * already-paid payout stays on record for the admin to reconcile.
      */
     private function cancel(Booking $booking): void
     {
@@ -56,9 +61,11 @@ class BookingActionController extends Controller
             'payment_status' => $booking->payment_status === 'paid' ? 'refunded' : 'unpaid',
         ]);
 
-        $booking->transaction?->update([
-            'status' => 'refunded',
-            'payout_status' => 'pending',
-        ]);
+        $booking->transaction?->update(['status' => 'refunded']);
+
+        $booking->loadMissing(['client', 'practitioner', 'service']);
+
+        $booking->client->notify(new BookingCancelledForClient($booking));
+        $booking->practitioner->notify(new SessionCancelledForPractitioner($booking));
     }
 }
