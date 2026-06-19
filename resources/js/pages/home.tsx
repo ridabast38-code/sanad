@@ -379,7 +379,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 {/* two entry doors — alternating editorial rows */}
                                 <div className="space-y-16 md:space-y-24">
                                     {/* Emergency First Aid — text left, photo right */}
-                                    <a href="/register" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
+                                    <a href="/emergency" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
                                         <motion.div
                                             initial={{ opacity: 0, x: -40 }}
                                             whileInView={{ opacity: 1, x: 0 }}

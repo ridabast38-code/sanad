@@ -1,7 +1,8 @@
 import { AmbientBackground } from '@/components/ambient-background';
 import { type SafetyInfo } from '@/components/crisis-safety';
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, ArrowRight, CalendarHeart, Check, Heart, MessageCircle } from 'lucide-react';
+import { type SharedData } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { ArrowLeft, ArrowRight, CalendarHeart, Check, Heart, MessageCircle, UserPlus } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
 
@@ -35,6 +36,9 @@ interface FlowPageProps {
 type Stage = 'intro' | 'check' | 'path' | 'closing';
 
 export default function EmergencyFlow({ flow, safety }: FlowPageProps) {
+    const { auth } = usePage<SharedData>().props;
+    const isGuest = !auth.user;
+
     const [stage, setStage] = useState<Stage>('intro');
     const [introIndex, setIntroIndex] = useState(0);
     const [feeling, setFeeling] = useState<string | null>(null);
@@ -126,7 +130,7 @@ export default function EmergencyFlow({ flow, safety }: FlowPageProps) {
                                     />
                                 )}
 
-                                {stage === 'closing' && path && <ClosingCard lines={path.closing} safety={safety} />}
+                                {stage === 'closing' && path && <ClosingCard lines={path.closing} safety={safety} isGuest={isGuest} />}
                             </motion.div>
                         </AnimatePresence>
                     </div>
@@ -222,7 +226,7 @@ function CheckCard({
     );
 }
 
-function ClosingCard({ lines, safety }: { lines: string[]; safety: SafetyInfo }) {
+function ClosingCard({ lines, safety, isGuest }: { lines: string[]; safety: SafetyInfo; isGuest: boolean }) {
     return (
         <div className="flex flex-1 flex-col">
             <motion.span
@@ -256,18 +260,27 @@ function ClosingCard({ lines, safety }: { lines: string[]; safety: SafetyInfo })
                     <MessageCircle className="size-4" /> I still feel overwhelmed — talk to someone now
                 </a>
 
-                <Link
-                    href="/specialists"
-                    className="border-sage-300 text-sage-700 hover:bg-sage-50 flex w-full items-center justify-center gap-2 rounded-full border bg-white/60 px-6 py-4 text-sm font-semibold transition active:scale-[0.99]"
-                >
-                    <CalendarHeart className="size-4" /> Arrange ongoing support
-                </Link>
+                {isGuest ? (
+                    <Link
+                        href="/register"
+                        className="border-sage-300 text-sage-700 hover:bg-sage-50 flex w-full items-center justify-center gap-2 rounded-full border bg-white/60 px-6 py-4 text-sm font-semibold transition active:scale-[0.99]"
+                    >
+                        <UserPlus className="size-4" /> Create an account for ongoing support
+                    </Link>
+                ) : (
+                    <Link
+                        href="/specialists"
+                        className="border-sage-300 text-sage-700 hover:bg-sage-50 flex w-full items-center justify-center gap-2 rounded-full border bg-white/60 px-6 py-4 text-sm font-semibold transition active:scale-[0.99]"
+                    >
+                        <CalendarHeart className="size-4" /> Arrange ongoing support
+                    </Link>
+                )}
 
                 <Link
-                    href="/dashboard"
+                    href={isGuest ? '/' : '/dashboard'}
                     className="text-ashen-500 hover:text-sage-700 flex w-full items-center justify-center gap-2 py-3 text-sm font-medium transition"
                 >
-                    <Check className="size-4" /> I’m feeling steadier — return to my space
+                    <Check className="size-4" /> {isGuest ? 'I’m feeling steadier — return home' : 'I’m feeling steadier — return to my space'}
                 </Link>
             </div>
         </div>

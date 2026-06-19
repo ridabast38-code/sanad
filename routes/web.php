@@ -38,13 +38,6 @@ Route::middleware(['auth'])->group(function () {
     // A session's video link — set by an admin or the session's own practitioner.
     Route::patch('bookings/{booking}/meeting-link', [MeetingLinkController::class, 'update'])->name('bookings.meeting-link');
 
-    // Emergency guided stabilization — reachable by clients even before they've
-    // finished onboarding, so someone in crisis is never blocked by a form.
-    Route::middleware('role:client')->group(function () {
-        Route::get('emergency', [EmergencyController::class, 'index'])->name('emergency.index');
-        Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emergency.show');
-    });
-
     // ===== Client area =====
     Route::middleware(['role:client', 'onboarded'])->group(function () {
         Route::get('dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
@@ -85,6 +78,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('practitioners/{practitioner}/payout-all', [PayoutController::class, 'settleAll'])->name('payouts.settle-all');
     });
 });
+
+// Emergency guided stabilization — public on purpose. Someone in crisis (whether
+// a registered client or an unregistered visitor from the landing page) gets the
+// same free flow immediately, with the option to log in, register, or reach us on
+// WhatsApp. No auth, so a form never blocks help.
+Route::get('emergency', [EmergencyController::class, 'index'])->name('emergency.index');
+Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emergency.show');
 
 Route::get('privacy', fn () => Inertia::render('legal/privacy'))->name('privacy');
 Route::get('terms', fn () => Inertia::render('legal/terms'))->name('terms');

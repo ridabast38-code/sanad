@@ -1,7 +1,8 @@
 import { AmbientBackground } from '@/components/ambient-background';
 import { CrisisSafety, type SafetyInfo } from '@/components/crisis-safety';
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, ArrowUpRight, Car, CloudRain, Flame, HeartCrack, LifeBuoy, type LucideIcon, Waves } from 'lucide-react';
+import { type SharedData } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { ArrowLeft, ArrowUpRight, Car, CloudRain, Flame, HeartCrack, LifeBuoy, LogIn, type LucideIcon, UserPlus, Waves } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface FlowMenuItem {
@@ -26,6 +27,9 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
+    const { auth } = usePage<SharedData>().props;
+    const isGuest = !auth.user;
+
     return (
         <>
             <Head title="Get help now" />
@@ -35,10 +39,10 @@ export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
 
                 <div className="relative mx-auto flex min-h-screen max-w-3xl flex-col px-6 py-10 md:py-14">
                     <Link
-                        href="/dashboard"
+                        href={isGuest ? '/' : '/dashboard'}
                         className="text-ashen-500 hover:text-sage-700 mb-10 inline-flex items-center gap-2 self-start text-sm font-medium transition"
                     >
-                        <ArrowLeft className="size-4" /> Back to my space
+                        <ArrowLeft className="size-4" /> {isGuest ? 'Back to home' : 'Back to my space'}
                     </Link>
 
                     <motion.header
@@ -62,6 +66,29 @@ export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
                     <div className="mb-8">
                         <CrisisSafety safety={safety} />
                     </div>
+
+                    {isGuest && (
+                        <div className="border-sage-200/70 bg-sage-50/50 mb-8 rounded-2xl border p-5">
+                            <p className="text-ashen-700 text-sm font-semibold">You can start right now — no account needed.</p>
+                            <p className="text-ashen-500 mt-1 text-sm">
+                                Begin a grounding exercise below, or sign in so a specialist can follow up with you afterwards.
+                            </p>
+                            <div className="mt-4 flex flex-wrap gap-3">
+                                <Link
+                                    href="/login"
+                                    className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex items-center gap-2 rounded-full border bg-white px-5 py-2.5 text-sm font-semibold transition active:scale-95"
+                                >
+                                    <LogIn className="size-4" /> Log in
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex items-center gap-2 rounded-full border bg-white px-5 py-2.5 text-sm font-semibold transition active:scale-95"
+                                >
+                                    <UserPlus className="size-4" /> Create an account
+                                </Link>
+                            </div>
+                        </div>
+                    )}
 
                     <p className="text-ashen-400 mb-5 text-[11px] font-semibold tracking-[0.2em] uppercase">What are you going through?</p>
 

@@ -35,7 +35,7 @@ test('a client can open a guided flow for a known trauma type', function () {
         );
 });
 
-test('an unknown trauma type sends the client back to the emergency menu', function () {
+test('an unknown trauma type sends the visitor back to the emergency menu', function () {
     $client = User::factory()->create();
 
     $this->actingAs($client)
@@ -43,14 +43,29 @@ test('an unknown trauma type sends the client back to the emergency menu', funct
         ->assertRedirect(route('emergency.index'));
 });
 
-test('the emergency screens require a signed-in client', function () {
-    $this->get(route('emergency.index'))->assertRedirect(route('login'));
+test('the emergency screens are public so an unregistered visitor can get help', function () {
+    $this->get(route('emergency.index'))
+        ->assertOk()
+        ->assertInertia(fn (AssertableInertia $page) => $page->component('emergency/index')->has('flows'));
 
-    // A non-client (here a practitioner) is bounced to their own home, not the flow.
-    $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);
-    $this->actingAs($practitioner)
-        ->get(route('emergency.index'))
-        ->assertRedirect(route('practitioner.dashboard'));
+    $this->get(route('emergency.show', 'accident'))
+        ->assertOk()
+        ->assertInertia(fn (AssertableInertia $page) => $page->component('emergency/flow')->where('flow.key', 'accident'));
+});
+
+test('all four trauma flows are available', function () {
+    $client = User::factory()->create();
+
+    foreach (['accident', 'war', 'grief', 'disaster'] as $type) {
+        $this->actingAs($client)
+            ->get(route('emergency.show', $type))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('emergency/flow')
+                ->where('flow.key', $type)
+                ->has('flow.paths')
+            );
+    }
 });
 
 test('the emergency whatsapp link uses the configured number', function () {
