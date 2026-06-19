@@ -1,8 +1,8 @@
-import { ArrowUpRight, ChevronRight, Clock, Globe, Mail, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, ChevronRight, Clock, Globe, LifeBuoy, Mail, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 
-export default function Home() {
+export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
     const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(232,217,191,0.45), rgba(212,180,131,0.15) 35%, transparent 70%)`;
@@ -116,6 +116,18 @@ export default function Home() {
 
     return (
         <div className="bg-cream min-h-screen">
+            {/* Always-present crisis fast lane for visitors in distress — one tap to
+            a real person on WhatsApp, no sign-up needed. */}
+            <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fixed bottom-5 left-5 z-[70] inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 active:scale-95"
+            >
+                <LifeBuoy className="size-4" />
+                <span className="hidden sm:inline">Need help now?</span>
+            </a>
+
             {/* FILM GRAIN — cinematic texture over the whole page */}
             <div
                 aria-hidden
@@ -948,7 +960,12 @@ export default function Home() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://wa.me/961" className="flex items-center gap-2.5 transition hover:text-white">
+                                    <a
+                                        href={whatsappUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-2.5 transition hover:text-white"
+                                    >
                                         <MessageCircle className="text-sage-400 h-4 w-4" /> WhatsApp us
                                     </a>
                                 </li>

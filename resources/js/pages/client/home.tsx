@@ -12,6 +12,7 @@ import {
     Compass,
     CreditCard,
     FileText,
+    LifeBuoy,
     Lock,
     LogOut,
     Share2,
@@ -226,6 +227,19 @@ function SessionsView({
                 <section className="space-y-8 md:space-y-10">
                     <ColumnHeader title="Find support" />
                     <BookNow count={specialistCount} onFind={onFindSpecialist} />
+                    <Link
+                        href="/emergency"
+                        className="group flex items-center gap-4 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-5 transition hover:bg-amber-50 active:scale-[0.99]"
+                    >
+                        <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                            <LifeBuoy className="size-5" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                            <span className="text-ashen-800 block text-sm font-semibold">Going through something right now?</span>
+                            <span className="text-ashen-500 block text-xs">Get gentle, immediate support — one step at a time.</span>
+                        </span>
+                        <ArrowUpRight className="size-4 text-amber-400 transition group-hover:translate-x-0.5" />
+                    </Link>
                     <div className="space-y-5">
                         <SectionLabel>Daily intention</SectionLabel>
                         <DailyIntention />
@@ -578,6 +592,13 @@ function TopNav({
             </nav>
 
             <div className="flex items-center gap-2">
+                <Link
+                    href="/emergency"
+                    className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-white/60 px-3.5 py-2 text-sm font-semibold text-amber-700 transition hover:bg-amber-50 active:scale-95"
+                >
+                    <LifeBuoy className="size-4" />
+                    <span className="hidden sm:inline">Urgent help</span>
+                </Link>
                 <button
                     type="button"
                     onClick={() => onNavigate('notifications')}
@@ -809,11 +830,7 @@ function SessionJoin({ session }: { session: UpcomingSession }) {
     const { isOpen, isLive, hasEnded, msUntilStart } = sessionTiming(session, now);
 
     if (hasEnded) {
-        return (
-            <div className="border-sage-200/60 text-ashen-400 mt-4 border-t pt-4 text-xs font-medium">
-                This session has ended.
-            </div>
-        );
+        return <div className="border-sage-200/60 text-ashen-400 mt-4 border-t pt-4 text-xs font-medium">This session has ended.</div>;
     }
 
     // The join window is open — wake the button up (or, if the specialist hasn't

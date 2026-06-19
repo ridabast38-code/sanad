@@ -1,5 +1,5 @@
 import { DateFilter } from '@/components/staff/date-filter';
-import { Badge, money, PageHeader, Section, StatCard, Table, Td } from '@/components/staff/kit';
+import { Badge, money, PageHeader, Section, StatCard, Table, Td, TypeBadge } from '@/components/staff/kit';
 import StaffLayout from '@/layouts/staff-layout';
 import { Coins, HandCoins, Wallet } from 'lucide-react';
 
@@ -8,6 +8,7 @@ interface Tx {
     date: string | null;
     client: string;
     service: string;
+    type: string;
     amount: number;
     platform_fee: number;
     payout: number;
@@ -55,7 +56,7 @@ export default function PractitionerEarnings({ totals, monthly, transactions, fi
 
             <Section title={`Transactions (${totals.count})`}>
                 <Table
-                    head={['Date', 'Client', 'Service', 'Billed', 'Fee', 'Your payout', 'Payout status']}
+                    head={['Date', 'Client', 'Service', 'Type', 'Billed', 'Fee', 'Your payout', 'Payout status']}
                     empty={transactions.length === 0 ? 'No transactions yet.' : undefined}
                 >
                     {transactions.map((t) => (
@@ -63,6 +64,9 @@ export default function PractitionerEarnings({ totals, monthly, transactions, fi
                             <Td className="whitespace-nowrap">{t.date}</Td>
                             <Td className="font-medium">{t.client}</Td>
                             <Td className="text-ashen-500">{t.service}</Td>
+                            <Td>
+                                <TypeBadge type={t.type} />
+                            </Td>
                             <Td>{money(t.amount)}</Td>
                             <Td className="text-ashen-400">−{money(t.platform_fee)}</Td>
                             <Td className="text-sage-700 font-semibold">{money(t.payout)}</Td>

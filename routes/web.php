@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PractitionerApprovalController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientHomeController;
+use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\MeetingLinkController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Practitioner\DashboardController as PractitionerDashboardController;
@@ -19,7 +20,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('home');
+    return Inertia::render('home', [
+        // The emergency WhatsApp fast lane — for visitors in crisis who aren't
+        // registered, the quickest way to reach a real person.
+        'whatsappUrl' => 'https://wa.me/'.config('sanad.whatsapp').'?text='.rawurlencode('Hi Sanad, I need urgent help.'),
+    ]);
 })->name('home');
 
 Route::get('/playground', function () {
@@ -32,6 +37,13 @@ Route::middleware(['auth'])->group(function () {
 
     // A session's video link — set by an admin or the session's own practitioner.
     Route::patch('bookings/{booking}/meeting-link', [MeetingLinkController::class, 'update'])->name('bookings.meeting-link');
+
+    // Emergency guided stabilization — reachable by clients even before they've
+    // finished onboarding, so someone in crisis is never blocked by a form.
+    Route::middleware('role:client')->group(function () {
+        Route::get('emergency', [EmergencyController::class, 'index'])->name('emergency.index');
+        Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emergency.show');
+    });
 
     // ===== Client area =====
     Route::middleware(['role:client', 'onboarded'])->group(function () {

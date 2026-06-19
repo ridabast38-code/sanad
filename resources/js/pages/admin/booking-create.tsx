@@ -28,20 +28,28 @@ interface ClientOption {
     email: string;
 }
 
+interface EmergencyCategory {
+    key: string;
+    label: string;
+}
+
 interface Props {
     practitioners: Practitioner[];
     clients: ClientOption[];
+    emergencyCategories: EmergencyCategory[];
 }
 
 const FIELD =
     'border-sage-200 focus:border-sage-400 focus:ring-sage-200 text-ashen-800 w-full rounded-xl border bg-white px-4 py-2.5 text-sm transition outline-none focus:ring-2';
 const LABEL = 'text-ashen-700 mb-1.5 block text-sm font-medium';
 
-export default function AdminBookingCreate({ practitioners, clients }: Props) {
+export default function AdminBookingCreate({ practitioners, clients, emergencyCategories }: Props) {
     const { data, setData, post, processing, errors } = useForm({
         practitioner_id: '',
         service_id: '',
         scheduled_at: '',
+        type: 'standard',
+        emergency_category: '',
         client_type: 'registered',
         client_id: '',
         guest_name: '',
@@ -50,10 +58,9 @@ export default function AdminBookingCreate({ practitioners, clients }: Props) {
         client_note: '',
     });
 
-    const practitioner = useMemo(
-        () => practitioners.find((p) => String(p.id) === data.practitioner_id),
-        [practitioners, data.practitioner_id],
-    );
+    const isEmergency = data.type === 'emergency';
+
+    const practitioner = useMemo(() => practitioners.find((p) => String(p.id) === data.practitioner_id), [practitioners, data.practitioner_id]);
 
     const choosePractitioner = (id: string) => {
         // Reset the dependent choices whenever the specialist changes.
@@ -76,6 +83,45 @@ export default function AdminBookingCreate({ practitioners, clients }: Props) {
             <PageHeader title="New booking" subtitle="Book on behalf of a client who reached you by phone or WhatsApp." />
 
             <form onSubmit={submit} className={`max-w-2xl space-y-6 p-6 ${CARD}`}>
+                {/* Booking type */}
+                <div>
+                    <label className={LABEL}>Booking type</label>
+                    <div className="flex gap-2">
+                        <button
+                            type="button"
+                            onClick={() => setData((c) => ({ ...c, type: 'standard', emergency_category: '' }))}
+                            className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
+                                !isEmergency ? 'border-sage-500 bg-sage-50 text-sage-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
+                            }`}
+                        >
+                            Calm / ongoing
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setData('type', 'emergency')}
+                            className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
+                                isEmergency ? 'border-amber-500 bg-amber-50 text-amber-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
+                            }`}
+                        >
+                            Emergency
+                        </button>
+                    </div>
+                    {isEmergency && (
+                        <div className="mt-4">
+                            <label className={LABEL}>What kind of emergency?</label>
+                            <select className={FIELD} value={data.emergency_category} onChange={(e) => setData('emergency_category', e.target.value)}>
+                                <option value="">Choose a category…</option>
+                                {emergencyCategories.map((category) => (
+                                    <option key={category.key} value={category.key}>
+                                        {category.label}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.emergency_category && <p className="mt-1 text-xs text-red-600">{errors.emergency_category}</p>}
+                        </div>
+                    )}
+                </div>
+
                 {/* Specialist */}
                 <div>
                     <label className={LABEL}>Specialist</label>
@@ -165,7 +211,12 @@ export default function AdminBookingCreate({ practitioners, clients }: Props) {
                     <div className="space-y-4">
                         <div>
                             <label className={LABEL}>Name</label>
-                            <input className={FIELD} value={data.guest_name} onChange={(e) => setData('guest_name', e.target.value)} placeholder="Their full name" />
+                            <input
+                                className={FIELD}
+                                value={data.guest_name}
+                                onChange={(e) => setData('guest_name', e.target.value)}
+                                placeholder="Their full name"
+                            />
                             {errors.guest_name && <p className="mt-1 text-xs text-red-600">{errors.guest_name}</p>}
                         </div>
                         <div className="grid gap-4 sm:grid-cols-2">

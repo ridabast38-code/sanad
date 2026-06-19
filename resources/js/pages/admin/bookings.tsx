@@ -1,5 +1,5 @@
 import { DateFilter } from '@/components/staff/date-filter';
-import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
+import { Badge, CARD, money, PageHeader, Section, Table, Td, TypeBadge } from '@/components/staff/kit';
 import { MeetingLinkEditor } from '@/components/staff/meeting-link-editor';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, router } from '@inertiajs/react';
@@ -12,6 +12,8 @@ interface BookingRow {
     client: string;
     practitioner: string;
     service: string;
+    type: string;
+    emergency_category: string | null;
     scheduled_label: string;
     status: string;
     payment_status: string;
@@ -65,11 +67,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
         }
 
         if (action === 'no_show' && price !== undefined) {
-            const amount = askRefund(
-                price,
-                `No-show. Keep the full payment (enter 0) or refund up to $${price} as goodwill?`,
-                '0',
-            );
+            const amount = askRefund(price, `No-show. Keep the full payment (enter 0) or refund up to $${price} as goodwill?`, '0');
             if (amount === null) {
                 return;
             }
@@ -102,11 +100,15 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                             {pending.map((b) => (
                                 <div key={b.id} className={`flex flex-wrap items-center gap-4 p-4 ${CARD}`}>
                                     <div className="min-w-0 flex-1">
-                                        <p className="text-ashen-800 font-medium">
-                                            {b.client} <span className="text-ashen-400 font-normal">with</span> {b.practitioner}
+                                        <p className="text-ashen-800 flex flex-wrap items-center gap-2 font-medium">
+                                            <span>
+                                                {b.client} <span className="text-ashen-400 font-normal">with</span> {b.practitioner}
+                                            </span>
+                                            {b.type === 'emergency' && <TypeBadge type={b.type} />}
                                         </p>
                                         <p className="text-ashen-500 text-sm">
                                             {b.service} · {b.scheduled_label} · {money(b.price)}
+                                            {b.emergency_category ? ` · ${b.emergency_category}` : ''}
                                         </p>
                                     </div>
                                     <button
@@ -196,7 +198,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
             <Section title="All bookings">
                 <DateFilter path="/admin/bookings" filters={filters} />
                 <Table
-                    head={['When', 'Client', 'Practitioner', 'Service', 'Price', 'Status', 'Payment']}
+                    head={['When', 'Client', 'Practitioner', 'Service', 'Type', 'Price', 'Status', 'Payment']}
                     empty={bookings.length === 0 ? 'No bookings yet.' : undefined}
                 >
                     {bookings.map((b) => (
@@ -205,6 +207,9 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                             <Td className="font-medium">{b.client}</Td>
                             <Td className="text-ashen-500">{b.practitioner}</Td>
                             <Td className="text-ashen-500">{b.service}</Td>
+                            <Td>
+                                <TypeBadge type={b.type} />
+                            </Td>
                             <Td>{money(b.price)}</Td>
                             <Td>
                                 <Badge>{b.status}</Badge>

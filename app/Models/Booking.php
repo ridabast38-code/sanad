@@ -22,6 +22,14 @@ class Booking extends Model
     public const PLATFORM_SHARE = 0.20;
 
     /**
+     * Booking types: a calm self-booked session, or an urgent one that came
+     * through the emergency fast lane.
+     */
+    public const TYPE_STANDARD = 'standard';
+
+    public const TYPE_EMERGENCY = 'emergency';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -33,6 +41,8 @@ class Booking extends Model
         'guest_phone',
         'practitioner_id',
         'service_id',
+        'type',
+        'emergency_category',
         'scheduled_at',
         'status',
         'price',
@@ -97,6 +107,14 @@ class Booking extends Model
     public function isGuest(): bool
     {
         return $this->client_id === null;
+    }
+
+    /**
+     * Whether this session came through the emergency fast lane.
+     */
+    public function isEmergency(): bool
+    {
+        return $this->type === self::TYPE_EMERGENCY;
     }
 
     /**

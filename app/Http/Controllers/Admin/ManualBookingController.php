@@ -7,9 +7,11 @@ use App\Http\Controllers\Concerns\BuildsSpecialistDirectory;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\User;
+use App\Support\StabilizationFlows;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -57,6 +59,9 @@ class ManualBookingController extends Controller
         return Inertia::render('admin/booking-create', [
             'practitioners' => $practitioners,
             'clients' => $clients,
+            'emergencyCategories' => collect(StabilizationFlows::menu())
+                ->map(fn (array $flow) => ['key' => $flow['key'], 'label' => $flow['label']])
+                ->values(),
         ]);
     }
 
@@ -75,6 +80,8 @@ class ManualBookingController extends Controller
             'guest_name' => ['required_if:client_type,guest', 'nullable', 'string', 'max:255'],
             'guest_email' => ['nullable', 'email', 'max:255'],
             'guest_phone' => ['nullable', 'string', 'max:50'],
+            'type' => ['nullable', Rule::in([Booking::TYPE_STANDARD, Booking::TYPE_EMERGENCY])],
+            'emergency_category' => ['nullable', 'required_if:type,emergency', Rule::in(array_keys(StabilizationFlows::all()))],
             'client_note' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -115,6 +122,7 @@ class ManualBookingController extends Controller
 
         $price = (float) $service->pivot->price;
         $isGuest = $validated['client_type'] === 'guest';
+        $type = $validated['type'] ?? Booking::TYPE_STANDARD;
 
         Booking::create([
             'client_id' => $isGuest ? null : $validated['client_id'],
@@ -123,6 +131,8 @@ class ManualBookingController extends Controller
             'guest_phone' => $isGuest ? ($validated['guest_phone'] ?? null) : null,
             'practitioner_id' => $practitioner->id,
             'service_id' => $service->id,
+            'type' => $type,
+            'emergency_category' => $type === Booking::TYPE_EMERGENCY ? $validated['emergency_category'] : null,
             'scheduled_at' => $scheduledAt,
             'status' => 'pending',
             'price' => $price,

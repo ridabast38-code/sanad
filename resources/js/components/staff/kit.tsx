@@ -106,3 +106,20 @@ export function Badge({ children }: { children: string }) {
     const tint = STATUS_TINTS[children] ?? 'bg-sage-50 text-sage-700';
     return <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${tint}`}>{children.replace('_', ' ')}</span>;
 }
+
+/**
+ * Marks how a session came in — an urgent emergency (amber) or the standard
+ * calm booking flow (muted). Lets staff tell the two apart at a glance.
+ */
+export function TypeBadge({ type }: { type: string }) {
+    const emergency = type === 'emergency';
+    return (
+        <span
+            className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                emergency ? 'bg-amber-100 text-amber-700' : 'bg-sage-50 text-sage-600'
+            }`}
+        >
+            {emergency ? 'Emergency' : 'Standard'}
+        </span>
+    );
+}

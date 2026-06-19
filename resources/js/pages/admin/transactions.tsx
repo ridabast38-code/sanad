@@ -1,5 +1,5 @@
 import { DateFilter } from '@/components/staff/date-filter';
-import { Badge, money, PageHeader, Section, StatCard, Table, Td } from '@/components/staff/kit';
+import { Badge, money, PageHeader, Section, StatCard, Table, Td, TypeBadge } from '@/components/staff/kit';
 import StaffLayout from '@/layouts/staff-layout';
 import { router } from '@inertiajs/react';
 import { Coins, HandCoins, PiggyBank, RotateCcw, Wallet } from 'lucide-react';
@@ -9,6 +9,7 @@ interface Tx {
     date: string | null;
     client: string;
     practitioner: string;
+    type: string;
     amount: number;
     refunded: number;
     platform_fee: number;
@@ -46,7 +47,18 @@ export default function AdminTransactions({ totals, transactions, filters }: Pro
 
             <Section title={`Transactions (${totals.count})`}>
                 <Table
-                    head={['Date', 'Client', 'Practitioner', 'Amount', 'Refunded', 'Platform cut', 'Payout', 'Payment', 'Payout to specialist']}
+                    head={[
+                        'Date',
+                        'Client',
+                        'Practitioner',
+                        'Type',
+                        'Amount',
+                        'Refunded',
+                        'Platform cut',
+                        'Payout',
+                        'Payment',
+                        'Payout to specialist',
+                    ]}
                     empty={transactions.length === 0 ? 'No transactions yet.' : undefined}
                 >
                     {transactions.map((t) => (
@@ -54,6 +66,9 @@ export default function AdminTransactions({ totals, transactions, filters }: Pro
                             <Td className="whitespace-nowrap">{t.date}</Td>
                             <Td className="font-medium">{t.client}</Td>
                             <Td className="text-ashen-500">{t.practitioner}</Td>
+                            <Td>
+                                <TypeBadge type={t.type} />
+                            </Td>
                             <Td>{money(t.amount)}</Td>
                             <Td className="text-ashen-400">{t.refunded > 0 ? money(t.refunded) : '—'}</Td>
                             <Td className="text-sage-700 font-semibold">{money(t.platform_fee)}</Td>

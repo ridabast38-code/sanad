@@ -25,6 +25,7 @@ class BookingFactory extends Factory
             'client_id' => User::factory(),
             'practitioner_id' => User::factory(),
             'service_id' => Service::factory(),
+            'type' => Booking::TYPE_STANDARD,
             'scheduled_at' => $this->faker->dateTimeBetween('-2 months', '+3 weeks'),
             'status' => 'confirmed',
             'price' => $price,
@@ -55,6 +56,17 @@ class BookingFactory extends Factory
         return $this->state(fn () => [
             'status' => 'confirmed',
             'scheduled_at' => $this->faker->dateTimeBetween('+1 day', '+3 weeks'),
+        ]);
+    }
+
+    /**
+     * A session that came through the emergency fast lane.
+     */
+    public function emergency(string $category = 'accident'): static
+    {
+        return $this->state(fn () => [
+            'type' => Booking::TYPE_EMERGENCY,
+            'emergency_category' => $category,
         ]);
     }
 }
