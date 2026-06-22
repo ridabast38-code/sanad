@@ -15,10 +15,10 @@ export function CrisisSafety({ safety }: { safety: SafetyInfo }) {
     const [showHotlines, setShowHotlines] = useState(false);
 
     return (
-        <div className="rounded-2xl border border-amber-200/70 bg-amber-50/60 p-5">
+        <div className="border-sage-200/70 rounded-3xl border bg-white/60 p-5 shadow-[0_8px_30px_-14px_rgba(26,28,28,0.12)] backdrop-blur-xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-start gap-3">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                    <span className="bg-sage-100 text-sage-700 flex size-10 shrink-0 items-center justify-center rounded-full">
                         <ShieldAlert className="size-5" />
                     </span>
                     <div>
@@ -36,11 +36,11 @@ export function CrisisSafety({ safety }: { safety: SafetyInfo }) {
                 </a>
             </div>
 
-            <div className="mt-4 border-t border-amber-200/60 pt-3">
+            <div className="border-sage-200/60 mt-4 border-t pt-3">
                 <button
                     type="button"
                     onClick={() => setShowHotlines((v) => !v)}
-                    className="inline-flex items-center gap-2 text-xs font-semibold text-amber-700 transition hover:text-amber-800"
+                    className="text-sage-700 hover:text-sage-800 inline-flex items-center gap-2 text-xs font-semibold transition"
                 >
                     <LifeBuoy className="size-3.5" />
                     {showHotlines ? 'Hide emergency numbers' : 'In immediate danger? See emergency numbers'}
@@ -49,14 +49,14 @@ export function CrisisSafety({ safety }: { safety: SafetyInfo }) {
                 {showHotlines && (
                     <ul className="mt-3 space-y-2">
                         {safety.hotlines.map((line) => (
-                            <li key={line.number} className="flex items-center justify-between gap-3 rounded-xl bg-white/70 px-4 py-3">
+                            <li key={line.number} className="bg-sage-50/70 flex items-center justify-between gap-3 rounded-xl px-4 py-3">
                                 <div className="min-w-0">
                                     <p className="text-ashen-800 truncate text-sm font-semibold">{line.label}</p>
                                     <p className="text-ashen-500 truncate text-xs">{line.note}</p>
                                 </div>
                                 <a
                                     href={`tel:${line.number}`}
-                                    className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-100 px-3.5 py-1.5 text-sm font-bold text-amber-700 tabular-nums transition hover:bg-amber-200"
+                                    className="bg-sage-100 text-sage-700 hover:bg-sage-200 inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-bold tabular-nums transition"
                                 >
                                     <Phone className="size-3.5" /> {line.number}
                                 </a>

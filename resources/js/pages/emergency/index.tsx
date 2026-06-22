@@ -68,7 +68,7 @@ export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
                     </div>
 
                     {isGuest && (
-                        <div className="border-sage-200/70 bg-sage-50/50 mb-8 rounded-2xl border p-5">
+                        <div className="border-sage-200/70 bg-sage-50/50 mb-8 rounded-3xl border p-5">
                             <p className="text-ashen-700 text-sm font-semibold">You can start right now — no account needed.</p>
                             <p className="text-ashen-500 mt-1 text-sm">
                                 Begin a grounding exercise below, or sign in so a specialist can follow up with you afterwards.
@@ -104,10 +104,10 @@ export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
                                 >
                                     <Link
                                         href={`/emergency/${flow.key}`}
-                                        className="group flex h-full items-start gap-4 rounded-2xl border border-white/60 bg-white/55 p-6 shadow-[0_8px_30px_-14px_rgba(26,28,28,0.14)] backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/80"
+                                        className="group hover:border-sage-200 flex h-full items-start gap-4 rounded-3xl border border-white/60 bg-white/55 p-6 shadow-[0_12px_36px_-16px_rgba(26,28,28,0.16)] backdrop-blur-xl transition hover:-translate-y-1 hover:bg-white/85 hover:shadow-[0_20px_50px_-20px_rgba(79,111,82,0.28)]"
                                     >
-                                        <span className="bg-sage-100 text-sage-700 flex size-12 shrink-0 items-center justify-center rounded-xl transition group-hover:scale-105">
-                                            <Icon className="size-6" />
+                                        <span className="bg-sage-100 text-sage-700 ring-sage-200/60 flex size-14 shrink-0 items-center justify-center rounded-2xl ring-1 transition group-hover:scale-105">
+                                            <Icon className="size-7" />
                                         </span>
                                         <span className="min-w-0 flex-1">
                                             <span className="text-ashen-800 font-display block text-lg leading-snug">{flow.label}</span>
