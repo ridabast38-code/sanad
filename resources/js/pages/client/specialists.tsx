@@ -33,7 +33,7 @@ export default function Specialists({ practitioners, preferences }: SpecialistsP
                         <h1 className="font-display text-ashen-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">Our specialists</h1>
                         <p className="text-ashen-600 mt-3 flex max-w-2xl items-start gap-2 text-sm leading-relaxed">
                             <ShieldCheck className="text-sage-600 mt-0.5 size-4 shrink-0" />
-                            Every specialist holds a Master’s (M2) in Clinical Psychology and works under the supervision of certified psychologists.
+                            Every Sanad psychologist is a licensed clinical psychologist — real, confidential care.
                         </p>
                     </header>
 

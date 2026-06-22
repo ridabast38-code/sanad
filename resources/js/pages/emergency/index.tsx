@@ -34,8 +34,13 @@ export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
         <>
             <Head title="Get help now" />
 
-            <div className="bg-cream text-ashen-800 relative min-h-screen">
+            <div className="from-cream via-sage-50/50 to-cream text-ashen-800 relative min-h-screen bg-gradient-to-b">
                 <AmbientBackground />
+                {/* soft sage halo behind the header — gentle warmth, stays calm */}
+                <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(125,160,128,0.14),transparent)]"
+                />
 
                 <div className="relative mx-auto flex min-h-screen max-w-3xl flex-col px-6 py-10 md:py-14">
                     <Link

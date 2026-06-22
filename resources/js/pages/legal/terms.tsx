@@ -9,9 +9,8 @@ export default function Terms() {
             </p>
             <h2>What Sanad is</h2>
             <p>
-                Sanad connects you with psychological support specialists who hold a Master’s (M2) in Clinical Psychology and work under the
-                supervision of certified psychologists. Sanad provides psychological support — it is not a medical service and not a substitute for
-                professional or emergency care.
+                Sanad connects you with licensed clinical psychologists for real, confidential sessions. Sanad is a fully licensed clinical practice.
+                It is not an emergency service: for a medical emergency, please contact your local emergency number.
             </p>
             <h2>In an emergency</h2>
             <p>If you are in danger or in crisis, do not wait for a session — contact your local emergency number immediately.</p>

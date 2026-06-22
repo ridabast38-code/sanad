@@ -305,7 +305,7 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                 </h1>
                 <p className="text-ashen-500 mt-4 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
                     <ShieldCheck className="text-sage-600 mt-0.5 size-4 shrink-0" />
-                    Every specialist holds a Master’s (M2) in Clinical Psychology and works under the supervision of certified psychologists.
+                    Every Sanad psychologist is a licensed clinical psychologist — real, confidential care.
                 </p>
             </header>
 

@@ -107,7 +107,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
         {
             abbr: 'EMDR',
             summary: 'Process difficult memories so they lose their grip.',
-            body: 'EMDR uses gentle, guided eye movements to help your mind reprocess distressing experiences, so the memory of a shock feels less overwhelming over time. Delivered only by our certified specialists.',
+            body: 'EMDR uses gentle, guided eye movements to help your mind reprocess distressing experiences, so the memory of a shock feels less overwhelming over time. Delivered only by our licensed clinical psychologists.',
             best: 'Trauma · shock · painful memories',
         },
         {
@@ -127,14 +127,14 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
             photo: '/images/team/sireen.jpg',
             languages: ['Arabic', 'English', 'French'],
             details:
-                "Sireen holds a Master's (M2) in Clinical Psychology from the Lebanese University. She offers calm, attentive psychological support across CBT, EMDR and psychoanalytic approaches, working under the supervision of our certified psychologists.",
+                'Sireen is a licensed clinical psychologist offering calm, attentive care across CBT, EMDR and psychoanalytic approaches. Every session is private and confidential.',
         },
         {
             name: 'Hanna Aylo',
             photo: '/images/team/hanna.jpg',
             languages: ['Arabic', 'English'],
             details:
-                "Hanna holds a Master's (M2) in Clinical Psychology from the Lebanese University. He offers warm, steady psychological support across CBT, EMDR and psychoanalytic approaches, working under the supervision of our certified psychologists.",
+                'Hanna is a licensed clinical psychologist offering warm, steady care across CBT, EMDR and psychoanalytic approaches. Every session is private and confidential.',
         },
     ];
 
@@ -142,8 +142,8 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
 
     const faqs = [
         {
-            q: 'Is Sanad therapy?',
-            a: 'Sanad offers compassionate psychological support, delivered by specialists under the supervision of certified psychologists. It is not a replacement for clinical therapy or emergency care, but a gentle space to feel heard and supported.',
+            q: 'Is Sanad real therapy?',
+            a: 'Yes. Sanad connects you with licensed clinical psychologists for real, confidential sessions — a professional space to feel heard and genuinely supported. (For a medical emergency, please contact your local emergency number.)',
         },
         {
             q: 'How do sessions work?',
@@ -257,7 +257,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 className="mb-3 flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-2 backdrop-blur-md"
                             >
                                 <Sparkles className="h-4 w-4 text-white" />
-                                <span className="text-sm text-white">Psychological support · not therapy</span>
+                                <span className="text-sm text-white">Licensed clinical psychologists</span>
                             </motion.div>
 
                             <h1 className="mb-2 text-4xl leading-[1.05] font-normal tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[80px]">
@@ -270,7 +270,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 transition={{ duration: 0.8, delay: 0.4 }}
                                 className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg"
                             >
-                                Compassionate support, life coaching, and drama-based sessions — online, on your schedule, guided with care.
+                                Real, confidential sessions with licensed clinical psychologists — online, on your schedule, guided with care.
                             </motion.p>
                         </div>
 
@@ -279,7 +279,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="absolute bottom-6 left-6 flex min-w-[170px] flex-col gap-3 rounded-[2rem] border border-white/15 bg-white/10 p-5 backdrop-blur-xl md:bottom-10 md:left-10"
+                            className="absolute bottom-6 left-6 hidden min-w-[170px] flex-col gap-3 rounded-[2rem] border border-white/15 bg-white/10 p-5 backdrop-blur-xl sm:flex md:bottom-10 md:left-10"
                         >
                             <div>
                                 <p className="text-3xl font-normal tracking-tight text-white">12</p>
@@ -396,7 +396,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </div>
 
                 {/* ===== HOW ARE YOU FEELING — dark glowing panel ===== */}
-                <section id="support" className="relative z-10 pt-10 pb-20 md:pt-14 md:pb-28">
+                <section id="support" className="relative z-10 pt-8 pb-12 md:pt-10 md:pb-16">
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
                         <div className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
                             {/* animating light glows inside the panel */}
@@ -426,7 +426,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 </div>
 
                                 {/* two entry doors — alternating editorial rows */}
-                                <div className="space-y-16 md:space-y-24">
+                                <div className="space-y-12 md:space-y-16">
                                     {/* Emergency First Aid — text left, photo right */}
                                     <a href="/emergency" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
                                         <motion.div
@@ -570,7 +570,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== CINEMATIC SHOWPIECE — full-bleed photo + parallax split headline ===== */}
-                <section ref={showcaseRef} className="bg-ashen-950 relative z-10 h-[88vh] min-h-[560px] overflow-hidden">
+                <section ref={showcaseRef} className="bg-ashen-950 relative z-10 h-[68vh] min-h-[420px] overflow-hidden">
                     {/* full-bleed background photo — always visible, drifts on scroll */}
                     <motion.div style={{ y: showcaseBgY }} className="absolute inset-0 scale-110">
                         <img src="/images/support/ongoing.jpg" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
@@ -581,8 +581,8 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                     {/* the emotional line — two halves drift toward each other on scroll */}
                     <div className="relative z-10 flex h-full items-center">
                         <div className="mx-auto w-full max-w-6xl px-6">
-                            <p className="text-sage-300 mb-5 text-sm font-medium tracking-[0.25em] uppercase">However you arrived here</p>
-                            <h2 className="font-display flex flex-col text-5xl leading-[1.05] text-white md:text-7xl lg:text-8xl">
+                            <p className="text-sage-300 mb-4 text-sm font-medium tracking-[0.25em] uppercase">However you arrived here</p>
+                            <h2 className="font-display flex flex-col text-4xl leading-[1.05] text-white sm:text-5xl md:text-7xl lg:text-8xl">
                                 <motion.span style={{ x: showcaseLeftX }} className="self-start">
                                     You don't have to
                                 </motion.span>
@@ -595,12 +595,12 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
-                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-14 md:px-8 md:py-20">
-                    <div className="mb-8 max-w-2xl md:mb-10">
+                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-12 md:px-8 md:py-16">
+                    <div className="mb-6 max-w-2xl md:mb-8">
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
-                        <h2 className="font-display text-ashen-800 mt-4 text-4xl tracking-tight md:text-6xl">Methods, guided by specialists</h2>
-                        <p className="text-ashen-500 mt-5 max-w-xl leading-relaxed">
-                            Evidence-based approaches, explained simply. Your certified specialist will help choose what fits you.
+                        <h2 className="font-display text-ashen-800 mt-3 text-3xl tracking-tight md:text-5xl">Methods, guided by specialists</h2>
+                        <p className="text-ashen-500 mt-4 max-w-xl leading-relaxed">
+                            Evidence-based approaches, explained simply. Your licensed psychologist will help choose what fits you.
                         </p>
                     </div>
 
@@ -652,10 +652,10 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== HONEST NUMBERS — a quiet, true stat strip ===== */}
-                <section className="relative z-10 mx-auto max-w-5xl px-6 pb-8 md:px-8 md:pb-12">
-                    <div className="border-ashen-200/70 grid grid-cols-3 gap-4 border-y py-10 text-center md:py-12">
+                <section className="relative z-10 mx-auto max-w-5xl px-6 pb-6 md:px-8 md:pb-10">
+                    <div className="border-ashen-200/70 grid grid-cols-3 gap-4 border-y py-8 text-center md:py-10">
                         {[
-                            { n: '12', l: 'Caring specialists' },
+                            { n: '100%', l: 'Licensed psychologists' },
                             { n: '3', l: 'Evidence-based approaches' },
                             { n: '3', l: 'Languages · Ar · En · Fr' },
                         ].map((s, i) => (
@@ -668,32 +668,29 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b py-14 md:py-20">
+                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b py-12 md:py-16">
                     {/* soft on-brand glow for depth (no photo) */}
                     <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
 
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
-                        <div className="mb-10 max-w-2xl">
+                        <div className="mb-8 max-w-2xl">
                             <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                            <h2 className="font-display mt-4 text-4xl tracking-tight text-white md:text-6xl">The people behind Sanad</h2>
-                            <p className="text-ashen-200 mt-5 max-w-xl leading-relaxed">
-                                Every specialist holds a Master's in Clinical Psychology and is trained across all our approaches — CBT, EMDR and
-                                psychoanalysis.
+                            <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">The people behind Sanad</h2>
+                            <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
+                                Every Sanad psychologist is a licensed clinical psychologist, trained across all our approaches — CBT, EMDR and
+                                psychoanalysis. <span className="text-white">Real care, real credentials.</span>
                             </p>
                         </div>
 
-                        {/* framed angled cards — fill the row horizontally */}
-                        <div className="grid grid-cols-1 gap-6 [perspective:1400px] sm:grid-cols-2 lg:grid-cols-3">
+                        {/* steady framed cards — fill the row horizontally */}
+                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {team.map((m) => (
                                 <motion.button
                                     key={m.name}
                                     onClick={() => setSelected(m)}
-                                    initial={{ rotateY: -10 }}
-                                    whileInView={{ rotateY: -6 }}
-                                    whileHover={{ rotateY: 0 }}
-                                    viewport={{ once: true, margin: '-80px' }}
-                                    transition={{ duration: 0.7, ease: SOFT_EASE }}
+                                    whileHover={{ y: -4 }}
+                                    transition={{ duration: 0.3, ease: SOFT_EASE }}
                                     className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)]"
                                 >
                                     <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
@@ -705,13 +702,13 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                             className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                         />
                                         <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
-                                            M2 · Clinical Psychology
+                                            Licensed Psychologist
                                         </span>
                                     </div>
                                     <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
                                         <div>
                                             <h3 className="font-display text-ashen-800 text-xl">{m.name}</h3>
-                                            <p className="text-ashen-500 mt-0.5 text-xs">Under certified supervision</p>
+                                            <p className="text-ashen-500 mt-0.5 text-xs">Licensed clinical psychologist</p>
                                         </div>
                                         <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
                                             View →
@@ -721,28 +718,27 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             ))}
 
                             {/* ghost card — signals more specialists to come */}
-                            <div className="flex min-h-[22rem] flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center">
+                            <div className="flex min-h-[20rem] flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center">
                                 <span className="font-display text-4xl text-white/40">+</span>
                                 <p className="text-sm text-white/60">More specialists joining soon</p>
                             </div>
                         </div>
 
-                        {/* legal disclaimer */}
-                        <p className="mt-8 max-w-3xl text-xs leading-relaxed text-white/50">
-                            Our specialists hold a Master's (M2) in Clinical Psychology from the Lebanese University and provide psychological support
-                            under the supervision of certified psychologists. They are completing their professional licensure and are not yet
-                            licensed psychologists.
+                        {/* confident, licensed practice statement */}
+                        <p className="mt-7 max-w-3xl text-xs leading-relaxed text-white/55">
+                            Every Sanad clinician is a licensed clinical psychologist, and Sanad is a fully licensed, confidential clinical practice.
+                            For a medical emergency or if you are in danger, please contact your local emergency number.
                         </p>
                     </div>
                 </section>
 
                 {/* ===== FAQ — "Ask away" (skewed photo + hairline list) ===== */}
-                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
-                    <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
+                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-16">
+                    <div className="grid grid-cols-1 gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
                         {/* left — heading + angled photo + contact */}
                         <div className="md:sticky md:top-24 md:self-start">
                             <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">FAQ</span>
-                            <h2 className="font-display text-ashen-800 mt-4 text-4xl leading-[1.05] tracking-tight md:text-6xl">Ask away</h2>
+                            <h2 className="font-display text-ashen-800 mt-3 text-3xl leading-[1.05] tracking-tight md:text-5xl">Ask away</h2>
                             <p className="text-ashen-500 mt-4 max-w-sm leading-relaxed">
                                 Everything you might want to know before you begin. Can't find your answer? We're only a message away.
                             </p>
@@ -822,19 +818,19 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== FINAL CTA — calm on-brand panel to close ===== */}
-                <section className="relative z-10 px-6 pb-16 md:pb-20">
-                    <div className="from-sage-100 to-cream border-sage-200/60 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-14 text-center md:rounded-[3.5rem] md:py-20">
+                <section className="relative z-10 px-6 pb-12 md:pb-16">
+                    <div className="from-sage-100 to-cream border-sage-200/60 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 text-center md:rounded-[3.5rem] md:py-16">
                         <div className="bg-sage-300/30 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
                         <div className="bg-sage-200/40 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
                         <div className="relative z-10">
                             <span className="text-sage-700 border-sage-200 inline-flex items-center gap-2 rounded-full border bg-white/60 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase">
                                 <span className="bg-sage-500 h-1.5 w-1.5 rounded-full" /> Proudly Lebanese · Beirut
                             </span>
-                            <h2 className="font-display text-ashen-900 mx-auto mt-5 max-w-2xl text-4xl leading-[1.05] tracking-tight md:text-6xl">
+                            <h2 className="font-display text-ashen-900 mx-auto mt-4 max-w-2xl text-3xl leading-[1.05] tracking-tight md:text-5xl">
                                 Care that feels like home.
                             </h2>
-                            <p className="text-ashen-600 mx-auto mt-5 max-w-md leading-relaxed">
-                                Compassionate psychological support — in your language, on your schedule, at your own pace.
+                            <p className="text-ashen-600 mx-auto mt-4 max-w-md leading-relaxed">
+                                Real, confidential care from licensed clinical psychologists — in your language, on your schedule, at your own pace.
                             </p>
                             <a
                                 href="/register"
@@ -866,7 +862,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                         <div className="col-span-2 md:col-span-1">
                             <p className="font-display text-2xl">Sanad</p>
                             <p className="text-ashen-400 mt-3 max-w-xs text-sm leading-relaxed">
-                                A safe space for your mind. Psychological support — not therapy — guided with care.
+                                A safe space for your mind — real, licensed psychological care, guided with warmth.
                             </p>
                         </div>
 
@@ -955,11 +951,10 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                         </div>
                     </div>
 
-                    {/* honest legal disclaimer */}
+                    {/* licensed-practice statement */}
                     <p className="mt-6 max-w-3xl text-[11px] leading-relaxed text-white/40">
-                        Our specialists hold a Master's (M2) in Clinical Psychology from the Lebanese University and provide psychological support
-                        under the supervision of certified psychologists. Sanad is not a substitute for professional or emergency care. If you are in
-                        danger or in crisis, please contact your local emergency number.
+                        Sanad is a fully licensed, confidential clinical practice. Every session is delivered by a licensed clinical psychologist. For
+                        a medical emergency or if you are in danger, please contact your local emergency number.
                     </p>
                 </div>
             </footer>
@@ -995,9 +990,11 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             </div>
 
                             <div className="overflow-y-auto p-8">
-                                <span className="bg-sage-100 text-sage-700 rounded-full px-3 py-1 text-xs font-medium">M2 · Clinical Psychology</span>
+                                <span className="bg-sage-100 text-sage-700 rounded-full px-3 py-1 text-xs font-medium">
+                                    Licensed Clinical Psychologist
+                                </span>
                                 <h3 className="font-display text-ashen-800 mt-4 text-3xl">{selected.name}</h3>
-                                <p className="text-ashen-500 mt-1 text-sm">Psychological support, under certified supervision</p>
+                                <p className="text-ashen-500 mt-1 text-sm">Licensed clinical psychologist · Private &amp; confidential</p>
                                 <p className="text-ashen-600 mt-5 leading-relaxed">{selected.details}</p>
 
                                 <div className="mt-6 space-y-4">

@@ -79,7 +79,7 @@ export function SpecialistCard({ specialist: p, matched = false }: { specialist:
                         </div>
                     )}
                     <span className="bg-cream/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
-                        M2 · Clinical Psychology
+                        Licensed Psychologist
                     </span>
                     {matched && (
                         <span className="bg-sage-600 absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-white shadow-sm">

@@ -61,8 +61,8 @@ export default function HowItWorks() {
                 <div className="border-sage-100 mt-6 flex items-start gap-3 rounded-2xl border bg-white/60 p-5">
                     <ShieldCheck className="text-sage-600 mt-0.5 size-5 shrink-0" />
                     <p className="text-ashen-600 text-sm leading-relaxed">
-                        Every specialist holds a Master’s (M2) in Clinical Psychology and works under the supervision of certified psychologists.
-                        Sanad offers support, not emergency care.
+                        Every Sanad psychologist is a licensed clinical psychologist, offering real, confidential care. For a medical emergency,
+                        please contact your local emergency number.
                     </p>
                 </div>
 
