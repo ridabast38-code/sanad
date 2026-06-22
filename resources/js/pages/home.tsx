@@ -97,10 +97,6 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
     const showcaseLeftX = useTransform(scrollYProgress, [0, 1], ['-14%', '6%']);
     const showcaseRightX = useTransform(scrollYProgress, [0, 1], ['14%', '-6%']);
 
-    // team carousel — arrows scroll the row
-    const teamScrollRef = useRef<HTMLDivElement>(null);
-    const scrollTeam = (dir: number) => teamScrollRef.current?.scrollBy({ left: dir * 360, behavior: 'smooth' });
-
     const approaches = [
         {
             abbr: 'CBT',
@@ -599,8 +595,8 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
-                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-20 md:px-8 md:py-28">
-                    <div className="mb-12 max-w-2xl md:mb-16">
+                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-14 md:px-8 md:py-20">
+                    <div className="mb-8 max-w-2xl md:mb-10">
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
                         <h2 className="font-display text-ashen-800 mt-4 text-4xl tracking-tight md:text-6xl">Methods, guided by specialists</h2>
                         <p className="text-ashen-500 mt-5 max-w-xl leading-relaxed">
@@ -608,47 +604,50 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                         </p>
                     </div>
 
-                    <div className="border-ashen-200/70 border-t">
-                        {approaches.map((a, i) => {
-                            const isOpen = open === i;
-                            return (
-                                <div key={a.abbr} className="border-ashen-200/70 border-b">
-                                    <button
-                                        onClick={() => setOpen(isOpen ? null : i)}
-                                        className="group flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
-                                    >
-                                        <span className="font-display text-ashen-400 w-7 shrink-0 text-sm tabular-nums md:text-base">
-                                            {String(i + 1).padStart(2, '0')}
-                                        </span>
-                                        <span className="font-display text-ashen-800 group-hover:text-sage-700 flex-1 text-2xl tracking-tight transition-colors md:text-4xl">
-                                            {a.abbr}
-                                        </span>
-                                        <span className="text-ashen-500 hidden max-w-[16rem] text-sm leading-snug lg:block">{a.summary}</span>
-                                        <span
-                                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-300 text-sage-700 group-hover:border-sage-500'}`}
+                    {/* defined panel with an animated, on-brand glowing border (cinematic) */}
+                    <div className="sanad-border relative overflow-hidden rounded-[1.5rem] bg-white/55 px-6 backdrop-blur-sm md:rounded-[2rem] md:px-10">
+                        <div className="divide-ashen-200/70 divide-y">
+                            {approaches.map((a, i) => {
+                                const isOpen = open === i;
+                                return (
+                                    <div key={a.abbr}>
+                                        <button
+                                            onClick={() => setOpen(isOpen ? null : i)}
+                                            className="group flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
                                         >
-                                            <Plus className="h-4 w-4" />
-                                        </span>
-                                    </button>
-                                    <AnimatePresence initial={false}>
-                                        {isOpen && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: 'auto', opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.4, ease: 'easeInOut' }}
-                                                className="overflow-hidden"
+                                            <span className="font-display text-ashen-400 w-7 shrink-0 text-sm tabular-nums md:text-base">
+                                                {String(i + 1).padStart(2, '0')}
+                                            </span>
+                                            <span className="font-display text-ashen-800 group-hover:text-sage-700 flex-1 text-2xl tracking-tight transition-colors md:text-4xl">
+                                                {a.abbr}
+                                            </span>
+                                            <span className="text-ashen-500 hidden max-w-[16rem] text-sm leading-snug lg:block">{a.summary}</span>
+                                            <span
+                                                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-300 text-sage-700 group-hover:border-sage-500'}`}
                                             >
-                                                <div className="pb-8 md:pl-12">
-                                                    <p className="text-ashen-600 max-w-2xl leading-relaxed md:text-lg">{a.body}</p>
-                                                    <p className="text-sage-700 mt-4 text-sm font-medium">Best for: {a.best}</p>
-                                                </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            );
-                        })}
+                                                <Plus className="h-4 w-4" />
+                                            </span>
+                                        </button>
+                                        <AnimatePresence initial={false}>
+                                            {isOpen && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="pb-8 md:pl-12">
+                                                        <p className="text-ashen-600 max-w-2xl leading-relaxed md:text-lg">{a.body}</p>
+                                                        <p className="text-sage-700 mt-4 text-sm font-medium">Best for: {a.best}</p>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </section>
 
@@ -668,115 +667,72 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                     </div>
                 </section>
 
-                {/* ===== MEET THE TEAM — skewed photo cards over a photographic panel ===== */}
-                <section id="team" className="relative z-10 mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-16">
-                    <div className="relative overflow-hidden rounded-[2rem] px-6 py-12 md:rounded-[2.5rem] md:px-10 md:py-14">
-                        {/* photographic backdrop — restores the depth of the original team section */}
-                        <img
-                            src="/images/team-bg.jpg"
-                            alt=""
-                            loading="lazy"
-                            decoding="async"
-                            className="absolute inset-0 h-full w-full object-cover"
-                        />
-                        <div className="bg-ashen-950/70 absolute inset-0" />
+                {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
+                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b py-14 md:py-20">
+                    {/* soft on-brand glow for depth (no photo) */}
+                    <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
+                    <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
 
-                        <div className="relative z-10">
-                            {/* hairline header — label, title, arrows */}
-                            <div className="mb-10 border-b border-white/15 pb-8">
-                                <div className="flex items-end justify-between gap-6">
-                                    <div className="max-w-2xl">
-                                        <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                                        <h2 className="font-display mt-4 text-4xl tracking-tight text-white md:text-6xl">The people behind Sanad</h2>
-                                        <p className="text-ashen-200 mt-5 max-w-xl leading-relaxed">
-                                            Every specialist holds a Master's in Clinical Psychology and is trained across all our approaches — CBT,
-                                            EMDR and psychoanalysis.
-                                        </p>
-                                    </div>
-                                    <div className="hidden shrink-0 gap-2 sm:flex">
-                                        <button
-                                            onClick={() => scrollTeam(-1)}
-                                            aria-label="Previous"
-                                            className="hover:border-sage-400 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:text-white"
-                                        >
-                                            <ChevronRight className="h-5 w-5 rotate-180" />
-                                        </button>
-                                        <button
-                                            onClick={() => scrollTeam(1)}
-                                            aria-label="Next"
-                                            className="hover:border-sage-400 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:text-white"
-                                        >
-                                            <ChevronRight className="h-5 w-5" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                    <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
+                        <div className="mb-10 max-w-2xl">
+                            <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
+                            <h2 className="font-display mt-4 text-4xl tracking-tight text-white md:text-6xl">The people behind Sanad</h2>
+                            <p className="text-ashen-200 mt-5 max-w-xl leading-relaxed">
+                                Every specialist holds a Master's in Clinical Psychology and is trained across all our approaches — CBT, EMDR and
+                                psychoanalysis.
+                            </p>
+                        </div>
 
-                            {/* horizontal carousel — angled photo cards */}
-                            <div
-                                ref={teamScrollRef}
-                                className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-3 [perspective:1400px]"
-                            >
-                                {team.map((m, i) => (
-                                    <motion.button
-                                        key={m.name}
-                                        onClick={() => setSelected(m)}
-                                        initial={{ rotateY: -12 }}
-                                        whileInView={{ rotateY: -6 }}
-                                        whileHover={{ rotateY: 0 }}
-                                        viewport={{ once: true, margin: '-80px' }}
-                                        transition={{ duration: 0.7, ease: SOFT_EASE }}
-                                        className="group bg-ashen-800 relative h-[26rem] w-[18.5rem] shrink-0 snap-start overflow-hidden rounded-[1.5rem] text-left shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)]"
-                                    >
+                        {/* framed angled cards — fill the row horizontally */}
+                        <div className="grid grid-cols-1 gap-6 [perspective:1400px] sm:grid-cols-2 lg:grid-cols-3">
+                            {team.map((m) => (
+                                <motion.button
+                                    key={m.name}
+                                    onClick={() => setSelected(m)}
+                                    initial={{ rotateY: -10 }}
+                                    whileInView={{ rotateY: -6 }}
+                                    whileHover={{ rotateY: 0 }}
+                                    viewport={{ once: true, margin: '-80px' }}
+                                    transition={{ duration: 0.7, ease: SOFT_EASE }}
+                                    className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)]"
+                                >
+                                    <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
                                         <img
                                             src={m.photo}
                                             alt={m.name}
                                             loading="lazy"
                                             decoding="async"
-                                            className="absolute inset-0 h-full w-full object-cover grayscale-[35%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                            className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/95" />
-                                        <span className="bg-beige/90 text-ashen-800 absolute top-5 left-5 rounded-full px-3 py-1 text-xs font-medium backdrop-blur">
+                                        <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
                                             M2 · Clinical Psychology
                                         </span>
-                                        <div className="absolute inset-x-0 bottom-0 p-6">
-                                            <h3 className="font-display text-2xl text-white">{m.name}</h3>
-                                            <p className="mt-1 text-xs text-white/70">Under certified supervision</p>
-                                            <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-500 ease-out group-hover:grid-rows-[1fr] group-hover:opacity-100">
-                                                <div className="overflow-hidden">
-                                                    <div className="mt-3 flex flex-wrap gap-2">
-                                                        {sharedApproaches.map((ap) => (
-                                                            <span
-                                                                key={ap}
-                                                                className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/90 backdrop-blur"
-                                                            >
-                                                                {ap}
-                                                            </span>
-                                                        ))}
-                                                    </div>
-                                                    <span className="text-beige mt-4 inline-flex items-center gap-1.5 text-sm font-medium">
-                                                        View profile →
-                                                    </span>
-                                                </div>
-                                            </div>
+                                    </div>
+                                    <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
+                                        <div>
+                                            <h3 className="font-display text-ashen-800 text-xl">{m.name}</h3>
+                                            <p className="text-ashen-500 mt-0.5 text-xs">Under certified supervision</p>
                                         </div>
-                                    </motion.button>
-                                ))}
+                                        <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
+                                            View →
+                                        </span>
+                                    </div>
+                                </motion.button>
+                            ))}
 
-                                {/* ghost card — signals more specialists to come */}
-                                <div className="flex h-[26rem] w-[18.5rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-[1.5rem] border-2 border-dashed border-white/25 text-center">
-                                    <span className="font-display text-4xl text-white/40">+</span>
-                                    <p className="px-10 text-sm text-white/60">More specialists joining soon</p>
-                                </div>
+                            {/* ghost card — signals more specialists to come */}
+                            <div className="flex min-h-[22rem] flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center">
+                                <span className="font-display text-4xl text-white/40">+</span>
+                                <p className="text-sm text-white/60">More specialists joining soon</p>
                             </div>
-
-                            {/* legal disclaimer */}
-                            <p className="mt-8 max-w-3xl text-xs leading-relaxed text-white/50">
-                                Our specialists hold a Master's (M2) in Clinical Psychology from the Lebanese University and provide psychological
-                                support under the supervision of certified psychologists. They are completing their professional licensure and are not
-                                yet licensed psychologists.
-                            </p>
                         </div>
+
+                        {/* legal disclaimer */}
+                        <p className="mt-8 max-w-3xl text-xs leading-relaxed text-white/50">
+                            Our specialists hold a Master's (M2) in Clinical Psychology from the Lebanese University and provide psychological support
+                            under the supervision of certified psychologists. They are completing their professional licensure and are not yet
+                            licensed psychologists.
+                        </p>
                     </div>
                 </section>
 
@@ -865,24 +821,26 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                     </div>
                 </section>
 
-                {/* ===== FINAL CTA — warm sand panel to close ===== */}
-                <section className="relative z-10 px-6 pb-20 md:pb-28">
-                    <div className="from-beige to-sand/80 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br px-6 py-20 text-center md:rounded-[3.5rem] md:py-28">
+                {/* ===== FINAL CTA — calm on-brand panel to close ===== */}
+                <section className="relative z-10 px-6 pb-16 md:pb-20">
+                    <div className="from-sage-100 to-cream border-sage-200/60 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-14 text-center md:rounded-[3.5rem] md:py-20">
                         <div className="bg-sage-300/30 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
-                        <div className="animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl [animation-delay:-4s]" />
+                        <div className="bg-sage-200/40 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
                         <div className="relative z-10">
-                            <span className="text-sage-800 text-sm font-medium tracking-[0.2em] uppercase">Proudly Lebanese · Beirut</span>
+                            <span className="text-sage-700 border-sage-200 inline-flex items-center gap-2 rounded-full border bg-white/60 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase">
+                                <span className="bg-sage-500 h-1.5 w-1.5 rounded-full" /> Proudly Lebanese · Beirut
+                            </span>
                             <h2 className="font-display text-ashen-900 mx-auto mt-5 max-w-2xl text-4xl leading-[1.05] tracking-tight md:text-6xl">
                                 Care that feels like home.
                             </h2>
-                            <p className="text-ashen-700 mx-auto mt-5 max-w-md leading-relaxed">
+                            <p className="text-ashen-600 mx-auto mt-5 max-w-md leading-relaxed">
                                 Compassionate psychological support — in your language, on your schedule, at your own pace.
                             </p>
                             <a
                                 href="/register"
-                                className="group bg-ashen-900 hover:bg-ashen-800 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-sm font-medium text-white transition"
+                                className="group bg-sage-700 hover:bg-sage-800 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-sm font-medium text-white transition"
                             >
-                                <span className="rounded-full bg-white/15 p-1.5 transition-transform group-hover:rotate-45">
+                                <span className="rounded-full bg-white/20 p-1.5 transition-transform group-hover:rotate-45">
                                     <ArrowUpRight className="h-5 w-5" />
                                 </span>
                                 Book a session
@@ -894,56 +852,16 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
 
             {/* ===== FOOTER — cinematic, Lebanese identity + trust ===== */}
             <footer id="contact" className="bg-ashen-950 relative scroll-mt-20 overflow-hidden text-white">
-                {/* cinematic background photo — swap for a Lebanese shot (cedars / Beirut coast / mountains) */}
-                <img
-                    src="/images/team-bg.jpg"
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="absolute inset-0 h-full w-full scale-105 object-cover opacity-40"
-                />
-                {/* readability scrim */}
-                <div className="from-ashen-950/85 via-ashen-950/75 to-ashen-950/95 absolute inset-0 bg-gradient-to-b" />
-                {/* soft sage glow for depth (opacity/translate only — cheap) */}
+                {/* soft on-brand glow for a little depth — solid color, no photo */}
                 <div
                     aria-hidden
-                    className="bg-sage-700/30 pointer-events-none absolute top-0 -left-32 h-96 w-96 rounded-full blur-3xl"
+                    className="bg-sage-700/20 pointer-events-none absolute top-0 -left-32 h-80 w-80 rounded-full blur-3xl"
                     style={{ animation: 'aurora-1 26s ease-in-out infinite' }}
                 />
-                <div
-                    aria-hidden
-                    className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-amber-500/15 blur-3xl"
-                    style={{ animation: 'aurora-2 30s ease-in-out infinite' }}
-                />
 
-                <div className="relative z-10 mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-20">
-                    {/* closing line + final CTA */}
-                    <div className="flex flex-col items-start justify-between gap-8 border-b border-white/10 pb-12 md:flex-row md:items-end">
-                        <div>
-                            <span className="text-sage-300 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase">
-                                <span className="bg-sage-400 h-1.5 w-1.5 rounded-full" /> Proudly Lebanese · Beirut
-                            </span>
-                            <h2 className="font-display mt-5 max-w-xl text-4xl leading-[1.05] tracking-tight md:text-5xl">
-                                Care that feels like home.
-                            </h2>
-                            <p className="text-ashen-300 mt-4 max-w-md leading-relaxed">
-                                Sanad is a Lebanese platform offering compassionate psychological support — in your language, on your schedule, at
-                                your own pace.
-                            </p>
-                        </div>
-                        <a
-                            href="/register"
-                            className="group text-ashen-900 flex shrink-0 items-center gap-3 rounded-full bg-white py-2.5 pr-6 pl-3 text-sm font-medium transition hover:bg-white/90"
-                        >
-                            <span className="bg-sage-700/10 rounded-full p-1.5 transition-transform group-hover:rotate-45">
-                                <ArrowUpRight className="text-sage-700 h-5 w-5" />
-                            </span>
-                            Book a session
-                        </a>
-                    </div>
-
+                <div className="relative z-10 mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-14">
                     {/* link columns */}
-                    <div className="grid grid-cols-2 gap-10 py-12 md:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-10 pb-10 md:grid-cols-4">
                         {/* brand */}
                         <div className="col-span-2 md:col-span-1">
                             <p className="font-display text-2xl">Sanad</p>
