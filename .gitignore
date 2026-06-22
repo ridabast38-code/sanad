@@ -26,3 +26,6 @@ yarn-error.log
 
 # Local-only original media backups
 /public/**/*.original.*
+
+# Local-only design references (screenshots, video walkthroughs)
+/.refs

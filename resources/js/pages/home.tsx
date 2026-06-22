@@ -2,6 +2,66 @@ import { ArrowUpRight, ChevronRight, Clock, Globe, LifeBuoy, Mail, MapPin, Messa
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 
+// A gentle ease used across every reveal so the whole page shares one feel.
+const SOFT_EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Reveals a line of text word-by-word with a soft blur-up — our signature
+ * heading entrance (borrowed from the Steno reference). Drop it inside any
+ * heading element; it keeps the element's own typography classes.
+ */
+function RevealText({ text, delay = 0, stagger = 0.07 }: { text: string; delay?: number; stagger?: number }) {
+    return (
+        <>
+            {text.split(' ').map((word, i) => (
+                <motion.span
+                    key={`${word}-${i}`}
+                    className="inline-block"
+                    style={{ marginRight: '0.25em' }}
+                    initial={{ opacity: 0, y: 14, filter: 'blur(8px)' }}
+                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.55, delay: delay + i * stagger, ease: SOFT_EASE }}
+                >
+                    {word}
+                </motion.span>
+            ))}
+        </>
+    );
+}
+
+/**
+ * An image/content card that enters from a deeper perspective skew and settles
+ * to a resting tilt with a blur→focus — the editorial "angled card" motif.
+ * Straightens on hover. Reduced-motion users get the resting state immediately.
+ */
+function TiltCard({
+    children,
+    className = '',
+    tilt = -6,
+    from = 'right',
+}: {
+    children: React.ReactNode;
+    className?: string;
+    tilt?: number;
+    from?: 'left' | 'right';
+}) {
+    const dir = from === 'right' ? 1 : -1;
+    return (
+        <motion.div
+            className={className}
+            style={{ transformPerspective: 1200 }}
+            initial={{ opacity: 0, rotateY: tilt - dir * 10, x: dir * 36, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, rotateY: tilt, x: 0, filter: 'blur(0px)' }}
+            whileHover={{ rotateY: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.8, ease: SOFT_EASE }}
+        >
+            {children}
+        </motion.div>
+    );
+}
+
 export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
@@ -27,21 +87,22 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
 
     const [open, setOpen] = useState<number | null>(0);
 
-    // cinematic interlude parallax — background drifts, text rises & fades on scroll
-    const interludeRef = useRef<HTMLElement>(null);
-    const { scrollYProgress } = useScroll({ target: interludeRef, offset: ['start end', 'end start'] });
-    const bgY = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
-    const textY = useTransform(scrollYProgress, [0, 1], ['60px', '-60px']);
-    const textOpacity = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 1, 1, 0]);
+    // cinematic showpiece — a small angled card grows to full-bleed while the
+    // split headline slides in from both sides, driven by scroll through the
+    // (tall) section. The inner panel is pinned (sticky) while this plays.
+    const showcaseRef = useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({ target: showcaseRef, offset: ['start start', 'end end'] });
+    const showcaseScale = useTransform(scrollYProgress, [0, 0.6], [0.46, 1]);
+    const showcaseTilt = useTransform(scrollYProgress, [0, 0.6], [-9, 0]);
+    const showcaseRadius = useTransform(scrollYProgress, [0, 0.6], [40, 0]);
+    const showcaseLeftX = useTransform(scrollYProgress, [0.08, 0.5], ['-45%', '0%']);
+    const showcaseRightX = useTransform(scrollYProgress, [0.08, 0.5], ['45%', '0%']);
+    const showcaseTextOpacity = useTransform(scrollYProgress, [0.04, 0.28], [0, 1]);
+    const showcaseEyebrowOpacity = useTransform(scrollYProgress, [0, 0.12, 0.45, 0.6], [0, 1, 1, 0]);
 
     // team carousel — arrows scroll the row
     const teamScrollRef = useRef<HTMLDivElement>(null);
     const scrollTeam = (dir: number) => teamScrollRef.current?.scrollBy({ left: dir * 360, behavior: 'smooth' });
-
-    // team backdrop parallax — drifts as you scroll past
-    const teamRef = useRef<HTMLElement>(null);
-    const { scrollYProgress: teamProgress } = useScroll({ target: teamRef, offset: ['start end', 'end start'] });
-    const teamBgY = useTransform(teamProgress, [0, 1], ['-10%', '10%']);
 
     const approaches = [
         {
@@ -206,14 +267,9 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 <span className="text-sm text-white">Psychological support · not therapy</span>
                             </motion.div>
 
-                            <motion.h1
-                                initial={{ opacity: 0, scale: 0.98 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.8, delay: 0.2 }}
-                                className="mb-2 text-4xl leading-[1.05] font-normal tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[80px]"
-                            >
-                                A safe space for your mind
-                            </motion.h1>
+                            <h1 className="mb-2 text-4xl leading-[1.05] font-normal tracking-tight text-white sm:text-5xl md:text-6xl lg:text-[80px]">
+                                <RevealText text="A safe space for your mind" delay={0.25} stagger={0.09} />
+                            </h1>
 
                             <motion.p
                                 initial={{ opacity: 0 }}
@@ -430,11 +486,9 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 Start now →
                                             </span>
                                         </motion.div>
-                                        <motion.div
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            viewport={{ once: true, margin: '-80px' }}
-                                            transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
+                                        <TiltCard
+                                            from="right"
+                                            tilt={-5}
                                             className="bg-ashen-900 relative h-80 w-full overflow-hidden rounded-3xl md:h-[28rem] md:w-1/2"
                                         >
                                             <img
@@ -445,16 +499,14 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                                        </motion.div>
+                                        </TiltCard>
                                     </a>
 
                                     {/* Ongoing Support — photo left, text right */}
                                     <a href="/register" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
-                                        <motion.div
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            viewport={{ once: true, margin: '-80px' }}
-                                            transition={{ duration: 0.7, ease: 'easeOut' }}
+                                        <TiltCard
+                                            from="left"
+                                            tilt={5}
                                             className="bg-ashen-900 relative h-80 w-full overflow-hidden rounded-3xl md:h-[28rem] md:w-1/2"
                                         >
                                             <img
@@ -464,7 +516,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                                        </motion.div>
+                                        </TiltCard>
                                         <motion.div
                                             initial={{ opacity: 0, x: 40 }}
                                             whileInView={{ opacity: 1, x: 0 }}
@@ -524,341 +576,320 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                     </div>
                 </section>
 
-                {/* ===== CINEMATIC INTERLUDE — parallax emotional beat ===== */}
-                <section ref={interludeRef} className="relative z-10 flex h-[80vh] items-center justify-center overflow-hidden">
-                    {/* parallax background — drifts slower than the scroll */}
-                    <motion.div style={{ y: bgY }} className="absolute inset-0 scale-125">
-                        <img src="/images/support/ongoing.jpg" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-                        <div className="bg-ashen-950/75 absolute inset-0" />
-                        <div className="from-cream to-cream absolute inset-0 bg-gradient-to-b via-transparent opacity-40" />
-                    </motion.div>
+                {/* ===== CINEMATIC SHOWPIECE — an angled card grows to full-bleed ===== */}
+                <section ref={showcaseRef} className="bg-ashen-950 relative z-10 h-[200vh]">
+                    <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
+                        {/* the growing image — starts as a small angled card, fills the screen */}
+                        <motion.div
+                            style={{ scale: showcaseScale, rotateY: showcaseTilt, borderRadius: showcaseRadius, transformPerspective: 1400 }}
+                            className="absolute inset-0 overflow-hidden"
+                        >
+                            <img src="/images/team-bg.jpg" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                            <div className="bg-ashen-950/45 absolute inset-0" />
+                        </motion.div>
 
-                    {/* the emotional line — rises and fades with scroll */}
-                    <motion.div style={{ y: textY, opacity: textOpacity }} className="relative z-10 mx-auto max-w-4xl px-6 text-center">
-                        <p className="text-sage-300 mb-5 text-sm font-medium tracking-[0.25em] uppercase">You are not alone in this</p>
-                        <h2 className="font-display text-4xl leading-[1.1] text-white md:text-6xl lg:text-7xl">
-                            However you arrived here, you don't have to carry it alone.
-                        </h2>
-                    </motion.div>
+                        {/* split headline — the two halves slide in from opposite sides */}
+                        <div className="pointer-events-none relative z-10 mx-auto w-full max-w-5xl px-6">
+                            <motion.p
+                                style={{ opacity: showcaseEyebrowOpacity }}
+                                className="text-sage-300 mb-5 text-center text-sm font-medium tracking-[0.25em] uppercase"
+                            >
+                                However you arrived here
+                            </motion.p>
+                            <motion.h2
+                                style={{ opacity: showcaseTextOpacity }}
+                                className="font-display flex flex-col text-5xl leading-[1.05] text-white md:text-7xl lg:text-8xl"
+                            >
+                                <motion.span style={{ x: showcaseLeftX }} className="self-start">
+                                    You don't have to
+                                </motion.span>
+                                <motion.span style={{ x: showcaseRightX }} className="self-end text-right">
+                                    carry it alone.
+                                </motion.span>
+                            </motion.h2>
+                        </div>
+                    </div>
                 </section>
 
-                {/* ===== OUR APPROACHES — accordion (transparent, on the shared canvas) ===== */}
-                <section id="approaches" className="relative z-10 py-20 [contain-intrinsic-size:auto_700px] [content-visibility:auto] md:py-28">
-                    <div className="relative z-10 mx-auto max-w-3xl px-6">
-                        <div className="mb-12 text-center">
-                            <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
-                            <h2 className="font-display text-ashen-800 mt-3 text-4xl tracking-tight md:text-5xl">Methods, guided by specialists</h2>
-                            <p className="text-ashen-500 mx-auto mt-4 max-w-xl leading-relaxed">
-                                Evidence-based approaches, explained simply. Your certified specialist will help choose what fits you.
+                {/* ===== OUR METHODS — editorial collapsible rows ===== */}
+                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-20 md:px-8 md:py-28">
+                    <div className="mb-12 max-w-2xl md:mb-16">
+                        <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
+                        <h2 className="font-display text-ashen-800 mt-4 text-4xl tracking-tight md:text-6xl">
+                            <RevealText text="Methods, guided by specialists" />
+                        </h2>
+                        <p className="text-ashen-500 mt-5 max-w-xl leading-relaxed">
+                            Evidence-based approaches, explained simply. Your certified specialist will help choose what fits you.
+                        </p>
+                    </div>
+
+                    <div className="border-ashen-200/70 border-t">
+                        {approaches.map((a, i) => {
+                            const isOpen = open === i;
+                            return (
+                                <div key={a.abbr} className="border-ashen-200/70 border-b">
+                                    <button
+                                        onClick={() => setOpen(isOpen ? null : i)}
+                                        className="group flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
+                                    >
+                                        <span className="font-display text-ashen-400 w-7 shrink-0 text-sm tabular-nums md:text-base">
+                                            {String(i + 1).padStart(2, '0')}
+                                        </span>
+                                        <span className="font-display text-ashen-800 group-hover:text-sage-700 flex-1 text-2xl tracking-tight transition-colors md:text-4xl">
+                                            {a.abbr}
+                                        </span>
+                                        <span className="text-ashen-500 hidden max-w-[16rem] text-sm leading-snug lg:block">{a.summary}</span>
+                                        <span
+                                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-300 text-sage-700 group-hover:border-sage-500'}`}
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                        </span>
+                                    </button>
+                                    <AnimatePresence initial={false}>
+                                        {isOpen && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: 'auto', opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="pb-8 md:pl-12">
+                                                    <p className="text-ashen-600 max-w-2xl leading-relaxed md:text-lg">{a.body}</p>
+                                                    <p className="text-sage-700 mt-4 text-sm font-medium">Best for: {a.best}</p>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+
+                {/* ===== HONEST NUMBERS — a quiet, true stat strip ===== */}
+                <section className="relative z-10 mx-auto max-w-5xl px-6 pb-8 md:px-8 md:pb-12">
+                    <div className="border-ashen-200/70 grid grid-cols-3 gap-4 border-y py-10 text-center md:py-12">
+                        {[
+                            { n: '12', l: 'Caring specialists' },
+                            { n: '3', l: 'Evidence-based approaches' },
+                            { n: '3', l: 'Languages · Ar · En · Fr' },
+                        ].map((s, i) => (
+                            <div key={s.l} className={i > 0 ? 'border-ashen-200/70 border-l' : ''}>
+                                <p className="font-display text-ashen-800 text-4xl tracking-tight md:text-6xl">{s.n}</p>
+                                <p className="text-ashen-500 mx-auto mt-2 max-w-[10rem] text-xs leading-snug tracking-wide uppercase">{s.l}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* ===== MEET THE TEAM — skewed photo cards on the shared canvas ===== */}
+                <section id="team" className="relative z-10 mx-auto max-w-6xl px-6 py-16 md:px-8 md:py-20">
+                    {/* hairline header — label, title, arrows */}
+                    <div className="border-ashen-200/70 mb-10 border-b pb-8">
+                        <div className="flex items-end justify-between gap-6">
+                            <div className="max-w-2xl">
+                                <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
+                                <h2 className="font-display text-ashen-800 mt-4 text-4xl tracking-tight md:text-6xl">
+                                    <RevealText text="The people behind Sanad" />
+                                </h2>
+                                <p className="text-ashen-500 mt-5 max-w-xl leading-relaxed">
+                                    Every specialist holds a Master's in Clinical Psychology and is trained across all our approaches — CBT, EMDR and
+                                    psychoanalysis.
+                                </p>
+                            </div>
+                            <div className="hidden shrink-0 gap-2 sm:flex">
+                                <button
+                                    onClick={() => scrollTeam(-1)}
+                                    aria-label="Previous"
+                                    className="border-ashen-300 text-ashen-600 hover:border-sage-500 hover:text-sage-700 flex h-11 w-11 items-center justify-center rounded-full border transition"
+                                >
+                                    <ChevronRight className="h-5 w-5 rotate-180" />
+                                </button>
+                                <button
+                                    onClick={() => scrollTeam(1)}
+                                    aria-label="Next"
+                                    className="border-ashen-300 text-ashen-600 hover:border-sage-500 hover:text-sage-700 flex h-11 w-11 items-center justify-center rounded-full border transition"
+                                >
+                                    <ChevronRight className="h-5 w-5" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* horizontal carousel — angled photo cards */}
+                    <div ref={teamScrollRef} className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-3 [perspective:1400px]">
+                        {team.map((m, i) => (
+                            <motion.button
+                                key={m.name}
+                                onClick={() => setSelected(m)}
+                                initial={{ opacity: 0, rotateY: -16, x: 36, filter: 'blur(10px)' }}
+                                whileInView={{ opacity: 1, rotateY: -6, x: 0, filter: 'blur(0px)' }}
+                                whileHover={{ rotateY: 0 }}
+                                viewport={{ once: true, margin: '-80px' }}
+                                transition={{ duration: 0.7, delay: i * 0.08, ease: SOFT_EASE }}
+                                className="group bg-ashen-800 relative h-[26rem] w-[18.5rem] shrink-0 snap-start overflow-hidden rounded-[1.5rem] text-left shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)]"
+                            >
+                                <img
+                                    src={m.photo}
+                                    alt={m.name}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="absolute inset-0 h-full w-full object-cover grayscale-[35%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/95" />
+                                <span className="bg-beige/90 text-ashen-800 absolute top-5 left-5 rounded-full px-3 py-1 text-xs font-medium backdrop-blur">
+                                    M2 · Clinical Psychology
+                                </span>
+                                <div className="absolute inset-x-0 bottom-0 p-6">
+                                    <h3 className="font-display text-2xl text-white">{m.name}</h3>
+                                    <p className="mt-1 text-xs text-white/70">Under certified supervision</p>
+                                    <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-500 ease-out group-hover:grid-rows-[1fr] group-hover:opacity-100">
+                                        <div className="overflow-hidden">
+                                            <div className="mt-3 flex flex-wrap gap-2">
+                                                {sharedApproaches.map((ap) => (
+                                                    <span
+                                                        key={ap}
+                                                        className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/90 backdrop-blur"
+                                                    >
+                                                        {ap}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <span className="text-beige mt-4 inline-flex items-center gap-1.5 text-sm font-medium">
+                                                View profile →
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.button>
+                        ))}
+
+                        {/* ghost card — signals more specialists to come */}
+                        <div className="border-ashen-300 flex h-[26rem] w-[18.5rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-[1.5rem] border-2 border-dashed text-center">
+                            <span className="font-display text-ashen-400 text-4xl">+</span>
+                            <p className="text-ashen-500 px-10 text-sm">More specialists joining soon</p>
+                        </div>
+                    </div>
+
+                    {/* legal disclaimer */}
+                    <p className="text-ashen-400 mt-8 max-w-3xl text-xs leading-relaxed">
+                        Our specialists hold a Master's (M2) in Clinical Psychology from the Lebanese University and provide psychological support
+                        under the supervision of certified psychologists. They are completing their professional licensure and are not yet licensed
+                        psychologists.
+                    </p>
+                </section>
+
+                {/* ===== FAQ — "Ask away" (skewed photo + hairline list) ===== */}
+                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
+                    <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
+                        {/* left — heading + angled photo + contact */}
+                        <div className="md:sticky md:top-24 md:self-start">
+                            <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">FAQ</span>
+                            <h2 className="font-display text-ashen-800 mt-4 text-4xl leading-[1.05] tracking-tight md:text-6xl">
+                                <RevealText text="Ask away" />
+                            </h2>
+                            <p className="text-ashen-500 mt-4 max-w-sm leading-relaxed">
+                                Everything you might want to know before you begin. Can't find your answer? We're only a message away.
                             </p>
+
+                            <TiltCard
+                                from="left"
+                                tilt={6}
+                                className="relative mt-8 hidden aspect-[4/5] w-full max-w-[18rem] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)] md:block"
+                            >
+                                <img
+                                    src={team[0].photo}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="absolute inset-0 h-full w-full object-cover grayscale-[30%]"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                <div className="absolute inset-x-0 bottom-0 p-5">
+                                    <p className="text-sm font-medium text-white">Talk to a real person</p>
+                                    <p className="text-xs text-white/70">We usually reply within a day</p>
+                                </div>
+                            </TiltCard>
+
+                            <a
+                                href="/register"
+                                className="group bg-sage-700 hover:bg-sage-800 mt-7 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-sm font-medium text-white transition"
+                            >
+                                <span className="rounded-full bg-white/20 p-1 transition-transform group-hover:rotate-45">
+                                    <ArrowUpRight className="h-4 w-4" />
+                                </span>
+                                Get in touch
+                            </a>
                         </div>
 
-                        {/* dark panel — same signature as the cards section */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: '-80px' }}
-                            transition={{ duration: 0.7 }}
-                            className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br"
-                        >
-                            {/* inner breathing glow */}
-                            <div className="bg-sage-500/30 animate-breathe pointer-events-none absolute -top-12 -right-12 h-60 w-60 rounded-full blur-3xl" />
-
-                            <div className="relative z-10 divide-y divide-white/10">
-                                {approaches.map((a, i) => (
-                                    <div key={a.abbr}>
+                        {/* right — hairline +/- list */}
+                        <div className="border-ashen-200/70 border-t">
+                            {faqs.map((f, i) => {
+                                const isOpen = openFaq === i;
+                                return (
+                                    <div key={f.q} className="border-ashen-200/70 border-b">
                                         <button
-                                            onClick={() => setOpen(open === i ? null : i)}
-                                            className="group flex w-full items-center justify-between gap-4 px-6 py-6 text-left transition hover:bg-white/5 md:px-8"
+                                            onClick={() => setOpenFaq(isOpen ? null : i)}
+                                            className="group flex w-full items-start gap-4 py-6 text-left md:gap-5"
                                         >
-                                            <span className="flex items-center gap-4">
-                                                <span
-                                                    className={`bg-sage-400 h-7 w-1 rounded-full transition-all duration-300 ${open === i ? 'opacity-100' : 'opacity-0'}`}
-                                                />
-                                                <span className="font-display group-hover:text-sage-300 text-xl text-white transition-colors">
-                                                    {a.abbr}
-                                                </span>
-                                                <span className="text-ashen-300 hidden sm:inline">{a.summary}</span>
+                                            <span
+                                                className={`font-display mt-1 text-sm tabular-nums transition-colors ${isOpen ? 'text-sage-700' : 'text-ashen-400'}`}
+                                            >
+                                                {String(i + 1).padStart(2, '0')}
                                             </span>
-                                            <Plus
-                                                className={`text-sage-300 h-5 w-5 shrink-0 transition-transform duration-300 ${open === i ? 'rotate-45' : ''}`}
-                                            />
+                                            <span className="font-display text-ashen-800 group-hover:text-sage-700 flex-1 text-lg transition-colors md:text-xl">
+                                                {f.q}
+                                            </span>
+                                            <span
+                                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-300 text-sage-700 group-hover:border-sage-400'}`}
+                                            >
+                                                <Plus className="h-4 w-4" />
+                                            </span>
                                         </button>
-
                                         <AnimatePresence initial={false}>
-                                            {open === i && (
+                                            {isOpen && (
                                                 <motion.div
                                                     initial={{ height: 0, opacity: 0 }}
                                                     animate={{ height: 'auto', opacity: 1 }}
                                                     exit={{ height: 0, opacity: 0 }}
-                                                    transition={{ duration: 0.4, ease: 'easeInOut' }}
+                                                    transition={{ duration: 0.35, ease: 'easeInOut' }}
                                                     className="overflow-hidden"
                                                 >
-                                                    <div className="px-6 pb-6 pl-11 md:px-8 md:pl-12">
-                                                        <p className="text-ashen-300 max-w-xl leading-relaxed">{a.body}</p>
-                                                        <p className="text-sage-300 mt-3 text-sm font-medium">Best for: {a.best}</p>
-                                                    </div>
+                                                    <p className="text-ashen-500 max-w-xl pr-6 pb-6 pl-[2.75rem] leading-relaxed">{f.a}</p>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
                                     </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </div>
-                </section>
-
-                {/* ===== MEET THE TEAM — photo cards ===== */}
-                <section ref={teamRef} id="team" className="relative z-10 pt-4 pb-8 md:pt-6 md:pb-12">
-                    <div className="mx-auto max-w-6xl px-6 md:px-10">
-                        <div className="relative overflow-hidden rounded-[2.5rem] px-6 py-12 md:px-10 md:py-14">
-                            {/* blurred ashen-sage nature backdrop — parallax drift, breaks the cream */}
-                            <motion.img
-                                src="/images/team-bg.jpg"
-                                alt=""
-                                loading="lazy"
-                                decoding="async"
-                                style={{ y: teamBgY }}
-                                className="absolute -top-[10%] left-0 h-[120%] w-full object-cover"
-                            />
-                            <div className="bg-ashen-900/55 absolute inset-0" />
-
-                            <div className="relative z-10">
-                                {/* header with carousel arrows */}
-                                <div className="mb-10 flex items-end justify-between gap-6">
-                                    <div>
-                                        <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                                        <h2 className="font-display mt-3 text-4xl tracking-tight text-white md:text-5xl">The people behind Sanad</h2>
-                                        <p className="text-ashen-300 mt-4 max-w-xl leading-relaxed">
-                                            Every specialist holds a Master's in Clinical Psychology and is trained across all our approaches — CBT,
-                                            EMDR and psychoanalysis.
-                                        </p>
-                                    </div>
-                                    <div className="hidden shrink-0 gap-2 sm:flex">
-                                        <button
-                                            onClick={() => scrollTeam(-1)}
-                                            aria-label="Previous"
-                                            className="hover:border-sage-400 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:text-white"
-                                        >
-                                            <ChevronRight className="h-5 w-5 rotate-180" />
-                                        </button>
-                                        <button
-                                            onClick={() => scrollTeam(1)}
-                                            aria-label="Next"
-                                            className="hover:border-sage-400 flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white/80 transition hover:text-white"
-                                        >
-                                            <ChevronRight className="h-5 w-5" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* horizontal carousel — text lives inside each card */}
-                                <div ref={teamScrollRef} className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2">
-                                    {team.map((m, i) => (
-                                        <motion.button
-                                            key={m.name}
-                                            onClick={() => setSelected(m)}
-                                            initial={{ opacity: 0, y: 30 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true, margin: '-80px' }}
-                                            transition={{ duration: 0.6, delay: i * 0.1 }}
-                                            className="group bg-ashen-800 relative h-[30rem] w-[20rem] shrink-0 snap-start overflow-hidden rounded-3xl text-left"
-                                        >
-                                            <img
-                                                src={m.photo}
-                                                alt={m.name}
-                                                loading="lazy"
-                                                decoding="async"
-                                                className="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/95" />
-                                            <span className="bg-beige/90 text-ashen-800 absolute top-5 left-5 rounded-full px-3 py-1 text-xs font-medium backdrop-blur">
-                                                M2 · Clinical Psychology
-                                            </span>
-
-                                            <div className="absolute inset-x-0 bottom-0 p-6">
-                                                <h3 className="font-display text-2xl text-white">{m.name}</h3>
-                                                <p className="mt-1 text-xs text-white/70">Under certified supervision</p>
-
-                                                {/* hover-reveal — smoothly expands on hover */}
-                                                <div className="grid grid-rows-[0fr] opacity-0 transition-all duration-500 ease-out group-hover:grid-rows-[1fr] group-hover:opacity-100">
-                                                    <div className="overflow-hidden">
-                                                        <div className="mt-3 flex flex-wrap gap-2">
-                                                            {sharedApproaches.map((ap) => (
-                                                                <span
-                                                                    key={ap}
-                                                                    className="rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs text-white/90 backdrop-blur"
-                                                                >
-                                                                    {ap}
-                                                                </span>
-                                                            ))}
-                                                        </div>
-                                                        <span className="text-beige mt-4 inline-flex items-center gap-1.5 text-sm font-medium">
-                                                            View profile →
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </motion.button>
-                                    ))}
-
-                                    {/* ghost card — signals more specialists to come */}
-                                    <div className="flex h-[30rem] w-[20rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-white/25 text-center">
-                                        <span className="font-display text-4xl text-white/40">+</span>
-                                        <p className="px-10 text-sm text-white/60">More specialists joining soon</p>
-                                    </div>
-                                </div>
-
-                                {/* legal disclaimer */}
-                                <p className="mt-8 max-w-3xl text-xs leading-relaxed text-white/50">
-                                    Our specialists hold a Master's (M2) in Clinical Psychology from the Lebanese University and provide psychological
-                                    support under the supervision of certified psychologists. They are completing their professional licensure and are
-                                    not yet licensed psychologists.
-                                </p>
-                            </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
 
-                {/* ===== FAQ — editorial two-column (light, on the shared canvas) ===== */}
-                <section id="faq" className="relative z-10 pt-6 pb-20 md:pt-10 md:pb-28">
-                    {/* local soft glow for depth (opacity/translate only — cheap) */}
-                    <div
-                        aria-hidden
-                        className="bg-sage-300/30 pointer-events-none absolute top-10 right-[-6rem] h-80 w-80 rounded-full blur-3xl"
-                        style={{ animation: 'aurora-2 24s ease-in-out infinite' }}
-                    />
-
-                    <div className="relative z-10 mx-auto max-w-6xl px-6 md:px-10">
-                        {/* animated dark border — a decorative frame BEHIND the content, so the
-                        sticky left column keeps working (a clipping wrapper would break it) */}
-                        <div aria-hidden className="pointer-events-none absolute inset-x-6 inset-y-0 md:inset-x-10">
-                            <div className="relative h-full w-full overflow-hidden rounded-[2.5rem] shadow-[0_30px_80px_-45px_rgba(58,59,55,0.6)]">
-                                <span className="spin-ring-dark absolute top-1/2 left-1/2 aspect-square w-[420%] -translate-x-1/2 -translate-y-1/2 md:w-[150%]" />
-                                <div className="bg-cream absolute inset-[3px] rounded-[calc(2.5rem-3px)]" />
-                            </div>
-                        </div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: '-80px' }}
-                            transition={{ duration: 0.7 }}
-                            className="relative grid grid-cols-1 gap-10 p-7 md:grid-cols-[0.9fr_1.1fr] md:gap-16 md:p-12"
-                        >
-                            {/* left — sticky intro + human element + contact card */}
-                            <div className="md:sticky md:top-24 md:self-start">
-                                <span className="text-sage-700 inline-flex items-center gap-2 text-sm font-medium tracking-[0.2em] uppercase">
-                                    <span className="bg-sage-500 h-1.5 w-1.5 rounded-full" /> FAQ
+                {/* ===== FINAL CTA — warm sand panel to close ===== */}
+                <section className="relative z-10 px-6 pb-20 md:pb-28">
+                    <div className="from-beige to-sand/80 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] bg-gradient-to-br px-6 py-20 text-center md:rounded-[3.5rem] md:py-28">
+                        <div className="bg-sage-300/30 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
+                        <div className="animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full bg-amber-200/40 blur-3xl [animation-delay:-4s]" />
+                        <div className="relative z-10">
+                            <span className="text-sage-800 text-sm font-medium tracking-[0.2em] uppercase">Proudly Lebanese · Beirut</span>
+                            <h2 className="font-display text-ashen-900 mx-auto mt-5 max-w-2xl text-4xl leading-[1.05] tracking-tight md:text-6xl">
+                                <RevealText text="Care that feels like home." />
+                            </h2>
+                            <p className="text-ashen-700 mx-auto mt-5 max-w-md leading-relaxed">
+                                Compassionate psychological support — in your language, on your schedule, at your own pace.
+                            </p>
+                            <a
+                                href="/register"
+                                className="group bg-ashen-900 hover:bg-ashen-800 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-sm font-medium text-white transition"
+                            >
+                                <span className="rounded-full bg-white/15 p-1.5 transition-transform group-hover:rotate-45">
+                                    <ArrowUpRight className="h-5 w-5" />
                                 </span>
-                                <h2 className="font-display text-ashen-800 mt-3 text-4xl leading-[1.05] tracking-tight md:text-5xl">
-                                    Questions,
-                                    <br />
-                                    answered gently
-                                </h2>
-                                <p className="text-ashen-500 mt-4 max-w-sm leading-relaxed">
-                                    Everything you might want to know before you begin. Can't find your answer? We're only a message away.
-                                </p>
-
-                                {/* human element — real specialists */}
-                                <div className="mt-8 flex items-center gap-4">
-                                    <div className="flex -space-x-3">
-                                        {team.map((m) => (
-                                            <img
-                                                key={m.name}
-                                                src={m.photo}
-                                                alt={m.name}
-                                                loading="lazy"
-                                                decoding="async"
-                                                className="border-cream h-11 w-11 rounded-full border-2 object-cover"
-                                            />
-                                        ))}
-                                        <span className="border-cream bg-sage-100 text-sage-700 flex h-11 w-11 items-center justify-center rounded-full border-2 text-xs font-medium">
-                                            +10
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <p className="text-ashen-800 text-sm font-medium">Talk to a real person</p>
-                                        <p className="text-ashen-500 text-xs">We usually reply within a day</p>
-                                    </div>
-                                </div>
-
-                                {/* contact card — elevated, with a GPU-rotated glow border */}
-                                <div className="relative mt-7 overflow-hidden rounded-3xl p-[2px] shadow-[0_18px_50px_-30px_rgba(73,74,69,0.5)]">
-                                    <span
-                                        aria-hidden
-                                        className="spin-ring pointer-events-none absolute top-1/2 left-1/2 aspect-square w-[200%] -translate-x-1/2 -translate-y-1/2 opacity-80"
-                                    />
-                                    <div className="relative rounded-[calc(1.5rem-2px)] bg-white p-6">
-                                        <p className="font-display text-ashen-800 text-xl">Still have questions?</p>
-                                        <p className="text-ashen-500 mt-2 text-sm leading-relaxed">
-                                            Reach out and we'll help you find the right support, at your own pace.
-                                        </p>
-                                        <a
-                                            href="/register"
-                                            className="group bg-sage-700 hover:bg-sage-800 mt-5 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-sm font-medium text-white transition"
-                                        >
-                                            <span className="rounded-full bg-white/20 p-1 transition-transform group-hover:rotate-45">
-                                                <ArrowUpRight className="h-4 w-4" />
-                                            </span>
-                                            Get in touch
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* right — numbered accordion with active accent */}
-                            <div className="border-ashen-200/80 border-t">
-                                {faqs.map((f, i) => {
-                                    const isOpen = openFaq === i;
-                                    return (
-                                        <div
-                                            key={f.q}
-                                            className={`border-ashen-200/80 relative border-b transition-colors duration-300 ${isOpen ? 'bg-white/40' : ''}`}
-                                        >
-                                            {/* active sage accent bar */}
-                                            <span
-                                                className={`bg-sage-500 pointer-events-none absolute top-[1.55rem] left-0 h-7 w-1 rounded-full transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-                                            />
-                                            <button
-                                                onClick={() => setOpenFaq(isOpen ? null : i)}
-                                                className="group flex w-full items-start gap-4 py-5 pr-3 pl-4 text-left md:gap-5"
-                                            >
-                                                <span
-                                                    className={`font-display mt-0.5 text-sm tabular-nums transition-colors ${isOpen ? 'text-sage-700' : 'text-ashen-400'}`}
-                                                >
-                                                    {String(i + 1).padStart(2, '0')}
-                                                </span>
-                                                <span className="font-display text-ashen-800 group-hover:text-sage-700 flex-1 text-lg transition-colors md:text-xl">
-                                                    {f.q}
-                                                </span>
-                                                <span
-                                                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-300 text-sage-700 group-hover:border-sage-400'}`}
-                                                >
-                                                    <Plus className="h-4 w-4" />
-                                                </span>
-                                            </button>
-
-                                            <AnimatePresence initial={false}>
-                                                {isOpen && (
-                                                    <motion.div
-                                                        initial={{ height: 0, opacity: 0 }}
-                                                        animate={{ height: 'auto', opacity: 1 }}
-                                                        exit={{ height: 0, opacity: 0 }}
-                                                        transition={{ duration: 0.35, ease: 'easeInOut' }}
-                                                        className="overflow-hidden"
-                                                    >
-                                                        <p className="text-ashen-500 max-w-xl pr-6 pb-6 pl-[3.25rem] leading-relaxed md:pl-[3.5rem]">
-                                                            {f.a}
-                                                        </p>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </motion.div>
+                                Book a session
+                            </a>
+                        </div>
                     </div>
                 </section>
             </div>
