@@ -230,7 +230,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
-                            className="absolute bottom-6 left-6 flex min-w-[170px] flex-col gap-3 rounded-[1.5rem_1.5rem_1.5rem_2.75rem] border border-white/15 bg-white/10 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.28)] backdrop-blur-xl md:bottom-10 md:left-10"
+                            className="absolute bottom-6 left-6 flex min-w-[170px] flex-col gap-3 rounded-[2rem] border border-white/15 bg-white/10 p-5 backdrop-blur-xl md:bottom-10 md:left-10"
                         >
                             <div>
                                 <p className="text-3xl font-normal tracking-tight text-white">12</p>
@@ -349,7 +349,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 {/* ===== HOW ARE YOU FEELING — dark glowing panel ===== */}
                 <section id="support" className="relative z-10 pt-10 pb-20 md:pt-14 md:pb-28">
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
-                        <div className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[3.5rem_1.75rem_3.5rem_1.75rem] border border-white/10 bg-gradient-to-br px-6 py-12 md:rounded-[5rem_2rem_5rem_2rem] md:px-12 md:py-14">
+                        <div className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
                             {/* animating light glows inside the panel */}
                             <div className="bg-sage-500/40 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
                             <div className="bg-beige/40 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
@@ -379,17 +379,13 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 {/* two entry doors — alternating editorial rows */}
                                 <div className="space-y-16 md:space-y-24">
                                     {/* Emergency First Aid — text left, photo right */}
-                                    <a href="/emergency" className="group relative flex flex-col items-center gap-8 md:flex-row md:gap-14">
-                                        {/* oversized editorial index — a quiet watermark numeral */}
-                                        <span className="font-display pointer-events-none absolute -top-9 -left-1 z-0 text-[6.5rem] leading-none text-white/[0.06] select-none md:-top-16 md:text-[11rem]">
-                                            01
-                                        </span>
+                                    <a href="/emergency" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
                                         <motion.div
                                             initial={{ opacity: 0, x: -40 }}
                                             whileInView={{ opacity: 1, x: 0 }}
                                             viewport={{ once: true, margin: '-80px' }}
                                             transition={{ duration: 0.7, ease: 'easeOut' }}
-                                            className="relative z-10 w-full md:w-1/2"
+                                            className="w-full md:w-1/2"
                                         >
                                             <div className="mb-4 flex items-center gap-2.5">
                                                 <span className="relative flex h-2.5 w-2.5">
@@ -407,15 +403,25 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 For a shock that's still fresh — within the last hours. Immediate, guided grounding to help you feel
                                                 safe right now.
                                             </p>
-                                            <ul className="relative mt-6 space-y-3 before:absolute before:top-3 before:bottom-3 before:left-[0.6rem] before:w-px before:bg-white/15">
-                                                {['Find safety', 'Full-body reset', 'Steady your focus'].map((step, s) => (
-                                                    <li key={step} className="text-ashen-300 flex items-center gap-3 text-sm">
-                                                        <span className="bg-beige/25 text-beige ring-ashen-600/60 relative z-10 flex h-[1.4rem] w-[1.4rem] shrink-0 items-center justify-center rounded-full text-[11px] font-medium ring-4">
-                                                            {s + 1}
-                                                        </span>
-                                                        {step}
-                                                    </li>
-                                                ))}
+                                            <ul className="mt-6 space-y-2.5">
+                                                <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
+                                                    <span className="bg-beige/20 text-beige flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
+                                                        1
+                                                    </span>
+                                                    Find safety
+                                                </li>
+                                                <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
+                                                    <span className="bg-beige/20 text-beige flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
+                                                        2
+                                                    </span>
+                                                    Full-body reset
+                                                </li>
+                                                <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
+                                                    <span className="bg-beige/20 text-beige flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
+                                                        3
+                                                    </span>
+                                                    Steady your focus
+                                                </li>
                                             </ul>
                                             <p className="text-ashen-400 mt-5 flex items-center gap-1.5 text-sm">
                                                 <Clock className="h-4 w-4" /> Available now · ~3 minutes
@@ -429,7 +435,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                             whileInView={{ opacity: 1, scale: 1 }}
                                             viewport={{ once: true, margin: '-80px' }}
                                             transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
-                                            className="bg-ashen-900 relative z-10 h-80 w-full overflow-hidden rounded-[2.5rem_2.5rem_2.5rem_5rem] md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-80 w-full overflow-hidden rounded-3xl md:h-[28rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/emergency.jpg"
@@ -438,26 +444,18 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 fetchPriority="high"
                                                 className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-                                            {/* floating glass chip overlapping the image */}
-                                            <div className="absolute bottom-5 left-7 flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-md">
-                                                <Clock className="h-3.5 w-3.5" /> ~3 min · available now
-                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                                         </motion.div>
                                     </a>
 
                                     {/* Ongoing Support — photo left, text right */}
-                                    <a href="/register" className="group relative flex flex-col items-center gap-8 md:flex-row md:gap-14">
-                                        {/* oversized editorial index — mirrored to the right */}
-                                        <span className="font-display pointer-events-none absolute -top-9 -right-1 z-0 text-[6.5rem] leading-none text-white/[0.06] select-none md:-top-16 md:text-[11rem]">
-                                            02
-                                        </span>
+                                    <a href="/register" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.95 }}
                                             whileInView={{ opacity: 1, scale: 1 }}
                                             viewport={{ once: true, margin: '-80px' }}
                                             transition={{ duration: 0.7, ease: 'easeOut' }}
-                                            className="bg-ashen-900 relative z-10 h-80 w-full overflow-hidden rounded-[2.5rem_2.5rem_5rem_2.5rem] md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-80 w-full overflow-hidden rounded-3xl md:h-[28rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/ongoing.jpg"
@@ -465,18 +463,14 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 decoding="async"
                                                 className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-                                            {/* floating glass chip overlapping the image */}
-                                            <div className="absolute right-7 bottom-5 flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-medium text-white backdrop-blur-md">
-                                                <Clock className="h-3.5 w-3.5" /> At your own pace
-                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                                         </motion.div>
                                         <motion.div
                                             initial={{ opacity: 0, x: 40 }}
                                             whileInView={{ opacity: 1, x: 0 }}
                                             viewport={{ once: true, margin: '-80px' }}
                                             transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
-                                            className="relative z-10 w-full md:w-1/2"
+                                            className="w-full md:w-1/2"
                                         >
                                             <div className="mb-4 flex items-center gap-2.5">
                                                 <span className="bg-sage-300 h-2.5 w-2.5 rounded-full" />
@@ -491,15 +485,25 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 For something from days, weeks, or longer ago — gentle support to process what happened, at your own
                                                 pace.
                                             </p>
-                                            <ul className="relative mt-6 space-y-3 before:absolute before:top-3 before:bottom-3 before:left-[0.6rem] before:w-px before:bg-white/15">
-                                                {['Talk it through', 'Guided sessions over time', 'At your own pace'].map((step, s) => (
-                                                    <li key={step} className="text-ashen-300 flex items-center gap-3 text-sm">
-                                                        <span className="bg-sage-500/25 text-sage-300 ring-ashen-600/60 relative z-10 flex h-[1.4rem] w-[1.4rem] shrink-0 items-center justify-center rounded-full text-[11px] font-medium ring-4">
-                                                            {s + 1}
-                                                        </span>
-                                                        {step}
-                                                    </li>
-                                                ))}
+                                            <ul className="mt-6 space-y-2.5">
+                                                <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
+                                                    <span className="bg-sage-500/20 text-sage-300 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
+                                                        1
+                                                    </span>
+                                                    Talk it through
+                                                </li>
+                                                <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
+                                                    <span className="bg-sage-500/20 text-sage-300 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
+                                                        2
+                                                    </span>
+                                                    Guided sessions over time
+                                                </li>
+                                                <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
+                                                    <span className="bg-sage-500/20 text-sage-300 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
+                                                        3
+                                                    </span>
+                                                    At your own pace
+                                                </li>
                                             </ul>
                                             <p className="text-ashen-400 mt-5 flex items-center gap-1.5 text-sm">
                                                 <Clock className="h-4 w-4" /> Whenever you're ready
@@ -555,7 +559,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-80px' }}
                             transition={{ duration: 0.7 }}
-                            className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[1.75rem_3.5rem_1.75rem_3.5rem] border border-white/10 bg-gradient-to-br md:rounded-[2rem_5rem_2rem_5rem]"
+                            className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br"
                         >
                             {/* inner breathing glow */}
                             <div className="bg-sage-500/30 animate-breathe pointer-events-none absolute -top-12 -right-12 h-60 w-60 rounded-full blur-3xl" />
@@ -567,12 +571,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                             onClick={() => setOpen(open === i ? null : i)}
                                             className="group flex w-full items-center justify-between gap-4 px-6 py-6 text-left transition hover:bg-white/5 md:px-8"
                                         >
-                                            <span className="flex items-center gap-4 md:gap-5">
-                                                <span
-                                                    className={`font-display shrink-0 text-2xl tabular-nums transition-colors duration-300 md:text-3xl ${open === i ? 'text-sage-300' : 'text-white/25'}`}
-                                                >
-                                                    {String(i + 1).padStart(2, '0')}
-                                                </span>
+                                            <span className="flex items-center gap-4">
                                                 <span
                                                     className={`bg-sage-400 h-7 w-1 rounded-full transition-all duration-300 ${open === i ? 'opacity-100' : 'opacity-0'}`}
                                                 />
@@ -612,7 +611,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 {/* ===== MEET THE TEAM — photo cards ===== */}
                 <section ref={teamRef} id="team" className="relative z-10 pt-4 pb-8 md:pt-6 md:pb-12">
                     <div className="mx-auto max-w-6xl px-6 md:px-10">
-                        <div className="relative overflow-hidden rounded-[3.5rem_1.75rem_3.5rem_1.75rem] px-6 py-12 md:rounded-[5rem_2rem_5rem_2rem] md:px-10 md:py-14">
+                        <div className="relative overflow-hidden rounded-[2.5rem] px-6 py-12 md:px-10 md:py-14">
                             {/* blurred ashen-sage nature backdrop — parallax drift, breaks the cream */}
                             <motion.img
                                 src="/images/team-bg.jpg"
@@ -663,7 +662,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true, margin: '-80px' }}
                                             transition={{ duration: 0.6, delay: i * 0.1 }}
-                                            className={`group bg-ashen-800 relative h-[30rem] w-[20rem] shrink-0 snap-start overflow-hidden text-left ${i % 2 === 1 ? 'md:mt-12' : ''} ${i % 2 === 0 ? 'rounded-[2.5rem_2.5rem_2.5rem_4.5rem]' : 'rounded-[2.5rem_4.5rem_2.5rem_2.5rem]'}`}
+                                            className="group bg-ashen-800 relative h-[30rem] w-[20rem] shrink-0 snap-start overflow-hidden rounded-3xl text-left"
                                         >
                                             <img
                                                 src={m.photo}
@@ -673,10 +672,6 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 className="absolute inset-0 h-full w-full object-cover grayscale-[40%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/95" />
-                                            {/* ghost index numeral — editorial gallery marker */}
-                                            <span className="font-display pointer-events-none absolute top-3 right-6 text-5xl text-white/20 select-none">
-                                                {String(i + 1).padStart(2, '0')}
-                                            </span>
                                             <span className="bg-beige/90 text-ashen-800 absolute top-5 left-5 rounded-full px-3 py-1 text-xs font-medium backdrop-blur">
                                                 M2 · Clinical Psychology
                                             </span>
@@ -708,7 +703,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                     ))}
 
                                     {/* ghost card — signals more specialists to come */}
-                                    <div className="flex h-[30rem] w-[20rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-[2.5rem_4.5rem_2.5rem_2.5rem] border-2 border-dashed border-white/25 text-center">
+                                    <div className="flex h-[30rem] w-[20rem] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-white/25 text-center">
                                         <span className="font-display text-4xl text-white/40">+</span>
                                         <p className="px-10 text-sm text-white/60">More specialists joining soon</p>
                                     </div>
@@ -738,9 +733,9 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                         {/* animated dark border — a decorative frame BEHIND the content, so the
                         sticky left column keeps working (a clipping wrapper would break it) */}
                         <div aria-hidden className="pointer-events-none absolute inset-x-6 inset-y-0 md:inset-x-10">
-                            <div className="relative h-full w-full overflow-hidden rounded-[1.75rem_3.5rem_1.75rem_3.5rem] shadow-[0_30px_80px_-45px_rgba(58,59,55,0.6)] md:rounded-[2rem_5rem_2rem_5rem]">
+                            <div className="relative h-full w-full overflow-hidden rounded-[2.5rem] shadow-[0_30px_80px_-45px_rgba(58,59,55,0.6)]">
                                 <span className="spin-ring-dark absolute top-1/2 left-1/2 aspect-square w-[420%] -translate-x-1/2 -translate-y-1/2 md:w-[150%]" />
-                                <div className="bg-cream absolute inset-[3px] rounded-[calc(1.75rem-3px)_calc(3.5rem-3px)_calc(1.75rem-3px)_calc(3.5rem-3px)] md:rounded-[calc(2rem-3px)_calc(5rem-3px)_calc(2rem-3px)_calc(5rem-3px)]" />
+                                <div className="bg-cream absolute inset-[3px] rounded-[calc(2.5rem-3px)]" />
                             </div>
                         </div>
 
