@@ -6,10 +6,27 @@
 
         <title inertia>{{ config('app.name', 'Sanad') }}</title>
 
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-        <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
-        <link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+        <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
+        <link rel="icon" href="/favicon-32.png?v=3" sizes="32x32" type="image/png">
+        <link rel="icon" href="/favicon-96.png?v=3" sizes="96x96" type="image/png">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
+
+        {{-- Social share / link preview (Open Graph + Twitter) --}}
+        @php($ogTitle = 'Sanad — A safe space for your mind')
+        @php($ogDescription = 'Real, confidential sessions with licensed clinical psychologists — online, on your schedule, guided with care.')
+        <meta name="description" content="{{ $ogDescription }}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Sanad">
+        <meta property="og:title" content="{{ $ogTitle }}">
+        <meta property="og:description" content="{{ $ogDescription }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:image" content="{{ url('/og-image.jpg') }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $ogTitle }}">
+        <meta name="twitter:description" content="{{ $ogDescription }}">
+        <meta name="twitter:image" content="{{ url('/og-image.jpg') }}">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600|fraunces:400,500,600,600i" rel="stylesheet" />
