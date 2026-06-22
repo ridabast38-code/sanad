@@ -425,12 +425,12 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                     </a>
                                 </div>
 
-                                {/* two entry doors — swipe carousel on phone, alternating editorial rows on desktop */}
-                                <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 md:mx-0 md:block md:space-y-16 md:overflow-visible md:px-0 md:pb-0">
+                                {/* two entry doors — compact stacked cards on phone, editorial rows on desktop */}
+                                <div className="space-y-6 md:space-y-16">
                                     {/* Emergency First Aid — text left, photo right */}
                                     <a
                                         href="/emergency"
-                                        className="group flex w-[86%] shrink-0 snap-center flex-col items-center gap-6 md:w-auto md:shrink md:flex-row md:gap-14"
+                                        className="group flex flex-col-reverse items-stretch gap-5 md:flex-row md:items-center md:gap-14"
                                     >
                                         <motion.div
                                             initial={{ opacity: 0, x: -40 }}
@@ -455,7 +455,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 For a shock that's still fresh — within the last hours. Immediate, guided grounding to help you feel
                                                 safe right now.
                                             </p>
-                                            <ul className="mt-6 space-y-2.5">
+                                            <ul className="mt-6 hidden space-y-2.5 md:block">
                                                 <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
                                                     <span className="bg-beige/20 text-beige flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
                                                         1
@@ -475,7 +475,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                     Steady your focus
                                                 </li>
                                             </ul>
-                                            <p className="text-ashen-400 mt-5 flex items-center gap-1.5 text-sm">
+                                            <p className="text-ashen-400 mt-5 hidden items-center gap-1.5 text-sm md:flex">
                                                 <Clock className="h-4 w-4" /> Available now · ~3 minutes
                                             </p>
                                             <span className="text-beige mt-6 inline-flex items-center gap-1.5 text-sm font-medium transition-all group-hover:gap-3">
@@ -485,7 +485,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                         <TiltCard
                                             from="right"
                                             tilt={-5}
-                                            className="bg-ashen-900 relative h-48 w-full overflow-hidden rounded-3xl sm:h-64 md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-44 w-full overflow-hidden rounded-3xl sm:h-56 md:h-[28rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/emergency.jpg"
@@ -499,14 +499,11 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                     </a>
 
                                     {/* Ongoing Support — photo left, text right */}
-                                    <a
-                                        href="/register"
-                                        className="group flex w-[86%] shrink-0 snap-center flex-col items-center gap-6 md:w-auto md:shrink md:flex-row md:gap-14"
-                                    >
+                                    <a href="/register" className="group flex flex-col items-stretch gap-5 md:flex-row md:items-center md:gap-14">
                                         <TiltCard
                                             from="left"
                                             tilt={5}
-                                            className="bg-ashen-900 relative h-48 w-full overflow-hidden rounded-3xl sm:h-64 md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-44 w-full overflow-hidden rounded-3xl sm:h-56 md:h-[28rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/ongoing.jpg"
@@ -536,7 +533,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                 For something from days, weeks, or longer ago — gentle support to process what happened, at your own
                                                 pace.
                                             </p>
-                                            <ul className="mt-6 space-y-2.5">
+                                            <ul className="mt-6 hidden space-y-2.5 md:block">
                                                 <li className="text-ashen-300 flex items-center gap-2.5 text-sm">
                                                     <span className="bg-sage-500/20 text-sage-300 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
                                                         1
@@ -556,7 +553,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                                     At your own pace
                                                 </li>
                                             </ul>
-                                            <p className="text-ashen-400 mt-5 flex items-center gap-1.5 text-sm">
+                                            <p className="text-ashen-400 mt-5 hidden items-center gap-1.5 text-sm md:flex">
                                                 <Clock className="h-4 w-4" /> Whenever you're ready
                                             </p>
                                             <span className="text-sage-300 mt-6 inline-flex items-center gap-1.5 text-sm font-medium transition-all group-hover:gap-3">
@@ -991,11 +988,11 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 <X className="h-5 w-5" />
                             </button>
 
-                            <div className="relative h-64 w-full shrink-0 md:h-auto md:w-2/5">
+                            <div className="relative h-52 w-full shrink-0 sm:h-64 md:h-auto md:w-2/5">
                                 <img src={selected.photo} alt={selected.name} className="h-full w-full object-cover" />
                             </div>
 
-                            <div className="overflow-y-auto p-8">
+                            <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
                                 <span className="bg-sage-100 text-sage-700 rounded-full px-3 py-1 text-xs font-medium">
                                     Licensed Clinical Psychologist
                                 </span>
