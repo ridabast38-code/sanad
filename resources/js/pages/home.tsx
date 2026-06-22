@@ -5,6 +5,11 @@ import { useRef, useState } from 'react';
 // A gentle ease used across every reveal so the whole page shares one feel.
 const SOFT_EASE = [0.22, 1, 0.36, 1] as const;
 
+// Faint paper-grain texture — layered over flat sections so they read as
+// crafted paper instead of solid blocks.
+const PAPER_NOISE =
+    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
 /**
  * Reveals a line of text word-by-word with a soft blur-up — our signature
  * heading entrance (borrowed from the Steno reference). Drop it inside any
@@ -595,8 +600,16 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
-                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-14 md:px-8 md:py-20">
-                    <div className="mb-8 max-w-2xl md:mb-10">
+                <section id="approaches" className="relative z-10 mx-auto max-w-5xl overflow-hidden px-6 py-14 md:px-8 md:py-20">
+                    {/* faint texture + an oversized faded echo of the title — breaks the white */}
+                    <div className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-overlay" style={{ backgroundImage: PAPER_NOISE }} />
+                    <span
+                        aria-hidden
+                        className="font-display text-ashen-900/[0.05] pointer-events-none absolute -right-4 -bottom-10 text-[8rem] leading-none select-none md:text-[13rem]"
+                    >
+                        Methods
+                    </span>
+                    <div className="relative mb-8 max-w-2xl md:mb-10">
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
                         <h2 className="font-display text-ashen-800 mt-4 text-4xl tracking-tight md:text-6xl">Methods, guided by specialists</h2>
                         <p className="text-ashen-500 mt-5 max-w-xl leading-relaxed">
@@ -615,7 +628,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                             onClick={() => setOpen(isOpen ? null : i)}
                                             className="group flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
                                         >
-                                            <span className="font-display text-ashen-400 w-7 shrink-0 text-sm tabular-nums md:text-base">
+                                            <span className="font-display text-ashen-300 w-10 shrink-0 text-2xl tabular-nums md:text-3xl">
                                                 {String(i + 1).padStart(2, '0')}
                                             </span>
                                             <span className="font-display text-ashen-800 group-hover:text-sage-700 flex-1 text-2xl tracking-tight transition-colors md:text-4xl">
@@ -668,10 +681,15 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b py-14 md:py-20">
-                    {/* soft on-brand glow for depth (no photo) */}
+                <section
+                    id="team"
+                    className="from-ashen-700 via-ashen-800 to-ashen-900 relative z-10 overflow-hidden bg-gradient-to-b py-14 md:py-20"
+                >
+                    {/* layered depth: top light, soft glows, faint grain — not a flat block */}
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_70%_at_50%_-10%,rgba(255,255,255,0.08),transparent_55%)]" />
                     <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
+                    <div className="pointer-events-none absolute inset-0 opacity-[0.12] mix-blend-overlay" style={{ backgroundImage: PAPER_NOISE }} />
 
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
                         <div className="mb-10 max-w-2xl">
@@ -689,22 +707,26 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 <motion.button
                                     key={m.name}
                                     onClick={() => setSelected(m)}
-                                    initial={{ rotateY: -10 }}
-                                    whileInView={{ rotateY: -6 }}
+                                    initial={{ rotateY: -13 }}
+                                    whileInView={{ rotateY: -8 }}
                                     whileHover={{ rotateY: 0 }}
                                     viewport={{ once: true, margin: '-80px' }}
                                     transition={{ duration: 0.7, ease: SOFT_EASE }}
-                                    className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)]"
+                                    className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_40px_70px_-32px_rgba(20,21,15,0.85)] transition-shadow duration-500 hover:shadow-[0_55px_90px_-30px_rgba(20,21,15,0.9)]"
                                 >
-                                    <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
+                                    {/* slanted (parallelogram) top edge — the template's dynamic 3D crop */}
+                                    <div
+                                        className="relative aspect-[4/5] overflow-hidden"
+                                        style={{ clipPath: 'polygon(0 9%, 100% 0, 100% 100%, 0 100%)' }}
+                                    >
                                         <img
                                             src={m.photo}
                                             alt={m.name}
                                             loading="lazy"
                                             decoding="async"
-                                            className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                            className="absolute inset-0 h-full w-full scale-[1.04] object-cover grayscale-[30%] transition duration-700 group-hover:scale-110 group-hover:grayscale-0"
                                         />
-                                        <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
+                                        <span className="bg-beige/90 text-ashen-800 absolute bottom-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
                                             M2 · Clinical Psychology
                                         </span>
                                     </div>
@@ -737,8 +759,16 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                 </section>
 
                 {/* ===== FAQ — "Ask away" (skewed photo + hairline list) ===== */}
-                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-20 md:px-8 md:py-28">
-                    <div className="grid grid-cols-1 gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
+                <section id="faq" className="relative z-10 mx-auto max-w-6xl overflow-hidden px-6 py-16 md:px-8 md:py-20">
+                    {/* faint texture + oversized faded echo — breaks the white */}
+                    <div className="pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-overlay" style={{ backgroundImage: PAPER_NOISE }} />
+                    <span
+                        aria-hidden
+                        className="font-display text-ashen-900/[0.05] pointer-events-none absolute -top-8 -right-6 text-[7rem] leading-none select-none md:text-[12rem]"
+                    >
+                        Questions
+                    </span>
+                    <div className="relative z-10 grid grid-cols-1 gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
                         {/* left — heading + angled photo + contact */}
                         <div className="md:sticky md:top-24 md:self-start">
                             <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">FAQ</span>
@@ -826,6 +856,10 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                     <div className="from-sage-100 to-cream border-sage-200/60 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-14 text-center md:rounded-[3.5rem] md:py-20">
                         <div className="bg-sage-300/30 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
                         <div className="bg-sage-200/40 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
+                        <div
+                            className="pointer-events-none absolute inset-0 opacity-[0.15] mix-blend-overlay"
+                            style={{ backgroundImage: PAPER_NOISE }}
+                        />
                         <div className="relative z-10">
                             <span className="text-sage-700 border-sage-200 inline-flex items-center gap-2 rounded-full border bg-white/60 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase">
                                 <span className="bg-sage-500 h-1.5 w-1.5 rounded-full" /> Proudly Lebanese · Beirut
@@ -851,13 +885,15 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
             </div>
 
             {/* ===== FOOTER — cinematic, Lebanese identity + trust ===== */}
-            <footer id="contact" className="bg-ashen-950 relative scroll-mt-20 overflow-hidden text-white">
-                {/* soft on-brand glow for a little depth — solid color, no photo */}
+            <footer id="contact" className="from-ashen-900 to-ashen-950 relative scroll-mt-20 overflow-hidden bg-gradient-to-b text-white">
+                {/* layered depth: top light, soft glow, faint grain — not a flat block */}
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(100%_60%_at_50%_0%,rgba(255,255,255,0.05),transparent_55%)]" />
                 <div
                     aria-hidden
                     className="bg-sage-700/20 pointer-events-none absolute top-0 -left-32 h-80 w-80 rounded-full blur-3xl"
                     style={{ animation: 'aurora-1 26s ease-in-out infinite' }}
                 />
+                <div className="pointer-events-none absolute inset-0 opacity-[0.1] mix-blend-overlay" style={{ backgroundImage: PAPER_NOISE }} />
 
                 <div className="relative z-10 mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-14">
                     {/* link columns */}
