@@ -125,7 +125,7 @@ export default function ClientHome({ practitioners, upcomingSessions, preference
                         transition={SLIDE}
                         className={`${photoSecond ? 'lg:order-2' : 'lg:order-1'} lg:w-[18rem] lg:shrink-0 xl:w-[20rem]`}
                     >
-                        <div className="h-80 lg:sticky lg:top-0 lg:h-screen">
+                        <div className="h-52 sm:h-72 lg:sticky lg:top-0 lg:h-screen">
                             <SanctuaryColumn />
                         </div>
                     </motion.aside>
@@ -134,7 +134,7 @@ export default function ClientHome({ practitioners, upcomingSessions, preference
                     <motion.main
                         layout
                         transition={SLIDE}
-                        className={`${photoSecond ? 'lg:order-1' : 'lg:order-2'} relative flex-1 px-6 py-12 md:px-12 md:py-14 lg:px-16 lg:py-16 xl:px-24`}
+                        className={`${photoSecond ? 'lg:order-1' : 'lg:order-2'} relative flex-1 px-6 pt-10 pb-28 md:px-12 md:py-14 lg:px-16 lg:py-16 xl:px-24`}
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -218,20 +218,22 @@ function SessionsView({
 
     return (
         <>
-            <header className="mb-16 md:mb-20">
-                <h1 className="font-display text-sage-800 text-4xl leading-tight tracking-tight md:text-5xl">Welcome back, {firstName}</h1>
-                <p className="text-ashen-500 mt-3 text-lg">Your sanctuary is ready. Take a breath before you begin.</p>
+            <header className="mb-8 md:mb-12">
+                <h1 className="font-display text-sage-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                    Welcome back, {firstName}
+                </h1>
+                <p className="text-ashen-500 mt-3 text-base sm:text-lg">Your sanctuary is ready. Take a breath before you begin.</p>
             </header>
 
-            <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-28">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-28">
                 <section className="space-y-8 md:space-y-10">
                     <ColumnHeader title="Find support" />
                     <BookNow count={specialistCount} onFind={onFindSpecialist} />
                     <Link
                         href="/emergency"
-                        className="group flex items-center gap-4 rounded-2xl border border-amber-200/70 bg-amber-50/60 p-5 transition hover:bg-amber-50 active:scale-[0.99]"
+                        className="border-sage-200/70 bg-sage-50/60 hover:bg-sage-50 group flex items-center gap-4 rounded-2xl border p-5 transition active:scale-[0.99]"
                     >
-                        <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                        <span className="bg-sage-100 text-sage-700 flex size-11 shrink-0 items-center justify-center rounded-full">
                             <LifeBuoy className="size-5" />
                         </span>
                         <span className="min-w-0 flex-1">
@@ -296,11 +298,11 @@ function SessionsView({
 function SpecialistsView({ practitioners, preferences }: { practitioners: Specialist[]; preferences: MatchPreferences }) {
     return (
         <>
-            <header className="mb-14 md:mb-16">
+            <header className="mb-8 md:mb-12">
                 <span className="border-sage-200 text-sage-700 inline-flex items-center gap-2 rounded-full border bg-white px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
                     <Users className="size-3.5" /> {practitioners.length} available
                 </span>
-                <h1 className="font-display text-sage-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">
+                <h1 className="font-display text-sage-800 mt-4 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">
                     Find your <span className="italic">specialist</span>
                 </h1>
                 <p className="text-ashen-500 mt-4 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
@@ -436,8 +438,8 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
 
     return (
         <>
-            <header className="mb-12 md:mb-14">
-                <h1 className="font-display text-sage-800 text-4xl leading-tight tracking-tight md:text-5xl">Notifications</h1>
+            <header className="mb-8 md:mb-12">
+                <h1 className="font-display text-sage-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">Notifications</h1>
                 <p className="text-ashen-500 mt-3 text-lg">Your session updates and a daily reflection, all in one place.</p>
             </header>
 
@@ -474,8 +476,8 @@ function ProfileView({ user }: { user: SharedData['auth']['user'] }) {
 
     return (
         <>
-            <header className="mb-12 md:mb-14">
-                <h1 className="font-display text-sage-800 text-4xl leading-tight tracking-tight md:text-5xl">Your account</h1>
+            <header className="mb-8 md:mb-12">
+                <h1 className="font-display text-sage-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">Your account</h1>
                 <p className="text-ashen-500 mt-3 text-lg">Manage your details and how Sanad works for you.</p>
             </header>
 
@@ -565,11 +567,15 @@ function TopNav({
                 isHidden ? '-translate-y-full' : 'translate-y-0'
             }`}
         >
-            <button type="button" onClick={() => onNavigate('sessions')} className="font-display text-sage-700 text-[1.65rem] tracking-tight">
+            <button
+                type="button"
+                onClick={() => onNavigate('sessions')}
+                className="font-display text-sage-700 text-2xl tracking-tight sm:text-[1.65rem]"
+            >
                 Sanad
             </button>
 
-            <nav className="flex flex-1 items-center justify-center gap-5 sm:gap-9">
+            <nav className="hidden flex-1 items-center justify-center gap-5 sm:flex sm:gap-9">
                 {tabs.map((tab) => {
                     const active = view === tab.view;
                     return (
@@ -594,7 +600,7 @@ function TopNav({
             <div className="flex items-center gap-2">
                 <Link
                     href="/emergency"
-                    className="mr-1 inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-white/60 px-3.5 py-2 text-sm font-semibold text-amber-700 transition hover:bg-amber-50 active:scale-95"
+                    className="border-sage-300/70 text-sage-700 hover:bg-sage-50 mr-1 inline-flex items-center gap-1.5 rounded-full border bg-white/60 px-3.5 py-2 text-sm font-semibold transition active:scale-95"
                 >
                     <LifeBuoy className="size-4" />
                     <span className="hidden sm:inline">Urgent help</span>

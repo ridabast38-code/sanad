@@ -425,10 +425,13 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                     </a>
                                 </div>
 
-                                {/* two entry doors — alternating editorial rows */}
-                                <div className="space-y-12 md:space-y-16">
+                                {/* two entry doors — swipe carousel on phone, alternating editorial rows on desktop */}
+                                <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 md:mx-0 md:block md:space-y-16 md:overflow-visible md:px-0 md:pb-0">
                                     {/* Emergency First Aid — text left, photo right */}
-                                    <a href="/emergency" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
+                                    <a
+                                        href="/emergency"
+                                        className="group flex w-[86%] shrink-0 snap-center flex-col items-center gap-6 md:w-auto md:shrink md:flex-row md:gap-14"
+                                    >
                                         <motion.div
                                             initial={{ opacity: 0, x: -40 }}
                                             whileInView={{ opacity: 1, x: 0 }}
@@ -482,7 +485,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                         <TiltCard
                                             from="right"
                                             tilt={-5}
-                                            className="bg-ashen-900 relative h-80 w-full overflow-hidden rounded-3xl md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-48 w-full overflow-hidden rounded-3xl sm:h-64 md:h-[28rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/emergency.jpg"
@@ -496,11 +499,14 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                     </a>
 
                                     {/* Ongoing Support — photo left, text right */}
-                                    <a href="/register" className="group flex flex-col items-center gap-8 md:flex-row md:gap-14">
+                                    <a
+                                        href="/register"
+                                        className="group flex w-[86%] shrink-0 snap-center flex-col items-center gap-6 md:w-auto md:shrink md:flex-row md:gap-14"
+                                    >
                                         <TiltCard
                                             from="left"
                                             tilt={5}
-                                            className="bg-ashen-900 relative h-80 w-full overflow-hidden rounded-3xl md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-48 w-full overflow-hidden rounded-3xl sm:h-64 md:h-[28rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/ongoing.jpg"
@@ -683,15 +689,15 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             </p>
                         </div>
 
-                        {/* steady framed cards — fill the row horizontally */}
-                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        {/* steady framed cards — swipe carousel on phone, grid on desktop */}
+                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
                             {team.map((m) => (
                                 <motion.button
                                     key={m.name}
                                     onClick={() => setSelected(m)}
                                     whileHover={{ y: -4 }}
                                     transition={{ duration: 0.3, ease: SOFT_EASE }}
-                                    className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)]"
+                                    className="group bg-cream block w-[72%] shrink-0 snap-center rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)] sm:w-full sm:shrink"
                                 >
                                     <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
                                         <img
@@ -718,7 +724,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                             ))}
 
                             {/* ghost card — signals more specialists to come */}
-                            <div className="flex min-h-[20rem] flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center">
+                            <div className="flex min-h-[16rem] w-[72%] shrink-0 snap-center flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center sm:min-h-[20rem] sm:w-full sm:shrink">
                                 <span className="font-display text-4xl text-white/40">+</span>
                                 <p className="text-sm text-white/60">More specialists joining soon</p>
                             </div>

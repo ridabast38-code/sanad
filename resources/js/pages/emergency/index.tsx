@@ -54,18 +54,30 @@ export default function EmergencyIndex({ flows, safety }: EmergencyIndexProps) {
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, ease: 'easeOut' }}
-                        className="mb-10"
+                        className="mb-10 md:flex md:items-center md:gap-8"
                     >
-                        <span className="border-sage-200 text-sage-700 inline-flex items-center gap-2 rounded-full border bg-white/70 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
-                            <LifeBuoy className="size-3.5" /> You’re not alone
-                        </span>
-                        <h1 className="font-display text-sage-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">
-                            Let’s take this <span className="italic">one step</span> at a time.
-                        </h1>
-                        <p className="text-ashen-500 mt-4 max-w-xl text-lg leading-relaxed">
-                            Whatever just happened, you don’t have to handle it alone. Tell us what you’re going through, and we’ll gently walk with
-                            you right now.
-                        </p>
+                        <div className="md:flex-1">
+                            <span className="border-sage-200 text-sage-700 inline-flex items-center gap-2 rounded-full border bg-white/70 px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
+                                <LifeBuoy className="size-3.5" /> You’re not alone
+                            </span>
+                            <h1 className="font-display text-sage-800 mt-4 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                                Let’s take this <span className="italic">one step</span> at a time.
+                            </h1>
+                            <p className="text-ashen-500 mt-4 max-w-xl text-base leading-relaxed sm:text-lg">
+                                Whatever just happened, you don’t have to handle it alone. Tell us what you’re going through, and we’ll gently walk
+                                with you right now.
+                            </p>
+                        </div>
+                        {/* calming portrait — warmth on the page, hidden on small screens to stay focused */}
+                        <div className="mt-6 hidden shrink-0 md:mt-0 md:block">
+                            <img
+                                src="/images/support/ongoing.jpg"
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                className="ring-sage-200/60 aspect-[3/4] w-44 rounded-[1.75rem] object-cover shadow-[0_24px_50px_-26px_rgba(20,21,15,0.5)] ring-1"
+                            />
+                        </div>
                     </motion.header>
 
                     <div className="mb-8">

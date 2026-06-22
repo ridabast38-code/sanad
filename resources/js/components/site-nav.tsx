@@ -26,11 +26,11 @@ export function SiteNav() {
 
     return (
         <header className="border-ashen-300/30 bg-cream sticky top-0 z-40 flex h-20 items-center justify-between gap-4 border-b px-5 md:px-12 lg:px-16">
-            <Link href="/dashboard" className="font-display text-sage-700 text-[1.65rem] tracking-tight">
+            <Link href="/dashboard" className="font-display text-sage-700 text-2xl tracking-tight sm:text-[1.65rem]">
                 Sanad
             </Link>
 
-            <nav className="flex flex-1 items-center justify-center gap-5 sm:gap-9">
+            <nav className="hidden flex-1 items-center justify-center gap-5 sm:flex sm:gap-9">
                 {tabs.map((tab) => (
                     <Link key={tab.href} href={tab.href} className="text-ashen-500 hover:text-sage-700 text-[15px] font-medium transition">
                         {tab.label}
