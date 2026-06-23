@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -42,6 +43,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // Deliver on "sign up to track everything": any sessions this person
+        // already booked as a guest with this email become theirs, so their new
+        // dashboard isn't empty.
+        Booking::whereNull('client_id')
+            ->where('guest_email', $user->email)
+            ->update(['client_id' => $user->id]);
 
         event(new Registered($user));
 

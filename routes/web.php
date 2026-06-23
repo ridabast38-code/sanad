@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Admin\BookingActionController;
 use App\Http\Controllers\Admin\BookingRescheduleController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -15,15 +16,27 @@ use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\Practitioner\DashboardController as PractitionerDashboardController;
 use App\Http\Controllers\Practitioner\PractitionerProfileController;
 use App\Http\Controllers\Practitioner\ScheduleController;
+use App\Http\Controllers\PublicBookingController;
 use App\Http\Controllers\SpecialistController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    // Approved psychologists, so the landing team cards can deep-link straight
+    // into each one's public (no-login) booking page.
+    $specialists = User::query()
+        ->where('role', UserRole::Practitioner)
+        ->whereHas('practitionerProfile', fn ($query) => $query->where('approval_status', 'approved'))
+        ->get(['id', 'name'])
+        ->map(fn ($practitioner) => ['id' => $practitioner->id, 'name' => $practitioner->name])
+        ->values();
+
     return Inertia::render('home', [
         // The emergency WhatsApp fast lane — for visitors in crisis who aren't
         // registered, the quickest way to reach a real person.
         'whatsappUrl' => 'https://wa.me/'.config('sanad.whatsapp').'?text='.rawurlencode('Hi Sanad, I need urgent help.'),
+        'specialists' => $specialists,
     ]);
 })->name('home');
 
@@ -85,6 +98,14 @@ Route::middleware(['auth'])->group(function () {
 // WhatsApp. No auth, so a form never blocks help.
 Route::get('emergency', [EmergencyController::class, 'index'])->name('emergency.index');
 Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emergency.show');
+
+// Public, no-login booking — the "book without an account" path offered from
+// the landing page. A visitor can complete a real booking as a guest, or be
+// nudged to register; either way it lands in the same admin "accept once paid"
+// pipeline. Signed-in clients are bounced to the richer in-app flow instead.
+Route::get('book/{practitioner}', [PublicBookingController::class, 'show'])->name('book.show');
+Route::post('book/{practitioner}', [PublicBookingController::class, 'store'])->name('book.store');
+Route::get('book/confirmed/{token}', [PublicBookingController::class, 'confirmed'])->name('book.confirmed');
 
 Route::get('privacy', fn () => Inertia::render('legal/privacy'))->name('privacy');
 Route::get('terms', fn () => Inertia::render('legal/terms'))->name('terms');

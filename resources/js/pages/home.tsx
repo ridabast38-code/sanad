@@ -63,7 +63,15 @@ function TiltCard({
     );
 }
 
-export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
+export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: { id: number; name: string }[] }) {
+    // Match a landing team card to its real practitioner record (by name) so its
+    // "Book" button can deep-link into that psychologist's public booking page.
+    // Falls back to /register if there's no matching approved practitioner.
+    const bookingHref = (name: string) => {
+        const match = specialists.find((s) => s.name.toLowerCase() === name.toLowerCase());
+        return match ? `/book/${match.id}` : '/register';
+    };
+
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
     const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(232,217,191,0.45), rgba(212,180,131,0.15) 35%, transparent 70%)`;
@@ -1012,7 +1020,7 @@ export default function Home({ whatsappUrl }: { whatsappUrl: string }) {
                                 </div>
 
                                 <a
-                                    href="/register"
+                                    href={bookingHref(selected.name)}
                                     className="bg-sage-700 hover:bg-sage-800 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-white transition"
                                 >
                                     Book a session with {selected.name.split(' ')[0]} →

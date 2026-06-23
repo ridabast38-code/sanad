@@ -36,6 +36,7 @@ class Booking extends Model
      */
     protected $fillable = [
         'client_id',
+        'public_token',
         'guest_name',
         'guest_email',
         'guest_phone',
