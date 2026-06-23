@@ -1,4 +1,4 @@
-import { ArrowUpRight, ChevronRight, Clock, Globe, LifeBuoy, Mail, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronRight, Clock, Globe, LifeBuoy, Mail, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 
@@ -506,8 +506,10 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         </TiltCard>
                                     </a>
 
-                                    {/* Ongoing Support — photo left, text right */}
-                                    <a href="/register" className="group flex flex-col items-stretch gap-5 md:flex-row md:items-center md:gap-14">
+                                    {/* Ongoing Support — photo left, text right. Sends visitors to the
+                                    methods section so they understand the approaches before choosing
+                                    a specialist to book with. */}
+                                    <a href="#approaches" className="group flex flex-col items-stretch gap-5 md:flex-row md:items-center md:gap-14">
                                         <TiltCard
                                             from="left"
                                             tilt={5}
@@ -660,6 +662,38 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             })}
                         </div>
                     </div>
+
+                    {/* nudge toward booking — animated arrows that flow down into the team,
+                    keeping "book your session" front of mind right after the methods */}
+                    <motion.a
+                        href="#team"
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-60px' }}
+                        transition={{ duration: 0.6, ease: SOFT_EASE }}
+                        className="group mx-auto mt-12 flex w-fit flex-col items-center gap-2 text-center md:mt-16"
+                    >
+                        <span className="text-sage-700 border-sage-200 group-hover:border-sage-400 group-hover:bg-sage-50 inline-flex items-center gap-2 rounded-full border bg-white/60 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase transition">
+                            <Sparkles className="h-3.5 w-3.5" /> Ready when you are
+                        </span>
+                        <span className="font-display text-ashen-800 group-hover:text-sage-700 mt-2 text-2xl tracking-tight transition-colors md:text-4xl">
+                            See our specialists &amp; book your session
+                        </span>
+                        <span className="text-ashen-500 text-sm">Find the right person for you — in just a couple of minutes</span>
+
+                        {/* floating arrows: a downward wave that draws the eye to the team */}
+                        <div className="mt-3 flex flex-col items-center -space-y-3">
+                            {[0, 1, 2].map((i) => (
+                                <motion.span
+                                    key={i}
+                                    animate={{ opacity: [0.15, 1, 0.15], y: [0, 4, 0] }}
+                                    transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.18, ease: 'easeInOut' }}
+                                >
+                                    <ChevronDown className="text-sage-600 size-7" />
+                                </motion.span>
+                            ))}
+                        </div>
+                    </motion.a>
                 </section>
 
                 {/* ===== HONEST NUMBERS — a quiet, true stat strip ===== */}
