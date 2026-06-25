@@ -96,9 +96,9 @@ function Login({ status, canResetPassword, googleEnabled }: LoginProps) {
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Log in
                     </motion.button>
-
-                    {googleEnabled && <GoogleAuthButton label="Continue with Google" />}
                 </div>
+
+                {googleEnabled && <GoogleAuthButton label="Continue with Google" />}
 
                 <div className="text-ashen-500 text-center text-sm">
                     Don't have an account?{' '}

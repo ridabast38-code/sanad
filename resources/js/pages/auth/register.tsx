@@ -121,9 +121,9 @@ function Register({ googleEnabled }: { googleEnabled?: boolean }) {
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </motion.button>
-
-                    {googleEnabled && <GoogleAuthButton label="Sign up with Google" />}
                 </div>
+
+                {googleEnabled && <GoogleAuthButton label="Sign up with Google" />}
 
                 <div className="text-ashen-500 text-center text-sm">
                     Already have an account?{' '}

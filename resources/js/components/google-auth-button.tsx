@@ -30,11 +30,11 @@ function GoogleIcon() {
  */
 export default function GoogleAuthButton({ label = 'Continue with Google' }: { label?: string }) {
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
-                <span className="bg-ashen-200 h-px flex-1" />
+                <span className="bg-ashen-200/80 h-px flex-1" />
                 <span className="text-ashen-400 text-xs tracking-wide uppercase">or</span>
-                <span className="bg-ashen-200 h-px flex-1" />
+                <span className="bg-ashen-200/80 h-px flex-1" />
             </div>
 
             <motion.a
