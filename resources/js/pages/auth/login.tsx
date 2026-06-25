@@ -5,7 +5,6 @@ import { FormEventHandler, ReactNode } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
@@ -14,7 +13,6 @@ import AuthSplitLayout from '@/layouts/auth/auth-split-layout';
 type LoginForm = {
     email: string;
     password: string;
-    remember: boolean;
 };
 
 interface LoginProps {
@@ -30,7 +28,6 @@ function Login({ status, canResetPassword }: LoginProps) {
     const { data, setData, post, processing, errors, reset } = useForm<LoginForm>({
         email: '',
         password: '',
-        remember: false,
     });
 
     const submit: FormEventHandler = (e) => {
@@ -83,20 +80,6 @@ function Login({ status, canResetPassword }: LoginProps) {
                                 </TextLink>
                             </div>
                         )}
-                    </div>
-
-                    <div className="flex items-center space-x-3">
-                        <Checkbox
-                            id="remember"
-                            name="remember"
-                            tabIndex={3}
-                            checked={data.remember}
-                            onCheckedChange={(checked) => setData('remember', checked === true)}
-                            className="border-ashen-300 data-[state=checked]:border-sage-700 data-[state=checked]:bg-sage-700"
-                        />
-                        <Label htmlFor="remember" className="text-ashen-600">
-                            Remember me
-                        </Label>
                     </div>
 
                     <motion.button
