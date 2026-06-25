@@ -28,8 +28,17 @@ Route::get('/', function () {
     $specialists = User::query()
         ->where('role', UserRole::Practitioner)
         ->whereHas('practitionerProfile', fn ($query) => $query->where('approval_status', 'approved'))
-        ->get(['id', 'name', 'slug'])
-        ->map(fn ($practitioner) => ['name' => $practitioner->name, 'slug' => $practitioner->slug])
+        ->with('practitionerProfile')
+        ->get()
+        ->map(fn ($practitioner) => [
+            'name' => $practitioner->name,
+            'slug' => $practitioner->slug,
+            'photo_path' => $practitioner->practitionerProfile->photo_path,
+            'headline' => $practitioner->practitionerProfile->headline,
+            'bio' => $practitioner->practitionerProfile->bio,
+            'approaches' => $practitioner->practitionerProfile->approaches ?? [],
+            'languages' => $practitioner->practitionerProfile->languages ?? [],
+        ])
         ->values();
 
     return Inertia::render('home', [

@@ -1,6 +1,18 @@
+import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import { ArrowUpRight, ChevronDown, ChevronRight, Clock, Globe, LifeBuoy, Mail, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
+
+/** An approved psychologist, as shown on the landing team cards (from the DB). */
+interface LandingSpecialist {
+    name: string;
+    slug: string;
+    photo_path: string | null;
+    headline: string | null;
+    bio: string | null;
+    approaches: string[];
+    languages: string[];
+}
 
 // A gentle ease used across every reveal so the whole page shares one feel.
 const SOFT_EASE = [0.22, 1, 0.36, 1] as const;
@@ -63,14 +75,7 @@ function TiltCard({
     );
 }
 
-export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: { name: string; slug: string }[] }) {
-    // Match a landing team card to its real practitioner record (by name) so its
-    // "Book" button can deep-link into that psychologist's public booking page.
-    // Falls back to /register if there's no matching approved practitioner.
-    const bookingHref = (name: string) => {
-        const match = specialists.find((s) => s.name.toLowerCase() === name.toLowerCase());
-        return match ? `/book/${match.slug}` : '/register';
-    };
+export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
 
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
@@ -126,27 +131,11 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
         },
     ];
 
-    // every specialist is trained across the same approaches — no per-person roles
+    // every specialist is trained across the same approaches — used as a gentle
+    // fallback for the modal when a practitioner hasn't listed their own yet.
     const sharedApproaches = ['CBT', 'EMDR', 'Psychoanalysis'];
 
-    const team = [
-        {
-            name: 'Sireen Al Bast',
-            photo: '/images/team/sireen.jpg',
-            languages: ['Arabic', 'English', 'French'],
-            details:
-                'Sireen is a licensed clinical psychologist offering calm, attentive care across CBT, EMDR and psychoanalytic approaches. Every session is private and confidential.',
-        },
-        {
-            name: 'Hanna Aylo',
-            photo: '/images/team/hanna.jpg',
-            languages: ['Arabic', 'English'],
-            details:
-                'Hanna is a licensed clinical psychologist offering warm, steady care across CBT, EMDR and psychoanalytic approaches. Every session is private and confidential.',
-        },
-    ];
-
-    const [selected, setSelected] = useState<(typeof team)[number] | null>(null);
+    const [selected, setSelected] = useState<LandingSpecialist | null>(null);
 
     const faqs = [
         {
@@ -730,22 +719,26 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                         {/* steady framed cards — swipe carousel on phone, grid on desktop */}
                         <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
-                            {team.map((m) => (
+                            {specialists.map((m) => (
                                 <motion.button
-                                    key={m.name}
+                                    key={m.slug}
                                     onClick={() => setSelected(m)}
                                     whileHover={{ y: -4 }}
                                     transition={{ duration: 0.3, ease: SOFT_EASE }}
                                     className="group bg-cream block w-[72%] shrink-0 snap-center rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)] sm:w-full sm:shrink"
                                 >
                                     <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
-                                        <img
-                                            src={m.photo}
-                                            alt={m.name}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                                        />
+                                        {m.photo_path ? (
+                                            <img
+                                                src={m.photo_path}
+                                                alt={m.name}
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                            />
+                                        ) : (
+                                            <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
+                                        )}
                                         <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
                                             Licensed Psychologist
                                         </span>
@@ -793,13 +786,17 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 tilt={6}
                                 className="relative mt-8 hidden aspect-[4/5] w-full max-w-[18rem] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)] md:block"
                             >
-                                <img
-                                    src={team[0].photo}
-                                    alt=""
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="absolute inset-0 h-full w-full object-cover grayscale-[30%]"
-                                />
+                                {specialists[0]?.photo_path ? (
+                                    <img
+                                        src={specialists[0].photo_path}
+                                        alt=""
+                                        loading="lazy"
+                                        decoding="async"
+                                        className="absolute inset-0 h-full w-full object-cover grayscale-[30%]"
+                                    />
+                                ) : (
+                                    <div className="from-sage-300 to-sage-700 absolute inset-0 bg-gradient-to-br" />
+                                )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                 <div className="absolute inset-x-0 bottom-0 p-5">
                                     <p className="text-sm font-medium text-white">Talk to a real person</p>
@@ -1031,7 +1028,11 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             </button>
 
                             <div className="relative h-52 w-full shrink-0 sm:h-64 md:h-auto md:w-2/5">
-                                <img src={selected.photo} alt={selected.name} className="h-full w-full object-cover" />
+                                {selected.photo_path ? (
+                                    <img src={selected.photo_path} alt={selected.name} className="h-full w-full object-cover" />
+                                ) : (
+                                    <div className="from-sage-300 to-sage-600 h-full w-full bg-gradient-to-br" />
+                                )}
                             </div>
 
                             <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
@@ -1040,21 +1041,34 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 </span>
                                 <h3 className="font-display text-ashen-800 mt-4 text-3xl">{selected.name}</h3>
                                 <p className="text-ashen-500 mt-1 text-sm">Licensed clinical psychologist · Private &amp; confidential</p>
-                                <p className="text-ashen-600 mt-5 leading-relaxed">{selected.details}</p>
+                                <p className="text-ashen-600 mt-5 leading-relaxed">
+                                    {selected.bio ||
+                                        selected.headline ||
+                                        `${selected.name.split(' ')[0]} is a licensed clinical psychologist offering warm, confidential care across CBT, EMDR and psychoanalytic approaches.`}
+                                </p>
 
                                 <div className="mt-6 space-y-4">
                                     <div>
                                         <p className="text-ashen-400 text-xs tracking-wider uppercase">Approaches</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">{sharedApproaches.join(' · ')}</p>
+                                        <p className="text-ashen-700 mt-1 text-sm">
+                                            {(selected.approaches.length > 0
+                                                ? selected.approaches.map((a) => APPROACH_LABELS[a] ?? a)
+                                                : sharedApproaches
+                                            ).join(' · ')}
+                                        </p>
                                     </div>
-                                    <div>
-                                        <p className="text-ashen-400 text-xs tracking-wider uppercase">Languages</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">{selected.languages.join(' · ')}</p>
-                                    </div>
+                                    {selected.languages.length > 0 && (
+                                        <div>
+                                            <p className="text-ashen-400 text-xs tracking-wider uppercase">Languages</p>
+                                            <p className="text-ashen-700 mt-1 text-sm">
+                                                {selected.languages.map((l) => LANGUAGE_LABELS[l] ?? l).join(' · ')}
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <a
-                                    href={bookingHref(selected.name)}
+                                    href={`/book/${selected.slug}`}
                                     className="bg-sage-700 hover:bg-sage-800 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-white transition"
                                 >
                                     Book a session with {selected.name.split(' ')[0]} →
