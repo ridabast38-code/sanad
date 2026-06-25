@@ -19,13 +19,14 @@ type LoginForm = {
 interface LoginProps {
     status?: string;
     canResetPassword: boolean;
+    googleEnabled?: boolean;
 }
 
 // calm, glowy field style — explicit light colors so text/icons never disappear on cream
 const fieldClass =
     'h-11 rounded-xl border-ashen-300 bg-white/70 text-ashen-800 placeholder:text-ashen-400 transition-shadow focus-visible:border-sage-400 focus-visible:ring-2 focus-visible:ring-sage-500/25 focus-visible:ring-offset-0 focus-visible:shadow-[0_0_0_4px_rgba(125,160,128,0.12)]';
 
-function Login({ status, canResetPassword }: LoginProps) {
+function Login({ status, canResetPassword, googleEnabled }: LoginProps) {
     const { data, setData, post, processing, errors, reset } = useForm<LoginForm>({
         email: '',
         password: '',
@@ -96,7 +97,7 @@ function Login({ status, canResetPassword }: LoginProps) {
                         Log in
                     </motion.button>
 
-                    <GoogleAuthButton label="Continue with Google" />
+                    {googleEnabled && <GoogleAuthButton label="Continue with Google" />}
                 </div>
 
                 <div className="text-ashen-500 text-center text-sm">
