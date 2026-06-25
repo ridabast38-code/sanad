@@ -110,19 +110,35 @@ const inputClass =
     'w-full rounded-xl border border-sage-200 bg-white px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/20';
 
 function AddAccountForm({ onDone }: { onDone: () => void }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm<{
+        name: string;
+        email: string;
+        password: string;
+        role: string;
+        photo: File | null;
+    }>({
         name: '',
         email: '',
         password: '',
         role: 'practitioner',
+        photo: null,
     });
+
+    const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+    const pickPhoto = (file: File | null) => {
+        setData('photo', file);
+        setPhotoPreview(file ? URL.createObjectURL(file) : null);
+    };
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         post('/admin/staff', {
             preserveScroll: true,
+            forceFormData: true,
             onSuccess: () => {
                 reset();
+                setPhotoPreview(null);
                 onDone();
             },
         });
@@ -154,6 +170,33 @@ function AddAccountForm({ onDone }: { onDone: () => void }) {
                     </select>
                 </Field>
             </div>
+
+            {data.role === 'practitioner' && (
+                <div className="mt-4">
+                    <label className="text-ashen-600 mb-1.5 block text-sm font-medium">Photo</label>
+                    <div className="flex items-center gap-4">
+                        <div className="bg-sage-50 border-sage-200 size-20 shrink-0 overflow-hidden rounded-2xl border">
+                            {photoPreview ? (
+                                <img src={photoPreview} alt="" className="size-full object-cover" />
+                            ) : (
+                                <div className="text-sage-400 flex size-full items-center justify-center">
+                                    <UserPlus className="size-6" />
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
+                                className="text-ashen-600 file:bg-sage-700 hover:file:bg-sage-800 text-sm file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+                            />
+                            <p className="text-ashen-400 mt-1.5 text-xs">Shown in the client specialist directory. JPG, PNG or WebP, up to 4 MB.</p>
+                            {errors.photo && <p className="text-ashen-500 mt-1 text-xs">{errors.photo}</p>}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div className="mt-5 flex items-center gap-3">
                 <button

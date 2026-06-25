@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class StaffController extends Controller
@@ -24,6 +25,7 @@ class StaffController extends Controller
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', Password::defaults()],
             'role' => ['required', 'in:practitioner,admin'],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
         ]);
 
         $user = User::create([
@@ -36,11 +38,18 @@ class StaffController extends Controller
         ]);
 
         if ($user->isPractitioner()) {
+            $photoPath = null;
+
+            if ($request->hasFile('photo')) {
+                $photoPath = Storage::url($request->file('photo')->store('practitioners', 'public'));
+            }
+
             $user->practitionerProfile()->create([
                 'type' => 'support',
                 'approval_status' => 'approved',
                 'approaches' => [],
                 'languages' => [],
+                'photo_path' => $photoPath,
             ]);
         }
 
