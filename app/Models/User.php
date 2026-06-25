@@ -11,11 +11,42 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Give every new user a unique, human-readable slug from their name, so
+     * public URLs (e.g. /book/sireen-al-bast) never expose the numeric id.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (User $user): void {
+            if (blank($user->slug) && filled($user->name)) {
+                $user->slug = static::uniqueSlug($user->name);
+            }
+        });
+    }
+
+    /**
+     * Build a slug from the name, appending a counter until it's unique.
+     */
+    public static function uniqueSlug(string $name): string
+    {
+        $base = Str::slug($name) ?: 'user';
+        $slug = $base;
+        $suffix = 2;
+
+        while (static::where('slug', $slug)->exists()) {
+            $slug = "{$base}-{$suffix}";
+            $suffix++;
+        }
+
+        return $slug;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +55,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'slug',
         'email',
         'password',
         'role',

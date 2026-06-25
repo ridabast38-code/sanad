@@ -63,13 +63,13 @@ function TiltCard({
     );
 }
 
-export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: { id: number; name: string }[] }) {
+export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: { name: string; slug: string }[] }) {
     // Match a landing team card to its real practitioner record (by name) so its
     // "Book" button can deep-link into that psychologist's public booking page.
     // Falls back to /register if there's no matching approved practitioner.
     const bookingHref = (name: string) => {
         const match = specialists.find((s) => s.name.toLowerCase() === name.toLowerCase());
-        return match ? `/book/${match.id}` : '/register';
+        return match ? `/book/${match.slug}` : '/register';
     };
 
     const mouseX = useMotionValue(50);

@@ -45,6 +45,7 @@ class PublicBookingController extends Controller
         return Inertia::render('public/book', [
             'specialist' => [
                 'id' => $practitioner->id,
+                'slug' => $practitioner->slug,
                 'name' => $practitioner->name,
                 'headline' => $profile->headline,
                 'bio' => $profile->bio,

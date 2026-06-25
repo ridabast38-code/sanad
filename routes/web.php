@@ -28,8 +28,8 @@ Route::get('/', function () {
     $specialists = User::query()
         ->where('role', UserRole::Practitioner)
         ->whereHas('practitionerProfile', fn ($query) => $query->where('approval_status', 'approved'))
-        ->get(['id', 'name'])
-        ->map(fn ($practitioner) => ['id' => $practitioner->id, 'name' => $practitioner->name])
+        ->get(['id', 'name', 'slug'])
+        ->map(fn ($practitioner) => ['name' => $practitioner->name, 'slug' => $practitioner->slug])
         ->values();
 
     return Inertia::render('home', [
@@ -103,8 +103,8 @@ Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emer
 // the landing page. A visitor can complete a real booking as a guest, or be
 // nudged to register; either way it lands in the same admin "accept once paid"
 // pipeline. Signed-in clients are bounced to the richer in-app flow instead.
-Route::get('book/{practitioner}', [PublicBookingController::class, 'show'])->name('book.show');
-Route::post('book/{practitioner}', [PublicBookingController::class, 'store'])->name('book.store');
+Route::get('book/{practitioner:slug}', [PublicBookingController::class, 'show'])->name('book.show');
+Route::post('book/{practitioner:slug}', [PublicBookingController::class, 'store'])->name('book.store');
 Route::get('book/confirmed/{token}', [PublicBookingController::class, 'confirmed'])->name('book.confirmed');
 
 Route::get('privacy', fn () => Inertia::render('legal/privacy'))->name('privacy');

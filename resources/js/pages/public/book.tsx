@@ -14,6 +14,7 @@ const FIELD =
 interface BookProps {
     specialist: {
         id: number;
+        slug: string;
         name: string;
         headline: string | null;
         bio: string | null;
@@ -49,7 +50,7 @@ export default function Book({ specialist, services, slots }: BookProps) {
 
     const submit = (event: FormEvent) => {
         event.preventDefault();
-        post(`/book/${specialist.id}`);
+        post(`/book/${specialist.slug}`);
     };
 
     return (
@@ -74,6 +75,37 @@ export default function Book({ specialist, services, slots }: BookProps) {
                 <Link href="/#team" className="text-ashen-500 hover:text-ashen-800 inline-flex w-fit items-center gap-1.5 text-sm transition">
                     <ArrowLeft className="size-4" /> Back to our team
                 </Link>
+
+                {/* up-front choice — make creating an account the visible, inviting first path */}
+                <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="border-sage-200/70 from-sage-100/80 relative overflow-hidden rounded-3xl border bg-gradient-to-r to-white/50 p-5 sm:p-6"
+                >
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-start gap-3">
+                            <span className="bg-sage-600 flex size-10 shrink-0 items-center justify-center rounded-2xl text-white shadow-sm">
+                                <Sparkles className="size-5" />
+                            </span>
+                            <div>
+                                <p className="font-display text-ashen-800 text-lg leading-tight">Create a free account &amp; unlock more</p>
+                                <p className="text-ashen-600 mt-0.5 text-sm leading-relaxed">
+                                    A dashboard to track sessions, reminders, and loyalty rewards — or simply book as a guest below.
+                                </p>
+                            </div>
+                        </div>
+                        <Link
+                            href="/register"
+                            className="group bg-sage-700 hover:bg-sage-800 inline-flex shrink-0 items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-sm font-medium text-white shadow-lg transition hover:-translate-y-0.5"
+                        >
+                            <span className="rounded-full bg-white/20 p-1 transition-transform group-hover:rotate-45">
+                                <UserPlus className="size-4" />
+                            </span>
+                            Create account &amp; book
+                        </Link>
+                    </div>
+                </motion.div>
 
                 <div className="grid items-start gap-6 md:grid-cols-5 md:gap-8">
                     {/* ===== LEFT — specialist + the sign-up invitation ===== */}
@@ -165,6 +197,15 @@ export default function Book({ specialist, services, slots }: BookProps) {
                         {/* service */}
                         <div>
                             <p className="text-ashen-500 mb-2.5 text-xs font-medium tracking-[0.12em] uppercase">1 · Session type</p>
+                            {services.length === 0 && (
+                                <div className="border-sage-200/70 text-ashen-600 rounded-2xl border border-dashed bg-white/40 px-4 py-5 text-center text-sm">
+                                    {firstName} is finishing setting up their session types. Please check back shortly, or{' '}
+                                    <Link href="/#team" className="text-sage-700 font-medium underline-offset-2 hover:underline">
+                                        choose another specialist
+                                    </Link>
+                                    .
+                                </div>
+                            )}
                             <div className="flex flex-col gap-2">
                                 {services.map((service) => (
                                     <button
