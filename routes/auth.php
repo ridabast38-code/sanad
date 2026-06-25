@@ -17,6 +17,14 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    // "Check your inbox" screen, then the emailed link that actually creates
+    // the account (no user exists until it's confirmed).
+    Route::get('register/check-email', [RegisteredUserController::class, 'pending'])
+        ->name('register.pending');
+
+    Route::get('register/confirm/{token}', [RegisteredUserController::class, 'confirm'])
+        ->name('register.confirm');
+
     // "Continue with Google" — the OAuth handshake handled by Socialite.
     Route::get('auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
         ->name('auth.social.redirect');

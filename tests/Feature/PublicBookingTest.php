@@ -3,6 +3,7 @@
 use App\Enums\UserRole;
 use App\Models\Availability;
 use App\Models\Booking;
+use App\Models\PendingRegistration;
 use App\Models\Service;
 use App\Models\User;
 use App\Notifications\NewBookingRequested;
@@ -194,6 +195,13 @@ test('registering with a guest email links past guest bookings to the new accoun
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
+
+    // The account (and the booking link) only happens once the emailed
+    // confirmation link is clicked.
+    expect($booking->fresh()->client_id)->toBeNull();
+
+    $token = PendingRegistration::where('email', 'maya@example.com')->sole()->token;
+    $this->get(route('register.confirm', $token));
 
     $newUser = User::where('email', 'maya@example.com')->sole();
 
