@@ -58,6 +58,8 @@ class User extends Authenticatable
         'slug',
         'email',
         'password',
+        'provider',
+        'provider_id',
         'role',
         'phone',
         'status',

@@ -3,6 +3,7 @@ import { LoaderCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { FormEventHandler, ReactNode } from 'react';
 
+import GoogleAuthButton from '@/components/google-auth-button';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Input } from '@/components/ui/input';
@@ -120,6 +121,8 @@ function Register() {
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </motion.button>
+
+                    <GoogleAuthButton label="Sign up with Google" />
                 </div>
 
                 <div className="text-ashen-500 text-center text-sm">
