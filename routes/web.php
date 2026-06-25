@@ -53,7 +53,7 @@ Route::get('/playground', function () {
     return Inertia::render('playground');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('onboarding', [OnboardingController::class, 'show'])->name('onboarding.show');
     Route::post('onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
 
