@@ -728,91 +728,71 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="relative z-10 px-6 py-8 md:px-10 md:py-10">
-                    <div className="relative z-10 mx-auto max-w-5xl">
-                        <div className="from-ashen-700 to-ashen-800 relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br px-6 py-9 md:px-12 md:py-10">
-                            {/* soft on-brand glow for depth (no photo) */}
-                            <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-8 -left-16 h-64 w-64 rounded-full blur-3xl" />
-                            <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-16 bottom-8 h-64 w-64 rounded-full blur-3xl [animation-delay:-4s]" />
+                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-10 pb-12 md:pt-12 md:pb-16">
+                    {/* soft on-brand glow for depth (no photo) */}
+                    <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
+                    <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
 
-                            <div className="relative z-10">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, margin: '-80px' }}
-                                    transition={{ duration: 0.6, ease: SOFT_EASE }}
-                                    className="mb-6 max-w-2xl"
+                    <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
+                        <div className="mb-8 max-w-2xl">
+                            <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
+                            <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">The people behind Sanad</h2>
+                            <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
+                                Every Sanad psychologist is a licensed clinical psychologist, trained across all our approaches — CBT, EMDR and
+                                psychoanalysis. <span className="text-white">Real care, real credentials.</span>
+                            </p>
+                        </div>
+
+                        {/* steady framed cards — swipe carousel on phone, grid on desktop */}
+                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+                            {specialists.map((m) => (
+                                <motion.button
+                                    key={m.slug}
+                                    onClick={() => setSelected(m)}
+                                    whileHover={{ y: -4 }}
+                                    transition={{ duration: 0.3, ease: SOFT_EASE }}
+                                    className="group bg-cream block w-[72%] shrink-0 snap-center rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)] sm:w-full sm:shrink"
                                 >
-                                    <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                                    <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">
-                                        <RevealText text="The people behind Sanad" delay={0.1} />
-                                    </h2>
-                                    <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
-                                        Every Sanad psychologist is a licensed clinical psychologist, trained across all our approaches — CBT, EMDR
-                                        and psychoanalysis. <span className="text-white">Real care, real credentials.</span>
-                                    </p>
-                                </motion.div>
-
-                                {/* steady framed cards — swipe carousel on phone, grid on desktop */}
-                                <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0">
-                                    {specialists.map((m, i) => (
-                                        <motion.div
-                                            key={m.slug}
-                                            initial={{ opacity: 0, y: 24 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true, margin: '-60px' }}
-                                            transition={{ duration: 0.55, ease: SOFT_EASE, delay: i * 0.08 }}
-                                            className="w-[72%] shrink-0 snap-center sm:w-56 sm:shrink-0"
-                                        >
-                                            <motion.button
-                                                onClick={() => setSelected(m)}
-                                                whileHover={{ y: -6 }}
-                                                transition={{ duration: 0.3, ease: SOFT_EASE }}
-                                                className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)]"
-                                            >
-                                                <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
-                                                    {m.photo_path ? (
-                                                        <img
-                                                            src={m.photo_path}
-                                                            alt={m.name}
-                                                            loading="lazy"
-                                                            decoding="async"
-                                                            className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                                                        />
-                                                    ) : (
-                                                        <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
-                                                    )}
-                                                    <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
-                                                        Licensed Psychologist
-                                                    </span>
-                                                </div>
-                                                <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
-                                                    <div>
-                                                        <h3 className="font-display text-ashen-800 text-lg">{m.name}</h3>
-                                                        <p className="text-ashen-500 mt-0.5 text-xs">Licensed clinical psychologist</p>
-                                                    </div>
-                                                    <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
-                                                        View →
-                                                    </span>
-                                                </div>
-                                            </motion.button>
-                                        </motion.div>
-                                    ))}
-
-                                    {/* ghost card — signals more specialists to come */}
-                                    <div className="flex min-h-[16rem] w-[72%] shrink-0 snap-center flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center sm:w-56 sm:shrink-0">
-                                        <span className="font-display text-4xl text-white/40">+</span>
-                                        <p className="text-sm text-white/60">More specialists joining soon</p>
+                                    <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
+                                        {m.photo_path ? (
+                                            <img
+                                                src={m.photo_path}
+                                                alt={m.name}
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                            />
+                                        ) : (
+                                            <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
+                                        )}
+                                        <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
+                                            Licensed Psychologist
+                                        </span>
                                     </div>
-                                </div>
+                                    <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
+                                        <div>
+                                            <h3 className="font-display text-ashen-800 text-xl">{m.name}</h3>
+                                            <p className="text-ashen-500 mt-0.5 text-xs">Licensed clinical psychologist</p>
+                                        </div>
+                                        <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
+                                            View →
+                                        </span>
+                                    </div>
+                                </motion.button>
+                            ))}
 
-                                {/* confident, licensed practice statement */}
-                                <p className="mt-6 max-w-3xl text-xs leading-relaxed text-white/55">
-                                    Every Sanad clinician is a licensed clinical psychologist, and Sanad is a fully licensed, confidential clinical
-                                    practice. For a medical emergency or if you are in danger, please contact your local emergency number.
-                                </p>
+                            {/* ghost card — signals more specialists to come */}
+                            <div className="flex min-h-[16rem] w-[72%] shrink-0 snap-center flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center sm:min-h-[20rem] sm:w-full sm:shrink">
+                                <span className="font-display text-4xl text-white/40">+</span>
+                                <p className="text-sm text-white/60">More specialists joining soon</p>
                             </div>
                         </div>
+
+                        {/* confident, licensed practice statement */}
+                        <p className="mt-7 max-w-3xl text-xs leading-relaxed text-white/55">
+                            Every Sanad clinician is a licensed clinical psychologist, and Sanad is a fully licensed, confidential clinical practice.
+                            For a medical emergency or if you are in danger, please contact your local emergency number.
+                        </p>
                     </div>
                 </section>
 
