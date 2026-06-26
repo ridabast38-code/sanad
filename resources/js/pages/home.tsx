@@ -728,7 +728,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-10 pb-12 md:pt-12 md:pb-16">
+                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-7 pb-8 md:pt-8 md:pb-10">
                     {/* soft on-brand glow for depth (no photo) */}
                     <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
@@ -739,7 +739,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-80px' }}
                             transition={{ duration: 0.6, ease: SOFT_EASE }}
-                            className="mb-8 max-w-2xl"
+                            className="mb-6 max-w-2xl"
                         >
                             <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
                             <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">
@@ -752,7 +752,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         </motion.div>
 
                         {/* steady framed cards — swipe carousel on phone, grid on desktop */}
-                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
+                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0">
                             {specialists.map((m, i) => (
                                 <motion.div
                                     key={m.slug}
@@ -760,7 +760,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: '-60px' }}
                                     transition={{ duration: 0.55, ease: SOFT_EASE, delay: i * 0.08 }}
-                                    className="w-[72%] shrink-0 snap-center sm:w-full sm:shrink"
+                                    className="w-[72%] shrink-0 snap-center sm:w-56 sm:shrink-0"
                                 >
                                     <motion.button
                                         onClick={() => setSelected(m)}
@@ -786,7 +786,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         </div>
                                         <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
                                             <div>
-                                                <h3 className="font-display text-ashen-800 text-xl">{m.name}</h3>
+                                                <h3 className="font-display text-ashen-800 text-lg">{m.name}</h3>
                                                 <p className="text-ashen-500 mt-0.5 text-xs">Licensed clinical psychologist</p>
                                             </div>
                                             <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
@@ -798,14 +798,14 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             ))}
 
                             {/* ghost card — signals more specialists to come */}
-                            <div className="flex min-h-[16rem] w-[72%] shrink-0 snap-center flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center sm:min-h-[20rem] sm:w-full sm:shrink">
+                            <div className="flex min-h-[16rem] w-[72%] shrink-0 snap-center flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed border-white/25 p-6 text-center sm:w-56 sm:shrink-0">
                                 <span className="font-display text-4xl text-white/40">+</span>
                                 <p className="text-sm text-white/60">More specialists joining soon</p>
                             </div>
                         </div>
 
                         {/* confident, licensed practice statement */}
-                        <p className="mt-7 max-w-3xl text-xs leading-relaxed text-white/55">
+                        <p className="mt-6 max-w-3xl text-xs leading-relaxed text-white/55">
                             Every Sanad clinician is a licensed clinical psychologist, and Sanad is a fully licensed, confidential clinical practice.
                             For a medical emergency or if you are in danger, please contact your local emergency number.
                         </p>
@@ -828,23 +828,30 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <TiltCard
                                 from="left"
                                 tilt={6}
-                                className="relative mt-8 hidden aspect-[4/5] w-full max-w-[18rem] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)] md:block"
+                                className="relative mt-8 hidden w-full max-w-[18rem] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)] md:block"
                             >
-                                {specialists[0]?.photo_path ? (
-                                    <img
-                                        src={specialists[0].photo_path}
-                                        alt=""
-                                        loading="lazy"
-                                        decoding="async"
-                                        className="absolute inset-0 h-full w-full object-cover grayscale-[30%]"
-                                    />
-                                ) : (
-                                    <div className="from-sage-300 to-sage-700 absolute inset-0 bg-gradient-to-br" />
-                                )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                <div className="absolute inset-x-0 bottom-0 p-5">
-                                    <p className="text-sm font-medium text-white">Talk to a real person</p>
-                                    <p className="text-xs text-white/70">We usually reply within a day</p>
+                                <div className="from-sage-600 to-sage-800 relative overflow-hidden bg-gradient-to-br p-6 text-white">
+                                    {/* soft warm glow — keeps the brand's light touch without a photo */}
+                                    <div className="bg-beige/20 animate-breathe pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl" />
+                                    <div className="relative z-10 flex flex-col gap-5">
+                                        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur">
+                                            <MessageCircle className="h-5 w-5" />
+                                        </span>
+                                        <div>
+                                            <p className="font-display text-xl">Talk to a real person</p>
+                                            <p className="mt-1.5 text-sm leading-relaxed text-white/75">
+                                                A licensed psychologist, never a bot. We usually reply within a day.
+                                            </p>
+                                        </div>
+                                        <div className="flex flex-col gap-2.5 pt-1 text-sm text-white/85">
+                                            <span className="flex items-center gap-2.5">
+                                                <ShieldCheck className="text-beige h-4 w-4" /> Private &amp; confidential
+                                            </span>
+                                            <span className="flex items-center gap-2.5">
+                                                <Globe className="text-beige h-4 w-4" /> Arabic · English · French
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </TiltCard>
 
