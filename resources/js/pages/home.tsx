@@ -393,7 +393,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </div>
 
                 {/* ===== HOW ARE YOU FEELING — dark glowing panel ===== */}
-                <section id="support" className="relative z-10 pt-8 pb-12 md:pt-10 md:pb-16">
+                <section id="support" className="relative z-10 pt-6 pb-6 md:pt-8 md:pb-8">
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
                         <div className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
                             {/* animating light glows inside the panel */}
@@ -572,7 +572,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== CINEMATIC SHOWPIECE — full-bleed photo + parallax split headline ===== */}
-                <section ref={showcaseRef} className="bg-ashen-950 relative z-10 h-[68vh] min-h-[420px] overflow-hidden">
+                <section ref={showcaseRef} className="bg-ashen-950 relative z-10 h-[52vh] min-h-[340px] overflow-hidden">
                     {/* full-bleed background photo — always visible, drifts on scroll */}
                     <motion.div style={{ y: showcaseBgY }} className="absolute inset-0 scale-110">
                         <img src="/images/support/ongoing.jpg" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
@@ -597,7 +597,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
-                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-8 md:px-8 md:pt-16 md:pb-10">
+                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-7 pb-5 md:px-8 md:pt-9 md:pb-6">
                     <div className="mb-6 max-w-2xl md:mb-8">
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
                         <h2 className="font-display text-ashen-800 mt-3 text-3xl tracking-tight md:text-5xl">Methods, guided by specialists</h2>
@@ -701,7 +701,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-10 pb-12 md:pt-12 md:pb-16">
+                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-8 pb-10 md:pt-9 md:pb-12">
                     {/* soft on-brand glow for depth (no photo) */}
                     <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
@@ -770,7 +770,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== FAQ — "Ask away" (skewed photo + hairline list) ===== */}
-                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-16">
+                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-8 md:px-8 md:py-10">
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
                         {/* left — heading + angled photo + contact */}
                         <div className="md:sticky md:top-24 md:self-start">
@@ -859,7 +859,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== FINAL CTA — calm on-brand panel to close ===== */}
-                <section className="relative z-10 px-6 pb-12 md:pb-16">
+                <section className="relative z-10 px-6 pb-8 md:pb-12">
                     <div className="from-sage-100 to-cream border-sage-200/60 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 text-center md:rounded-[3.5rem] md:py-16">
                         <div className="bg-sage-300/30 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
                         <div className="bg-sage-200/40 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
