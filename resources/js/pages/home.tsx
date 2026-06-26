@@ -1,5 +1,5 @@
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
-import { ArrowUpRight, ChevronDown, ChevronRight, Clock, Globe, LifeBuoy, Mail, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
+import { ArrowUpRight, ChevronDown, ChevronRight, Clock, Globe, LifeBuoy, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 
@@ -279,7 +279,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             className="absolute bottom-6 left-6 hidden min-w-[170px] flex-col gap-3 rounded-[2rem] border border-white/15 bg-white/10 p-5 backdrop-blur-xl sm:flex md:bottom-10 md:left-10"
                         >
                             <div>
-                                <p className="text-3xl font-normal tracking-tight text-white">12</p>
+                                <p className="text-3xl font-normal tracking-tight text-white">{specialists.length}</p>
                                 <p className="text-[11px] tracking-wider text-white/60 uppercase">Caring specialists</p>
                             </div>
                             <motion.a
@@ -597,7 +597,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
-                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 py-12 md:px-8 md:py-16">
+                <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-8 md:px-8 md:pt-16 md:pb-10">
                     <div className="mb-6 max-w-2xl md:mb-8">
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
                         <h2 className="font-display text-ashen-800 mt-3 text-3xl tracking-tight md:text-5xl">Methods, guided by specialists</h2>
@@ -652,6 +652,21 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         </div>
                     </div>
 
+                    {/* quiet proof — the true numbers, tucked right under the methods so
+                    they read as supporting evidence rather than a separate band */}
+                    <div className="border-ashen-200/70 mt-10 grid grid-cols-3 gap-4 border-t pt-8 text-center md:mt-12 md:pt-10">
+                        {[
+                            { n: '100%', l: 'Licensed psychologists' },
+                            { n: '3', l: 'Evidence-based approaches' },
+                            { n: '3', l: 'Languages · Ar · En · Fr' },
+                        ].map((s, i) => (
+                            <div key={s.l} className={i > 0 ? 'border-ashen-200/70 border-l' : ''}>
+                                <p className="font-display text-ashen-800 text-3xl tracking-tight md:text-5xl">{s.n}</p>
+                                <p className="text-ashen-500 mx-auto mt-2 max-w-[10rem] text-xs leading-snug tracking-wide uppercase">{s.l}</p>
+                            </div>
+                        ))}
+                    </div>
+
                     {/* nudge toward booking — animated arrows that flow down into the team,
                     keeping "book your session" front of mind right after the methods */}
                     <motion.a
@@ -685,24 +700,8 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     </motion.a>
                 </section>
 
-                {/* ===== HONEST NUMBERS — a quiet, true stat strip ===== */}
-                <section className="relative z-10 mx-auto max-w-5xl px-6 pb-6 md:px-8 md:pb-10">
-                    <div className="border-ashen-200/70 grid grid-cols-3 gap-4 border-y py-8 text-center md:py-10">
-                        {[
-                            { n: '100%', l: 'Licensed psychologists' },
-                            { n: '3', l: 'Evidence-based approaches' },
-                            { n: '3', l: 'Languages · Ar · En · Fr' },
-                        ].map((s, i) => (
-                            <div key={s.l} className={i > 0 ? 'border-ashen-200/70 border-l' : ''}>
-                                <p className="font-display text-ashen-800 text-4xl tracking-tight md:text-6xl">{s.n}</p>
-                                <p className="text-ashen-500 mx-auto mt-2 max-w-[10rem] text-xs leading-snug tracking-wide uppercase">{s.l}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b py-12 md:py-16">
+                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-10 pb-12 md:pt-12 md:pb-16">
                     {/* soft on-brand glow for depth (no photo) */}
                     <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
@@ -940,11 +939,6 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <p className="text-ashen-500 text-xs font-medium tracking-[0.15em] uppercase">Reach us</p>
                             <ul className="text-ashen-300 mt-4 space-y-3 text-sm">
                                 <li>
-                                    <a href="mailto:hello@sanad.com" className="flex items-center gap-2.5 transition hover:text-white">
-                                        <Mail className="text-sage-400 h-4 w-4" /> hello@sanad.com
-                                    </a>
-                                </li>
-                                <li>
                                     <a
                                         href={whatsappUrl}
                                         target="_blank"
@@ -968,7 +962,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     <ShieldCheck className="text-sage-400 h-4 w-4" /> Private &amp; confidential
                                 </li>
                                 <li className="flex items-center gap-2.5">
-                                    <Sparkles className="text-sage-400 h-4 w-4" /> Under certified supervision
+                                    <Sparkles className="text-sage-400 h-4 w-4" /> Licensed clinical psychologists
                                 </li>
                                 <li className="flex items-center gap-2.5">
                                     <Globe className="text-sage-400 h-4 w-4" /> Arabic · English · French
