@@ -30,7 +30,7 @@ function RegistrationPending({ email }: { email: string }) {
                 </div>
 
                 <div className="border-sage-200/70 bg-sage-50/60 text-ashen-500 w-full rounded-2xl border p-4 text-xs leading-relaxed">
-                    Didn’t get it? Check your spam folder, or{' '}
+                    Didn’t get it after a minute? You can{' '}
                     <TextLink href={route('register')} className="text-sage-700 font-medium">
                         try signing up again
                     </TextLink>
