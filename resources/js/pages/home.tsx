@@ -1,5 +1,19 @@
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
-import { ArrowUpRight, ChevronDown, ChevronRight, Clock, Globe, LifeBuoy, MapPin, MessageCircle, Play, Plus, ShieldCheck, Sparkles, X } from 'lucide-react';
+import {
+    ArrowUpRight,
+    ChevronDown,
+    ChevronRight,
+    Clock,
+    Globe,
+    LifeBuoy,
+    MapPin,
+    MessageCircle,
+    Play,
+    Plus,
+    ShieldCheck,
+    Sparkles,
+    X,
+} from 'lucide-react';
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 
@@ -76,7 +90,6 @@ function TiltCard({
 }
 
 export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
-
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
     const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(232,217,191,0.45), rgba(212,180,131,0.15) 35%, transparent 70%)`;
@@ -598,13 +611,21 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
                 <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-8 md:px-8 md:pt-16 md:pb-10">
-                    <div className="mb-6 max-w-2xl md:mb-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 0.6, ease: SOFT_EASE }}
+                        className="mb-6 max-w-2xl md:mb-8"
+                    >
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
-                        <h2 className="font-display text-ashen-800 mt-3 text-3xl tracking-tight md:text-5xl">Methods, guided by specialists</h2>
+                        <h2 className="font-display text-ashen-800 mt-3 text-3xl tracking-tight md:text-5xl">
+                            <RevealText text="Methods, guided by specialists" delay={0.1} />
+                        </h2>
                         <p className="text-ashen-500 mt-4 max-w-xl leading-relaxed">
                             Evidence-based approaches, explained simply. Your licensed psychologist will help choose what fits you.
                         </p>
-                    </div>
+                    </motion.div>
 
                     {/* defined panel with an animated, on-brand glowing border (cinematic) */}
                     <div className="sanad-border relative overflow-hidden rounded-[1.5rem] bg-white/55 px-6 backdrop-blur-sm md:rounded-[2rem] md:px-10">
@@ -612,7 +633,13 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             {approaches.map((a, i) => {
                                 const isOpen = open === i;
                                 return (
-                                    <div key={a.abbr}>
+                                    <motion.div
+                                        key={a.abbr}
+                                        initial={{ opacity: 0, y: 22 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: '-40px' }}
+                                        transition={{ duration: 0.55, ease: SOFT_EASE, delay: i * 0.1 }}
+                                    >
                                         <button
                                             onClick={() => setOpen(isOpen ? null : i)}
                                             className="group flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
@@ -646,7 +673,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
-                                    </div>
+                                    </motion.div>
                                 );
                             })}
                         </div>
@@ -707,51 +734,67 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
 
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
-                        <div className="mb-8 max-w-2xl">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: '-80px' }}
+                            transition={{ duration: 0.6, ease: SOFT_EASE }}
+                            className="mb-8 max-w-2xl"
+                        >
                             <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                            <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">The people behind Sanad</h2>
+                            <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">
+                                <RevealText text="The people behind Sanad" delay={0.1} />
+                            </h2>
                             <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
                                 Every Sanad psychologist is a licensed clinical psychologist, trained across all our approaches — CBT, EMDR and
                                 psychoanalysis. <span className="text-white">Real care, real credentials.</span>
                             </p>
-                        </div>
+                        </motion.div>
 
                         {/* steady framed cards — swipe carousel on phone, grid on desktop */}
-                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
-                            {specialists.map((m) => (
-                                <motion.button
+                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4">
+                            {specialists.map((m, i) => (
+                                <motion.div
                                     key={m.slug}
-                                    onClick={() => setSelected(m)}
-                                    whileHover={{ y: -4 }}
-                                    transition={{ duration: 0.3, ease: SOFT_EASE }}
-                                    className="group bg-cream block w-[72%] shrink-0 snap-center rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)] sm:w-full sm:shrink"
+                                    initial={{ opacity: 0, y: 24 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: '-60px' }}
+                                    transition={{ duration: 0.55, ease: SOFT_EASE, delay: i * 0.08 }}
+                                    className="w-[72%] shrink-0 snap-center sm:w-full sm:shrink"
                                 >
-                                    <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
-                                        {m.photo_path ? (
-                                            <img
-                                                src={m.photo_path}
-                                                alt={m.name}
-                                                loading="lazy"
-                                                decoding="async"
-                                                className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                                            />
-                                        ) : (
-                                            <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
-                                        )}
-                                        <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
-                                            Licensed Psychologist
-                                        </span>
-                                    </div>
-                                    <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
-                                        <div>
-                                            <h3 className="font-display text-ashen-800 text-xl">{m.name}</h3>
-                                            <p className="text-ashen-500 mt-0.5 text-xs">Licensed clinical psychologist</p>
+                                    <motion.button
+                                        onClick={() => setSelected(m)}
+                                        whileHover={{ y: -6 }}
+                                        transition={{ duration: 0.3, ease: SOFT_EASE }}
+                                        className="group bg-cream block w-full rounded-[1.25rem] p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)]"
+                                    >
+                                        <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
+                                            {m.photo_path ? (
+                                                <img
+                                                    src={m.photo_path}
+                                                    alt={m.name}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                    className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                                />
+                                            ) : (
+                                                <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
+                                            )}
+                                            <span className="bg-beige/90 text-ashen-800 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
+                                                Licensed Psychologist
+                                            </span>
                                         </div>
-                                        <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
-                                            View →
-                                        </span>
-                                    </div>
-                                </motion.button>
+                                        <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
+                                            <div>
+                                                <h3 className="font-display text-ashen-800 text-xl">{m.name}</h3>
+                                                <p className="text-ashen-500 mt-0.5 text-xs">Licensed clinical psychologist</p>
+                                            </div>
+                                            <span className="text-sage-700 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
+                                                View →
+                                            </span>
+                                        </div>
+                                    </motion.button>
+                                </motion.div>
                             ))}
 
                             {/* ghost card — signals more specialists to come */}
@@ -775,7 +818,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         {/* left — heading + angled photo + contact */}
                         <div className="md:sticky md:top-24 md:self-start">
                             <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">FAQ</span>
-                            <h2 className="font-display text-ashen-800 mt-3 text-3xl leading-[1.05] tracking-tight md:text-5xl">Ask away</h2>
+                            <h2 className="font-display text-ashen-800 mt-3 text-3xl leading-[1.05] tracking-tight md:text-5xl">
+                                <RevealText text="Ask away" delay={0.1} />
+                            </h2>
                             <p className="text-ashen-500 mt-4 max-w-sm leading-relaxed">
                                 Everything you might want to know before you begin. Can't find your answer? We're only a message away.
                             </p>
@@ -819,7 +864,14 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             {faqs.map((f, i) => {
                                 const isOpen = openFaq === i;
                                 return (
-                                    <div key={f.q} className="border-ashen-200/70 border-b">
+                                    <motion.div
+                                        key={f.q}
+                                        initial={{ opacity: 0, y: 16 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: '-40px' }}
+                                        transition={{ duration: 0.5, ease: SOFT_EASE, delay: i * 0.06 }}
+                                        className="border-ashen-200/70 border-b"
+                                    >
                                         <button
                                             onClick={() => setOpenFaq(isOpen ? null : i)}
                                             className="group flex w-full items-start gap-4 py-6 text-left md:gap-5"
@@ -851,7 +903,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
-                                    </div>
+                                    </motion.div>
                                 );
                             })}
                         </div>
