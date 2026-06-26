@@ -395,7 +395,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 {/* ===== HOW ARE YOU FEELING — dark glowing panel ===== */}
                 <section id="support" className="relative z-10 pt-6 pb-6 md:pt-8 md:pb-8">
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
-                        <div className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
+                        <div className="sanad-border from-ashen-500 to-ashen-700 relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-gradient-to-br px-6 py-10 md:px-12 md:py-11">
                             {/* animating light glows inside the panel */}
                             <div className="bg-sage-500/40 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
                             <div className="bg-beige/40 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
@@ -404,7 +404,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             {/* content above the glows */}
                             <div className="relative z-10">
                                 {/* header: heading left, button right */}
-                                <div className="mb-8 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
+                                <div className="mb-6 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
                                     <div>
                                         <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">In-the-moment support</span>
                                         <h2 className="font-display mt-3 text-4xl tracking-tight text-white md:text-5xl">
@@ -423,7 +423,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 </div>
 
                                 {/* two entry doors — compact stacked cards on phone, editorial rows on desktop */}
-                                <div className="space-y-6 md:space-y-16">
+                                <div className="space-y-6 md:space-y-11">
                                     {/* Emergency First Aid — text left, photo right */}
                                     <a
                                         href="/emergency"
@@ -482,7 +482,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         <TiltCard
                                             from="right"
                                             tilt={-5}
-                                            className="bg-ashen-900 relative h-44 w-full overflow-hidden rounded-3xl sm:h-56 md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-44 w-full overflow-hidden rounded-3xl sm:h-56 md:h-[23rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/emergency.jpg"
@@ -502,7 +502,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         <TiltCard
                                             from="left"
                                             tilt={5}
-                                            className="bg-ashen-900 relative h-44 w-full overflow-hidden rounded-3xl sm:h-56 md:h-[28rem] md:w-1/2"
+                                            className="bg-ashen-900 relative h-44 w-full overflow-hidden rounded-3xl sm:h-56 md:h-[23rem] md:w-1/2"
                                         >
                                             <img
                                                 src="/images/support/ongoing.jpg"
@@ -562,7 +562,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     </a>
                                 </div>
 
-                                <p className="text-ashen-400 mx-auto mt-12 max-w-xl text-center text-sm">
+                                <p className="text-ashen-400 mx-auto mt-8 max-w-xl text-center text-sm">
                                     These are self-guided grounding tools, not a substitute for professional or emergency care. If you're in danger or
                                     in crisis, please contact your local emergency number.
                                 </p>
@@ -598,7 +598,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
                 <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-7 pb-5 md:px-8 md:pt-9 md:pb-6">
-                    <div className="mb-6 max-w-2xl md:mb-8">
+                    <div className="mb-5 max-w-2xl md:mb-6">
                         <span className="text-sage-700 text-sm font-medium tracking-[0.2em] uppercase">Our approaches</span>
                         <h2 className="font-display text-ashen-800 mt-3 text-3xl tracking-tight md:text-5xl">Methods, guided by specialists</h2>
                         <p className="text-ashen-500 mt-4 max-w-xl leading-relaxed">
@@ -615,7 +615,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     <div key={a.abbr}>
                                         <button
                                             onClick={() => setOpen(isOpen ? null : i)}
-                                            className="group flex w-full items-center gap-5 py-7 text-left md:gap-8 md:py-9"
+                                            className="group flex w-full items-center gap-5 py-6 text-left md:gap-8 md:py-7"
                                         >
                                             <span className="font-display text-ashen-400 w-7 shrink-0 text-sm tabular-nums md:text-base">
                                                 {String(i + 1).padStart(2, '0')}
@@ -675,7 +675,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-60px' }}
                         transition={{ duration: 0.6, ease: SOFT_EASE }}
-                        className="group mx-auto mt-12 flex w-fit flex-col items-center gap-2 text-center md:mt-16"
+                        className="group mx-auto mt-8 flex w-fit flex-col items-center gap-2 text-center md:mt-10"
                     >
                         <span className="text-sage-700 border-sage-200 group-hover:border-sage-400 group-hover:bg-sage-50 inline-flex items-center gap-2 rounded-full border bg-white/60 px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase transition">
                             <Sparkles className="h-3.5 w-3.5" /> Ready when you are
@@ -707,7 +707,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
 
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
-                        <div className="mb-8 max-w-2xl">
+                        <div className="mb-6 max-w-2xl">
                             <span className="text-sage-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
                             <h2 className="font-display mt-3 text-3xl tracking-tight text-white md:text-5xl">The people behind Sanad</h2>
                             <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
