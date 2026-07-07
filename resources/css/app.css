@@ -232,14 +232,16 @@ html {
     inset: 0;
     border-radius: inherit;
     padding: 2px;
+    /* Always-visible gray ring with two lighter gray glints travelling along it. */
     background: conic-gradient(
         from var(--sanad-angle),
-        transparent 0deg,
-        #7da080 40deg,
-        transparent 95deg,
-        transparent 205deg,
-        #d6b27a 250deg,
-        transparent 305deg
+        #92938d 0deg,
+        #e8e8e5 45deg,
+        #92938d 110deg,
+        #7c7d75 200deg,
+        #dcdcd8 255deg,
+        #92938d 320deg,
+        #92938d 360deg
     );
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
