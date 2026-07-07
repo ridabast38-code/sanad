@@ -65,7 +65,7 @@ function TiltCard({
 export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
-    const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(232,217,191,0.22), rgba(212,180,131,0.08) 35%, transparent 70%)`;
+    const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(176,177,171,0.22), rgba(146,147,141,0.08) 35%, transparent 70%)`;
 
     // Throttle the spotlight to one update per animation frame. Mouse-move fires
     // far more often than the screen refreshes; without this cap we repaint the
@@ -325,19 +325,19 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
             <div onMouseMove={handleMouseMove} className="relative overflow-hidden">
                 {/* always-on aurora spanning the WHOLE canvas (both sections) */}
                 <div
-                    className="bg-sage-400/40 pointer-events-none absolute top-[4%] -left-40 h-[38rem] w-[38rem] rounded-full blur-3xl"
+                    className="bg-ashen-400/30 pointer-events-none absolute top-[4%] -left-40 h-[38rem] w-[38rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-1 22s ease-in-out infinite' }}
                 />
                 <div
-                    className="bg-sage-300/25 pointer-events-none absolute top-[26%] -right-40 h-[42rem] w-[42rem] rounded-full blur-3xl"
+                    className="bg-ashen-300/25 pointer-events-none absolute top-[26%] -right-40 h-[42rem] w-[42rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-2 26s ease-in-out infinite' }}
                 />
                 <div
-                    className="bg-beige/45 pointer-events-none absolute top-[52%] left-1/4 h-[34rem] w-[34rem] rounded-full blur-3xl"
+                    className="bg-ashen-200/40 pointer-events-none absolute top-[52%] left-1/4 h-[34rem] w-[34rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-3 28s ease-in-out infinite' }}
                 />
                 <div
-                    className="bg-sage-300/35 pointer-events-none absolute top-[78%] -left-32 h-[34rem] w-[34rem] rounded-full blur-3xl"
+                    className="bg-ashen-300/30 pointer-events-none absolute top-[78%] -left-32 h-[34rem] w-[34rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-2 30s ease-in-out infinite' }}
                 />
 
@@ -358,7 +358,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     ].map((p, i) => (
                         <div
                             key={i}
-                            className="absolute rounded-full bg-amber-100"
+                            className="absolute rounded-full bg-ashen-200"
                             style={{
                                 left: `${p.l}%`,
                                 top: `${p.t}%`,
@@ -367,7 +367,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 animation: `dust-drift ${p.d}s ease-in-out infinite`,
                                 animationDelay: `${p.delay}s`,
                                 filter: 'blur(1px)',
-                                boxShadow: '0 0 8px 2px rgba(232,217,191,0.6)',
+                                boxShadow: '0 0 8px 2px rgba(176,177,171,0.5)',
                             }}
                         />
                     ))}
@@ -378,9 +378,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
                         <div className="sanad-border from-ashen-700 to-ashen-800 border-ashen-300/25 relative overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
                             {/* animating light glows inside the panel */}
-                            <div className="bg-sage-500/40 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
-                            <div className="bg-beige/40 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
-                            <div className="bg-sage-500/30 animate-breathe pointer-events-none absolute top-1/3 left-1/2 h-64 w-64 rounded-full blur-3xl [animation-delay:-7s]" />
+                            <div className="bg-ashen-400/30 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
+                            <div className="bg-ashen-300/25 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
+                            <div className="bg-ashen-400/25 animate-breathe pointer-events-none absolute top-1/3 left-1/2 h-64 w-64 rounded-full blur-3xl [animation-delay:-7s]" />
 
                             {/* content above the glows */}
                             <div className="relative z-10">
@@ -705,8 +705,8 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
                 <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-10 pb-12 md:pt-12 md:pb-16">
                     {/* soft on-brand glow for depth (no photo) */}
-                    <div className="bg-sage-500/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
-                    <div className="bg-beige/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
+                    <div className="bg-ashen-400/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
+                    <div className="bg-ashen-300/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
 
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
                         <div className="mb-8 max-w-2xl">
@@ -738,7 +738,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
                                         ) : (
-                                            <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
+                                            <div className="from-ashen-300 to-ashen-500 absolute inset-0 bg-gradient-to-br" />
                                         )}
                                         <span className="bg-ashen-100/90 text-ashen-900 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
                                             Licensed Psychologist
@@ -791,7 +791,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             >
                                 <div className="from-ashen-700 to-ashen-800 text-ashen-200 relative overflow-hidden bg-gradient-to-br p-6">
                                     {/* soft warm glow — keeps the brand's light touch without a photo */}
-                                    <div className="bg-beige/20 animate-breathe pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl" />
+                                    <div className="bg-ashen-300/20 animate-breathe pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl" />
                                     <div className="relative z-10 flex flex-col gap-5">
                                         <span className="bg-ashen-200/25 flex h-11 w-11 items-center justify-center rounded-full backdrop-blur">
                                             <MessageCircle className="h-5 w-5" />
@@ -826,7 +826,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         </div>
 
                         {/* right — hairline +/- list (darker hairlines: this column
-                        sits on the sage side of the page split) */}
+                        sits on the darker side of the page split) */}
                         <div className="border-ashen-800/30 border-t">
                             {faqs.map((f, i) => {
                                 const isOpen = openFaq === i;
@@ -881,7 +881,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 <section className="relative z-10 px-6 pb-12 md:pb-16">
                     {/* translucent glass — the page split stays visible behind the closing panel */}
                     <div className="from-ashen-100/55 to-ashen-300/40 border-ashen-600/30 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 text-center backdrop-blur-sm md:rounded-[3.5rem] md:py-16">
-                        <div className="bg-sage-300/30 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
+                        <div className="bg-ashen-300/25 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
                         <div className="bg-ashen-200/40 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
                         <div className="relative z-10">
                             <span className="text-ashen-900 border-ashen-600/40 bg-ashen-100/60 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase">
@@ -1045,7 +1045,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 {selected.photo_path ? (
                                     <img src={selected.photo_path} alt={selected.name} className="h-full w-full object-cover" />
                                 ) : (
-                                    <div className="from-sage-300 to-sage-600 h-full w-full bg-gradient-to-br" />
+                                    <div className="from-ashen-300 to-ashen-500 h-full w-full bg-gradient-to-br" />
                                 )}
                             </div>
 
