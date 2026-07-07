@@ -585,21 +585,6 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
                 <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-8 md:px-8 md:pt-16 md:pb-10">
-                    {/* soft olive branches — an organic breath of calm framing the section
-                    (olive: peace, life, and a quiet nod to home). Kept low and lightly
-                    desaturated so it lives inside the gray world instead of shouting. */}
-                    <motion.img
-                        aria-hidden
-                        src="/images/olive-branches.png"
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                        initial={{ opacity: 0, scale: 1.04 }}
-                        whileInView={{ opacity: 0.35, scale: 1 }}
-                        viewport={{ once: true, margin: '-80px' }}
-                        transition={{ duration: 1.4, ease: SOFT_EASE }}
-                        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover grayscale-[15%] select-none"
-                    />
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -617,9 +602,23 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     </motion.div>
 
                     {/* defined panel with an animated, on-brand glowing border (cinematic).
-                    Translucent cream glass — lets the page split glow through. */}
+                    Translucent glass — lets the page split glow through. */}
                     <div className="sanad-border bg-ashen-100/50 relative overflow-hidden rounded-[1.5rem] px-6 backdrop-blur-sm md:rounded-[2rem] md:px-10">
-                        <div className="divide-ashen-700/15 divide-y">
+                        {/* soft olive branches framing inside the border — peace, life, and a
+                        quiet nod to home. Clipped by the panel's overflow, sits behind the rows. */}
+                        <motion.img
+                            aria-hidden
+                            src="/images/olive-branches.webp"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            initial={{ opacity: 0, scale: 1.04 }}
+                            whileInView={{ opacity: 0.4, scale: 1 }}
+                            viewport={{ once: true, margin: '-80px' }}
+                            transition={{ duration: 1.4, ease: SOFT_EASE }}
+                            className="pointer-events-none absolute inset-0 h-full w-full object-cover grayscale-[15%] select-none"
+                        />
+                        <div className="divide-ashen-700/15 relative z-10 divide-y">
                             {approaches.map((a, i) => {
                                 const isOpen = open === i;
                                 return (

@@ -37,6 +37,37 @@ export interface ClosingProps {
 type Stage = 'intro' | 'check' | 'path' | 'closing';
 
 /**
+ * The calming side photo shared by every guided screen (menu + all flows). A
+ * FIXED height and centered crop keep it identical from page to page — it rests
+ * at a gentle tilt, is gray-washed to match the site, and colors up on hover.
+ * Desktop only, so a phone in a hard moment goes straight to the words.
+ */
+export function GuidedPhoto({ src, eyebrow, title }: { src: string; eyebrow: string; title: ReactNode }) {
+    return (
+        <motion.div
+            initial={{ opacity: 0, rotateY: -10 }}
+            animate={{ opacity: 1, rotateY: -5 }}
+            whileHover={{ rotateY: 0 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{ transformPerspective: 1200 }}
+            className="group relative hidden overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-40px_rgba(20,21,15,0.6)] lg:sticky lg:top-8 lg:block lg:h-[40rem]"
+        >
+            <img
+                src={src}
+                alt=""
+                decoding="async"
+                className="h-full w-full object-cover object-center grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+            />
+            <div className="from-ashen-950/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
+            <div className="absolute right-0 bottom-0 left-0 p-8">
+                <p className="text-ashen-300 text-xs font-medium tracking-[0.25em] uppercase">{eyebrow}</p>
+                <p className="font-display text-ashen-200 mt-2 text-3xl leading-tight">{title}</p>
+            </div>
+        </motion.div>
+    );
+}
+
+/**
  * The shared guided-flow player used by both the emergency and ongoing-support
  * journeys: a calm progress rail, word-by-word title reveals, and a large
  * gray-washed side photo (desktop). Only the closing screen differs between the
@@ -104,29 +135,7 @@ export function GuidedFlow({
             </div>
 
             <div className="grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14">
-                {/* the calming photo — large, gently gray-washed, resting at a tilt like
-                the landing cards; colors up softly on hover. Desktop only, so a phone
-                in a hard moment goes straight to the words. */}
-                <motion.div
-                    initial={{ opacity: 0, rotateY: -10 }}
-                    animate={{ opacity: 1, rotateY: -5 }}
-                    whileHover={{ rotateY: 0 }}
-                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    style={{ transformPerspective: 1200 }}
-                    className="group relative hidden overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-40px_rgba(20,21,15,0.6)] lg:block lg:self-stretch"
-                >
-                    <img
-                        src={photo.src}
-                        alt=""
-                        decoding="async"
-                        className="h-full min-h-[34rem] w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                    />
-                    <div className="from-ashen-950/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
-                    <div className="absolute right-0 bottom-0 left-0 p-8">
-                        <p className="text-ashen-300 text-xs font-medium tracking-[0.25em] uppercase">{photo.eyebrow}</p>
-                        <p className="font-display text-ashen-200 mt-2 text-3xl leading-tight">{photo.title}</p>
-                    </div>
-                </motion.div>
+                <GuidedPhoto src={photo.src} eyebrow={photo.eyebrow} title={photo.title} />
 
                 {/* the guided player */}
                 <div className="flex min-h-[70vh] flex-col lg:min-h-[34rem]">
