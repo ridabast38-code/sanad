@@ -92,7 +92,7 @@ function TiltCard({
 export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
-    const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(232,217,191,0.45), rgba(212,180,131,0.15) 35%, transparent 70%)`;
+    const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(232,217,191,0.22), rgba(212,180,131,0.08) 35%, transparent 70%)`;
 
     // Throttle the spotlight to one update per animation frame. Mouse-move fires
     // far more often than the screen refreshes; without this cap we repaint the
@@ -183,7 +183,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
         // muted sage on the right, behind every section from hero to footer. The
         // final color goes flat from 76% so the hero's notched corner card can
         // match it exactly at any common viewport width.
-        <div className="min-h-screen bg-[linear-gradient(to_right,#faf6ef_0%,#f4f1e2_28%,#ccd8c6_54%,#a4b89f_76%,#a4b89f_100%)]">
+        <div className="min-h-screen bg-[linear-gradient(to_right,#faf6ef_0%,#f1eedd_26%,#bccbb4_52%,#8ba386_76%,#8ba386_100%)]">
             {/* Always-present crisis fast lane for visitors in distress — one tap to
             a real person on WhatsApp, no sign-up needed. */}
             <a
@@ -317,17 +317,17 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#a4b89f] p-6 pl-10 md:gap-6 md:pl-12"
+                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#8ba386] p-6 pl-10 md:gap-6 md:pl-12"
                         >
                             {/* concave corner masks — make the notch blend smoothly into the card */}
                             <div className="pointer-events-none absolute -top-[2.5rem] right-0 h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#a4b89f" />
+                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#8ba386" />
                                 </svg>
                             </div>
                             <div className="pointer-events-none absolute bottom-0 -left-[2.5rem] h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#a4b89f" />
+                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#8ba386" />
                                 </svg>
                             </div>
 
@@ -356,7 +356,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     style={{ animation: 'aurora-1 22s ease-in-out infinite' }}
                 />
                 <div
-                    className="pointer-events-none absolute top-[26%] -right-40 h-[42rem] w-[42rem] rounded-full bg-amber-300/35 blur-3xl"
+                    className="bg-sage-300/25 pointer-events-none absolute top-[26%] -right-40 h-[42rem] w-[42rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-2 26s ease-in-out infinite' }}
                 />
                 <div
@@ -366,16 +366,6 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 <div
                     className="bg-sage-300/35 pointer-events-none absolute top-[78%] -left-32 h-[34rem] w-[34rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-2 30s ease-in-out infinite' }}
-                />
-
-                {/* golden rays from the top */}
-                <div
-                    className="pointer-events-none absolute -top-20 -left-20 h-[40rem] w-[28rem] origin-top-left -rotate-12 bg-gradient-to-b from-amber-200/40 via-amber-100/15 to-transparent blur-2xl"
-                    style={{ animation: 'ray-sweep 14s ease-in-out infinite' }}
-                />
-                <div
-                    className="pointer-events-none absolute -top-20 -right-20 h-[40rem] w-[28rem] origin-top-right rotate-12 bg-gradient-to-b from-amber-200/40 via-amber-100/15 to-transparent blur-2xl"
-                    style={{ animation: 'ray-sweep 14s ease-in-out infinite reverse', animationDelay: '-3s' }}
                 />
 
                 {/* mouse spotlight across the whole canvas */}
