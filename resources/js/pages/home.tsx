@@ -179,7 +179,10 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
     const [openFaq, setOpenFaq] = useState<number | null>(0);
 
     return (
-        <div className="bg-cream min-h-screen">
+        // One page-wide light→dark split: cream on the left easing into a muted
+        // sage-gray on the right. The final color goes flat from 74% so the hero's
+        // notched corner card can match it exactly at any common viewport width.
+        <div className="min-h-screen bg-[linear-gradient(to_right,#faf6ef_0%,#f6f3e7_32%,#dde4d4_54%,#bfcfbc_74%,#bfcfbc_100%)]">
             {/* Always-present crisis fast lane for visitors in distress — one tap to
             a real person on WhatsApp, no sign-up needed. */}
             <a
@@ -313,17 +316,17 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="bg-cream absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] p-6 pl-10 md:gap-6 md:pl-12"
+                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#bfcfbc] p-6 pl-10 md:gap-6 md:pl-12"
                         >
                             {/* concave corner masks — make the notch blend smoothly into the card */}
                             <div className="pointer-events-none absolute -top-[2.5rem] right-0 h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#faf6ef" />
+                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#bfcfbc" />
                                 </svg>
                             </div>
                             <div className="pointer-events-none absolute bottom-0 -left-[2.5rem] h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#faf6ef" />
+                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#bfcfbc" />
                                 </svg>
                             </div>
 
@@ -343,8 +346,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
             </div>
 
-            {/* ===== CONTINUOUS CANVAS — one seamless background for all content ===== */}
-            <div onMouseMove={handleMouseMove} className="from-cream via-ashen-100 to-cream relative overflow-hidden bg-gradient-to-b">
+            {/* ===== CONTINUOUS CANVAS — transparent, so the page-wide light→dark
+            split shows through beneath the auroras and every section ===== */}
+            <div onMouseMove={handleMouseMove} className="relative overflow-hidden">
                 {/* always-on aurora spanning the WHOLE canvas (both sections) */}
                 <div
                     className="bg-sage-400/40 pointer-events-none absolute top-[4%] -left-40 h-[38rem] w-[38rem] rounded-full blur-3xl"
