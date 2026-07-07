@@ -42,7 +42,17 @@ type Stage = 'intro' | 'check' | 'path' | 'closing';
  * at a gentle tilt, is gray-washed to match the site, and colors up on hover.
  * Desktop only, so a phone in a hard moment goes straight to the words.
  */
-export function GuidedPhoto({ src, eyebrow, title }: { src: string; eyebrow: string; title: ReactNode }) {
+export function GuidedPhoto({
+    src,
+    eyebrow,
+    title,
+    sizeClass = 'lg:sticky lg:top-8 lg:h-[40rem]',
+}: {
+    src: string;
+    eyebrow: string;
+    title: ReactNode;
+    sizeClass?: string;
+}) {
     return (
         <motion.div
             initial={{ opacity: 0, rotateY: -10 }}
@@ -50,7 +60,7 @@ export function GuidedPhoto({ src, eyebrow, title }: { src: string; eyebrow: str
             whileHover={{ rotateY: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{ transformPerspective: 1200 }}
-            className="group relative hidden overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-40px_rgba(20,21,15,0.6)] lg:sticky lg:top-8 lg:block lg:h-[40rem]"
+            className={`group relative hidden overflow-hidden rounded-[2rem] shadow-[0_40px_80px_-40px_rgba(20,21,15,0.6)] lg:block ${sizeClass}`}
         >
             <img
                 src={src}
