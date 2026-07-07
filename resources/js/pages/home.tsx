@@ -163,7 +163,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ashen-200 fixed bottom-5 left-5 z-[70] inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 active:scale-95"
+                className="bg-ashen-800 hover:bg-ashen-900 text-ashen-100 fixed bottom-5 left-5 z-[70] inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 active:scale-95"
             >
                 <LifeBuoy className="size-4" />
                 <span className="hidden sm:inline">Need help now?</span>
@@ -376,7 +376,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 {/* ===== HOW ARE YOU FEELING — dark glowing panel ===== */}
                 <section id="support" className="relative z-10 pt-8 pb-12 md:pt-10 md:pb-16">
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
-                        <div className="sanad-border from-ashen-500 to-ashen-700 border-ashen-300/25 relative overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
+                        <div className="sanad-border from-ashen-700 to-ashen-800 border-ashen-300/25 relative overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
                             {/* animating light glows inside the panel */}
                             <div className="bg-sage-500/40 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
                             <div className="bg-beige/40 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
@@ -479,7 +479,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     {/* Ongoing Support — photo left, text right. Sends visitors to the
                                     methods section so they understand the approaches before choosing
                                     a specialist to book with. */}
-                                    <a href="#approaches" className="group flex flex-col items-stretch gap-5 md:flex-row md:items-center md:gap-14">
+                                    <a href="/ongoing" className="group flex flex-col items-stretch gap-5 md:flex-row md:items-center md:gap-14">
                                         <TiltCard
                                             from="left"
                                             tilt={5}
@@ -561,7 +561,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             alt=""
                             loading="lazy"
                             decoding="async"
-                            className="h-full w-full object-cover grayscale-[65%]"
+                            className="h-full w-full object-cover grayscale-[45%]"
                         />
                         <div className="bg-ashen-950/55 absolute inset-0" />
                         <div className="from-ashen-950/80 to-ashen-950/30 absolute inset-0 bg-gradient-to-t via-transparent" />
@@ -735,7 +735,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 alt={m.name}
                                                 loading="lazy"
                                                 decoding="async"
-                                                className="absolute inset-0 h-full w-full object-cover grayscale-[80%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                                className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
                                         ) : (
                                             <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
@@ -789,7 +789,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 tilt={6}
                                 className="relative mt-8 hidden w-full max-w-[18rem] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)] md:block"
                             >
-                                <div className="from-ashen-600 to-ashen-800 text-ashen-200 relative overflow-hidden bg-gradient-to-br p-6">
+                                <div className="from-ashen-700 to-ashen-800 text-ashen-200 relative overflow-hidden bg-gradient-to-br p-6">
                                     {/* soft warm glow — keeps the brand's light touch without a photo */}
                                     <div className="bg-beige/20 animate-breathe pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl" />
                                     <div className="relative z-10 flex flex-col gap-5">

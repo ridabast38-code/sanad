@@ -13,6 +13,7 @@ use App\Http\Controllers\ClientHomeController;
 use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\MeetingLinkController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\OngoingSupportController;
 use App\Http\Controllers\Practitioner\DashboardController as PractitionerDashboardController;
 use App\Http\Controllers\Practitioner\PractitionerProfileController;
 use App\Http\Controllers\Practitioner\ScheduleController;
@@ -107,6 +108,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // WhatsApp. No auth, so a form never blocks help.
 Route::get('emergency', [EmergencyController::class, 'index'])->name('emergency.index');
 Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emergency.show');
+
+// Ongoing support — the "Ongoing Support" door from the landing page. The visitor
+// picks the situation they've been through, walks the full guided flow, and is
+// gently invited into real sessions (or a WhatsApp message) at the end. Public,
+// like the emergency flow, so no form blocks the way in.
+Route::get('ongoing', [OngoingSupportController::class, 'index'])->name('ongoing.index');
+Route::get('ongoing/{type}', [OngoingSupportController::class, 'show'])->name('ongoing.show');
 
 // Public, no-login booking — the "book without an account" path offered from
 // the landing page. A visitor can complete a real booking as a guest, or be

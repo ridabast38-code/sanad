@@ -248,7 +248,7 @@ class StabilizationFlows
     }
 
     /**
-     * Accident / sudden shock — acute (just happened). Source: "accident- full".
+     * Accident / sudden shock. Full transcription of "accident- full.docx".
      *
      * @return Flow
      */
@@ -266,7 +266,7 @@ class StabilizationFlows
                     'lines' => [
                         'You’ve just been through something sudden and overwhelming.',
                         'It’s normal for your mind and body to still feel shaken after this.',
-                        'We’ll help you regain a sense of stability, step by step.',
+                        'We’ll help you regain a sense of stability step by step.',
                     ],
                 ],
                 [
@@ -297,31 +297,32 @@ class StabilizationFlows
                             ],
                         ],
                         [
-                            'title' => 'Let your body know it’s over',
+                            'title' => 'Your body may still be reacting',
                             'lines' => [
-                                'Your body may still be reacting as if the danger is happening right now.',
-                                'But this moment is different — the danger is not here anymore.',
+                                'Your body may still be reacting as if danger is happening right now.',
+                                'But this moment is different, and the danger is not present anymore.',
+                                'Let’s help your system settle down together.',
                             ],
                         ],
                         [
                             'title' => 'Full-body reset',
                             'lines' => [
                                 'Press both feet firmly into the ground for five seconds.',
-                                'Let your jaw loosen — let your teeth separate slightly.',
-                                'Slowly drop your shoulders down.',
+                                'Release your jaw — let your teeth separate slightly.',
+                                'Drop your shoulders down slowly.',
                                 'Place one hand on your chest or stomach.',
-                                'Notice your breath moving on its own, without changing it.',
-                                'Gently stretch your fingers, or open and close your hands once.',
+                                'Notice the natural movement of your breath, without changing it.',
+                                'If you can, gently stretch your fingers, or open and close your hands once.',
                             ],
                         ],
                         [
                             'title' => 'Steady your attention',
                             'lines' => [
                                 'Look at one object in front of you.',
-                                'Notice three details about it: its shape, its color, its texture.',
+                                'Slowly notice three details: its shape, its color, its texture or surface.',
                                 'Keep your eyes on it for a few moments.',
-                                'If your mind drifts, gently bring it back to the object.',
-                                'Silently remind yourself: “I am here, right now.”',
+                                'If your mind drifts, gently return to the object.',
+                                'Remind yourself silently: “I am here, right now.”',
                             ],
                         ],
                     ],
@@ -332,27 +333,26 @@ class StabilizationFlows
                 'frozen' => [
                     'steps' => [
                         [
-                            'title' => 'This is your body protecting you',
+                            'title' => 'The body can feel frozen',
                             'lines' => [
                                 'After something sudden, the body can feel frozen or disconnected.',
-                                'This is a normal response — not something wrong with you.',
                             ],
                         ],
                         [
-                            'title' => 'Gently restart movement',
+                            'title' => 'Gently restart your body',
                             'lines' => [
                                 'Start by moving just one part of your body — your fingers or toes.',
-                                'Then shift your position slightly. A small movement is enough.',
+                                'Then gently shift your position a little; no rush, a small movement is enough.',
                                 'Roll your shoulders once, or gently tilt your head.',
                                 'Press your feet into the ground for a moment, then release.',
                                 'Notice: “I can still move, even a little.”',
                             ],
                         ],
                         [
-                            'title' => 'Re-enter the world slowly',
+                            'title' => 'Re-enter a stable world',
                             'lines' => [
-                                'Look around slowly, without searching for anything in particular.',
-                                'Notice one thing that feels stable — an object, a wall, a light.',
+                                'Look around slowly, without searching for anything specific.',
+                                'Notice one thing that feels stable — an object, a wall, a surface, a light.',
                                 'Let your eyes rest on it without effort.',
                                 'Then notice one more detail about it — its color, shape, or position.',
                                 'Remind yourself: “The world is still here, and I am here in it.”',
@@ -366,34 +366,33 @@ class StabilizationFlows
                 'overthinking' => [
                     'steps' => [
                         [
-                            'title' => 'Your mind is trying to make sense of it',
+                            'title' => 'Your mind may be replaying it',
                             'lines' => [
-                                'Your mind may be replaying or trying to understand what happened.',
-                                'This is normal after a shock.',
+                                'Your mind may be replaying, or trying to understand, what happened.',
                             ],
                         ],
                         [
                             'title' => 'A thought is not the event',
                             'lines' => [
-                                'This is a thought — not something happening right now.',
+                                'This is a thought, not something happening right now.',
                                 'You don’t need to follow it.',
                             ],
                         ],
                         [
-                            'title' => 'Let the loop loosen',
+                            'title' => 'Let the thought loosen',
                             'lines' => [
-                                'Imagine the thought moving a little further away from you.',
-                                'You’re not pushing it away — just not holding onto it.',
-                                'If it returns, gently label it again: “just a thought.”',
-                                'Let your attention loosen around it, instead of fighting it.',
+                                'Imagine the thought moving further away from you.',
+                                'You are not pushing it away — just not holding it.',
+                                'If it returns, gently label it again as “just a thought.”',
+                                'Allow your attention to loosen around it, rather than fight it.',
                             ],
                         ],
                         [
-                            'title' => 'Refocus on right now',
+                            'title' => 'Refocus on the present',
                             'lines' => [
                                 'Choose one object in your environment.',
                                 'Look at it slowly for a few seconds.',
-                                'Notice three simple details: its shape, its color, its texture.',
+                                'Notice three simple details: its shape, its color, its texture or surface.',
                                 'If your mind pulls back, gently return to the object.',
                                 'Say silently: “Right now, I am here.”',
                             ],
@@ -409,31 +408,42 @@ class StabilizationFlows
                             'title' => 'You don’t need to explain it',
                             'lines' => [
                                 'That’s okay — you don’t need to explain how you feel.',
-                                'Let your body be as it is right now, without fixing or analyzing anything.',
                             ],
                         ],
                         [
-                            'title' => 'It’s okay if it’s unclear',
+                            'title' => 'Let your body be as it is',
                             'lines' => [
-                                'It’s okay if things feel unclear, heavy, or a little distant.',
+                                'Pause for a moment.',
+                                'Let your body be as it is right now.',
+                                'You don’t need to fix, analyze, or change anything.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Unclear feelings are okay',
+                            'lines' => [
+                                'It’s okay if things feel unclear, heavy, or slightly distant.',
                                 'You might not be able to name what you feel — and that’s okay.',
                                 'Sometimes after intense experiences, feelings don’t come in a clear way.',
                             ],
                         ],
                         [
-                            'title' => 'Just be here',
+                            'title' => 'Settle gently into this moment',
                             'lines' => [
                                 'Notice that you are here in this moment, even if things feel unclear.',
+                                'You don’t need to understand what is happening internally right now.',
                                 'Let your attention settle gently, without trying to guide it.',
                                 'If thoughts or feelings appear, you don’t need to respond to them.',
+                                'Just allow this moment to exist without pressure.',
                             ],
                         ],
                         [
-                            'title' => 'A soft look around',
+                            'title' => 'A light look around',
                             'lines' => [
                                 'Slowly become aware of the space around you.',
-                                'Notice one neutral detail — a light, a color, a shape.',
-                                'Let your eyes rest there without effort.',
+                                'Notice one neutral detail in your environment — a light, a color, a shape, an object.',
+                                'Let your eyes rest there without effort or pressure.',
+                                'You don’t need to analyze it — just let it exist in your awareness.',
+                                'If your attention moves away, that is completely fine.',
                             ],
                         ],
                     ],
@@ -446,7 +456,7 @@ class StabilizationFlows
     }
 
     /**
-     * War / conflict — acute. Source: "full-war".
+     * War / conflict. Full transcription of "full-war.docx".
      *
      * @return Flow
      */
@@ -460,7 +470,7 @@ class StabilizationFlows
             'icon' => 'war',
             'intro' => [
                 [
-                    'title' => 'You’re in a space to help you steady yourself',
+                    'title' => 'A space to help you stabilize',
                     'lines' => [
                         'You are in a space designed to help you stabilize after difficult or overwhelming experiences.',
                         'There is no right or wrong way to feel right now.',
@@ -471,7 +481,7 @@ class StabilizationFlows
             'check' => [
                 'question' => 'How do you feel right now?',
                 'options' => [
-                    ['key' => 'panic', 'label' => 'Panicked'],
+                    ['key' => 'panic', 'label' => 'Panic'],
                     ['key' => 'numb', 'label' => 'Numb'],
                     ['key' => 'overthinking', 'label' => 'Overthinking'],
                     ['key' => 'unsure', 'label' => 'I’m not sure'],
@@ -481,9 +491,9 @@ class StabilizationFlows
                 'panic' => [
                     'steps' => [
                         [
-                            'title' => 'Panic can pass',
+                            'title' => 'Let’s help your body slow down',
                             'lines' => [
-                                'Panic can happen when your body feels like it’s in danger, even when you are safe right now.',
+                                'Panic can happen when your body feels like it’s in danger, even if you are safe right now.',
                                 'Let’s help your body slow down and feel more grounded.',
                             ],
                         ],
@@ -498,53 +508,32 @@ class StabilizationFlows
                         [
                             'title' => 'Let’s get through this moment',
                             'lines' => [
-                                'Breathe in slowly… and out. Stay with this for about a minute.',
+                                'Breathe in slowly… and out. Stay with your breath for about a minute.',
                                 'Look around and name five things you can see.',
                                 'Tell yourself: “I am safe right now.”',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You did something important. Even small steps help.',
-                    ],
-                ],
-                'numb' => [
-                    'steps' => [
-                        [
-                            'title' => 'Numbness is protection',
-                            'lines' => [
-                                'Feeling numb can happen after overwhelming experiences.',
-                                'It’s your mind’s way of protecting you by slowing things down.',
-                                'We’ll gently help you reconnect with the present.',
-                            ],
-                        ],
-                        [
-                            'title' => 'Gently reconnect',
-                            'lines' => [
-                                'Touch something cold, or hold something with texture — focus only on how it feels.',
-                                'Move your body slowly for about a minute: stretch your arms, or roll your shoulders.',
-                                'Name three things you can physically feel right now.',
-                            ],
-                        ],
-                    ],
-                    'closing' => [
-                        'You’re reconnecting, little by little. That’s enough for now.',
+                        'You did something important.',
+                        'Even small steps help.',
+                        'If you still feel overwhelmed, stay with slow breathing for a few seconds — and, if you can, reach out to someone you trust.',
                     ],
                 ],
                 'overthinking' => [
                     'steps' => [
                         [
-                            'title' => 'Your mind is circling',
+                            'title' => 'Let’s calm it down',
                             'lines' => [
                                 'Overthinking is when your mind keeps repeating thoughts or worries.',
-                                'It often happens after stress or uncertainty.',
+                                'It often happens when you’ve been through stress or uncertainty.',
                             ],
                         ],
                         [
-                            'title' => 'This is normal',
+                            'title' => 'Your mind is making sense of things',
                             'lines' => [
                                 'Your mind is trying to make sense of things right now.',
-                                'After stressful experiences, thoughts can start going in circles — that’s completely normal.',
+                                'After stressful experiences, thoughts can start going in circles — which is completely normal.',
                                 'Let’s slow things down together.',
                             ],
                         ],
@@ -552,36 +541,96 @@ class StabilizationFlows
                             'title' => 'Clear the mental noise',
                             'lines' => [
                                 'Write or say one thought that’s in your head right now — just one sentence, no analysis.',
-                                'Say to yourself: “This is just a thought, not a fact.”',
-                                'Look around and name three things you see, or focus on your breath for about a minute.',
+                                'Say to yourself: “This is just a thought, not a fact.” Repeat it slowly two or three times.',
+                                'Then choose one: name three things you can see, or focus on your breath for sixty seconds, or listen carefully to three sounds around you.',
+                            ],
+                        ],
+                        [
+                            'title' => 'If your mind is still racing',
+                            'lines' => [
+                                'Let’s pause the thinking for a moment.',
+                                'Put both feet on the ground.',
+                                'Take one slow breath in… and out.',
+                                'Name one thing you can see right now.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You don’t need to solve everything right now. Letting thoughts pass is also progress.',
+                        'You don’t need to solve everything right now.',
+                        'Letting thoughts pass is also progress.',
+                        'Your mind doesn’t need to solve everything at once — you can return to this anytime.',
+                    ],
+                ],
+                'numb' => [
+                    'steps' => [
+                        [
+                            'title' => 'Numbness is a form of protection',
+                            'lines' => [
+                                'Feeling numb can happen after overwhelming experiences.',
+                                'It’s your mind’s way of protecting you by slowing things down.',
+                                'We’ll gently help you reconnect with the present, step by step.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Gently reconnect',
+                            'lines' => [
+                                'Touch something cold — water, metal, or a cold surface — or hold something with texture, like fabric or a wall. Focus only on how it feels.',
+                                'Move your body slowly for about a minute — stretch your arms, roll your shoulders, or stand up and sit down once. No pressure, just movement.',
+                                'Name three things you can physically feel right now — the chair under you, the air on your skin, your clothes on your body.',
+                            ],
+                        ],
+                        [
+                            'title' => 'If you still feel numb',
+                            'lines' => [
+                                'Let’s try something simpler.',
+                                'Place your hand on your chest.',
+                                'Take one slow breath in, and out.',
+                                'Look around and notice one color.',
+                            ],
+                        ],
+                    ],
+                    'closing' => [
+                        'You’re reconnecting, little by little.',
+                        'Numbness can take time to fade — you don’t need to force anything.',
+                        'Just coming here is already a step.',
                     ],
                 ],
                 'unsure' => [
                     'steps' => [
                         [
-                            'title' => 'It’s okay not to know',
+                            'title' => 'It’s okay not to be sure',
                             'lines' => [
                                 'It’s okay if you’re not sure how you feel.',
                                 'After difficult experiences, it can be hard to put it into words.',
-                                'We’ll keep things simple and help you feel a bit more steady.',
+                                'We’ll keep things simple and focus on helping you feel a bit more steady.',
                             ],
                         ],
                         [
-                            'title' => 'A safe, simple reset',
+                            'title' => 'You don’t need to explain anything',
                             'lines' => [
-                                'Take a slow breath in… and out, for about a minute.',
-                                'Look around and name three things you can see.',
-                                'Feel your feet on the ground, or place a hand on your chest and notice your breath.',
+                                'You don’t need to explain anything.',
+                                'We’ll just help you feel a little more steady.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A simple, steady baseline',
+                            'lines' => [
+                                'Take a slow breath in… and out. Do this for about sixty seconds.',
+                                'Look around and name three things you see.',
+                                'Feel your feet on the ground, or place your hand on your chest and notice your breath.',
+                            ],
+                        ],
+                        [
+                            'title' => 'If nothing has shifted yet',
+                            'lines' => [
+                                'That’s okay. Let’s stay with something simple.',
+                                'Take another slow breath, or look around and notice one thing you didn’t notice before.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You don’t need the right words for what you feel. Coming here is already a step forward.',
+                        'You don’t need to have the right words for what you feel.',
+                        'Coming here is already a step forward.',
                     ],
                 ],
             ],
@@ -589,7 +638,7 @@ class StabilizationFlows
     }
 
     /**
-     * Loss / grief — acute. Source: "full grief".
+     * Loss / grief. Full transcription of "full grief.docx".
      *
      * @return Flow
      */
@@ -603,15 +652,15 @@ class StabilizationFlows
             'icon' => 'grief',
             'intro' => [
                 [
-                    'title' => 'We’ll stay with you, gently',
+                    'title' => 'We’ll stay with you gently',
                     'lines' => [
-                        'Loss can feel deeply painful, in many different ways.',
+                        'Loss can feel deeply painful in many different ways.',
                         'There’s no right or wrong way to feel right now.',
                         'We’ll stay with you gently, step by step.',
                     ],
                 ],
                 [
-                    'title' => 'Nothing needs to change right now',
+                    'title' => 'Let’s just take a moment together',
                     'lines' => [
                         'Right now, we don’t need to change anything.',
                         'Let’s just take a moment together.',
@@ -631,7 +680,14 @@ class StabilizationFlows
                 'sadness' => [
                     'steps' => [
                         [
-                            'title' => 'This is allowed',
+                            'title' => 'Sadness is a natural response',
+                            'lines' => [
+                                'Feeling sadness after loss is a natural response.',
+                                'You don’t need to push it away.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Whatever is here is allowed',
                             'lines' => [
                                 'It’s okay to feel this right now.',
                                 'You don’t need to change it.',
@@ -639,15 +695,15 @@ class StabilizationFlows
                             ],
                         ],
                         [
-                            'title' => 'Let it have a little space',
+                            'title' => 'Let it have some space',
                             'lines' => [
                                 'Say, or think: “This hurts.”',
                                 'Notice what feels heavy right now.',
-                                'If you can, write one sentence about what you miss.',
+                                'If it helps, write one sentence about what you miss.',
                             ],
                         ],
                         [
-                            'title' => 'Let memories come and go',
+                            'title' => 'Let memories pass like waves',
                             'lines' => [
                                 'It’s okay if memories come and go.',
                                 'You don’t need to hold onto them right now.',
@@ -655,21 +711,21 @@ class StabilizationFlows
                             ],
                         ],
                         [
-                            'title' => 'Come back to your body',
+                            'title' => 'Return gently to now',
                             'lines' => [
                                 'Feel your body resting where you are.',
-                                'Notice the surface supporting you.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'Feeling sadness after loss is a natural response. You don’t need to push it away.',
+                        'Right now, you don’t need to change anything.',
+                        'Just being here with it is enough.',
                     ],
                 ],
                 'numb' => [
                     'steps' => [
                         [
-                            'title' => 'It’s okay to feel numb',
+                            'title' => 'You don’t need to force anything',
                             'lines' => [
                                 'It’s okay if you’re feeling numb right now.',
                                 'Sometimes after loss, emotions can feel distant or quiet.',
@@ -677,49 +733,58 @@ class StabilizationFlows
                             ],
                         ],
                         [
-                            'title' => 'A little body awareness',
+                            'title' => 'Light body awareness',
                             'lines' => [
-                                'Notice the weight of your body where you’re sitting.',
-                                'Or place a hand on your arm or chest and just notice the contact.',
-                                'Feel the temperature of the air around you.',
+                                'Choose one: notice the weight of your body where you’re sitting, place a hand on your arm or chest and just notice the contact, or feel the temperature of the air around you.',
                             ],
                         ],
                         [
-                            'title' => 'A soft anchor',
+                            'title' => 'A soft anchor to now',
                             'lines' => [
                                 'Look at one thing around you, without trying to change anything.',
                                 'Notice something neutral in your environment.',
-                                'Even if you don’t feel much right now, that’s okay — feelings can return slowly, in their own time.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Feelings can return in their own time',
+                            'lines' => [
+                                'Even if you don’t feel much right now, that’s okay.',
+                                'Sometimes feelings return slowly, in their own time.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You don’t need to feel anything specific right now. Just being here is enough.',
+                        'You don’t need to feel anything specific right now.',
+                        'Just being here is enough.',
                     ],
                 ],
                 'overthinking' => [
                     'steps' => [
                         [
-                            'title' => 'Memories are surfacing',
+                            'title' => 'The mind revisits after loss',
                             'lines' => [
                                 'It’s okay if memories are coming up.',
                                 'The mind often tries to revisit things after loss.',
                             ],
                         ],
                         [
-                            'title' => 'A gentle bit of distance',
+                            'title' => 'A little distance from the thought',
                             'lines' => [
-                                'This is a memory, not something happening now.',
-                                'You don’t need to follow this thought fully.',
-                                'It’s okay for thoughts to come and go.',
+                                'Choose one to tell yourself: “This is a memory, not something happening now,” or “I don’t need to follow this thought fully,” or “It’s okay for thoughts to come and go.”',
                             ],
                         ],
                         [
-                            'title' => 'Let the thought soften',
+                            'title' => 'Let the thought pass',
                             'lines' => [
                                 'Let the thought pass without holding it.',
+                                'You don’t need to continue it right now.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A very light shift to now',
+                            'lines' => [
                                 'Notice one simple thing around you right now.',
-                                'Feel your feet or hands, briefly.',
+                                'Feel your feet or hands briefly.',
                             ],
                         ],
                     ],
@@ -737,7 +802,7 @@ class StabilizationFlows
                             ],
                         ],
                         [
-                            'title' => 'Foggy is okay',
+                            'title' => 'Feelings don’t always come in words',
                             'lines' => [
                                 'Sometimes feelings don’t come in clear words.',
                                 'It’s okay if everything feels a bit unclear right now.',
@@ -745,16 +810,34 @@ class StabilizationFlows
                             ],
                         ],
                         [
-                            'title' => 'Just be here',
+                            'title' => 'Just be here for a moment',
                             'lines' => [
                                 'Just notice where you are right now.',
-                                'Notice your feet touching the ground, or one point of contact between your body and the surface.',
-                                'You don’t have to carry everything at once — we’re here with you while you go through this.',
+                                'You don’t need to think about anything specific.',
+                                'Let yourself just be here for a moment.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A very light body anchor',
+                            'lines' => [
+                                'Notice your feet touching the ground or floor.',
+                                'Notice the surface you are sitting or resting on.',
+                                'Feel one point of contact between your body and the surface.',
+                            ],
+                        ],
+                        [
+                            'title' => 'You don’t have to carry it all at once',
+                            'lines' => [
+                                'You don’t have to carry everything at once.',
+                                'It’s okay if this feels heavy, confusing, or hard.',
+                                'We’re here with you while you go through this.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'Whatever you’re feeling — or not feeling — is okay. You can take things at your own pace.',
+                        'You don’t need to understand everything right now.',
+                        'Whatever you’re feeling — or not feeling — is okay.',
+                        'You can take things at your own pace.',
                     ],
                 ],
             ],
@@ -762,7 +845,8 @@ class StabilizationFlows
     }
 
     /**
-     * Disaster — acute (just happened). Source: "Emergency first aid".
+     * A disaster or chaotic event — post-event phase (1 week–1 month). Full
+     * transcription of "paths through diaster.docx".
      *
      * @return Flow
      */
@@ -770,88 +854,96 @@ class StabilizationFlows
     {
         return [
             'key' => 'disaster',
-            'phase' => 'acute',
+            'phase' => 'post-event',
             'label' => 'A disaster or chaotic event',
             'summary' => 'An earthquake, fire, explosion, or other sudden, chaotic event around you.',
             'icon' => 'disaster',
             'intro' => [
                 [
-                    'title' => 'We’ll find stability, step by step',
+                    'title' => 'It’s normal to still feel on edge',
                     'lines' => [
-                        'Something overwhelming and chaotic may have just happened around you.',
-                        'It’s normal to feel disoriented or shaken after situations like this.',
-                        'We’ll help you find safety and stability, step by step.',
+                        'After a large or frightening event, it’s normal for your mind and body to stay alert for some time.',
+                        'Even when you are safe now, your system may still feel like it’s “on edge.”',
+                        'This will gradually ease with time.',
                     ],
                 ],
             ],
             'check' => [
-                'question' => 'How do you feel right now?',
+                'question' => 'How have you been feeling lately?',
                 'options' => [
-                    ['key' => 'panic', 'label' => 'Panic or fear'],
-                    ['key' => 'confused', 'label' => 'Confused or disoriented'],
-                    ['key' => 'numb', 'label' => 'Emotionally numb'],
+                    ['key' => 'on_edge', 'label' => 'Still on edge or easily startled'],
+                    ['key' => 'avoidance', 'label' => 'Avoiding reminders of what happened'],
+                    ['key' => 'numb', 'label' => 'Emotionally numb or detached'],
+                    ['key' => 'intrusive', 'label' => 'Thinking about the event often'],
                     ['key' => 'unsure', 'label' => 'I’m not sure'],
                 ],
             ],
             'paths' => [
-                'panic' => [
+                'on_edge' => [
                     'steps' => [
                         [
-                            'title' => 'Safety first',
+                            'title' => 'The body stays watchful for a while',
                             'lines' => [
-                                'First, make sure you are in a safe place right now.',
-                                'If there is any immediate danger, move away — if it is safe to do so.',
+                                'After intense events, the body can stay in a “watchful” mode for a while.',
                             ],
                         ],
                         [
-                            'title' => 'Orient to where you are',
+                            'title' => 'Re-orient to safety',
                             'lines' => [
-                                'Look around and confirm where you are.',
-                                'Notice what is currently stable, or not moving.',
-                                'Try to identify one safe point in your surroundings.',
+                                'Notice that you are safe in this moment.',
+                                'Look around and confirm that nothing is happening right now.',
                             ],
                         ],
                         [
-                            'title' => 'Steady your body',
+                            'title' => 'A reality check for your body',
                             'lines' => [
-                                'Stand or sit in a steady position if you can.',
-                                'Press your feet gently into the ground for support.',
-                                'Let your body feel supported by the surface.',
+                                'Right now, there is no immediate danger in this moment.',
+                                'Your body may still be reacting as if something is happening, even when it isn’t.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Let your body settle',
+                            'lines' => [
+                                'Let your shoulders or hands relax slightly.',
+                                'Allow your body to rest a little more.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'Focus only on what helps you stay safe right now. Take things one step at a time.',
+                        'Your body can slowly learn that it doesn’t need to stay on alert.',
                     ],
                 ],
-                'confused' => [
+                'avoidance' => [
                     'steps' => [
                         [
-                            'title' => 'Disorientation is normal',
+                            'title' => 'Wanting to avoid reminders is normal',
                             'lines' => [
-                                'It’s normal to feel disoriented after something like this.',
-                                'Your mind may need a moment to adjust to what just happened.',
+                                'It’s normal to want to avoid reminders after something overwhelming.',
                             ],
                         ],
                         [
-                            'title' => 'Let your thoughts slow down',
+                            'title' => 'At your own pace',
                             'lines' => [
-                                'Notice where you are right now.',
-                                'You don’t need to think about everything that happened all at once.',
-                                'Let your thoughts slow down a little.',
+                                'You don’t need to face anything before you’re ready.',
+                                'You can approach reminders at your own pace.',
                             ],
                         ],
                         [
-                            'title' => 'Rest on one fixed point',
+                            'title' => 'You are in control',
                             'lines' => [
-                                'Find one fixed point in your environment — something still and unchanged.',
-                                'Rest your attention on it for a few seconds.',
-                                'Let it help your mind settle slightly.',
+                                'When you feel ready, you can choose one small step toward normal routines.',
+                                'You are in control of how much, or how little, you engage.',
+                            ],
+                        ],
+                        [
+                            'title' => 'One small, familiar thing',
+                            'lines' => [
+                                'Do one small, familiar activity in your day — something safe and simple.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You don’t need to understand everything right now. Just take this moment step by step.',
+                        'You can return to things slowly, when it feels right — at your own pace.',
                     ],
                 ],
                 'numb' => [
@@ -859,56 +951,101 @@ class StabilizationFlows
                         [
                             'title' => 'Emotions can feel distant',
                             'lines' => [
-                                'Sometimes after overwhelming events, emotions can feel distant, muted, or not fully available.',
+                                'Sometimes after big events, emotions can feel distant or less accessible.',
                             ],
                         ],
                         [
-                            'title' => 'A light reconnection',
+                            'title' => 'Low-pressure awareness',
                             'lines' => [
-                                'Notice your body where it is resting or standing.',
-                                'Feel the surface supporting you, without trying to change anything.',
+                                'Notice if anything feels even slightly present emotionally.',
+                                'There’s no need to force any feeling.',
                             ],
                         ],
                         [
-                            'title' => 'Find something stable',
+                            'title' => 'It’s okay to simply notice',
                             'lines' => [
-                                'Look around and notice something that feels stable or normal right now.',
-                                'Let your eyes rest on it, without needing to react or analyze it.',
+                                'If any emotion appears, you don’t need to control it or push it away.',
+                                'It’s okay to simply notice it for a moment.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A small daily anchor',
+                            'lines' => [
+                                'Do one simple daily action — eat, walk, or rest.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You don’t need to feel anything specific right now. Just being here in this moment is enough.',
+                        'Emotions may return slowly, in their own time — there is no need to rush them.',
+                    ],
+                ],
+                'intrusive' => [
+                    'steps' => [
+                        [
+                            'title' => 'The mind revisits intense events',
+                            'lines' => [
+                                'It’s common for the mind to revisit parts of intense events afterward.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A memory, not the event',
+                            'lines' => [
+                                'This is a memory, not something happening now.',
+                                'You don’t need to stay with it.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Let it pass',
+                            'lines' => [
+                                'Let the thought pass without engaging with it.',
+                                'You don’t need to continue the story in your mind.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Come back to now',
+                            'lines' => [
+                                'Gently bring your attention back to what you are doing right now.',
+                                'You can focus on a simple current activity or sensation — sitting, walking, or holding something.',
+                            ],
+                        ],
+                    ],
+                    'closing' => [
+                        'Thoughts can come and go without needing your attention.',
                     ],
                 ],
                 'unsure' => [
                     'steps' => [
                         [
-                            'title' => 'It’s okay if it’s unclear',
+                            'title' => 'It’s okay if things feel unclear',
                             'lines' => [
-                                'It’s okay not to know exactly how you feel right now.',
-                                'After something overwhelming, your thoughts can feel unclear or scattered.',
+                                'It’s okay if things still feel unclear after what happened.',
                             ],
                         ],
                         [
-                            'title' => 'A few slow breaths',
+                            'title' => 'Just focus on small parts of the day',
                             'lines' => [
-                                'Take a slow breath in through your nose.',
-                                'Let it out slowly through your mouth.',
-                                'Repeat this a few times, at your own pace.',
+                                'You don’t need to understand everything right now.',
+                                'Just focus on small parts of your day.',
+                                'It’s also okay if you feel a bit tired, emotionally flat, or unmotivated.',
                             ],
                         ],
                         [
-                            'title' => 'A simple orientation',
+                            'title' => 'Even small choices are enough',
                             'lines' => [
-                                'Just notice where you are right now.',
-                                'Look around and find one thing that feels stable or unchanged.',
-                                'Let your eyes stay on it for a moment.',
+                                'You can choose one small thing to do next — rest, eat, or move slightly.',
+                                'Even small choices are enough right now.',
+                                'You don’t need to pick the “perfect” option.',
+                            ],
+                        ],
+                        [
+                            'title' => 'One normal thing today',
+                            'lines' => [
+                                'Do one simple, normal activity today — rest, eat, or move slightly.',
                             ],
                         ],
                     ],
                     'closing' => [
-                        'You don’t need to understand everything right now. Take things one step at a time, when you’re ready.',
+                        'Clarity, energy, and stability can return gradually.',
                     ],
                 ],
             ],
