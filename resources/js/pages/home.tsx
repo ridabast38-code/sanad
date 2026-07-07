@@ -274,7 +274,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 <span className="text-ashen-200 text-sm">Licensed clinical psychologists</span>
                             </motion.div>
 
-                            <h1 className="text-ashen-200 mb-2 text-4xl leading-[1.05] font-normal tracking-tight sm:text-5xl md:text-6xl lg:text-[80px]">
+                            <h1 className="text-ashen-200 hover:text-ashen-400 mb-2 text-4xl leading-[1.05] font-normal tracking-tight transition-colors duration-300 sm:text-5xl md:text-6xl lg:text-[80px]">
                                 <RevealText text="A safe space for your mind" delay={0.25} stagger={0.09} />
                             </h1>
 
@@ -583,7 +583,13 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 <section ref={showcaseRef} className="bg-ashen-950 relative z-10 h-[68vh] min-h-[420px] overflow-hidden">
                     {/* full-bleed background photo — always visible, drifts on scroll */}
                     <motion.div style={{ y: showcaseBgY }} className="absolute inset-0 scale-110">
-                        <img src="/images/support/ongoing.jpg" alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                        <img
+                            src="/images/support/ongoing.jpg"
+                            alt=""
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover grayscale-[65%]"
+                        />
                         <div className="bg-ashen-950/55 absolute inset-0" />
                         <div className="from-ashen-950/80 to-ashen-950/30 absolute inset-0 bg-gradient-to-t via-transparent" />
                     </motion.div>
@@ -592,7 +598,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="relative z-10 flex h-full items-center">
                         <div className="mx-auto w-full max-w-6xl px-6">
                             <p className="text-ashen-300 mb-4 text-sm font-medium tracking-[0.25em] uppercase">However you arrived here</p>
-                            <h2 className="font-display text-ashen-200 flex flex-col text-4xl leading-[1.05] sm:text-5xl md:text-7xl lg:text-8xl">
+                            <h2 className="font-display text-ashen-200 hover:text-ashen-400 flex flex-col text-4xl leading-[1.05] transition-colors duration-300 sm:text-5xl md:text-7xl lg:text-8xl">
                                 <motion.span style={{ x: showcaseLeftX }} className="self-start">
                                     You don't have to
                                 </motion.span>
@@ -756,7 +762,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 alt={m.name}
                                                 loading="lazy"
                                                 decoding="async"
-                                                className="absolute inset-0 h-full w-full object-cover grayscale-[30%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                                                className="absolute inset-0 h-full w-full object-cover grayscale-[80%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                                             />
                                         ) : (
                                             <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
