@@ -183,14 +183,14 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
         // a deep warm gray on the right, behind every section from hero to footer.
         // The final color goes flat from 76% so the hero's notched corner card can
         // match it exactly at any common viewport width.
-        <div className="min-h-screen bg-[linear-gradient(to_right,#f2f0e9_0%,#e3e2da_30%,#c4c5bd_55%,#a7a8a0_76%,#a7a8a0_100%)]">
+        <div className="min-h-screen bg-[linear-gradient(to_right,#f6f4ed_0%,#e6e5dd_28%,#b8b9b1_55%,#90918a_76%,#90918a_100%)]">
             {/* Always-present crisis fast lane for visitors in distress — one tap to
             a real person on WhatsApp, no sign-up needed. */}
             <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ashen-100 fixed bottom-5 left-5 z-[70] inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 active:scale-95"
+                className="text-ashen-200 fixed bottom-5 left-5 z-[70] inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 active:scale-95"
             >
                 <LifeBuoy className="size-4" />
                 <span className="hidden sm:inline">Need help now?</span>
@@ -239,20 +239,20 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     { label: 'Contact', href: '#contact' },
                                 ].map((item) => (
                                     <li key={item.href}>
-                                        <a href={item.href} className="group relative inline-block py-1 transition hover:text-ashen-100">
+                                        <a href={item.href} className="group relative inline-block py-1 transition hover:text-ashen-400">
                                             {item.label}
                                             <span className="bg-ashen-200 absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
                                         </a>
                                     </li>
                                 ))}
                             </ul>
-                            <div className="text-ashen-100 text-xl md:hidden">Sanad</div>
+                            <div className="text-ashen-200 text-xl md:hidden">Sanad</div>
                             <div className="flex flex-1 justify-end">
                                 <motion.a
                                     href="/register"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="bg-ashen-800 hover:bg-ashen-900 text-ashen-100 flex items-center gap-2 rounded-full py-1.5 pr-5 pl-2 text-sm transition md:gap-3 md:py-2"
+                                    className="bg-ashen-800 hover:bg-ashen-900 text-ashen-200 flex items-center gap-2 rounded-full py-1.5 pr-5 pl-2 text-sm transition md:gap-3 md:py-2"
                                 >
                                     <span className="bg-ashen-200/30 rounded-full p-1 md:p-1.5">
                                         <ArrowUpRight className="h-4 w-4 md:h-5 md:w-5" />
@@ -271,10 +271,10 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 className="border-ashen-200/40 bg-ashen-200/15 mb-3 flex w-fit items-center gap-2 rounded-full border px-4 py-2 backdrop-blur-md"
                             >
                                 <Sparkles className="text-ashen-200 h-4 w-4" />
-                                <span className="text-ashen-100 text-sm">Licensed clinical psychologists</span>
+                                <span className="text-ashen-200 text-sm">Licensed clinical psychologists</span>
                             </motion.div>
 
-                            <h1 className="text-ashen-100 mb-2 text-4xl leading-[1.05] font-normal tracking-tight sm:text-5xl md:text-6xl lg:text-[80px]">
+                            <h1 className="text-ashen-200 mb-2 text-4xl leading-[1.05] font-normal tracking-tight sm:text-5xl md:text-6xl lg:text-[80px]">
                                 <RevealText text="A safe space for your mind" delay={0.25} stagger={0.09} />
                             </h1>
 
@@ -296,7 +296,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             className="border-ashen-200/30 bg-ashen-200/10 absolute bottom-6 left-6 hidden min-w-[170px] flex-col gap-3 rounded-[2rem] border p-5 backdrop-blur-xl sm:flex md:bottom-10 md:left-10"
                         >
                             <div>
-                                <p className="text-ashen-100 text-3xl font-normal tracking-tight">{specialists.length}</p>
+                                <p className="text-ashen-200 text-3xl font-normal tracking-tight">{specialists.length}</p>
                                 <p className="text-ashen-200/70 text-[11px] tracking-wider uppercase">Caring specialists</p>
                             </div>
                             <motion.a
@@ -317,17 +317,17 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#a7a8a0] p-6 pl-10 md:gap-6 md:pl-12"
+                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#90918a] p-6 pl-10 md:gap-6 md:pl-12"
                         >
                             {/* concave corner masks — make the notch blend smoothly into the card */}
                             <div className="pointer-events-none absolute -top-[2.5rem] right-0 h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#a7a8a0" />
+                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#90918a" />
                                 </svg>
                             </div>
                             <div className="pointer-events-none absolute bottom-0 -left-[2.5rem] h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#a7a8a0" />
+                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#90918a" />
                                 </svg>
                             </div>
 
@@ -415,7 +415,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 <div className="mb-8 flex flex-col items-start justify-between gap-5 md:flex-row md:items-end">
                                     <div>
                                         <span className="text-ashen-300 text-sm font-medium tracking-[0.2em] uppercase">In-the-moment support</span>
-                                        <h2 className="font-display text-ashen-100 mt-3 text-4xl tracking-tight md:text-5xl">
+                                        <h2 className="font-display text-ashen-200 mt-3 text-4xl tracking-tight md:text-5xl">
                                             Let's start where you are
                                         </h2>
                                     </div>
@@ -453,7 +453,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                     If it just happened
                                                 </span>
                                             </div>
-                                            <h3 className="font-display group-hover:text-ashen-50 text-ashen-100 text-4xl tracking-tight transition-colors md:text-5xl">
+                                            <h3 className="font-display group-hover:text-ashen-400 text-ashen-200 text-4xl tracking-tight transition-colors md:text-5xl">
                                                 Emergency First Aid
                                             </h3>
                                             <p className="text-ashen-300 mt-4 max-w-md leading-relaxed">
@@ -533,7 +533,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                     If it's been a while
                                                 </span>
                                             </div>
-                                            <h3 className="font-display group-hover:text-ashen-50 text-ashen-100 text-4xl tracking-tight transition-colors md:text-5xl">
+                                            <h3 className="font-display group-hover:text-ashen-400 text-ashen-200 text-4xl tracking-tight transition-colors md:text-5xl">
                                                 Ongoing Support
                                             </h3>
                                             <p className="text-ashen-300 mt-4 max-w-md leading-relaxed">
@@ -592,7 +592,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="relative z-10 flex h-full items-center">
                         <div className="mx-auto w-full max-w-6xl px-6">
                             <p className="text-ashen-300 mb-4 text-sm font-medium tracking-[0.25em] uppercase">However you arrived here</p>
-                            <h2 className="font-display text-ashen-100 flex flex-col text-4xl leading-[1.05] sm:text-5xl md:text-7xl lg:text-8xl">
+                            <h2 className="font-display text-ashen-200 flex flex-col text-4xl leading-[1.05] sm:text-5xl md:text-7xl lg:text-8xl">
                                 <motion.span style={{ x: showcaseLeftX }} className="self-start">
                                     You don't have to
                                 </motion.span>
@@ -648,7 +648,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                             </span>
                                             <span className="text-ashen-700 hidden max-w-[16rem] text-sm leading-snug lg:block">{a.summary}</span>
                                             <span
-                                                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-ashen-800 bg-ashen-800 text-ashen-100 rotate-45' : 'border-ashen-500/60 text-ashen-600 group-hover:border-ashen-700'}`}
+                                                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-ashen-800 bg-ashen-800 text-ashen-200 rotate-45' : 'border-ashen-800/60 text-ashen-800 group-hover:border-ashen-900'}`}
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </span>
@@ -677,13 +677,13 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                     {/* quiet proof — the true numbers, tucked right under the methods so
                     they read as supporting evidence rather than a separate band */}
-                    <div className="border-ashen-700/20 mt-10 grid grid-cols-3 gap-4 border-t pt-8 text-center md:mt-12 md:pt-10">
+                    <div className="border-ashen-800/30 mt-10 grid grid-cols-3 gap-4 border-t pt-8 text-center md:mt-12 md:pt-10">
                         {[
                             { n: '100%', l: 'Licensed psychologists' },
                             { n: '3', l: 'Evidence-based approaches' },
                             { n: '3', l: 'Languages · Ar · En · Fr' },
                         ].map((s, i) => (
-                            <div key={s.l} className={i > 0 ? 'border-ashen-700/20 border-l' : ''}>
+                            <div key={s.l} className={i > 0 ? 'border-ashen-800/30 border-l' : ''}>
                                 <p className="font-display text-ashen-900 text-3xl tracking-tight md:text-5xl">{s.n}</p>
                                 <p className="text-ashen-700 mx-auto mt-2 max-w-[10rem] text-xs leading-snug tracking-wide uppercase">{s.l}</p>
                             </div>
@@ -732,10 +732,10 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
                         <div className="mb-8 max-w-2xl">
                             <span className="text-ashen-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                            <h2 className="font-display text-ashen-100 mt-3 text-3xl tracking-tight md:text-5xl">The people behind Sanad</h2>
+                            <h2 className="font-display text-ashen-200 mt-3 text-3xl tracking-tight md:text-5xl">The people behind Sanad</h2>
                             <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
                                 Every Sanad psychologist is a licensed clinical psychologist, trained across all our approaches — CBT, EMDR and
-                                psychoanalysis. <span className="text-ashen-100">Real care, real credentials.</span>
+                                psychoanalysis. <span className="text-ashen-200">Real care, real credentials.</span>
                             </p>
                         </div>
 
@@ -810,7 +810,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 tilt={6}
                                 className="relative mt-8 hidden w-full max-w-[18rem] overflow-hidden rounded-[1.5rem] shadow-[0_30px_60px_-30px_rgba(37,38,31,0.5)] md:block"
                             >
-                                <div className="from-ashen-600 to-ashen-800 text-ashen-100 relative overflow-hidden bg-gradient-to-br p-6">
+                                <div className="from-ashen-600 to-ashen-800 text-ashen-200 relative overflow-hidden bg-gradient-to-br p-6">
                                     {/* soft warm glow — keeps the brand's light touch without a photo */}
                                     <div className="bg-beige/20 animate-breathe pointer-events-none absolute -top-8 -right-8 h-28 w-28 rounded-full blur-2xl" />
                                     <div className="relative z-10 flex flex-col gap-5">
@@ -837,7 +837,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                             <a
                                 href="/register"
-                                className="group bg-ashen-800 hover:bg-ashen-900 mt-7 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-ashen-100 text-sm font-medium transition"
+                                className="group bg-ashen-800 hover:bg-ashen-900 mt-7 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-ashen-200 text-sm font-medium transition"
                             >
                                 <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
                                     <ArrowUpRight className="h-4 w-4" />
@@ -848,7 +848,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                         {/* right — hairline +/- list (darker hairlines: this column
                         sits on the sage side of the page split) */}
-                        <div className="border-ashen-700/20 border-t">
+                        <div className="border-ashen-800/30 border-t">
                             {faqs.map((f, i) => {
                                 const isOpen = openFaq === i;
                                 return (
@@ -858,14 +858,14 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true, margin: '-40px' }}
                                         transition={{ duration: 0.5, ease: SOFT_EASE, delay: i * 0.06 }}
-                                        className="border-ashen-700/20 border-b"
+                                        className="border-ashen-800/30 border-b"
                                     >
                                         <button
                                             onClick={() => setOpenFaq(isOpen ? null : i)}
                                             className="group flex w-full items-start gap-4 py-6 text-left md:gap-5"
                                         >
                                             <span
-                                                className={`font-display mt-1 text-sm tabular-nums transition-colors ${isOpen ? 'text-ashen-600' : 'text-ashen-600/70'}`}
+                                                className={`font-display mt-1 text-sm tabular-nums transition-colors ${isOpen ? 'text-ashen-900' : 'text-ashen-800/70'}`}
                                             >
                                                 {String(i + 1).padStart(2, '0')}
                                             </span>
@@ -873,7 +873,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 {f.q}
                                             </span>
                                             <span
-                                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-ashen-800 bg-ashen-800 text-ashen-100 rotate-45' : 'border-ashen-600/50 text-ashen-600 group-hover:border-ashen-700'}`}
+                                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-ashen-800 bg-ashen-800 text-ashen-200 rotate-45' : 'border-ashen-800/60 text-ashen-800 group-hover:border-ashen-900'}`}
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </span>
@@ -887,7 +887,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                     transition={{ duration: 0.35, ease: 'easeInOut' }}
                                                     className="overflow-hidden"
                                                 >
-                                                    <p className="text-ashen-700 max-w-xl pr-6 pb-6 pl-[2.75rem] leading-relaxed">{f.a}</p>
+                                                    <p className="text-ashen-800 max-w-xl pr-6 pb-6 pl-[2.75rem] leading-relaxed">{f.a}</p>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
@@ -916,7 +916,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             </p>
                             <a
                                 href="/register"
-                                className="group bg-ashen-800 hover:bg-ashen-900 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-ashen-100 text-sm font-medium transition"
+                                className="group bg-ashen-800 hover:bg-ashen-900 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-ashen-200 text-sm font-medium transition"
                             >
                                 <span className="bg-ashen-200/30 rounded-full p-1.5 transition-transform group-hover:rotate-45">
                                     <ArrowUpRight className="h-5 w-5" />
@@ -929,7 +929,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
             </div>
 
             {/* ===== FOOTER — cinematic, Lebanese identity + trust ===== */}
-            <footer id="contact" className="bg-ashen-950 text-ashen-100 relative scroll-mt-20 overflow-hidden">
+            <footer id="contact" className="bg-ashen-950 text-ashen-200 relative scroll-mt-20 overflow-hidden">
                 {/* soft on-brand glow for a little depth — solid color, no photo */}
                 <div
                     aria-hidden
@@ -953,22 +953,22 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <p className="text-ashen-400 text-xs font-medium tracking-[0.15em] uppercase">Explore</p>
                             <ul className="text-ashen-300 mt-4 space-y-3 text-sm">
                                 <li>
-                                    <a href="#support" className="transition hover:text-ashen-100">
+                                    <a href="#support" className="transition hover:text-ashen-400">
                                         In-the-moment support
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#approaches" className="transition hover:text-ashen-100">
+                                    <a href="#approaches" className="transition hover:text-ashen-400">
                                         Our approaches
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#team" className="transition hover:text-ashen-100">
+                                    <a href="#team" className="transition hover:text-ashen-400">
                                         Our team
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#faq" className="transition hover:text-ashen-100">
+                                    <a href="#faq" className="transition hover:text-ashen-400">
                                         FAQ
                                     </a>
                                 </li>
@@ -984,7 +984,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         href={whatsappUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-2.5 transition hover:text-ashen-100"
+                                        className="flex items-center gap-2.5 transition hover:text-ashen-400"
                                     >
                                         <MessageCircle className="text-ashen-400 h-4 w-4" /> WhatsApp us
                                     </a>
@@ -1016,13 +1016,13 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="border-ashen-300/15 flex flex-col gap-4 border-t pt-8 md:flex-row md:items-center md:justify-between">
                         <p className="text-ashen-300/60 text-xs">© {new Date().getFullYear()} Sanad. All rights reserved.</p>
                         <div className="text-ashen-200/70 flex items-center gap-6 text-xs">
-                            <a href="/privacy" className="transition hover:text-ashen-100">
+                            <a href="/privacy" className="transition hover:text-ashen-400">
                                 Privacy
                             </a>
-                            <a href="/terms" className="transition hover:text-ashen-100">
+                            <a href="/terms" className="transition hover:text-ashen-400">
                                 Terms
                             </a>
-                            <a href="#faq" className="transition hover:text-ashen-100">
+                            <a href="#faq" className="transition hover:text-ashen-400">
                                 FAQ
                             </a>
                         </div>
@@ -1104,7 +1104,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                                 <a
                                     href={`/book/${selected.slug}`}
-                                    className="bg-ashen-800 hover:bg-ashen-900 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-ashen-100 text-sm font-medium transition"
+                                    className="bg-ashen-800 hover:bg-ashen-900 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-ashen-200 text-sm font-medium transition"
                                 >
                                     Book a session with {selected.name.split(' ')[0]} →
                                 </a>
