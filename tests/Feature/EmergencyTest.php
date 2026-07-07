@@ -5,15 +5,19 @@ use App\Models\Booking;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia;
 
-test('a client can open the emergency entry screen', function () {
+test('the emergency button drops a client straight into the first aid flow', function () {
     $client = User::factory()->create();
 
     $this->actingAs($client)
         ->get(route('emergency.index'))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
-            ->component('emergency/index')
-            ->has('flows')
+            ->component('emergency/flow')
+            ->where('flow.key', 'emergency')
+            ->where('flow.label', 'Emergency First Aid')
+            ->has('flow.intro')
+            ->has('flow.check.options', 4)
+            ->has('flow.paths')
             ->has('safety.whatsapp_url')
             ->has('safety.hotlines')
         );
@@ -35,7 +39,7 @@ test('a client can open a guided flow for a known trauma type', function () {
         );
 });
 
-test('an unknown trauma type sends the visitor back to the emergency menu', function () {
+test('an unknown trauma type sends the visitor back to the emergency flow', function () {
     $client = User::factory()->create();
 
     $this->actingAs($client)
@@ -46,17 +50,17 @@ test('an unknown trauma type sends the visitor back to the emergency menu', func
 test('the emergency screens are public so an unregistered visitor can get help', function () {
     $this->get(route('emergency.index'))
         ->assertOk()
-        ->assertInertia(fn (AssertableInertia $page) => $page->component('emergency/index')->has('flows'));
+        ->assertInertia(fn (AssertableInertia $page) => $page->component('emergency/flow')->where('flow.key', 'emergency'));
 
     $this->get(route('emergency.show', 'accident'))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page->component('emergency/flow')->where('flow.key', 'accident'));
 });
 
-test('all four trauma flows are available', function () {
+test('the first aid flow and all four trauma flows are available', function () {
     $client = User::factory()->create();
 
-    foreach (['accident', 'war', 'grief', 'disaster'] as $type) {
+    foreach (['emergency', 'accident', 'war', 'grief', 'disaster'] as $type) {
         $this->actingAs($client)
             ->get(route('emergency.show', $type))
             ->assertOk()

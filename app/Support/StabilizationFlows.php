@@ -67,7 +67,184 @@ class StabilizationFlows
      */
     public static function find(string $key): ?array
     {
+        if ($key === 'emergency') {
+            return self::emergency();
+        }
+
         return self::all()[$key] ?? null;
+    }
+
+    /**
+     * Emergency First Aid — the single guided flow every visitor lands on when
+     * they press the emergency button. Kept out of all() so it never appears as
+     * an admin triage category; the four trauma types above remain for that.
+     * Source: the founder's "Emergency first aid" script.
+     *
+     * @return Flow
+     */
+    public static function emergency(): array
+    {
+        return [
+            'key' => 'emergency',
+            'phase' => 'acute',
+            'label' => 'Emergency First Aid',
+            'summary' => 'Immediate, guided grounding for something that just happened.',
+            'icon' => 'waves',
+            'intro' => [
+                [
+                    'title' => 'We’ll take this together, step by step',
+                    'lines' => [
+                        'Something overwhelming and chaotic may have just happened around you.',
+                        'It’s normal to feel disoriented or shaken after situations like this.',
+                        'We’ll help you find safety and stability step by step.',
+                    ],
+                ],
+            ],
+            'check' => [
+                'question' => 'How do you feel right now?',
+                'options' => [
+                    ['key' => 'panic', 'label' => 'Panic or fear'],
+                    ['key' => 'confused', 'label' => 'Confused or disoriented'],
+                    ['key' => 'numb', 'label' => 'Emotionally numb'],
+                    ['key' => 'unsure', 'label' => 'I’m not sure'],
+                ],
+            ],
+            'paths' => [
+                'panic' => [
+                    'steps' => [
+                        [
+                            'title' => 'Safety check',
+                            'lines' => [
+                                'First, make sure you are in a safe place right now.',
+                                'If there is any immediate danger, try to move away if it is safe to do so.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Reality orientation',
+                            'lines' => [
+                                'Look around and confirm where you are.',
+                                'Notice what is currently stable or not moving.',
+                                'Try to identify one safe point in your surroundings.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Body stability',
+                            'lines' => [
+                                'Stand or sit in a steady position if possible.',
+                                'Press your feet gently into the ground for support.',
+                                'Let your body feel supported by the surface.',
+                            ],
+                        ],
+                    ],
+                    'closing' => [
+                        'Focus only on what helps you stay safe right now.',
+                        'Take things one step at a time.',
+                        'Choose one thing that helps you feel safer, and stay with it.',
+                    ],
+                ],
+                'confused' => [
+                    'steps' => [
+                        [
+                            'title' => 'It’s normal to feel this way',
+                            'lines' => [
+                                'It’s normal to feel disoriented after something like this.',
+                                'Your mind may need a moment to adjust to what just happened.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Slow reality rebuild',
+                            'lines' => [
+                                'Notice where you are right now.',
+                                'You don’t need to think about everything that happened all at once.',
+                                'Let your thoughts slow down a little.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A simple stability cue',
+                            'lines' => [
+                                'Find one fixed point in your environment — something still and unchanged.',
+                                'Rest your attention on it for a few seconds.',
+                                'Let it help your mind settle slightly.',
+                            ],
+                        ],
+                    ],
+                    'closing' => [
+                        'You don’t need to understand everything right now.',
+                        'Just take this moment step by step.',
+                        'Start with what feels most important right now, even if it’s small.',
+                    ],
+                ],
+                'numb' => [
+                    'steps' => [
+                        [
+                            'title' => 'This is a normal response',
+                            'lines' => [
+                                'Sometimes after overwhelming events, emotions can feel distant, muted, or not fully available.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Light body reconnection',
+                            'lines' => [
+                                'Notice your body where it is resting or standing.',
+                                'Feel the surface supporting you without trying to change anything.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Environment stability',
+                            'lines' => [
+                                'Look around and notice something that feels stable or normal right now.',
+                                'Let your eyes rest on it without needing to react or analyze it.',
+                                'Just let it be in your awareness for a moment.',
+                            ],
+                        ],
+                    ],
+                    'closing' => [
+                        'You don’t need to feel anything specific right now.',
+                        'Just being here in this moment is enough.',
+                        'Continue focusing on one steady thing around you as you move through the next moments.',
+                    ],
+                ],
+                'unsure' => [
+                    'steps' => [
+                        [
+                            'title' => 'It’s okay not to know',
+                            'lines' => [
+                                'It’s okay not to know exactly how you feel right now.',
+                                'After something overwhelming, your thoughts can feel unclear or scattered.',
+                            ],
+                        ],
+                        [
+                            'title' => 'A gentle breath',
+                            'lines' => [
+                                'Take a slow breath in through your nose.',
+                                'Let it out slowly through your mouth.',
+                                'Repeat this a few times, at your own pace.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Neutral presence',
+                            'lines' => [
+                                'Just notice where you are right now.',
+                                'You don’t need to figure anything out at this moment.',
+                                'Let your attention rest where you are.',
+                            ],
+                        ],
+                        [
+                            'title' => 'Simple orientation',
+                            'lines' => [
+                                'Look around and find one thing that feels stable or unchanged.',
+                                'Let your eyes stay on it for a moment.',
+                                'You don’t need to analyze it.',
+                            ],
+                        ],
+                    ],
+                    'closing' => [
+                        'You don’t need to understand everything right now.',
+                        'Just take things one step at a time when you’re ready.',
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

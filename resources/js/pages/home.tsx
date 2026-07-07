@@ -1,3 +1,4 @@
+import { RevealText, SOFT_EASE } from '@/components/reveal-text';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import {
     ArrowUpRight,
@@ -26,34 +27,6 @@ interface LandingSpecialist {
     bio: string | null;
     approaches: string[];
     languages: string[];
-}
-
-// A gentle ease used across every reveal so the whole page shares one feel.
-const SOFT_EASE = [0.22, 1, 0.36, 1] as const;
-
-/**
- * Reveals a line of text word-by-word with a soft blur-up — our signature
- * heading entrance (borrowed from the Steno reference). Drop it inside any
- * heading element; it keeps the element's own typography classes.
- */
-function RevealText({ text, delay = 0, stagger = 0.07 }: { text: string; delay?: number; stagger?: number }) {
-    return (
-        <>
-            {text.split(' ').map((word, i) => (
-                <motion.span
-                    key={`${word}-${i}`}
-                    className="inline-block"
-                    style={{ marginRight: '0.25em' }}
-                    initial={{ opacity: 0, y: 14, filter: 'blur(8px)' }}
-                    whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.55, delay: delay + i * stagger, ease: SOFT_EASE }}
-                >
-                    {word}
-                </motion.span>
-            ))}
-        </>
-    );
 }
 
 /**

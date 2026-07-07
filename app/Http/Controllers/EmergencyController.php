@@ -10,13 +10,14 @@ use Inertia\Response;
 class EmergencyController extends Controller
 {
     /**
-     * The emergency entry screen: crisis-safety information and the choice of
-     * "what just happened", which opens the matching guided flow.
+     * The emergency entry screen. Pressing the emergency button drops the
+     * visitor straight into the single Emergency First Aid guided flow —
+     * no "what happened?" menu in the way when someone needs help now.
      */
     public function index(): Response
     {
-        return Inertia::render('emergency/index', [
-            'flows' => StabilizationFlows::menu(),
+        return Inertia::render('emergency/flow', [
+            'flow' => StabilizationFlows::emergency(),
             'safety' => $this->safety(),
         ]);
     }
