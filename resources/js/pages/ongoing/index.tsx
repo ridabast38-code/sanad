@@ -70,17 +70,16 @@ export default function OngoingIndex({ flows, safety }: OngoingIndexProps) {
                                 initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.4, ease: 'easeOut' }}
-                                className="mb-5 shrink-0"
+                                className="mb-4 shrink-0"
                             >
-                                <span className="border-ashen-500/50 text-ashen-700 bg-ashen-100/50 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
+                                <span className="border-ashen-500/50 text-ashen-700 bg-ashen-200/50 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
                                     <LifeBuoy className="size-3.5" /> Ongoing support
                                 </span>
                                 <h1 className="font-display text-ashen-900 mt-3 text-3xl leading-tight tracking-tight sm:text-4xl">
                                     <RevealText text="What have you been through?" delay={0.1} />
                                 </h1>
-                                <p className="text-ashen-700 mt-3 max-w-xl text-sm leading-relaxed sm:text-base">
-                                    Choose what feels closest. We'll walk through it together, gently — and when you're ready, we can help you take
-                                    the next step with a specialist.
+                                <p className="text-ashen-700 mt-2 max-w-xl text-sm leading-relaxed">
+                                    Choose what feels closest — we'll walk through it gently, then help you take the next step.
                                 </p>
                             </motion.header>
 
@@ -96,14 +95,14 @@ export default function OngoingIndex({ flows, safety }: OngoingIndexProps) {
                                         >
                                             <Link
                                                 href={`/ongoing/${flow.key}`}
-                                                className="group border-ashen-400/40 bg-ashen-100/50 hover:border-ashen-600/50 hover:bg-ashen-100/80 flex h-full items-start gap-4 rounded-2xl border p-5 shadow-[0_12px_36px_-16px_rgba(26,28,28,0.2)] backdrop-blur-xl transition hover:-translate-y-1"
+                                                className="group border-ashen-500/40 from-ashen-200/60 to-ashen-300/50 hover:border-ashen-600/60 hover:to-ashen-300/70 flex h-full items-start gap-3.5 rounded-2xl border bg-gradient-to-br p-4 shadow-[0_12px_36px_-16px_rgba(26,28,28,0.25)] backdrop-blur-xl transition hover:-translate-y-1"
                                             >
-                                                <span className="bg-ashen-200/70 text-ashen-700 ring-ashen-400/40 flex size-12 shrink-0 items-center justify-center rounded-2xl ring-1 transition group-hover:scale-105">
-                                                    <Icon className="size-6" />
+                                                <span className="bg-ashen-300/70 text-ashen-800 ring-ashen-500/40 flex size-11 shrink-0 items-center justify-center rounded-xl ring-1 transition group-hover:scale-105">
+                                                    <Icon className="size-5" />
                                                 </span>
                                                 <span className="min-w-0 flex-1">
                                                     <span className="text-ashen-900 font-display block leading-snug">{flow.label}</span>
-                                                    <span className="text-ashen-600 mt-1 block text-sm leading-relaxed">{flow.summary}</span>
+                                                    <span className="text-ashen-700 mt-1 block text-[13px] leading-snug">{flow.summary}</span>
                                                 </span>
                                                 <ArrowUpRight className="text-ashen-500 group-hover:text-ashen-800 mt-0.5 size-5 shrink-0 transition group-hover:translate-x-0.5" />
                                             </Link>
@@ -112,17 +111,9 @@ export default function OngoingIndex({ flows, safety }: OngoingIndexProps) {
                                 })}
                             </div>
 
-                            <div className="mt-5">
+                            <div className="mt-4">
                                 <CrisisSafety safety={safety} />
                             </div>
-
-                            <p className="text-ashen-600 mt-4 text-xs leading-relaxed">
-                                These guided steps offer gentle support — they don't replace professional or emergency care. If it just happened, our{' '}
-                                <Link href="/emergency" className="text-ashen-900 font-medium underline underline-offset-4">
-                                    Emergency First Aid
-                                </Link>{' '}
-                                is one tap away.
-                            </p>
                         </div>
                     </div>
                 </div>

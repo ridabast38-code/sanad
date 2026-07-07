@@ -15,7 +15,7 @@ export function CrisisSafety({ safety }: { safety: SafetyInfo }) {
     const [showHotlines, setShowHotlines] = useState(false);
 
     return (
-        <div className="border-ashen-400/40 bg-ashen-100/60 rounded-3xl border p-5 shadow-[0_8px_30px_-14px_rgba(26,28,28,0.16)] backdrop-blur-xl">
+        <div className="border-ashen-500/40 from-ashen-200/60 to-ashen-300/50 rounded-3xl border bg-gradient-to-br p-5 shadow-[0_8px_30px_-14px_rgba(26,28,28,0.2)] backdrop-blur-xl">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-start gap-3">
                     <span className="bg-ashen-200/70 text-ashen-700 flex size-10 shrink-0 items-center justify-center rounded-full">
