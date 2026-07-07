@@ -585,6 +585,21 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
                 <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-8 md:px-8 md:pt-16 md:pb-10">
+                    {/* soft olive branches — an organic breath of calm framing the section
+                    (olive: peace, life, and a quiet nod to home). Kept low and lightly
+                    desaturated so it lives inside the gray world instead of shouting. */}
+                    <motion.img
+                        aria-hidden
+                        src="/images/olive-branches.png"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        initial={{ opacity: 0, scale: 1.04 }}
+                        whileInView={{ opacity: 0.35, scale: 1 }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 1.4, ease: SOFT_EASE }}
+                        className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover grayscale-[15%] select-none"
+                    />
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
