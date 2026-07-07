@@ -179,10 +179,11 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
     const [openFaq, setOpenFaq] = useState<number | null>(0);
 
     return (
-        // One page-wide light→dark split: cream on the left easing into a muted
-        // sage-gray on the right. The final color goes flat from 74% so the hero's
-        // notched corner card can match it exactly at any common viewport width.
-        <div className="min-h-screen bg-[linear-gradient(to_right,#faf6ef_0%,#f6f3e7_32%,#dde4d4_54%,#bfcfbc_74%,#bfcfbc_100%)]">
+        // One page-wide light→dark split: cream on the left flowing into a deep
+        // muted sage on the right, behind every section from hero to footer. The
+        // final color goes flat from 76% so the hero's notched corner card can
+        // match it exactly at any common viewport width.
+        <div className="min-h-screen bg-[linear-gradient(to_right,#faf6ef_0%,#f4f1e2_28%,#ccd8c6_54%,#a4b89f_76%,#a4b89f_100%)]">
             {/* Always-present crisis fast lane for visitors in distress — one tap to
             a real person on WhatsApp, no sign-up needed. */}
             <a
@@ -316,17 +317,17 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#bfcfbc] p-6 pl-10 md:gap-6 md:pl-12"
+                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#a4b89f] p-6 pl-10 md:gap-6 md:pl-12"
                         >
                             {/* concave corner masks — make the notch blend smoothly into the card */}
                             <div className="pointer-events-none absolute -top-[2.5rem] right-0 h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#bfcfbc" />
+                                    <path d="M56 56V0C56 30.9279 30.9279 56 0 56H56Z" fill="#a4b89f" />
                                 </svg>
                             </div>
                             <div className="pointer-events-none absolute bottom-0 -left-[2.5rem] h-[2.5rem] w-[2.5rem]">
                                 <svg width="100%" height="100%" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#bfcfbc" />
+                                    <path d="M56 56H0C30.9279 56 56 30.9279 56 0V56Z" fill="#a4b89f" />
                                 </svg>
                             </div>
 
@@ -854,8 +855,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             </a>
                         </div>
 
-                        {/* right — hairline +/- list */}
-                        <div className="border-ashen-200/70 border-t">
+                        {/* right — hairline +/- list (darker hairlines: this column
+                        sits on the sage side of the page split) */}
+                        <div className="border-ashen-700/20 border-t">
                             {faqs.map((f, i) => {
                                 const isOpen = openFaq === i;
                                 return (
@@ -865,14 +867,14 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true, margin: '-40px' }}
                                         transition={{ duration: 0.5, ease: SOFT_EASE, delay: i * 0.06 }}
-                                        className="border-ashen-200/70 border-b"
+                                        className="border-ashen-700/20 border-b"
                                     >
                                         <button
                                             onClick={() => setOpenFaq(isOpen ? null : i)}
                                             className="group flex w-full items-start gap-4 py-6 text-left md:gap-5"
                                         >
                                             <span
-                                                className={`font-display mt-1 text-sm tabular-nums transition-colors ${isOpen ? 'text-sage-700' : 'text-ashen-400'}`}
+                                                className={`font-display mt-1 text-sm tabular-nums transition-colors ${isOpen ? 'text-sage-700' : 'text-ashen-600'}`}
                                             >
                                                 {String(i + 1).padStart(2, '0')}
                                             </span>
@@ -880,7 +882,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                 {f.q}
                                             </span>
                                             <span
-                                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-300 text-sage-700 group-hover:border-sage-400'}`}
+                                                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${isOpen ? 'border-sage-700 bg-sage-700 rotate-45 text-white' : 'border-ashen-600/50 text-sage-700 group-hover:border-sage-600'}`}
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </span>
@@ -894,7 +896,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                                     transition={{ duration: 0.35, ease: 'easeInOut' }}
                                                     className="overflow-hidden"
                                                 >
-                                                    <p className="text-ashen-500 max-w-xl pr-6 pb-6 pl-[2.75rem] leading-relaxed">{f.a}</p>
+                                                    <p className="text-ashen-700 max-w-xl pr-6 pb-6 pl-[2.75rem] leading-relaxed">{f.a}</p>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
