@@ -19,6 +19,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Bootstrap Admin Password
+    |--------------------------------------------------------------------------
+    |
+    | The one-time password for the admin the GoLiveSeeder creates on a fresh
+    | database. Read through config (not env() directly) so it still resolves
+    | when production config is cached. Leave it unset to have the seeder
+    | generate a strong random password and print it once during seeding.
+    |
+    */
+
+    'bootstrap_password' => env('SANAD_BOOTSTRAP_PASSWORD'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Crisis Hotlines
     |--------------------------------------------------------------------------
     |

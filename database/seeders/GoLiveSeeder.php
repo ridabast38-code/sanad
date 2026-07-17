@@ -54,9 +54,10 @@ class GoLiveSeeder extends Seeder
         }
 
         // A one-time password. Prefer one you set in the environment
-        // (SANAD_BOOTSTRAP_PASSWORD); otherwise a strong random one is generated
-        // and printed once, right here, so it never lives in the repo.
-        $password = env('SANAD_BOOTSTRAP_PASSWORD') ?: Str::password(14);
+        // (SANAD_BOOTSTRAP_PASSWORD, read through config so it survives config
+        // caching); otherwise a strong random one is generated and printed once,
+        // right here, so it never lives in the repo.
+        $password = config('sanad.bootstrap_password') ?: Str::password(14);
 
         User::create([
             'name' => self::ADMIN_NAME,
