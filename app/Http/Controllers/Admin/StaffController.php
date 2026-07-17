@@ -33,9 +33,17 @@ class StaffController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => UserRole::from($validated['role']),
+        ]);
+
+        // An admin adding staff by hand is itself the verification — they know who
+        // these people are. Set through forceFill because `email_verified_at` and
+        // `onboarded_at` aren't mass-assignable; passed to create() above they were
+        // silently dropped, which left every new staff member unverified and bounced
+        // to /verify-email — locked out of the account they were just given.
+        $user->forceFill([
             'onboarded_at' => now(),
             'email_verified_at' => now(),
-        ]);
+        ])->save();
 
         if ($user->isPractitioner()) {
             $photoPath = null;

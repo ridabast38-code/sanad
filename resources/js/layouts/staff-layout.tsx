@@ -1,7 +1,7 @@
 import { DUST_QUIET, DustField } from '@/components/olive';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { LogOut } from 'lucide-react';
+import { LogOut, Settings } from 'lucide-react';
 
 interface NavItem {
     label: string;
@@ -93,6 +93,17 @@ export default function StaffLayout({ title, children, fitViewport = false }: { 
                         <span className="bg-ashen-200 text-ashen-700 hidden size-9 items-center justify-center rounded-full text-sm font-semibold sm:flex">
                             {initials}
                         </span>
+                        {/* Change-password lives here for every staff member. The route
+                        always existed but nothing linked to it, so a fresh admin or
+                        practitioner had no way to change the password they were given. */}
+                        <Link
+                            href="/settings/password"
+                            className="text-ashen-500 hover:text-ashen-800 hover:bg-ashen-100/70 flex size-9 items-center justify-center rounded-full transition"
+                            aria-label="Account & password"
+                            title="Account & password"
+                        >
+                            <Settings className="size-5" />
+                        </Link>
                         <Link
                             href="/logout"
                             method="post"
