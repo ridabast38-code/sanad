@@ -1106,7 +1106,10 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-ashen-50 relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl shadow-2xl md:flex-row"
+                            // The same diagonal gradient as .sanad-card, but opaque: this sits over a dark
+                            // scrim, so a translucent panel would pull that darkness up through the
+                            // text. Flat white was the one profile surface left in the app.
+                            className="from-ashen-50 to-ashen-200 relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-gradient-to-br shadow-2xl md:flex-row"
                         >
                             <button
                                 onClick={() => setSelected(null)}
