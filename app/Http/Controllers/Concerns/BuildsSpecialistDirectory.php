@@ -10,7 +10,13 @@ use Illuminate\Support\Collection;
 trait BuildsSpecialistDirectory
 {
     /**
-     * Approved practitioners shaped for the directory, soonest available first.
+     * Approved practitioners shaped for the directory, in a fresh random order.
+     *
+     * Shuffled on every request, exactly like the landing team section: any fixed
+     * order is a ranking, and whoever sat at the top would own it. Sorting by
+     * soonest-available was quietly doing that — a practitioner with wide-open
+     * availability lived permanently first. Each card still shows its own next
+     * slot, so "soonest" is visible per person without being the page's spine.
      *
      * @return Collection<int, array<string, mixed>>
      */
@@ -26,7 +32,7 @@ trait BuildsSpecialistDirectory
             }])
             ->get()
             ->map(fn (User $practitioner) => $this->transformPractitioner($practitioner))
-            ->sortBy('next_available_at')
+            ->shuffle()
             ->values();
     }
 

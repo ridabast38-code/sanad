@@ -124,8 +124,10 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                         />
                     ) : (
                         <>
-                            {/* below lg the page scrolls, so vertical is the natural direction */}
-                            <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
+                            {/* Phones get the same horizontal rail, not a vertical grid —
+                            consistent with the dashboard directory and the landing team.
+                            Cards keep their 4:5 shape here (no fitHeight). */}
+                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 lg:hidden">
                                 <AnimatePresence mode="popLayout">
                                     {visible.map((specialist) => (
                                         <motion.div
@@ -135,6 +137,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.96 }}
                                             transition={{ duration: 0.28, ease: 'easeOut' }}
+                                            className="w-[74%] shrink-0 snap-center sm:w-[46%]"
                                         >
                                             <SpecialistPortraitCard specialist={specialist} href={`/book/${specialist.slug}`} />
                                         </motion.div>
@@ -162,9 +165,9 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                 </AnimatePresence>
                             </div>
 
-                            <p className="text-ashen-500 mt-2 hidden shrink-0 items-center gap-2 text-xs lg:flex">
+                            <p className="text-ashen-500 mt-2 flex shrink-0 items-center gap-2 text-xs">
                                 <Sparkles className="size-3.5 shrink-0" />
-                                Drag sideways to meet everyone — or book any of them without an account.
+                                Swipe sideways to meet everyone — or book any of them without an account.
                             </p>
                         </>
                     )}

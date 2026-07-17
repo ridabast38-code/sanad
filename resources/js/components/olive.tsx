@@ -146,7 +146,12 @@ export function OliveTree({
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 1.6, ease: SOFT_EASE }}
-                className="relative h-[35rem] w-[26.25rem] md:h-[54rem] md:w-[40.5rem]"
+                // The box keeps the engraving's exact 3:4 ratio at every size, so the
+                // luminance mask (contain) fills it with no empty margin. The old mobile
+                // width was 26.25rem/420px — wider than a phone, so the tree overflowed
+                // both edges and read as a detached slab rather than a backdrop growing
+                // out of the panel. 21rem/336px sits inside the viewport and merges.
+                className="relative h-[28rem] w-[21rem] md:h-[54rem] md:w-[40.5rem]"
             >
                 <div className={`olive-mask bg-ashen-950 absolute inset-0 ${opacity}`} />
                 <OliveDrops drops={TREE_DROPS} tone="dark" />

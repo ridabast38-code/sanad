@@ -340,9 +340,11 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                 />
             ) : (
                 <>
-                    {/* The landing's team-card treatment: the photo is the card. Below lg it
-                    is a plain grid, where vertical scrolling is natural. */}
-                    <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
+                    {/* Phones get the same horizontal drag rail as the landing team, not a
+                    vertical grid — swiping through faces reads as a directory; a tall
+                    stacked column reads as a list. Cards hold their 4:5 shape here (no
+                    fitHeight), since a phone has no fixed height to fill. */}
+                    <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 lg:hidden">
                         <AnimatePresence mode="popLayout">
                             {visible.map((specialist) => (
                                 <motion.div
@@ -352,6 +354,7 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.96 }}
                                     transition={{ duration: 0.28, ease: 'easeOut' }}
+                                    className="w-[74%] shrink-0 snap-center sm:w-[46%]"
                                 >
                                     <SpecialistPortraitCard specialist={specialist} matched={matchesPreferences(specialist, preferences)} />
                                 </motion.div>
@@ -381,9 +384,9 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                         </AnimatePresence>
                     </div>
 
-                    <p className="text-ashen-500 mt-2 hidden shrink-0 items-center gap-2 text-xs lg:flex">
+                    <p className="text-ashen-500 mt-2 flex shrink-0 items-center gap-2 text-xs">
                         <Sparkles className="size-3.5 shrink-0" />
-                        Drag sideways to meet everyone.
+                        Swipe sideways to meet everyone.
                     </p>
                 </>
             )}

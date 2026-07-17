@@ -258,8 +258,34 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     </li>
                                 ))}
                             </ul>
-                            <div className="text-ashen-200 text-xl md:hidden">Sanad</div>
-                            <div className="flex flex-1 justify-end">
+                            {/* wordmark dropped on phones once the two pills are here — three
+                            items crowd a narrow bar, and the hero headline already says who
+                            we are. It comes back on md. */}
+                            <div className="text-ashen-200 hidden text-xl sm:block md:hidden">Sanad</div>
+                            <div className="flex flex-1 items-center justify-end gap-2 md:gap-3">
+                                {/* Guests only — the way back in for a practitioner or a
+                                returning client. We stripped login links off most sections,
+                                so the hero is where it belongs; a signed-in visitor gets the
+                                dashboard shortcut in its place. Shown at every size. */}
+                                {isGuest ? (
+                                    <motion.a
+                                        href="/login"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className="border-ashen-200/40 text-ashen-200 hover:border-ashen-200/80 hover:bg-ashen-200/10 flex items-center rounded-full border px-4 py-1.5 text-sm transition md:py-2"
+                                    >
+                                        Log in
+                                    </motion.a>
+                                ) : (
+                                    <motion.a
+                                        href="/dashboard"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className="border-ashen-200/40 text-ashen-200 hover:border-ashen-200/80 hover:bg-ashen-200/10 flex items-center rounded-full border px-4 py-1.5 text-sm transition md:py-2"
+                                    >
+                                        My space
+                                    </motion.a>
+                                )}
                                 <motion.a
                                     href="#team"
                                     whileHover={{ scale: 1.02 }}
@@ -269,7 +295,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     <span className="bg-ashen-200/30 rounded-full p-1 md:p-1.5">
                                         <ArrowUpRight className="h-4 w-4 md:h-5 md:w-5" />
                                     </span>
-                                    Book a session
+                                    {/* just "Book" on phones so it fits beside Log in */}
+                                    <span className="hidden sm:inline">Book a session</span>
+                                    <span className="sm:hidden">Book</span>
                                 </motion.a>
                             </div>
                         </nav>
