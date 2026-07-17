@@ -37,7 +37,7 @@ export default function OngoingIndex({ flows, safety }: OngoingIndexProps) {
 
             {/* Same landing gray split. On desktop the page locks to the viewport so the
             cards column never scrolls; on phones it flows and scrolls naturally. */}
-            <div className="text-ashen-800 relative min-h-screen bg-[linear-gradient(to_right,#f6f4ed_0%,#e6e5dd_28%,#b8b9b1_55%,#90918a_76%,#90918a_100%)] lg:h-screen lg:overflow-hidden">
+            <div className="text-ashen-800 sanad-split relative min-h-screen lg:h-screen lg:overflow-hidden">
                 <AmbientBackground />
 
                 <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-6 lg:h-screen lg:min-h-0 lg:py-7">

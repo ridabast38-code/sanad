@@ -1,9 +1,9 @@
 export default function AppLogo() {
     return (
         <>
-            {/* Sanad badge — the cream "S" on sage, matching our favicon */}
-            <div className="bg-sage-600 flex aspect-square size-9 items-center justify-center rounded-lg shadow-sm">
-                <span className="font-display text-cream text-xl leading-none">S</span>
+            {/* Sanad badge — the pale "S" on warm gray, matching our favicon */}
+            <div className="bg-ashen-600 flex aspect-square size-9 items-center justify-center rounded-lg shadow-sm">
+                <span className="font-display text-ashen-50 text-xl leading-none">S</span>
             </div>
             <div className="ml-1 grid flex-1 text-left">
                 <span className="font-display text-sidebar-foreground text-base leading-tight">Sanad</span>

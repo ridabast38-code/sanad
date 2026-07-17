@@ -16,7 +16,7 @@ function RegistrationPending({ email }: { email: string }) {
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className="bg-sage-100 text-sage-700 flex size-16 items-center justify-center rounded-full"
+                    className="bg-ashen-100 text-ashen-700 flex size-16 items-center justify-center rounded-full"
                 >
                     <MailCheck className="size-8" />
                 </motion.div>
@@ -29,9 +29,9 @@ function RegistrationPending({ email }: { email: string }) {
                     </p>
                 </div>
 
-                <div className="border-sage-200/70 bg-sage-50/60 text-ashen-500 w-full rounded-2xl border p-4 text-xs leading-relaxed">
+                <div className="border-ashen-200/70 bg-ashen-50/60 text-ashen-500 w-full rounded-2xl border p-4 text-xs leading-relaxed">
                     Didn’t get it after a minute? You can{' '}
-                    <TextLink href={route('register')} className="text-sage-700 font-medium">
+                    <TextLink href={route('register')} className="text-ashen-700 font-medium">
                         try signing up again
                     </TextLink>
                     . The link expires in an hour.
@@ -39,7 +39,7 @@ function RegistrationPending({ email }: { email: string }) {
 
                 <div className="text-ashen-500 text-sm">
                     Already confirmed?{' '}
-                    <TextLink href={route('login')} className="text-sage-700 font-medium">
+                    <TextLink href={route('login')} className="text-ashen-700 font-medium">
                         Log in
                     </TextLink>
                 </div>

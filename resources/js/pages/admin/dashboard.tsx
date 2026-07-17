@@ -33,10 +33,10 @@ export default function AdminDashboard({ stats, recent }: Props) {
 
             {/* money */}
             <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-                <StatCard label="Gross billed" value={money(stats.gross)} icon={Coins} accent="ashen" />
+                <StatCard label="Gross billed" value={money(stats.gross)} icon={Coins} />
                 <StatCard label="Platform profit (20%)" value={money(stats.platform_profit)} icon={PiggyBank} />
-                <StatCard label="Profit this month" value={money(stats.profit_month)} icon={TrendingUp} accent="sand" />
-                <StatCard label="Practitioner payouts" value={money(stats.payouts)} icon={Wallet} accent="ashen" />
+                <StatCard label="Profit this month" value={money(stats.profit_month)} icon={TrendingUp} emphasis />
+                <StatCard label="Practitioner payouts" value={money(stats.payouts)} icon={Wallet} />
             </div>
 
             {/* people */}
@@ -47,18 +47,18 @@ export default function AdminDashboard({ stats, recent }: Props) {
                 <Link href="/admin/practitioners" className={`block p-5 transition hover:-translate-y-0.5 ${CARD}`}>
                     <p className="text-ashen-400 text-[11px] font-semibold tracking-[0.16em] uppercase">Pending approvals</p>
                     <p
-                        className={`font-display mt-3 text-2xl tracking-tight md:text-3xl ${stats.pending_approvals > 0 ? 'text-sage-700' : 'text-ashen-800'}`}
+                        className={`font-display mt-3 text-2xl tracking-tight md:text-3xl ${stats.pending_approvals > 0 ? 'text-ashen-700' : 'text-ashen-800'}`}
                     >
                         {stats.pending_approvals}
                     </p>
-                    <p className="text-sage-700 mt-1 text-xs font-medium">Review →</p>
+                    <p className="text-ashen-700 mt-1 text-xs font-medium">Review →</p>
                 </Link>
             </div>
 
             <Section
                 title="Recent transactions"
                 action={
-                    <Link href="/admin/transactions" className="text-sage-700 hover:text-sage-900 text-sm font-medium">
+                    <Link href="/admin/transactions" className="text-ashen-700 hover:text-ashen-900 text-sm font-medium">
                         Full ledger
                     </Link>
                 }
@@ -73,7 +73,7 @@ export default function AdminDashboard({ stats, recent }: Props) {
                             <Td className="font-medium">{t.client}</Td>
                             <Td className="text-ashen-500">{t.practitioner}</Td>
                             <Td>{money(t.amount)}</Td>
-                            <Td className="text-sage-700 font-semibold">{money(t.platform_fee)}</Td>
+                            <Td className="text-ashen-700 font-semibold">{money(t.platform_fee)}</Td>
                         </tr>
                     ))}
                 </Table>

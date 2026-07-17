@@ -1,3 +1,4 @@
+import { DUST_QUIET, DustField } from '@/components/olive';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { LogOut } from 'lucide-react';
@@ -23,8 +24,16 @@ const ADMIN_NAV: NavItem[] = [
     { label: 'Transactions', href: '/admin/transactions' },
 ];
 
-/** Shared shell for the practitioner & admin dashboards — on-brand, but a denser work tool. */
-export default function StaffLayout({ title, children }: { title: string; children: React.ReactNode }) {
+/**
+ * Shared shell for the practitioner & admin dashboards — on-brand, but a denser work tool.
+ *
+ * `fitViewport` locks the page to the screen on desktop so it never scrolls; the
+ * page's own content is then responsible for scrolling its parts. Opt-in, because
+ * it only suits pages with a bounded amount of content — a 40-row bookings table
+ * has to scroll the window, and forcing it into the viewport would just hide rows
+ * behind a scrollbar nobody expects.
+ */
+export default function StaffLayout({ title, children, fitViewport = false }: { title: string; children: React.ReactNode; fitViewport?: boolean }) {
     const page = usePage<SharedData>();
     const user = page.props.auth.user;
     const isAdmin = user.role === 'admin';
@@ -41,16 +50,26 @@ export default function StaffLayout({ title, children }: { title: string; childr
     const isActive = (href: string) => (href === '/practitioner' || href === '/admin' ? path === href : path.startsWith(href));
 
     return (
-        <div className="bg-cream text-ashen-800 flex min-h-screen flex-col">
+        <div
+            className={`sanad-split text-ashen-800 relative flex min-h-screen flex-col ${fitViewport ? 'lg:h-screen lg:min-h-0 lg:overflow-hidden' : ''}`}
+        >
             <Head title={title} />
 
-            <header className="border-ashen-300/30 bg-cream sticky top-0 z-40 border-b">
+            {/* The lightest possible touch of the landing's atmosphere. No olive tree
+            and no drops here on purpose: this is a work tool, and anything falling
+            behind a table of numbers reads as a rendering glitch, not as calm.
+            Fixed, so the motes don't drift off with a long scrolling table. */}
+            <div aria-hidden className="pointer-events-none fixed inset-0 z-0">
+                <DustField motes={DUST_QUIET} />
+            </div>
+
+            <header className="border-ashen-300/25 sticky top-0 z-40 border-b backdrop-blur-xl">
                 <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-5 md:px-8">
                     <div className="flex items-center gap-3">
-                        <Link href={isAdmin ? '/admin' : '/practitioner'} className="font-display text-sage-700 text-xl tracking-tight">
+                        <Link href={isAdmin ? '/admin' : '/practitioner'} className="font-display text-ashen-800 text-xl tracking-tight">
                             Sanad
                         </Link>
-                        <span className="bg-sage-100 text-sage-700 rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide uppercase">
+                        <span className="bg-ashen-200 text-ashen-700 rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide uppercase">
                             {isAdmin ? 'Admin' : 'Specialist'}
                         </span>
                     </div>
@@ -62,7 +81,7 @@ export default function StaffLayout({ title, children }: { title: string; childr
                                 href={item.href}
                                 prefetch
                                 className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
-                                    isActive(item.href) ? 'bg-sage-100 text-sage-800' : 'text-ashen-500 hover:text-sage-700 hover:bg-white'
+                                    isActive(item.href) ? 'bg-ashen-200 text-ashen-800' : 'text-ashen-500 hover:text-ashen-800 hover:bg-ashen-100/70'
                                 }`}
                             >
                                 {item.label}
@@ -71,14 +90,14 @@ export default function StaffLayout({ title, children }: { title: string; childr
                     </nav>
 
                     <div className="flex items-center gap-3">
-                        <span className="bg-sage-100 text-sage-700 hidden size-9 items-center justify-center rounded-full text-sm font-semibold sm:flex">
+                        <span className="bg-ashen-200 text-ashen-700 hidden size-9 items-center justify-center rounded-full text-sm font-semibold sm:flex">
                             {initials}
                         </span>
                         <Link
                             href="/logout"
                             method="post"
                             as="button"
-                            className="text-ashen-500 hover:text-sage-700 flex size-9 items-center justify-center rounded-full transition hover:bg-white"
+                            className="text-ashen-500 hover:text-ashen-800 hover:bg-ashen-100/70 flex size-9 items-center justify-center rounded-full transition"
                             aria-label="Log out"
                         >
                             <LogOut className="size-5" />
@@ -93,7 +112,7 @@ export default function StaffLayout({ title, children }: { title: string; childr
                             key={item.href}
                             href={item.href}
                             className={`shrink-0 rounded-full px-3 py-1.5 text-sm font-medium ${
-                                isActive(item.href) ? 'bg-sage-100 text-sage-800' : 'text-ashen-500'
+                                isActive(item.href) ? 'bg-ashen-200 text-ashen-800' : 'text-ashen-500'
                             }`}
                         >
                             {item.label}
@@ -102,7 +121,13 @@ export default function StaffLayout({ title, children }: { title: string; childr
                 </nav>
             </header>
 
-            <main className="mx-auto w-full max-w-7xl flex-1 px-5 py-8 md:px-8 md:py-10">{children}</main>
+            <main
+                className={`relative z-10 mx-auto w-full max-w-7xl flex-1 px-5 py-8 md:px-8 md:py-10 ${
+                    fitViewport ? 'flex flex-col lg:min-h-0 lg:py-6' : ''
+                }`}
+            >
+                {children}
+            </main>
         </div>
     );
 }

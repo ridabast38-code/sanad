@@ -40,7 +40,7 @@ interface Props {
 }
 
 const FIELD =
-    'border-sage-200 focus:border-sage-400 focus:ring-sage-200 text-ashen-800 w-full rounded-xl border bg-white px-4 py-2.5 text-sm transition outline-none focus:ring-2';
+    'border-ashen-200 focus:border-ashen-400 focus:ring-ashen-200 text-ashen-800 w-full rounded-xl border bg-ashen-50/80 px-4 py-2.5 text-sm transition outline-none focus:ring-2';
 const LABEL = 'text-ashen-700 mb-1.5 block text-sm font-medium';
 
 export default function AdminBookingCreate({ practitioners, clients, emergencyCategories }: Props) {
@@ -76,7 +76,7 @@ export default function AdminBookingCreate({ practitioners, clients, emergencyCa
 
     return (
         <StaffLayout title="New booking">
-            <Link href="/admin/bookings" className="text-ashen-500 hover:text-sage-700 mb-4 inline-flex items-center gap-1.5 text-sm transition">
+            <Link href="/admin/bookings" className="text-ashen-500 hover:text-ashen-700 mb-4 inline-flex items-center gap-1.5 text-sm transition">
                 <ArrowLeft className="size-4" /> Back to bookings
             </Link>
 
@@ -91,7 +91,7 @@ export default function AdminBookingCreate({ practitioners, clients, emergencyCa
                             type="button"
                             onClick={() => setData((c) => ({ ...c, type: 'standard', emergency_category: '' }))}
                             className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-                                !isEmergency ? 'border-sage-500 bg-sage-50 text-sage-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
+                                !isEmergency ? 'border-ashen-500 bg-ashen-50 text-ashen-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
                             }`}
                         >
                             Calm / ongoing
@@ -100,7 +100,7 @@ export default function AdminBookingCreate({ practitioners, clients, emergencyCa
                             type="button"
                             onClick={() => setData('type', 'emergency')}
                             className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-                                isEmergency ? 'border-amber-500 bg-amber-50 text-amber-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
+                                isEmergency ? 'border-ashen-950 bg-ashen-950 text-ashen-50' : 'border-ashen-300 text-ashen-500 hover:bg-ashen-50'
                             }`}
                         >
                             Emergency
@@ -177,7 +177,7 @@ export default function AdminBookingCreate({ practitioners, clients, emergencyCa
                             type="button"
                             onClick={() => setData('client_type', 'registered')}
                             className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-                                !isGuest ? 'border-sage-500 bg-sage-50 text-sage-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
+                                !isGuest ? 'border-ashen-500 bg-ashen-50 text-ashen-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
                             }`}
                         >
                             Registered client
@@ -186,7 +186,7 @@ export default function AdminBookingCreate({ practitioners, clients, emergencyCa
                             type="button"
                             onClick={() => setData('client_type', 'guest')}
                             className={`flex-1 rounded-xl border px-4 py-2.5 text-sm font-medium transition ${
-                                isGuest ? 'border-sage-500 bg-sage-50 text-sage-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
+                                isGuest ? 'border-ashen-500 bg-ashen-50 text-ashen-800' : 'border-ashen-200 text-ashen-500 hover:bg-ashen-50'
                             }`}
                         >
                             Walk-in / WhatsApp
@@ -262,7 +262,7 @@ export default function AdminBookingCreate({ practitioners, clients, emergencyCa
                 <button
                     type="submit"
                     disabled={processing}
-                    className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
+                    className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
                 >
                     <CalendarPlus className="size-4" /> Create booking
                 </button>

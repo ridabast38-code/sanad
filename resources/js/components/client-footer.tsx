@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 /** Slim in-app footer — the marketing footer lives on the public site. */
 export function ClientFooter() {
     return (
-        <footer className="border-sage-200/70 mt-4 border-t">
+        <footer className="border-ashen-200/70 mt-4 border-t">
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-8 md:px-8">
                 <div className="text-ashen-500 flex flex-col gap-3 text-xs sm:flex-row sm:items-center sm:justify-between">
                     <p>© {new Date().getFullYear()} Sanad · A safe space for your mind.</p>

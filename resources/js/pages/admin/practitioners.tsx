@@ -32,7 +32,7 @@ export default function AdminPractitioners({ practitioners }: { practitioners: P
                     <button
                         type="button"
                         onClick={() => setAdding((v) => !v)}
-                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition"
+                        className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition"
                     >
                         {adding ? <X className="size-4" /> : <Plus className="size-4" />}
                         {adding ? 'Close' : 'Add account'}
@@ -58,13 +58,13 @@ export default function AdminPractitioners({ practitioners }: { practitioners: P
                                 <p className="text-ashen-400 text-xs">{p.headline ?? p.email}</p>
                             </Td>
                             <Td>{p.sessions}</Td>
-                            <Td className="text-sage-700 font-medium">{money(p.earned)}</Td>
+                            <Td className="text-ashen-700 font-medium">{money(p.earned)}</Td>
                             <Td>
                                 {p.owed > 0 ? (
                                     <button
                                         type="button"
                                         onClick={() => payAll(p.id)}
-                                        className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition"
+                                        className="border-ashen-300 text-ashen-700 hover:bg-ashen-50 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition"
                                         title="Mark this whole balance as paid out"
                                     >
                                         {money(p.owed)} · Pay all
@@ -82,7 +82,7 @@ export default function AdminPractitioners({ practitioners }: { practitioners: P
                                         <button
                                             type="button"
                                             onClick={() => setStatus(p.id, 'approved')}
-                                            className="bg-sage-700 hover:bg-sage-800 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white transition"
+                                            className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-3.5 py-1.5 text-xs font-semibold text-white transition"
                                         >
                                             Approve
                                         </button>
@@ -107,7 +107,7 @@ export default function AdminPractitioners({ practitioners }: { practitioners: P
 }
 
 const inputClass =
-    'w-full rounded-xl border border-sage-200 bg-white px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/20';
+    'w-full rounded-xl border border-ashen-200 bg-ashen-50/80 px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-ashen-400 focus:outline-none focus:ring-2 focus:ring-ashen-500/20';
 
 function AddAccountForm({ onDone }: { onDone: () => void }) {
     const { data, setData, post, processing, errors, reset } = useForm<{
@@ -147,7 +147,7 @@ function AddAccountForm({ onDone }: { onDone: () => void }) {
     return (
         <form onSubmit={submit} className={`p-6 ${CARD}`}>
             <div className="mb-5 flex items-center gap-2">
-                <span className="bg-sage-100 text-sage-700 flex size-9 items-center justify-center rounded-full">
+                <span className="bg-ashen-100 text-ashen-700 flex size-9 items-center justify-center rounded-full">
                     <UserPlus className="size-5" />
                 </span>
                 <h3 className="font-display text-ashen-800 text-lg">New account</h3>
@@ -175,11 +175,11 @@ function AddAccountForm({ onDone }: { onDone: () => void }) {
                 <div className="mt-4">
                     <label className="text-ashen-600 mb-1.5 block text-sm font-medium">Photo</label>
                     <div className="flex items-center gap-4">
-                        <div className="bg-sage-50 border-sage-200 size-20 shrink-0 overflow-hidden rounded-2xl border">
+                        <div className="bg-ashen-50 border-ashen-200 size-20 shrink-0 overflow-hidden rounded-2xl border">
                             {photoPreview ? (
                                 <img src={photoPreview} alt="" className="size-full object-cover" />
                             ) : (
-                                <div className="text-sage-400 flex size-full items-center justify-center">
+                                <div className="text-ashen-400 flex size-full items-center justify-center">
                                     <UserPlus className="size-6" />
                                 </div>
                             )}
@@ -189,7 +189,7 @@ function AddAccountForm({ onDone }: { onDone: () => void }) {
                                 type="file"
                                 accept="image/jpeg,image/png,image/webp"
                                 onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
-                                className="text-ashen-600 file:bg-sage-700 hover:file:bg-sage-800 text-sm file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+                                className="text-ashen-600 file:bg-ashen-700 hover:file:bg-ashen-800 text-sm file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
                             />
                             <p className="text-ashen-400 mt-1.5 text-xs">Shown in the client specialist directory. JPG, PNG or WebP, up to 4 MB.</p>
                             {errors.photo && <p className="text-ashen-500 mt-1 text-xs">{errors.photo}</p>}
@@ -202,7 +202,7 @@ function AddAccountForm({ onDone }: { onDone: () => void }) {
                 <button
                     type="submit"
                     disabled={processing}
-                    className="bg-sage-700 hover:bg-sage-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
+                    className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
                 >
                     Create account
                 </button>

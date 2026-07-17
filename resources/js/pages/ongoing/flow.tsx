@@ -21,7 +21,7 @@ export default function OngoingFlow({ flow, safety }: FlowPageProps) {
             <Head title={`${flow.label} — Ongoing support`} />
 
             {/* Same landing gray split, so the journey feels like one place. */}
-            <div className="text-ashen-800 relative min-h-screen bg-[linear-gradient(to_right,#f6f4ed_0%,#e6e5dd_28%,#b8b9b1_55%,#90918a_76%,#90918a_100%)]">
+            <div className="text-ashen-800 sanad-split relative min-h-screen">
                 <AmbientBackground />
                 <GuidedFlow
                     flow={flow}
@@ -78,10 +78,10 @@ function OngoingClosing({ lines, safety, isGuest }: ClosingProps) {
                     These steps ease the moment. A specialist helps you heal what's underneath.
                 </h3>
                 <p className="text-ashen-700 mt-4 leading-relaxed">
-                    Grounding calms the body right now. To truly move through what happened, our licensed clinical psychologists work with you
-                    over time — through approaches like <span className="text-ashen-900 font-medium">CBT</span>,{' '}
-                    <span className="text-ashen-900 font-medium">EMDR</span>, and{' '}
-                    <span className="text-ashen-900 font-medium">psychoanalysis</span> — at a pace that feels right for you.
+                    Grounding calms the body right now. To truly move through what happened, our licensed clinical psychologists work with you over
+                    time — through approaches like <span className="text-ashen-900 font-medium">CBT</span>,{' '}
+                    <span className="text-ashen-900 font-medium">EMDR</span>, and <span className="text-ashen-900 font-medium">psychoanalysis</span> —
+                    at a pace that feels right for you.
                 </p>
 
                 <div className="mt-7 space-y-3">

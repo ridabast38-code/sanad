@@ -25,32 +25,34 @@ export default function PractitionerDashboard({ stats, upcoming }: Props) {
     const firstName = auth.user.name.split(' ')[0];
 
     return (
-        <StaffLayout title="Overview">
-            <PageHeader title={`Welcome back, ${firstName}`} subtitle="Your sessions and earnings at a glance." />
+        <StaffLayout title="Overview" fitViewport>
+            <PageHeader title={`Welcome back, ${firstName}`} subtitle="Your sessions and earnings at a glance." tight />
 
-            <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div className="mb-5 grid shrink-0 grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard label="Upcoming" value={stats.upcoming} icon={CalendarClock} />
                 <StatCard label="Completed" value={stats.completed} icon={CalendarHeart} />
                 <StatCard label="Clients" value={stats.clients} icon={Users} />
-                <StatCard label="This month" value={money(stats.earnings_month)} icon={TrendingUp} accent="sand" />
+                <StatCard label="This month" value={money(stats.earnings_month)} icon={TrendingUp} emphasis />
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-2">
+            <div className="grid gap-6 lg:min-h-0 lg:flex-1 lg:grid-cols-3">
+                <div className="flex flex-col lg:col-span-2 lg:min-h-0">
                     <Section
                         title="Next sessions"
                         action={
-                            <Link href="/practitioner/clients" className="text-sage-700 hover:text-sage-900 text-sm font-medium">
+                            <Link href="/practitioner/clients" className="text-ashen-700 hover:text-ashen-900 text-sm font-medium">
                                 All clients
                             </Link>
                         }
+                        fill
+                        scroll
                     >
                         {upcoming.length > 0 ? (
                             <div className="space-y-3">
                                 {upcoming.map((s) => (
                                     <div key={s.id} className={`p-4 ${CARD}`}>
                                         <div className="flex items-center gap-4">
-                                            <div className="bg-sage-100 text-sage-700 flex size-11 shrink-0 items-center justify-center rounded-xl">
+                                            <div className="bg-ashen-100 text-ashen-700 flex size-11 shrink-0 items-center justify-center rounded-xl">
                                                 <CalendarClock className="size-5" />
                                             </div>
                                             <div className="min-w-0 flex-1">
@@ -61,7 +63,7 @@ export default function PractitionerDashboard({ stats, upcoming }: Props) {
                                             </div>
                                             <Badge>{s.status}</Badge>
                                         </div>
-                                        <div className="border-sage-100 mt-3 flex items-center justify-end border-t pt-3">
+                                        <div className="border-ashen-100 mt-3 flex items-center justify-end border-t pt-3">
                                             <MeetingLinkEditor bookingId={s.id} meetingLink={s.meeting_link} />
                                         </div>
                                     </div>
@@ -75,17 +77,17 @@ export default function PractitionerDashboard({ stats, upcoming }: Props) {
                     </Section>
                 </div>
 
-                <div>
-                    <Section title="Earnings">
+                <div className="flex flex-col lg:min-h-0">
+                    <Section title="Earnings" fill>
                         <div className={`p-6 ${CARD}`}>
-                            <div className="bg-sage-100 text-sage-700 flex size-11 items-center justify-center rounded-xl">
+                            <div className="bg-ashen-100 text-ashen-700 flex size-11 items-center justify-center rounded-xl">
                                 <Wallet className="size-5" />
                             </div>
                             <p className="text-ashen-400 mt-4 text-[11px] font-semibold tracking-[0.16em] uppercase">Total earned (your 80%)</p>
                             <p className="font-display text-ashen-800 mt-1 text-4xl tracking-tight">{money(stats.earnings_total)}</p>
                             <Link
                                 href="/practitioner/earnings"
-                                className="bg-sage-700 hover:bg-sage-800 mt-5 inline-flex w-full items-center justify-center rounded-full py-2.5 text-sm font-semibold text-white transition"
+                                className="bg-ashen-700 hover:bg-ashen-800 mt-5 inline-flex w-full items-center justify-center rounded-full py-2.5 text-sm font-semibold text-white transition"
                             >
                                 View accounting
                             </Link>

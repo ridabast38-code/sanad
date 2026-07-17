@@ -12,7 +12,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
     return (
         <main className="mx-auto w-full max-w-3xl px-6 py-12 md:px-8 md:py-16">
             <header className="mb-8">
-                <h1 className="font-display text-sage-800 text-3xl tracking-tight md:text-4xl">Settings</h1>
+                <h1 className="font-display text-ashen-800 text-3xl tracking-tight md:text-4xl">Settings</h1>
                 <p className="text-ashen-500 mt-2">Manage your profile and account.</p>
             </header>
 
@@ -24,10 +24,10 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                             key={item.url}
                             href={item.url}
                             prefetch
-                            className={`relative px-4 py-3 text-sm font-medium transition ${active ? 'text-sage-700' : 'text-ashen-500 hover:text-sage-700'}`}
+                            className={`relative px-4 py-3 text-sm font-medium transition ${active ? 'text-ashen-700' : 'text-ashen-500 hover:text-ashen-700'}`}
                         >
                             {item.title}
-                            {active && <span className="bg-sage-600 absolute inset-x-4 -bottom-px h-0.5 rounded-full" />}
+                            {active && <span className="bg-ashen-600 absolute inset-x-4 -bottom-px h-0.5 rounded-full" />}
                         </Link>
                     );
                 })}

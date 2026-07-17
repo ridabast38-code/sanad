@@ -34,7 +34,7 @@ export default function DeleteUser() {
     return (
         <div className="space-y-6">
             <HeadingSmall title="Delete account" description="Delete your account and all of its resources" />
-            <div className="border-sand/60 bg-sand/15 space-y-4 rounded-lg border p-4">
+            <div className="border-ashen-400/50 bg-ashen-200/30 space-y-4 rounded-lg border p-4">
                 <div className="text-ashen-700 relative space-y-0.5">
                     <p className="font-medium">Before you go</p>
                     <p className="text-sm">Please proceed with care — this cannot be undone.</p>

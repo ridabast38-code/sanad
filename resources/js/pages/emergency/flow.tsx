@@ -1,7 +1,7 @@
-import { type ClosingProps, type Flow, GuidedFlow } from '@/components/guided-flow';
 import { AmbientBackground } from '@/components/ambient-background';
-import { RevealText } from '@/components/reveal-text';
 import { type SafetyInfo } from '@/components/crisis-safety';
+import { type ClosingProps, type Flow, GuidedFlow } from '@/components/guided-flow';
+import { RevealText } from '@/components/reveal-text';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { CalendarHeart, Check, Heart, MessageCircle, UserPlus } from 'lucide-react';
@@ -21,7 +21,7 @@ export default function EmergencyFlow({ flow, safety }: FlowPageProps) {
             <Head title={flow.label} />
 
             {/* The landing's light→dark gray split, so the flow feels like the same place. */}
-            <div className="text-ashen-800 relative min-h-screen bg-[linear-gradient(to_right,#f6f4ed_0%,#e6e5dd_28%,#b8b9b1_55%,#90918a_76%,#90918a_100%)]">
+            <div className="text-ashen-800 sanad-split relative min-h-screen">
                 <AmbientBackground />
                 <GuidedFlow
                     flow={flow}

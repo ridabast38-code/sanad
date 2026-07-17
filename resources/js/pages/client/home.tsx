@@ -1,4 +1,6 @@
-import { matchesPreferences, SpecialistCard, type MatchPreferences, type Specialist } from '@/components/specialist-card';
+import { EDGE_DROPS, OliveDrops, OliveHorizon } from '@/components/olive';
+import { matchesPreferences, SpecialistPortraitCard, type MatchPreferences, type Specialist } from '@/components/specialist-card';
+import { applyFilters, EMPTY_FILTERS, SpecialistFilterBar, type SpecialistFilters } from '@/components/specialist-filters';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
@@ -23,16 +25,10 @@ import {
     Video,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useState, type ComponentType } from 'react';
+import { useEffect, useMemo, useState, type ComponentType } from 'react';
 
-/** The portrait behind the sanctuary panel (compressed). Set to null to show the placeholder. */
-const SANCTUARY_PHOTO: string | null = '/images/dashboard.jpg';
-
-/** Soft tonal card — white surface, gentle diffused shadow, generous radius. */
-const CARD = 'rounded-2xl bg-white shadow-[0_8px_30px_-14px_rgba(26,28,28,0.14)]';
-
-/** Spring used for the photo's glide between views. */
-const SLIDE = { type: 'spring', stiffness: 220, damping: 32 } as const;
+/** Soft tonal card — frosted rather than solid, so the page split reads through. */
+const CARD = 'sanad-card rounded-2xl';
 
 /** Gentle affirmations in Sanad's voice — shown on the daily-intention card. */
 const INTENTIONS = [
@@ -104,38 +100,35 @@ export default function ClientHome({ practitioners, upcomingSessions, preference
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Photo sits on the left for sessions/notifications, right for specialists/profile —
-    // always a clean full-height column (never a cropped banner).
-    const photoSecond = view === 'specialists' || view === 'profile';
-
     return (
         <>
             <Head title={view.charAt(0).toUpperCase() + view.slice(1)} />
 
-            <div className="bg-cream text-ashen-800 flex min-h-screen flex-col">
+            {/* Locked to the viewport on desktop, exactly like the ongoing menu: the
+            page itself never scrolls, and each view scrolls its own body if it has
+            to. Below lg it flows and scrolls normally — a phone has no viewport to
+            fit anything into. */}
+            <div className="sanad-split text-ashen-800 flex min-h-screen flex-col lg:h-screen lg:min-h-0 lg:overflow-hidden">
                 {/* hovering the top edge always brings the nav back */}
                 <div aria-hidden onMouseEnter={() => setNavHidden(false)} className="fixed inset-x-0 top-0 z-30 h-5" />
 
                 <TopNav user={auth.user} isHidden={navHidden} view={view} onNavigate={navigate} onReveal={() => setNavHidden(false)} />
 
-                <div className="flex flex-1 flex-col lg:flex-row">
-                    {/* Portrait — glides left↔right between views */}
-                    <motion.aside
-                        layout
-                        transition={SLIDE}
-                        className={`${photoSecond ? 'lg:order-2' : 'lg:order-1'} lg:w-[18rem] lg:shrink-0 xl:w-[20rem]`}
-                    >
-                        <div className="h-52 sm:h-72 lg:sticky lg:top-0 lg:h-screen">
-                            <SanctuaryColumn />
-                        </div>
-                    </motion.aside>
+                {/* The max-width container is on <main> alone, not out here. Wrapping both
+                columns in it pushed the intention inward off the screen edge and made it
+                eat width the dashboard needed. */}
+                <div className="flex flex-1 flex-col gap-6 px-6 pt-6 pb-28 md:px-10 lg:min-h-0 lg:flex-row lg:gap-0 lg:px-0 lg:pt-0 lg:pb-0">
+                    {/* The intention stands where the dashboard photo used to — same slot,
+                    same portrait shape, but it says something instead of being decoration.
+                    Flush to the very left edge and deliberately narrow: it's an anchor of
+                    weight for the split to read against, not a second column of content.
+                    Desktop only — on a phone it belongs inline with the rest, not as a
+                    banner you have to scroll past to reach your sessions. */}
+                    <aside className="hidden shrink-0 lg:block lg:w-[12.5rem] lg:py-5 lg:pl-5 xl:w-[14rem]">
+                        <DailyIntention portrait />
+                    </aside>
 
-                    {/* Working area */}
-                    <motion.main
-                        layout
-                        transition={SLIDE}
-                        className={`${photoSecond ? 'lg:order-1' : 'lg:order-2'} relative flex-1 px-6 pt-10 pb-28 md:px-12 md:py-14 lg:px-16 lg:py-16 xl:px-24`}
-                    >
+                    <main className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col lg:min-h-0 lg:px-8 lg:py-6 xl:px-10">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={view}
@@ -143,6 +136,7 @@ export default function ClientHome({ practitioners, upcomingSessions, preference
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -14 }}
                                 transition={{ duration: 0.35, ease: 'easeOut' }}
+                                className="flex flex-1 flex-col lg:min-h-0"
                             >
                                 {view === 'sessions' && (
                                     <SessionsView
@@ -157,7 +151,7 @@ export default function ClientHome({ practitioners, upcomingSessions, preference
                                 {view === 'profile' && <ProfileView user={auth.user} />}
                             </motion.div>
                         </AnimatePresence>
-                    </motion.main>
+                    </main>
                 </div>
 
                 {/* familiar back/forth control to move between the four sections */}
@@ -179,12 +173,12 @@ function ViewPager({ current, onNavigate }: { current: View; onNavigate: (view: 
     const go = (dir: -1 | 1) => onNavigate(VIEWS[(idx + dir + VIEWS.length) % VIEWS.length]);
 
     return (
-        <div className="border-ashen-300/30 bg-cream/95 fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 rounded-full border p-1.5 shadow-[0_10px_30px_-10px_rgba(26,28,28,0.3)] backdrop-blur">
+        <div className="border-ashen-300/30 bg-ashen-50/85 fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 rounded-full border p-1.5 shadow-[0_10px_30px_-10px_rgba(26,28,28,0.3)] backdrop-blur-md">
             <button
                 type="button"
                 onClick={() => go(-1)}
                 aria-label="Previous section"
-                className="text-ashen-500 hover:text-sage-700 flex size-9 items-center justify-center rounded-full transition hover:bg-white active:scale-90"
+                className="text-ashen-500 hover:text-ashen-700 hover:bg-ashen-50/70 flex size-9 items-center justify-center rounded-full transition active:scale-90"
             >
                 <ChevronLeft className="size-5" />
             </button>
@@ -193,7 +187,7 @@ function ViewPager({ current, onNavigate }: { current: View; onNavigate: (view: 
                 type="button"
                 onClick={() => go(1)}
                 aria-label="Next section"
-                className="text-ashen-500 hover:text-sage-700 flex size-9 items-center justify-center rounded-full transition hover:bg-white active:scale-90"
+                className="text-ashen-500 hover:text-ashen-700 hover:bg-ashen-50/70 flex size-9 items-center justify-center rounded-full transition active:scale-90"
             >
                 <ChevronRight className="size-5" />
             </button>
@@ -217,45 +211,51 @@ function SessionsView({
     const [featured, ...rest] = sessions;
 
     return (
-        <>
-            <header className="mb-8 md:mb-12">
-                <h1 className="font-display text-sage-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">
+        <div className="flex flex-1 flex-col lg:min-h-0">
+            {/* shrink-0: the greeting holds its size and the columns below absorb
+            whatever height is left, instead of pushing the page taller */}
+            <header className="mb-8 shrink-0 md:mb-12 lg:mb-6">
+                <h1 className="font-display text-ashen-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-4xl">
                     Welcome back, {firstName}
                 </h1>
-                <p className="text-ashen-500 mt-3 text-base sm:text-lg">Your sanctuary is ready. Take a breath before you begin.</p>
+                <p className="text-ashen-500 mt-3 text-base sm:text-lg lg:mt-2 lg:text-base">
+                    Your sanctuary is ready. Take a breath before you begin.
+                </p>
             </header>
 
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-x-20 xl:gap-x-28">
-                <section className="space-y-8 md:space-y-10">
+            <div className="grid grid-cols-1 gap-10 lg:min-h-0 lg:flex-1 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-0 xl:gap-x-20">
+                <section className="space-y-8 md:space-y-10 lg:min-h-0 lg:space-y-4">
                     <ColumnHeader title="Find support" />
                     <BookNow count={specialistCount} onFind={onFindSpecialist} />
                     <Link
                         href="/emergency"
-                        className="border-sage-200/70 bg-sage-50/60 hover:bg-sage-50 group flex items-center gap-4 rounded-2xl border p-5 transition active:scale-[0.99]"
+                        className="border-ashen-200/70 bg-ashen-50/60 hover:bg-ashen-50 group flex items-center gap-4 rounded-2xl border p-5 transition active:scale-[0.99]"
                     >
-                        <span className="bg-sage-100 text-sage-700 flex size-11 shrink-0 items-center justify-center rounded-full">
+                        <span className="bg-ashen-100 text-ashen-700 flex size-11 shrink-0 items-center justify-center rounded-full">
                             <LifeBuoy className="size-5" />
                         </span>
                         <span className="min-w-0 flex-1">
                             <span className="text-ashen-800 block text-sm font-semibold">Going through something right now?</span>
                             <span className="text-ashen-500 block text-xs">Get gentle, immediate support — one step at a time.</span>
                         </span>
-                        <ArrowUpRight className="size-4 text-amber-400 transition group-hover:translate-x-0.5" />
+                        <ArrowUpRight className="text-ashen-500 size-4 transition group-hover:translate-x-0.5" />
                     </Link>
-                    <div className="space-y-5">
+                    {/* Phones only — on desktop this lives in the portrait column beside
+                    the whole dashboard, so showing it here too would just repeat it. */}
+                    <div className="space-y-5 lg:hidden">
                         <SectionLabel>Daily intention</SectionLabel>
                         <DailyIntention />
                     </div>
                 </section>
 
-                <section className="space-y-8 md:space-y-10">
+                <section className="scrollbar-hide space-y-8 md:space-y-10 lg:min-h-0 lg:space-y-4 lg:overflow-y-auto lg:pr-1">
                     <ColumnHeader
                         title="Your Sanctuary"
                         action={
                             <button
                                 type="button"
                                 onClick={onFindSpecialist}
-                                className="text-sage-700 hover:text-sage-900 text-sm font-medium transition"
+                                className="text-ashen-700 hover:text-ashen-900 text-sm font-medium transition"
                             >
                                 View all
                             </button>
@@ -289,41 +289,115 @@ function SessionsView({
                     </div>
                 </section>
             </div>
-        </>
+        </div>
     );
 }
 
 /* ============================ Specialists view ============================ */
 
 function SpecialistsView({ practitioners, preferences }: { practitioners: Specialist[]; preferences: MatchPreferences }) {
+    const [filters, setFilters] = useState<SpecialistFilters>(EMPTY_FILTERS);
+    const visible = useMemo(() => applyFilters(practitioners, filters), [practitioners, filters]);
+
     return (
-        <>
-            <header className="mb-8 md:mb-12">
-                <span className="border-sage-200 text-sage-700 inline-flex items-center gap-2 rounded-full border bg-white px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
-                    <Users className="size-3.5" /> {practitioners.length} available
+        <div className="flex flex-1 flex-col lg:min-h-0">
+            <header className="mb-5 shrink-0 md:mb-7 lg:mb-4">
+                <span className="border-ashen-300/60 text-ashen-700 bg-ashen-50/70 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
+                    <Users className="size-3.5" />
+                    {/* counts what you can actually see, so the number never contradicts the rail */}
+                    {visible.length === practitioners.length ? `${practitioners.length} available` : `${visible.length} of ${practitioners.length}`}
                 </span>
-                <h1 className="font-display text-sage-800 mt-4 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">
+                <h1 className="font-display text-ashen-800 mt-3 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-4xl">
                     Find your <span className="italic">specialist</span>
                 </h1>
-                <p className="text-ashen-500 mt-4 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
-                    <ShieldCheck className="text-sage-600 mt-0.5 size-4 shrink-0" />
+                <p className="text-ashen-500 mt-2.5 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
+                    <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
                     Every Sanad psychologist is a licensed clinical psychologist — real, confidential care.
                 </p>
             </header>
 
-            {practitioners.length > 0 ? (
-                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                    {practitioners.map((specialist) => (
-                        <SpecialistCard key={specialist.id} specialist={specialist} matched={matchesPreferences(specialist, preferences)} />
-                    ))}
-                </div>
-            ) : (
-                <div className="border-sage-300/60 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed bg-white/40 p-12 text-center">
-                    <p className="font-display text-ashen-700 text-xl">Our specialists are on their way</p>
-                    <p className="text-ashen-500 max-w-sm text-sm">We’re carefully selecting the right people. Check back soon.</p>
+            {practitioners.length > 0 && (
+                <div className="mb-4 shrink-0">
+                    <SpecialistFilterBar specialists={practitioners} filters={filters} onChange={setFilters} />
                 </div>
             )}
-        </>
+
+            {practitioners.length === 0 ? (
+                <EmptyDirectory title="Our specialists are on their way" body="We’re carefully selecting the right people. Check back soon." />
+            ) : visible.length === 0 ? (
+                <EmptyDirectory
+                    title="No one matches those filters"
+                    body="Try widening your search — a different approach, another time of day, or a higher price."
+                    action={
+                        <button
+                            type="button"
+                            onClick={() => setFilters(EMPTY_FILTERS)}
+                            className="text-ashen-700 hover:text-ashen-900 mt-1 text-sm font-medium underline underline-offset-4 transition"
+                        >
+                            Clear filters
+                        </button>
+                    }
+                />
+            ) : (
+                <>
+                    {/* The landing's team-card treatment: the photo is the card. Below lg it
+                    is a plain grid, where vertical scrolling is natural. */}
+                    <div className="grid gap-5 sm:grid-cols-2 lg:hidden">
+                        <AnimatePresence mode="popLayout">
+                            {visible.map((specialist) => (
+                                <motion.div
+                                    key={specialist.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.96 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.96 }}
+                                    transition={{ duration: 0.28, ease: 'easeOut' }}
+                                >
+                                    <SpecialistPortraitCard specialist={specialist} matched={matchesPreferences(specialist, preferences)} />
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </div>
+
+                    {/* On desktop, a drag rail — same decision the landing's team section
+                    made, and for the same reasons: a grid of twenty people is a wall, and
+                    it cannot fit a viewport at any card size. `layout` on each card means
+                    filtering slides the rail rather than snapping it. */}
+                    <div className="scrollbar-hide -mx-10 hidden min-h-0 flex-1 snap-x snap-mandatory gap-5 overflow-x-auto px-10 py-1 lg:flex">
+                        <AnimatePresence mode="popLayout" initial={false}>
+                            {visible.map((specialist) => (
+                                <motion.div
+                                    key={specialist.id}
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.94 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.94 }}
+                                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                    className="w-[17rem] shrink-0 snap-center xl:w-[19rem]"
+                                >
+                                    <SpecialistPortraitCard specialist={specialist} matched={matchesPreferences(specialist, preferences)} fitHeight />
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </div>
+
+                    <p className="text-ashen-500 mt-2 hidden shrink-0 items-center gap-2 text-xs lg:flex">
+                        <Sparkles className="size-3.5 shrink-0" />
+                        Drag sideways to meet everyone.
+                    </p>
+                </>
+            )}
+        </div>
+    );
+}
+
+function EmptyDirectory({ title, body, action }: { title: string; body: string; action?: React.ReactNode }) {
+    return (
+        <div className="border-ashen-300/60 bg-ashen-50/40 flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-12 text-center lg:min-h-0 lg:flex-1">
+            <p className="font-display text-ashen-700 text-xl">{title}</p>
+            <p className="text-ashen-500 max-w-sm text-sm">{body}</p>
+            {action}
+        </div>
     );
 }
 
@@ -335,7 +409,7 @@ interface NotificationItem {
     title: string;
     body: string;
     time: string;
-    tone: 'sage' | 'amber';
+    tone: 'calm' | 'urgent';
     action?: React.ReactNode;
 }
 
@@ -358,13 +432,13 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
                 title: t.isLive ? 'Your session is live now' : 'Your session starts soon',
                 body: t.isLive ? `${withWhom} is in progress — join when you’re ready.` : `${withWhom} begins ${formatCountdown(t.msUntilStart)}.`,
                 time: t.isLive ? 'Now' : formatCountdown(t.msUntilStart).replace('in ', ''),
-                tone: 'amber',
+                tone: 'urgent',
                 action: session.meeting_link ? (
                     <a
                         href={session.meeting_link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white transition"
+                        className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white transition"
                     >
                         <Video className="size-3.5" /> Join now
                     </a>
@@ -381,7 +455,7 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
                 title: 'Payment received',
                 body: `Your payment was received and ${withWhom} is confirmed.`,
                 time: 'Confirmed',
-                tone: 'sage',
+                tone: 'calm',
             });
         }
 
@@ -392,11 +466,11 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
                 title: 'Awaiting payment',
                 body: `Finish your transfer to confirm ${withWhom}.`,
                 time: 'Action needed',
-                tone: 'amber',
+                tone: 'urgent',
                 action: (
                     <Link
                         href={`/bookings/${session.id}/pay`}
-                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white transition"
+                        className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold text-white transition"
                     >
                         <CreditCard className="size-3.5" /> Payment instructions
                     </Link>
@@ -412,7 +486,7 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
                 title: 'Upcoming session',
                 body: `${withWhom} · ${session.scheduled_label}`,
                 time: `Starts ${formatCountdown(t.msUntilStart)}`,
-                tone: 'sage',
+                tone: 'calm',
             });
         }
     });
@@ -424,26 +498,28 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
             title: 'Take your first step',
             body: 'Whenever you’re ready, a licensed specialist is here to help. Booking only takes a minute.',
             time: 'Tip',
-            tone: 'sage',
+            tone: 'calm',
         });
     }
 
     // The daily reflection always closes the list.
-    items.push({ key: 'reflection', icon: Sparkles, title: 'Your daily reflection', body: quote, time: 'Today', tone: 'sage' });
+    items.push({ key: 'reflection', icon: Sparkles, title: 'Your daily reflection', body: quote, time: 'Today', tone: 'calm' });
 
     const tones: Record<NotificationItem['tone'], string> = {
-        sage: 'bg-sage-100 text-sage-700',
-        amber: 'bg-amber-100 text-amber-600',
+        calm: 'bg-ashen-100 text-ashen-700',
+        urgent: 'bg-ashen-800 text-ashen-50',
     };
 
     return (
-        <>
-            <header className="mb-8 md:mb-12">
-                <h1 className="font-display text-sage-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">Notifications</h1>
-                <p className="text-ashen-500 mt-3 text-lg">Your session updates and a daily reflection, all in one place.</p>
+        <div className="flex flex-1 flex-col lg:min-h-0">
+            <header className="mb-8 shrink-0 md:mb-12 lg:mb-5">
+                <h1 className="font-display text-ashen-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-4xl">
+                    Notifications
+                </h1>
+                <p className="text-ashen-500 mt-3 text-lg lg:mt-2 lg:text-base">Your session updates and a daily reflection, all in one place.</p>
             </header>
 
-            <div className="max-w-2xl space-y-4">
+            <div className="scrollbar-hide max-w-2xl space-y-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
                 {items.map((n) => (
                     <div key={n.key} className={`flex items-start gap-4 p-6 ${CARD}`}>
                         <span className={`flex size-11 shrink-0 items-center justify-center rounded-full ${tones[n.tone]}`}>
@@ -460,7 +536,7 @@ function NotificationsView({ sessions }: { sessions: UpcomingSession[] }) {
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     );
 }
 
@@ -475,19 +551,21 @@ function ProfileView({ user }: { user: SharedData['auth']['user'] }) {
         .toUpperCase();
 
     return (
-        <>
-            <header className="mb-8 md:mb-12">
-                <h1 className="font-display text-sage-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl">Your account</h1>
-                <p className="text-ashen-500 mt-3 text-lg">Manage your details and how Sanad works for you.</p>
+        <div className="flex flex-1 flex-col lg:min-h-0">
+            <header className="mb-8 shrink-0 md:mb-12 lg:mb-5">
+                <h1 className="font-display text-ashen-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-4xl">
+                    Your account
+                </h1>
+                <p className="text-ashen-500 mt-3 text-lg lg:mt-2 lg:text-base">Manage your details and how Sanad works for you.</p>
             </header>
 
-            <div className="max-w-2xl space-y-6">
+            <div className="scrollbar-hide max-w-2xl space-y-6 lg:min-h-0 lg:flex-1 lg:space-y-4 lg:overflow-y-auto lg:pr-1">
                 <div className={`flex items-center gap-5 p-6 ${CARD}`}>
-                    <div className="ring-sage-200 size-16 shrink-0 overflow-hidden rounded-full ring-2">
+                    <div className="ring-ashen-200 size-16 shrink-0 overflow-hidden rounded-full ring-2">
                         {user.avatar ? (
                             <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
                         ) : (
-                            <span className="bg-sage-100 text-sage-700 font-display flex h-full w-full items-center justify-center text-xl">
+                            <span className="bg-ashen-100 text-ashen-700 font-display flex h-full w-full items-center justify-center text-xl">
                                 {initials}
                             </span>
                         )}
@@ -508,20 +586,20 @@ function ProfileView({ user }: { user: SharedData['auth']['user'] }) {
                     href={route('logout')}
                     method="post"
                     as="button"
-                    className="border-ashen-300/50 text-ashen-600 hover:border-ashen-300 hover:text-ashen-800 flex w-full items-center justify-center gap-2 rounded-2xl border bg-white/60 py-3.5 text-sm font-medium transition active:scale-[0.99]"
+                    className="border-ashen-300/50 text-ashen-600 hover:border-ashen-300 hover:text-ashen-800 bg-ashen-50/60 flex w-full items-center justify-center gap-2 rounded-2xl border py-3.5 text-sm font-medium transition active:scale-[0.99]"
                 >
                     <LogOut className="size-4" />
                     Log out
                 </Link>
             </div>
-        </>
+        </div>
     );
 }
 
 function ProfileRow({ icon: Icon, label, hint, href }: { icon: ComponentType<{ className?: string }>; label: string; hint: string; href: string }) {
     return (
-        <Link href={href} prefetch className="group hover:bg-sage-50/70 flex items-center gap-4 px-6 py-4 transition">
-            <span className="bg-sage-100 text-sage-700 flex size-10 shrink-0 items-center justify-center rounded-full">
+        <Link href={href} prefetch className="group hover:bg-ashen-50/70 flex items-center gap-4 px-6 py-4 transition">
+            <span className="bg-ashen-100 text-ashen-700 flex size-10 shrink-0 items-center justify-center rounded-full">
                 <Icon className="size-5" />
             </span>
             <span className="min-w-0 flex-1">
@@ -563,14 +641,14 @@ function TopNav({
     return (
         <header
             onMouseEnter={onReveal}
-            className={`border-ashen-300/30 bg-cream sticky top-0 z-40 flex h-20 items-center justify-between gap-4 border-b px-5 transition-transform duration-300 ease-out md:px-12 lg:px-16 ${
+            className={`border-ashen-300/25 sticky top-0 z-40 flex h-20 items-center justify-between gap-4 border-b px-5 backdrop-blur-xl transition-transform duration-300 ease-out md:px-12 lg:px-16 ${
                 isHidden ? '-translate-y-full' : 'translate-y-0'
             }`}
         >
             <button
                 type="button"
                 onClick={() => onNavigate('sessions')}
-                className="font-display text-sage-700 text-2xl tracking-tight sm:text-[1.65rem]"
+                className="font-display text-ashen-700 text-2xl tracking-tight sm:text-[1.65rem]"
             >
                 Sanad
             </button>
@@ -583,13 +661,13 @@ function TopNav({
                             key={tab.view}
                             type="button"
                             onClick={() => onNavigate(tab.view)}
-                            className={`relative text-[15px] font-medium transition ${active ? 'text-sage-700' : 'text-ashen-500 hover:text-sage-700'}`}
+                            className={`relative text-[15px] font-medium transition ${active ? 'text-ashen-700' : 'text-ashen-500 hover:text-ashen-700'}`}
                         >
                             {tab.label}
                             {active && (
                                 <motion.span
                                     layoutId="nav-underline"
-                                    className="bg-sage-600 absolute -bottom-[27px] left-0 h-0.5 w-full rounded-full"
+                                    className="bg-ashen-600 absolute -bottom-[27px] left-0 h-0.5 w-full rounded-full"
                                 />
                             )}
                         </button>
@@ -600,7 +678,7 @@ function TopNav({
             <div className="flex items-center gap-2">
                 <Link
                     href="/emergency"
-                    className="border-sage-300/70 text-sage-700 hover:bg-sage-50 mr-1 inline-flex items-center gap-1.5 rounded-full border bg-white/60 px-3.5 py-2 text-sm font-semibold transition active:scale-95"
+                    className="border-ashen-300/70 text-ashen-700 hover:bg-ashen-50 bg-ashen-50/60 mr-1 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-sm font-semibold transition active:scale-95"
                 >
                     <LifeBuoy className="size-4" />
                     <span className="hidden sm:inline">Urgent help</span>
@@ -609,25 +687,25 @@ function TopNav({
                     type="button"
                     onClick={() => onNavigate('notifications')}
                     aria-label="Notifications"
-                    className={`relative flex size-10 items-center justify-center rounded-full transition hover:bg-white ${
-                        view === 'notifications' ? 'text-sage-700 bg-white' : 'text-ashen-500 hover:text-sage-700'
+                    className={`hover:bg-ashen-50/70 relative flex size-10 items-center justify-center rounded-full transition ${
+                        view === 'notifications' ? 'text-ashen-700 bg-ashen-50/80' : 'text-ashen-500 hover:text-ashen-700'
                     }`}
                 >
                     <Bell className="size-5" />
-                    <span className="bg-sage-600 ring-cream absolute top-2.5 right-2.5 size-2 rounded-full ring-2" />
+                    <span className="bg-ashen-600 ring-ashen-50 absolute top-2.5 right-2.5 size-2 rounded-full ring-2" />
                 </button>
                 <button
                     type="button"
                     onClick={() => onNavigate('profile')}
                     aria-label="Your profile"
                     className={`block size-10 overflow-hidden rounded-full ring-2 transition ${
-                        view === 'profile' ? 'ring-sage-500' : 'ring-sage-200 hover:ring-sage-400'
+                        view === 'profile' ? 'ring-ashen-500' : 'ring-ashen-200 hover:ring-ashen-400'
                     }`}
                 >
                     {user.avatar ? (
                         <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
                     ) : (
-                        <span className="bg-sage-100 text-sage-700 flex h-full w-full items-center justify-center text-sm font-semibold">
+                        <span className="bg-ashen-100 text-ashen-700 flex h-full w-full items-center justify-center text-sm font-semibold">
                             {initials}
                         </span>
                     )}
@@ -637,62 +715,25 @@ function TopNav({
     );
 }
 
-/* ============================ Left/banner photo ============================ */
-
-function SanctuaryColumn() {
-    return (
-        <div className="from-ashen-700 to-ashen-900 relative h-full w-full overflow-hidden bg-gradient-to-b">
-            {SANCTUARY_PHOTO && <img src={SANCTUARY_PHOTO} alt="" className="absolute inset-0 h-full w-full object-cover object-[center_30%]" />}
-
-            <div className="from-ashen-950/80 via-ashen-950/20 absolute inset-0 bg-gradient-to-t to-transparent" />
-            <div className="from-sage-900/25 absolute inset-0 bg-gradient-to-tr via-transparent to-transparent mix-blend-soft-light" />
-
-            {!SANCTUARY_PHOTO && (
-                <div className="absolute inset-6 flex items-start justify-center rounded-2xl border border-dashed border-white/20 pt-10">
-                    <span className="text-[11px] font-medium tracking-[0.2em] text-white/45 uppercase">Portrait photo</span>
-                </div>
-            )}
-
-            <span
-                className="absolute top-8 right-5 text-[11px] font-medium tracking-[0.4em] text-white/60 uppercase"
-                style={{ writingMode: 'vertical-rl' }}
-            >
-                Stillness
-            </span>
-
-            <div className="absolute inset-x-0 bottom-0 p-8">
-                <h2 className="font-display text-3xl leading-[1.15] text-white">
-                    Quiet the mind,
-                    <br />
-                    find the path.
-                </h2>
-                <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/75">
-                    Your progress is a journey of a thousand small steps. Today is one of them.
-                </p>
-            </div>
-        </div>
-    );
-}
-
 /* ============================ Cards ============================ */
 
 function BookNow({ count, onFind }: { count: number; onFind: () => void }) {
     return (
-        <div className="from-sage-700 to-sage-800 relative overflow-hidden rounded-2xl bg-gradient-to-br p-8 text-white shadow-[0_22px_50px_-20px_rgba(63,88,65,0.6)]">
-            <div aria-hidden className="pointer-events-none absolute -top-20 -right-16 h-52 w-52 rounded-full bg-white/10 blur-3xl" />
+        <div className="from-ashen-700 to-ashen-800 relative overflow-hidden rounded-2xl bg-gradient-to-br p-8 text-white shadow-[0_22px_50px_-20px_rgba(56,57,53,0.6)] lg:p-6">
+            <div aria-hidden className="bg-ashen-50/10 pointer-events-none absolute -top-20 -right-16 h-52 w-52 rounded-full blur-3xl" />
             <p className="text-[11px] font-semibold tracking-[0.2em] text-white/70 uppercase">Ready when you are</p>
-            <h3 className="font-display mt-3 text-[1.8rem] leading-snug">Talk to someone who can help</h3>
-            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/80">
+            <h3 className="font-display mt-3 text-[1.8rem] leading-snug lg:mt-2 lg:text-[1.45rem]">Talk to someone who can help</h3>
+            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/80 lg:mt-2 lg:text-sm">
                 Book a private session with a licensed specialist — in Arabic, English, or French. It only takes a minute.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
                 <button
                     type="button"
                     onClick={onFind}
-                    className="group text-sage-800 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98]"
+                    className="group text-ashen-800 bg-ashen-50/80 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                     Find your specialist
-                    <span className="bg-sage-100 rounded-full p-1 transition-transform group-hover:rotate-45">
+                    <span className="bg-ashen-100 rounded-full p-1 transition-transform group-hover:rotate-45">
                         <ArrowUpRight className="size-4" />
                     </span>
                 </button>
@@ -702,29 +743,60 @@ function BookNow({ count, onFind }: { count: number; onFind: () => void }) {
     );
 }
 
-function DailyIntention() {
+/**
+ * The affirmation, standing where the dashboard photo used to.
+ *
+ * It takes the removed portrait's slot and shape: a tall dark panel down the side
+ * of the page. The panel is dark for the same reason the photo was — the split
+ * needs one anchor of weight to read against, and a page of light glass alone
+ * goes flat. It was previously a tan card (`bg-beige`), the last of the warm
+ * palette in the client app.
+ */
+function DailyIntention({ portrait = false }: { portrait?: boolean }) {
     const [index, setIndex] = useState(0);
 
     return (
-        <div className="bg-beige/35 rounded-2xl p-8">
-            <p className="font-display text-ashen-700 text-xl leading-relaxed italic md:text-2xl">“{INTENTIONS[index]}”</p>
+        <div
+            className={`sanad-card-dark relative flex flex-col overflow-hidden ${
+                portrait ? 'h-full rounded-[1.75rem] p-6 xl:p-7' : 'rounded-2xl p-8 lg:p-5'
+            }`}
+        >
+            {/* the olive, quietly — the same treeline that stands behind the team */}
+            {portrait && (
+                <>
+                    <OliveHorizon opacity="opacity-[0.12]" />
+                    <OliveDrops drops={EDGE_DROPS} tone="light" />
+                </>
+            )}
 
-            <div className="mt-8 flex items-center gap-3">
-                <button
-                    type="button"
-                    onClick={() => setIndex((i) => (i + 1) % INTENTIONS.length)}
-                    className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex items-center gap-2 rounded-full border bg-white/70 px-6 py-3 text-sm font-medium transition hover:-translate-y-0.5 active:scale-[0.98]"
+            <div className={`relative z-10 flex flex-col ${portrait ? 'h-full' : ''}`}>
+                {portrait && <p className="text-ashen-400 shrink-0 text-[11px] font-semibold tracking-[0.2em] uppercase">Daily intention</p>}
+
+                <p
+                    className={`font-display text-ashen-100 leading-relaxed italic ${
+                        portrait ? 'mt-5 flex-1 text-base leading-relaxed xl:text-lg' : 'text-xl md:text-2xl lg:text-lg'
+                    }`}
                 >
-                    New intention
-                </button>
-                <button
-                    type="button"
-                    aria-label="Share intention"
-                    onClick={() => navigator.clipboard?.writeText(INTENTIONS[index])}
-                    className="border-ashen-300/60 text-ashen-500 hover:text-sage-700 flex size-11 items-center justify-center rounded-full border bg-white/60 transition hover:-translate-y-0.5 active:scale-95"
-                >
-                    <Share2 className="size-4" />
-                </button>
+                    “{INTENTIONS[index]}”
+                </p>
+
+                <div className={`flex shrink-0 items-center gap-2.5 ${portrait ? 'mt-5' : 'mt-8 lg:mt-4'}`}>
+                    <button
+                        type="button"
+                        onClick={() => setIndex((i) => (i + 1) % INTENTIONS.length)}
+                        className="border-ashen-300/40 text-ashen-100 hover:bg-ashen-100/10 inline-flex flex-1 items-center justify-center gap-2 rounded-full border px-3 py-2.5 text-xs font-medium transition hover:-translate-y-0.5 active:scale-[0.98]"
+                    >
+                        New intention
+                    </button>
+                    <button
+                        type="button"
+                        aria-label="Share intention"
+                        onClick={() => navigator.clipboard?.writeText(INTENTIONS[index])}
+                        className="border-ashen-300/30 text-ashen-300 hover:text-ashen-100 hover:bg-ashen-100/10 flex size-9 shrink-0 items-center justify-center rounded-full border transition hover:-translate-y-0.5 active:scale-95"
+                    >
+                        <Share2 className="size-4" />
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -736,7 +808,7 @@ function NextSessionCard({ session, firstName, onFind }: { session: UpcomingSess
             <div className={`p-6 ${CARD}`}>
                 <SectionLabel>Next session</SectionLabel>
                 <div className="mt-4 flex items-center gap-4">
-                    <div className="bg-sage-100 text-sage-700 flex size-14 shrink-0 items-center justify-center rounded-xl">
+                    <div className="bg-ashen-100 text-ashen-700 flex size-14 shrink-0 items-center justify-center rounded-xl">
                         <CalendarHeart className="size-6" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -747,7 +819,7 @@ function NextSessionCard({ session, firstName, onFind }: { session: UpcomingSess
                         type="button"
                         onClick={onFind}
                         aria-label="Find a specialist"
-                        className="bg-sage-700 hover:bg-sage-800 flex size-11 shrink-0 items-center justify-center rounded-full text-white transition hover:-translate-y-0.5 active:scale-95"
+                        className="bg-ashen-700 hover:bg-ashen-800 flex size-11 shrink-0 items-center justify-center rounded-full text-white transition hover:-translate-y-0.5 active:scale-95"
                     >
                         <ArrowUpRight className="size-5" />
                     </button>
@@ -760,7 +832,7 @@ function NextSessionCard({ session, firstName, onFind }: { session: UpcomingSess
         <div className={`p-6 ${CARD}`}>
             <SectionLabel>Next session</SectionLabel>
             <div className="mt-4 flex items-center gap-4">
-                <div className="bg-sage-100 text-sage-700 flex size-16 shrink-0 flex-col items-center justify-center rounded-xl leading-none">
+                <div className="bg-ashen-100 text-ashen-700 flex size-16 shrink-0 flex-col items-center justify-center rounded-xl leading-none">
                     <span className="text-[10px] font-semibold tracking-wide uppercase">{session.scheduled_month}</span>
                     <span className="font-display mt-1 text-2xl">{session.scheduled_day}</span>
                 </div>
@@ -778,13 +850,13 @@ function NextSessionCard({ session, firstName, onFind }: { session: UpcomingSess
             {session.status === 'confirmed' && <SessionJoin session={session} />}
 
             {session.status === 'pending' && (
-                <div className="border-sage-200/60 mt-4 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="border-ashen-200/60 mt-4 flex flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-ashen-500 inline-flex items-center gap-1.5 text-xs font-medium">
-                        <span className="size-1.5 rounded-full bg-amber-400" /> Awaiting payment
+                        <span className="bg-ashen-500 size-1.5 rounded-full" /> Awaiting payment
                     </span>
                     <Link
                         href={`/bookings/${session.id}/pay`}
-                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium text-white transition hover:-translate-y-0.5 active:scale-95"
+                        className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-medium text-white transition hover:-translate-y-0.5 active:scale-95"
                     >
                         <CreditCard className="size-3.5" /> Payment instructions
                     </Link>
@@ -836,7 +908,7 @@ function SessionJoin({ session }: { session: UpcomingSession }) {
     const { isOpen, isLive, hasEnded, msUntilStart } = sessionTiming(session, now);
 
     if (hasEnded) {
-        return <div className="border-sage-200/60 text-ashen-400 mt-4 border-t pt-4 text-xs font-medium">This session has ended.</div>;
+        return <div className="border-ashen-200/60 text-ashen-400 mt-4 border-t pt-4 text-xs font-medium">This session has ended.</div>;
     }
 
     // The join window is open — wake the button up (or, if the specialist hasn't
@@ -844,8 +916,8 @@ function SessionJoin({ session }: { session: UpcomingSession }) {
     if (isOpen) {
         if (!session.meeting_link) {
             return (
-                <div className="border-sage-200/60 text-ashen-500 mt-4 flex items-center gap-2 border-t pt-4 text-xs font-medium">
-                    <span className="size-1.5 animate-pulse rounded-full bg-amber-400" />
+                <div className="border-ashen-200/60 text-ashen-500 mt-4 flex items-center gap-2 border-t pt-4 text-xs font-medium">
+                    <span className="bg-ashen-500 size-1.5 animate-pulse rounded-full" />
                     Your meeting link is being prepared — it’ll appear here any moment.
                 </div>
             );
@@ -856,7 +928,7 @@ function SessionJoin({ session }: { session: UpcomingSession }) {
                 href={session.meeting_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group bg-sage-700 hover:bg-sage-800 mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white shadow-[0_0_0_0_rgba(99,128,101,0.5)] transition hover:-translate-y-0.5 active:scale-[0.99]"
+                className="group bg-ashen-700 hover:bg-ashen-800 mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white shadow-[0_0_0_0_rgba(99,128,101,0.5)] transition hover:-translate-y-0.5 active:scale-[0.99]"
                 style={{ animation: 'joinPulse 2.4s ease-in-out infinite' }}
             >
                 <Video className="size-4" />
@@ -871,11 +943,11 @@ function SessionJoin({ session }: { session: UpcomingSession }) {
 
     // Before the window: a calm, locked state with a live countdown.
     return (
-        <div className="border-sage-200/60 mt-4 flex flex-col gap-2 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="border-ashen-200/60 mt-4 flex flex-col gap-2 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
             <span className="text-ashen-500 inline-flex items-center gap-1.5 text-xs font-medium">
                 <Lock className="size-3.5" /> Join opens {JOIN_OPENS_MINUTES_BEFORE} min before
             </span>
-            <span className="text-sage-700 inline-flex items-center gap-1.5 text-xs font-semibold">
+            <span className="text-ashen-700 inline-flex items-center gap-1.5 text-xs font-semibold">
                 <Clock className="size-3.5" /> Starts {formatCountdown(msUntilStart)}
             </span>
         </div>
@@ -911,7 +983,7 @@ function UpcomingSessionRow({ session }: { session: UpcomingSession }) {
 
     return (
         <div className={`flex items-center gap-3.5 p-4 ${CARD}`}>
-            <div className="bg-sage-100 text-sage-700 flex size-12 shrink-0 flex-col items-center justify-center rounded-xl leading-none">
+            <div className="bg-ashen-100 text-ashen-700 flex size-12 shrink-0 flex-col items-center justify-center rounded-xl leading-none">
                 <span className="text-[9px] font-semibold tracking-wide uppercase">{session.scheduled_month}</span>
                 <span className="font-display mt-0.5 text-xl">{session.scheduled_day}</span>
             </div>
@@ -928,7 +1000,7 @@ function UpcomingSessionRow({ session }: { session: UpcomingSession }) {
             {session.status === 'pending' ? (
                 <Link
                     href={`/bookings/${session.id}/pay`}
-                    className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition"
+                    className="border-ashen-300 text-ashen-700 hover:bg-ashen-50 inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition"
                 >
                     <CreditCard className="size-3.5" /> Pay
                 </Link>
@@ -938,7 +1010,7 @@ function UpcomingSessionRow({ session }: { session: UpcomingSession }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Join session"
-                    className="bg-sage-700 hover:bg-sage-800 flex size-9 shrink-0 items-center justify-center rounded-full text-white transition"
+                    className="bg-ashen-700 hover:bg-ashen-800 flex size-9 shrink-0 items-center justify-center rounded-full text-white transition"
                 >
                     <Video className="size-4" />
                 </a>
@@ -966,19 +1038,19 @@ function QuickTile({
 }) {
     const inner = (
         <>
-            <span className="bg-sage-100 text-sage-700 flex size-10 items-center justify-center rounded-full transition group-hover:scale-105">
+            <span className="bg-ashen-100 text-ashen-700 flex size-10 items-center justify-center rounded-full transition group-hover:scale-105">
                 <Icon className="size-5" />
             </span>
             <p className="text-ashen-800 mt-4 text-sm font-semibold">{title}</p>
             <p className="text-ashen-400 truncate text-xs">{subtitle}</p>
             {progress != null && (
-                <div className="bg-sage-100 mt-4 h-1.5 w-full overflow-hidden rounded-full">
-                    <div className="bg-sage-500 h-full rounded-full" style={{ width: `${Math.round(Math.max(0.08, progress) * 100)}%` }} />
+                <div className="bg-ashen-100 mt-4 h-1.5 w-full overflow-hidden rounded-full">
+                    <div className="bg-ashen-500 h-full rounded-full" style={{ width: `${Math.round(Math.max(0.08, progress) * 100)}%` }} />
                 </div>
             )}
         </>
     );
-    const className = `group hover:bg-sage-50/70 block p-6 text-left transition active:scale-[0.98] ${CARD}`;
+    const className = `group hover:bg-ashen-50/70 block p-6 text-left transition active:scale-[0.98] ${CARD}`;
 
     return onClick ? (
         <button type="button" onClick={onClick} className={className}>
@@ -993,8 +1065,8 @@ function QuickTile({
 
 function ResourceRow({ icon: Icon, label, href }: { icon: ComponentType<{ className?: string }>; label: string; href: string }) {
     return (
-        <a href={href} className="group border-ashen-300/25 hover:border-ashen-300/50 flex items-center gap-4 border-b py-4 transition">
-            <span className="bg-sage-100 text-sage-700 flex size-10 items-center justify-center rounded-full">
+        <a href={href} className="group border-ashen-300/25 hover:border-ashen-300/50 flex items-center gap-4 border-b py-4 transition lg:py-2.5">
+            <span className="bg-ashen-100 text-ashen-700 flex size-10 items-center justify-center rounded-full">
                 <Icon className="size-5" />
             </span>
             <span className="text-ashen-700 flex-1 text-[15px] font-medium">{label}</span>
@@ -1008,7 +1080,7 @@ function ResourceRow({ icon: Icon, label, href }: { icon: ComponentType<{ classN
 function ColumnHeader({ title, action }: { title: string; action?: React.ReactNode }) {
     return (
         <div className="flex items-center justify-between">
-            <h2 className="font-display text-sage-700 text-[1.7rem] tracking-tight">{title}</h2>
+            <h2 className="font-display text-ashen-700 text-[1.7rem] tracking-tight lg:text-[1.35rem]">{title}</h2>
             {action}
         </div>
     );

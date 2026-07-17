@@ -37,30 +37,31 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
     };
 
     return (
-        <StaffLayout title="Schedule">
-            <form onSubmit={submit}>
+        <StaffLayout title="Schedule" fitViewport>
+            <form onSubmit={submit} className="flex flex-1 flex-col lg:min-h-0">
                 <PageHeader
                     title="Your schedule"
                     subtitle="Set the weekly windows when clients can book you. They repeat every week."
                     action={
                         <div className="flex items-center gap-3">
                             {recentlySuccessful && (
-                                <span className="text-sage-700 inline-flex items-center gap-1 text-sm font-medium">
+                                <span className="text-ashen-700 inline-flex items-center gap-1 text-sm font-medium">
                                     <Check className="size-4" /> Saved
                                 </span>
                             )}
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="bg-sage-700 hover:bg-sage-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
+                                className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
                             >
                                 Save schedule
                             </button>
                         </div>
                     }
+                    tight
                 />
 
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="scrollbar-hide grid gap-4 md:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-cols-3 lg:content-start lg:overflow-y-auto lg:pr-1">
                     {DAYS.map((dayName, day) => {
                         const dayWindows = data.windows.map((w, i) => ({ ...w, index: i })).filter((w) => w.day_of_week === day);
 
@@ -71,7 +72,7 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                                     <button
                                         type="button"
                                         onClick={() => addWindow(day)}
-                                        className="text-sage-700 hover:bg-sage-50 flex size-7 items-center justify-center rounded-full transition"
+                                        className="text-ashen-700 hover:bg-ashen-50 flex size-7 items-center justify-center rounded-full transition"
                                         aria-label={`Add window to ${dayName}`}
                                     >
                                         <Plus className="size-4" />
@@ -83,19 +84,19 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                                 ) : (
                                     <div className="space-y-2">
                                         {dayWindows.map((w) => (
-                                            <div key={w.index} className="bg-sage-50 flex items-center gap-2 rounded-xl px-3 py-2">
+                                            <div key={w.index} className="bg-ashen-50 flex items-center gap-2 rounded-xl px-3 py-2">
                                                 <input
                                                     type="time"
                                                     value={w.start_time}
                                                     onChange={(e) => updateWindow(w.index, 'start_time', e.target.value)}
-                                                    className="border-sage-200 text-ashen-800 rounded-lg border bg-white px-2 py-1 text-sm"
+                                                    className="border-ashen-200 text-ashen-800 bg-ashen-50/80 rounded-lg border px-2 py-1 text-sm"
                                                 />
                                                 <span className="text-ashen-400 text-sm">–</span>
                                                 <input
                                                     type="time"
                                                     value={w.end_time}
                                                     onChange={(e) => updateWindow(w.index, 'end_time', e.target.value)}
-                                                    className="border-sage-200 text-ashen-800 rounded-lg border bg-white px-2 py-1 text-sm"
+                                                    className="border-ashen-200 text-ashen-800 bg-ashen-50/80 rounded-lg border px-2 py-1 text-sm"
                                                 />
                                                 <button
                                                     type="button"

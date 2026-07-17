@@ -25,23 +25,25 @@ interface Props {
 
 export default function PractitionerEarnings({ totals, monthly, transactions, filters }: Props) {
     return (
-        <StaffLayout title="Earnings">
-            <PageHeader title="Earnings" subtitle="Every paid session, your 80% share, and what's been paid out to you." />
+        <StaffLayout title="Earnings" fitViewport>
+            <PageHeader title="Earnings" subtitle="Every paid session, your 80% share, and what's been paid out to you." tight />
 
-            <DateFilter path="/practitioner/earnings" filters={filters} />
+            <div className="shrink-0">
+                <DateFilter path="/practitioner/earnings" filters={filters} />
+            </div>
 
-            <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="mb-5 grid shrink-0 grid-cols-1 gap-4 sm:grid-cols-3">
                 <StatCard label="Total earned (80%)" value={money(totals.payout)} icon={Wallet} />
-                <StatCard label="Paid out to you" value={money(totals.paid_out)} icon={Coins} accent="ashen" />
-                <StatCard label="Awaiting payout" value={money(totals.awaiting_payout)} icon={HandCoins} accent="sand" />
+                <StatCard label="Paid out to you" value={money(totals.paid_out)} icon={Coins} />
+                <StatCard label="Awaiting payout" value={money(totals.awaiting_payout)} icon={HandCoins} emphasis />
             </div>
 
             {monthly.length > 0 && (
-                <div className="mb-8">
+                <div className="mb-5 shrink-0">
                     <Section title="By month">
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
                             {monthly.map((m) => (
-                                <div key={m.month} className="border-sage-100 rounded-2xl border bg-white p-4">
+                                <div key={m.month} className="border-ashen-100 bg-ashen-50/80 rounded-2xl border p-4">
                                     <p className="text-ashen-400 text-xs">{m.month}</p>
                                     <p className="font-display text-ashen-800 mt-1 text-xl">{money(m.payout)}</p>
                                     <p className="text-ashen-400 text-xs">
@@ -54,10 +56,11 @@ export default function PractitionerEarnings({ totals, monthly, transactions, fi
                 </div>
             )}
 
-            <Section title={`Transactions (${totals.count})`}>
+            <Section title={`Transactions (${totals.count})`} fill>
                 <Table
                     head={['Date', 'Client', 'Service', 'Type', 'Billed', 'Fee', 'Your payout', 'Payout status']}
                     empty={transactions.length === 0 ? 'No transactions yet.' : undefined}
+                    fill
                 >
                     {transactions.map((t) => (
                         <tr key={t.id}>
@@ -69,7 +72,7 @@ export default function PractitionerEarnings({ totals, monthly, transactions, fi
                             </Td>
                             <Td>{money(t.amount)}</Td>
                             <Td className="text-ashen-400">−{money(t.platform_fee)}</Td>
-                            <Td className="text-sage-700 font-semibold">{money(t.payout)}</Td>
+                            <Td className="text-ashen-700 font-semibold">{money(t.payout)}</Td>
                             <Td>
                                 <Badge>{t.payout_status === 'paid' ? 'paid' : 'pending'}</Badge>
                             </Td>

@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowUpRight, CalendarClock, CreditCard, Heart, MessageCircle, ShieldCheck, Sparkles, Video } from 'lucide-react';
 import type { ComponentType } from 'react';
 
-const CARD = 'rounded-2xl bg-white shadow-[0_8px_30px_-14px_rgba(26,28,28,0.14)]';
+const CARD = 'sanad-card rounded-2xl';
 
 const STEPS: { icon: ComponentType<{ className?: string }>; title: string; body: string }[] = [
     {
@@ -34,19 +34,19 @@ export default function HowItWorks() {
 
             <main className="mx-auto w-full max-w-3xl px-6 py-12 md:px-8 md:py-16">
                 <header className="mb-12">
-                    <span className="border-sage-200 text-sage-700 inline-flex items-center gap-2 rounded-full border bg-white px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
+                    <span className="border-ashen-200 text-ashen-700 bg-ashen-50/80 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
                         <Sparkles className="size-3.5" /> A gentle guide
                     </span>
-                    <h1 className="font-display text-sage-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">How Sanad works</h1>
+                    <h1 className="font-display text-ashen-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">How Sanad works</h1>
                     <p className="text-ashen-500 mt-3 text-lg leading-relaxed">Support that meets you where you are — in four simple steps.</p>
                 </header>
 
                 <div className="space-y-4">
                     {STEPS.map(({ icon: Icon, title, body }, i) => (
                         <div key={title} className={`flex items-start gap-5 p-6 ${CARD}`}>
-                            <div className="bg-sage-100 text-sage-700 relative flex size-12 shrink-0 items-center justify-center rounded-xl">
+                            <div className="bg-ashen-100 text-ashen-700 relative flex size-12 shrink-0 items-center justify-center rounded-xl">
                                 <Icon className="size-6" />
-                                <span className="bg-sage-600 ring-cream absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full text-[11px] font-semibold text-white ring-2">
+                                <span className="bg-ashen-600 ring-ashen-50 absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full text-[11px] font-semibold text-white ring-2">
                                     {i + 1}
                                 </span>
                             </div>
@@ -58,8 +58,8 @@ export default function HowItWorks() {
                     ))}
                 </div>
 
-                <div className="border-sage-100 mt-6 flex items-start gap-3 rounded-2xl border bg-white/60 p-5">
-                    <ShieldCheck className="text-sage-600 mt-0.5 size-5 shrink-0" />
+                <div className="border-ashen-100 bg-ashen-50/60 mt-6 flex items-start gap-3 rounded-2xl border p-5">
+                    <ShieldCheck className="text-ashen-600 mt-0.5 size-5 shrink-0" />
                     <p className="text-ashen-600 text-sm leading-relaxed">
                         Every Sanad psychologist is a licensed clinical psychologist, offering real, confidential care. For a medical emergency,
                         please contact your local emergency number.
@@ -68,13 +68,13 @@ export default function HowItWorks() {
 
                 {/* ===== Preparing for your first session ===== */}
                 <section id="first-session" className="mt-16 scroll-mt-24">
-                    <h2 className="font-display text-sage-800 text-3xl tracking-tight md:text-4xl">Preparing for your first session</h2>
+                    <h2 className="font-display text-ashen-800 text-3xl tracking-tight md:text-4xl">Preparing for your first session</h2>
                     <p className="text-ashen-500 mt-3 leading-relaxed">A few small things to help you feel settled before you begin.</p>
 
                     <ul className="mt-6 space-y-3">
                         {PREP.map((tip) => (
                             <li key={tip} className={`flex items-start gap-3 p-5 ${CARD}`}>
-                                <Heart className="text-sage-600 mt-0.5 size-5 shrink-0" />
+                                <Heart className="text-ashen-600 mt-0.5 size-5 shrink-0" />
                                 <span className="text-ashen-700 text-sm leading-relaxed">{tip}</span>
                             </li>
                         ))}
@@ -83,10 +83,10 @@ export default function HowItWorks() {
 
                 <Link
                     href="/dashboard?view=specialists"
-                    className="group bg-sage-700 hover:bg-sage-800 mt-12 inline-flex items-center gap-2 rounded-full py-3 pr-3 pl-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 active:scale-[0.98]"
+                    className="group bg-ashen-700 hover:bg-ashen-800 mt-12 inline-flex items-center gap-2 rounded-full py-3 pr-3 pl-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 active:scale-[0.98]"
                 >
                     Find your specialist
-                    <span className="rounded-full bg-white/20 p-1.5 transition-transform group-hover:rotate-45">
+                    <span className="bg-ashen-50/20 rounded-full p-1.5 transition-transform group-hover:rotate-45">
                         <ArrowUpRight className="size-4" />
                     </span>
                 </Link>

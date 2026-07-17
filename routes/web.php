@@ -30,6 +30,10 @@ Route::get('/', function () {
         ->where('role', UserRole::Practitioner)
         ->whereHas('practitionerProfile', fn ($query) => $query->where('approval_status', 'approved'))
         ->with('practitionerProfile')
+        // Reshuffled on every request. Any fixed order is a ranking: whoever was
+        // approved first would own the top of the page permanently, and whoever
+        // joined last would be permanently last. Nobody owns a rank.
+        ->inRandomOrder()
         ->get()
         ->map(fn ($practitioner) => [
             'name' => $practitioner->name,
@@ -115,6 +119,11 @@ Route::get('emergency/{type}', [EmergencyController::class, 'show'])->name('emer
 // like the emergency flow, so no form blocks the way in.
 Route::get('ongoing', [OngoingSupportController::class, 'index'])->name('ongoing.index');
 Route::get('ongoing/{type}', [OngoingSupportController::class, 'show'])->name('ongoing.show');
+
+// The public directory — the landing's "View all" for visitors who aren't signed
+// in. Deliberately a separate path from the client-only `specialists.index`: that
+// one sits behind role:client, so a guest sent there would just bounce to login.
+Route::get('psychologists', [PublicBookingController::class, 'directory'])->name('psychologists');
 
 // Public, no-login booking — the "book without an account" path offered from
 // the landing page. A visitor can complete a real booking as a guest, or be

@@ -13,12 +13,13 @@ interface Client {
 
 export default function PractitionerClients({ clients }: { clients: Client[] }) {
     return (
-        <StaffLayout title="Clients">
-            <PageHeader title="Your clients" subtitle="Everyone you've supported, and when you'll see them next." />
+        <StaffLayout title="Clients" fitViewport>
+            <PageHeader title="Your clients" subtitle="Everyone you've supported, and when you'll see them next." tight />
 
             <Table
                 head={['Client', 'Sessions', 'Completed', 'Next session', 'Last seen']}
                 empty={clients.length === 0 ? 'No clients yet.' : undefined}
+                fill
             >
                 {clients.map((c) => (
                     <tr key={c.id}>
@@ -28,7 +29,7 @@ export default function PractitionerClients({ clients }: { clients: Client[] }) 
                         </Td>
                         <Td>{c.sessions}</Td>
                         <Td className="text-ashen-500">{c.completed}</Td>
-                        <Td className={c.next_at ? 'text-sage-700 font-medium' : 'text-ashen-400'}>{c.next_at ?? '—'}</Td>
+                        <Td className={c.next_at ? 'text-ashen-700 font-medium' : 'text-ashen-400'}>{c.next_at ?? '—'}</Td>
                         <Td className="text-ashen-500">{c.last_at ?? '—'}</Td>
                     </tr>
                 ))}

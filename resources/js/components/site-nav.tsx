@@ -25,14 +25,14 @@ export function SiteNav() {
         .toUpperCase();
 
     return (
-        <header className="border-ashen-300/30 bg-cream sticky top-0 z-40 flex h-20 items-center justify-between gap-4 border-b px-5 md:px-12 lg:px-16">
-            <Link href="/dashboard" className="font-display text-sage-700 text-2xl tracking-tight sm:text-[1.65rem]">
+        <header className="border-ashen-300/25 sticky top-0 z-40 flex h-20 items-center justify-between gap-4 border-b px-5 backdrop-blur-xl md:px-12 lg:px-16">
+            <Link href="/dashboard" className="font-display text-ashen-800 text-2xl tracking-tight sm:text-[1.65rem]">
                 Sanad
             </Link>
 
             <nav className="hidden flex-1 items-center justify-center gap-5 sm:flex sm:gap-9">
                 {tabs.map((tab) => (
-                    <Link key={tab.href} href={tab.href} className="text-ashen-500 hover:text-sage-700 text-[15px] font-medium transition">
+                    <Link key={tab.href} href={tab.href} className="text-ashen-500 hover:text-ashen-800 text-[15px] font-medium transition">
                         {tab.label}
                     </Link>
                 ))}
@@ -42,22 +42,22 @@ export function SiteNav() {
                 <Link
                     href="/dashboard?view=notifications"
                     aria-label="Notifications"
-                    className="text-ashen-500 hover:text-sage-700 relative flex size-10 items-center justify-center rounded-full transition hover:bg-white"
+                    className="text-ashen-500 hover:text-ashen-800 hover:bg-ashen-50/70 relative flex size-10 items-center justify-center rounded-full transition"
                 >
                     <Bell className="size-5" />
-                    <span className="bg-sage-600 ring-cream absolute top-2.5 right-2.5 size-2 rounded-full ring-2" />
+                    <span className="bg-ashen-600 ring-ashen-50 absolute top-2.5 right-2.5 size-2 rounded-full ring-2" />
                 </Link>
                 <Link
                     href="/dashboard?view=profile"
                     aria-label="Your profile"
                     className={`block size-10 overflow-hidden rounded-full ring-2 transition ${
-                        url.startsWith('/settings') ? 'ring-sage-500' : 'ring-sage-200 hover:ring-sage-400'
+                        url.startsWith('/settings') ? 'ring-ashen-500' : 'ring-ashen-300 hover:ring-ashen-400'
                     }`}
                 >
                     {user.avatar ? (
                         <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
                     ) : (
-                        <span className="bg-sage-100 text-sage-700 flex h-full w-full items-center justify-center text-sm font-semibold">
+                        <span className="bg-ashen-200 text-ashen-700 flex h-full w-full items-center justify-center text-sm font-semibold">
                             {initials}
                         </span>
                     )}

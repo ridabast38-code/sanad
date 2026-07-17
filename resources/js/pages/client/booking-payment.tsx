@@ -1,4 +1,3 @@
-import { AmbientBackground } from '@/components/ambient-background';
 import { ClientFooter } from '@/components/client-footer';
 import ClientLayout from '@/layouts/client-layout';
 import { Head, Link } from '@inertiajs/react';
@@ -7,7 +6,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 
 /** Same warm frosted-glass container as the rest of the client app. */
-const CARD = 'rounded-3xl border border-white/60 bg-white/55 shadow-[0_24px_60px_-35px_rgba(58,59,55,0.4)] backdrop-blur-xl';
+const CARD = 'sanad-card rounded-3xl';
 
 interface PaymentMethod {
     key: string;
@@ -43,7 +42,7 @@ function CopyField({ label, value }: { label: string; value: string }) {
     };
 
     return (
-        <div className="border-sage-200/70 flex items-center justify-between gap-3 rounded-2xl border bg-white/60 px-4 py-3">
+        <div className="border-ashen-200/70 bg-ashen-50/60 flex items-center justify-between gap-3 rounded-2xl border px-4 py-3">
             <span className="min-w-0">
                 <span className="text-ashen-500 block text-[11px] font-medium tracking-[0.12em] uppercase">{label}</span>
                 <span className="text-ashen-800 mt-0.5 block truncate text-sm font-medium">{value}</span>
@@ -51,7 +50,7 @@ function CopyField({ label, value }: { label: string; value: string }) {
             <button
                 type="button"
                 onClick={copy}
-                className="text-sage-700 hover:bg-sage-100 inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition active:scale-95"
+                className="text-ashen-700 hover:bg-ashen-100 inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition active:scale-95"
             >
                 {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
                 {copied ? 'Copied' : 'Copy'}
@@ -65,12 +64,10 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
         <ClientLayout>
             <Head title="Confirm your session" />
 
-            <div className="bg-cream text-ashen-800 relative flex min-h-full flex-col overflow-hidden">
-                <AmbientBackground />
-
+            <div className="text-ashen-800 relative flex min-h-full flex-col overflow-hidden">
                 <div className="relative mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 md:px-8 md:py-12">
                     <motion.header initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-                        <span className="bg-sage-100 text-sage-700 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium">
+                        <span className="bg-ashen-100 text-ashen-700 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium">
                             <Check className="size-3.5" /> Session reserved
                         </span>
                         <h1 className="font-display text-ashen-800 mt-4 text-3xl leading-tight tracking-tight md:text-4xl">
@@ -92,13 +89,13 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                             <div className="min-w-0">
                                 <p className="text-ashen-500 flex items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase">
-                                    <CalendarClock className="text-sage-600 size-4" /> Your session
+                                    <CalendarClock className="text-ashen-600 size-4" /> Your session
                                 </p>
                                 <p className="font-display text-ashen-800 mt-2 text-xl">{booking.practitioner_name}</p>
                                 <p className="text-ashen-600 text-sm">{booking.service_name}</p>
                                 <p className="text-ashen-600 mt-1 text-sm">{booking.scheduled_label}</p>
                             </div>
-                            <div className="border-sage-200/60 shrink-0 border-t pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-6 sm:text-right">
+                            <div className="border-ashen-200/60 shrink-0 border-t pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-6 sm:text-right">
                                 <p className="text-ashen-500 text-xs">Amount to send</p>
                                 <p className="font-display text-ashen-800 text-3xl">${booking.price.toFixed(2)}</p>
                             </div>
@@ -138,7 +135,7 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
                         transition={{ delay: 0.2 }}
                         className={`flex flex-col gap-4 p-6 ${CARD}`}
                     >
-                        <div className="border-sage-200/70 flex items-center justify-between gap-3 rounded-2xl border bg-white/60 px-4 py-3">
+                        <div className="border-ashen-200/70 bg-ashen-50/60 flex items-center justify-between gap-3 rounded-2xl border px-4 py-3">
                             <span className="min-w-0">
                                 <span className="text-ashen-500 block text-[11px] font-medium tracking-[0.12em] uppercase">Your reference</span>
                                 <span className="text-ashen-800 mt-0.5 block text-sm font-medium">{booking.reference}</span>
@@ -149,7 +146,7 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
                         </div>
 
                         <p className="text-ashen-600 flex items-start gap-2 text-xs leading-relaxed">
-                            <ShieldCheck className="text-sage-600 mt-0.5 size-4 shrink-0" />
+                            <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
                             Payments are reviewed by hand for now — once yours arrives, you’ll get a confirmation email (usually within a few hours)
                             and your session moves to confirmed.
                         </p>
@@ -159,16 +156,16 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
                     <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                         <Link
                             href="/dashboard"
-                            className="group bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-2 rounded-full py-2.5 pr-2.5 pl-6 text-sm font-medium text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:scale-[0.97]"
+                            className="group bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-2 rounded-full py-2.5 pr-2.5 pl-6 text-sm font-medium text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:scale-[0.97]"
                         >
                             I’ve sent the payment
-                            <span className="rounded-full bg-white/20 p-1.5 transition-transform group-hover:rotate-45">
+                            <span className="bg-ashen-50/20 rounded-full p-1.5 transition-transform group-hover:rotate-45">
                                 <ArrowUpRight className="size-4" />
                             </span>
                         </Link>
                         <a
                             href="mailto:help@sanad.app"
-                            className="text-sage-700 hover:bg-sage-100 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition"
+                            className="text-ashen-700 hover:bg-ashen-100 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition"
                         >
                             <Mail className="size-4" /> Need help paying?
                         </a>

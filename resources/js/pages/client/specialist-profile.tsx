@@ -1,5 +1,3 @@
-import { AmbientBackground } from '@/components/ambient-background';
-import { ClientFooter } from '@/components/client-footer';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import ClientLayout from '@/layouts/client-layout';
 import { Head, useForm } from '@inertiajs/react';
@@ -8,7 +6,7 @@ import { motion } from 'motion/react';
 import type { FormEvent } from 'react';
 
 /** Same warm frosted-glass container as the rest of the client app. */
-const CARD = 'rounded-3xl border border-white/60 bg-white/55 shadow-[0_24px_60px_-35px_rgba(58,59,55,0.4)] backdrop-blur-xl';
+const CARD = 'sanad-card rounded-3xl';
 
 interface SpecialistProfileProps {
     specialist: {
@@ -47,57 +45,63 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
     };
 
     return (
-        <ClientLayout>
+        <ClientLayout fitViewport>
             <Head title={specialist.name} />
 
-            <div className="bg-cream text-ashen-800 relative flex min-h-full flex-col overflow-hidden">
-                <AmbientBackground />
+            <div className="text-ashen-800 relative flex min-h-full flex-1 flex-col lg:min-h-0">
+                <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 py-8 md:px-8 md:py-12 lg:min-h-0 lg:py-6">
+                    {/* Three columns on desktop, not two.
 
-                <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 md:px-8 md:py-12">
+                    The times used to sit in a scrolling box inside the form, which meant
+                    hunting for a slot through a letterbox — worse than simply scrolling
+                    the page. Spreading the content sideways gives every step room to be
+                    visible at once, so the times never need a cramped scroller again. */}
                     <motion.div
                         initial={{ opacity: 0, y: 18 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="grid items-start gap-6 md:grid-cols-5 md:gap-8"
+                        className="grid gap-6 md:grid-cols-2 md:gap-8 lg:min-h-0 lg:flex-1 lg:grid-cols-12 lg:items-stretch lg:gap-6"
                     >
                         {/* ===== PORTRAIT ===== */}
-                        <div className={`overflow-hidden md:col-span-2 ${CARD}`}>
-                            <div className="p-2.5">
-                                <div className="bg-ashen-200/70 relative aspect-[4/5] w-full overflow-hidden rounded-[1.3rem]">
+                        <div className={`flex flex-col overflow-hidden lg:col-span-4 lg:min-h-0 ${CARD}`}>
+                            <div className="p-2.5 lg:min-h-0 lg:flex-1">
+                                <div className="bg-ashen-200/70 relative aspect-[4/5] w-full overflow-hidden rounded-[1.3rem] lg:aspect-auto lg:h-full lg:min-h-[8rem]">
                                     {specialist.photo_path ? (
                                         <img
                                             src={specialist.photo_path}
                                             alt={specialist.name}
-                                            className="absolute inset-0 h-full w-full object-cover object-[center_20%]"
+                                            className="absolute inset-0 h-full w-full object-cover object-[center_20%] grayscale-[15%]"
                                         />
                                     ) : (
-                                        <div className="from-sage-300 to-sage-600 absolute inset-0 bg-gradient-to-br" />
+                                        <div className="from-ashen-300 to-ashen-600 absolute inset-0 bg-gradient-to-br" />
                                     )}
-                                    <span className="bg-cream/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
+                                    <span className="bg-ashen-50/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
                                         Licensed Psychologist
                                     </span>
                                 </div>
                             </div>
-                            <div className="px-5 pb-5">
+                            <div className="shrink-0 px-5 pb-5 lg:pt-3">
                                 <p className="text-ashen-600 flex items-start gap-2 text-xs leading-relaxed">
-                                    <ShieldCheck className="text-sage-600 mt-0.5 size-4 shrink-0" />
+                                    <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
                                     Licensed clinical psychologist. Private &amp; confidential.
                                 </p>
                             </div>
                         </div>
 
-                        {/* ===== STORY + BOOKING ===== */}
-                        <div className="flex flex-col gap-6 md:col-span-3">
-                            <header>
-                                <h1 className="font-display text-ashen-800 text-3xl leading-tight tracking-tight md:text-4xl">{specialist.name}</h1>
-                                {specialist.headline && <p className="text-ashen-600 mt-2 text-base">{specialist.headline}</p>}
+                        {/* ===== STORY + SESSION TYPE ===== */}
+                        <div className="flex flex-col gap-5 lg:col-span-3 lg:min-h-0">
+                            <header className="shrink-0">
+                                <h1 className="font-display text-ashen-800 text-3xl leading-tight tracking-tight md:text-4xl lg:text-3xl">
+                                    {specialist.name}
+                                </h1>
+                                {specialist.headline && <p className="text-ashen-600 mt-2 text-base lg:text-sm">{specialist.headline}</p>}
                                 <div className="mt-3 flex flex-wrap items-center gap-1.5">
                                     {specialist.approaches.map((approach) => (
-                                        <span key={approach} className="bg-sage-100 text-sage-700 rounded-full px-2.5 py-0.5 text-xs font-medium">
+                                        <span key={approach} className="bg-ashen-100 text-ashen-700 rounded-full px-2.5 py-0.5 text-xs font-medium">
                                             {APPROACH_LABELS[approach] ?? approach}
                                         </span>
                                     ))}
                                     {specialist.languages.map((language) => (
-                                        <span key={language} className="border-sage-200 text-ashen-500 rounded-full border px-2.5 py-0.5 text-xs">
+                                        <span key={language} className="border-ashen-300/60 text-ashen-500 rounded-full border px-2.5 py-0.5 text-xs">
                                             {LANGUAGE_LABELS[language] ?? language}
                                         </span>
                                     ))}
@@ -105,114 +109,115 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
                                         <span className="text-ashen-500 ml-1 text-xs">{specialist.years_experience} years of experience</span>
                                     )}
                                 </div>
-                                {specialist.bio && <p className="text-ashen-600 mt-4 max-w-xl text-sm leading-relaxed">{specialist.bio}</p>}
+                                {/* clamped on desktop so an unusually long bio cannot push the
+                                booking column off the screen */}
+                                {specialist.bio && (
+                                    <p className="text-ashen-600 mt-4 text-sm leading-relaxed lg:mt-3 lg:line-clamp-4">{specialist.bio}</p>
+                                )}
                             </header>
 
-                            {/* ===== BOOKING FORM ===== */}
-                            <form onSubmit={submit} className={`flex flex-col gap-6 p-6 md:p-7 ${CARD}`}>
-                                <h2 className="font-display text-ashen-800 text-xl">Book your session</h2>
+                            <div className={`flex flex-col gap-3 p-5 lg:min-h-0 lg:flex-1 ${CARD}`}>
+                                <p className="text-ashen-500 shrink-0 text-xs font-medium tracking-[0.12em] uppercase">1 · Session type</p>
+                                <div className="scrollbar-hide flex flex-col gap-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+                                    {services.map((service) => (
+                                        <button
+                                            type="button"
+                                            key={service.id}
+                                            onClick={() => setData('service_id', service.id)}
+                                            className={`flex shrink-0 items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-left transition ${
+                                                data.service_id === service.id
+                                                    ? 'border-ashen-500 bg-ashen-50/80 shadow-sm'
+                                                    : 'border-ashen-300/50 hover:border-ashen-400 bg-ashen-50/40'
+                                            }`}
+                                        >
+                                            <span className="min-w-0">
+                                                <span className="text-ashen-800 block text-sm font-medium">{service.name}</span>
+                                                {service.duration_minutes != null && (
+                                                    <span className="text-ashen-500 mt-0.5 flex items-center gap-1 text-xs">
+                                                        <Clock className="size-3.5" /> {service.duration_minutes} minutes
+                                                    </span>
+                                                )}
+                                            </span>
+                                            <span className="font-display text-ashen-800 shrink-0 text-lg">${service.price}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                                {errors.service_id && <p className="text-sm text-red-600">{errors.service_id}</p>}
+                            </div>
+                        </div>
 
-                                {/* service */}
-                                <div>
-                                    <p className="text-ashen-500 mb-2.5 text-xs font-medium tracking-[0.12em] uppercase">1 · Session type</p>
-                                    <div className="flex flex-col gap-2">
-                                        {services.map((service) => (
+                        {/* ===== TIME + NOTE + CONFIRM ===== */}
+                        <form onSubmit={submit} className={`flex flex-col gap-4 p-6 md:col-span-2 lg:col-span-5 lg:min-h-0 ${CARD}`}>
+                            <h2 className="font-display text-ashen-800 shrink-0 text-xl">Book your session</h2>
+
+                            {/* The times get the room — this is what the page exists for, and
+                            it is the last thing that should ever be squeezed. */}
+                            <div className="flex flex-col gap-2.5 lg:min-h-0 lg:flex-1">
+                                <p className="text-ashen-500 flex shrink-0 items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase">
+                                    <CalendarClock className="text-ashen-600 size-4" /> 2 · Pick a time
+                                </p>
+                                {slots.length > 0 ? (
+                                    <div className="scrollbar-hide flex flex-wrap content-start gap-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+                                        {slots.map((slot) => (
                                             <button
                                                 type="button"
-                                                key={service.id}
-                                                onClick={() => setData('service_id', service.id)}
-                                                className={`flex items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-left transition ${
-                                                    data.service_id === service.id
-                                                        ? 'border-sage-500 bg-sage-50 shadow-sm'
-                                                        : 'border-sage-200/70 hover:border-sage-300 bg-white/50'
+                                                key={slot.iso}
+                                                onClick={() => setData('scheduled_at', slot.iso)}
+                                                className={`h-fit rounded-full border px-4 py-2 text-sm font-medium transition ${
+                                                    data.scheduled_at === slot.iso
+                                                        ? 'border-ashen-600 bg-ashen-600 text-ashen-50 shadow-sm'
+                                                        : 'border-ashen-300/60 bg-ashen-50/60 text-ashen-800 hover:border-ashen-400'
                                                 }`}
                                             >
-                                                <span className="min-w-0">
-                                                    <span className="text-ashen-800 block text-sm font-medium">{service.name}</span>
-                                                    {service.duration_minutes != null && (
-                                                        <span className="text-ashen-500 mt-0.5 flex items-center gap-1 text-xs">
-                                                            <Clock className="size-3.5" /> {service.duration_minutes} minutes
-                                                        </span>
-                                                    )}
-                                                </span>
-                                                <span className="font-display text-ashen-800 shrink-0 text-lg">${service.price}</span>
+                                                {slot.label}
                                             </button>
                                         ))}
                                     </div>
-                                    {errors.service_id && <p className="mt-2 text-sm text-red-600">{errors.service_id}</p>}
-                                </div>
+                                ) : (
+                                    <p className="text-ashen-500 text-sm">No open times right now — please check back soon.</p>
+                                )}
+                                {errors.scheduled_at && <p className="text-sm text-red-600">{errors.scheduled_at}</p>}
+                            </div>
 
-                                {/* slot */}
-                                <div>
-                                    <p className="text-ashen-500 mb-2.5 flex items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase">
-                                        <CalendarClock className="text-sage-600 size-4" /> 2 · Pick a time
-                                    </p>
-                                    {slots.length > 0 ? (
-                                        <div className="flex flex-wrap gap-2">
-                                            {slots.map((slot) => (
-                                                <button
-                                                    type="button"
-                                                    key={slot.iso}
-                                                    onClick={() => setData('scheduled_at', slot.iso)}
-                                                    className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                                                        data.scheduled_at === slot.iso
-                                                            ? 'border-sage-600 bg-sage-600 text-white shadow-sm'
-                                                            : 'border-sage-200 bg-sage-50/70 text-sage-800 hover:border-sage-400'
-                                                    }`}
-                                                >
-                                                    {slot.label}
-                                                </button>
-                                            ))}
-                                        </div>
+                            <div className="shrink-0">
+                                <p className="text-ashen-500 mb-2 text-xs font-medium tracking-[0.12em] uppercase">
+                                    3 · Anything you’d like to share? <span className="normal-case">(optional)</span>
+                                </p>
+                                <textarea
+                                    value={data.client_note}
+                                    onChange={(event) => setData('client_note', event.target.value)}
+                                    rows={2}
+                                    placeholder="A few words about what brings you here — only your specialist will read this."
+                                    className="border-ashen-300/50 text-ashen-800 placeholder:text-ashen-400 focus:border-ashen-400 focus:ring-ashen-300/40 bg-ashen-50/60 w-full rounded-2xl border px-4 py-2.5 text-sm focus:ring-2 focus:outline-none"
+                                />
+                                {errors.client_note && <p className="mt-2 text-sm text-red-600">{errors.client_note}</p>}
+                            </div>
+
+                            <div className="border-ashen-300/40 flex shrink-0 flex-col gap-3 border-t pt-4 sm:flex-row sm:items-center sm:justify-between">
+                                <p className="text-ashen-600 text-sm">
+                                    {selectedService ? (
+                                        <>
+                                            Total: <span className="font-display text-ashen-800 text-xl">${selectedService.price}</span> — payment is
+                                            arranged after confirmation.
+                                        </>
                                     ) : (
-                                        <p className="text-ashen-500 text-sm">No open times right now — please check back soon.</p>
+                                        'Select a session type to continue.'
                                     )}
-                                    {errors.scheduled_at && <p className="mt-2 text-sm text-red-600">{errors.scheduled_at}</p>}
-                                </div>
-
-                                {/* note */}
-                                <div>
-                                    <p className="text-ashen-500 mb-2.5 text-xs font-medium tracking-[0.12em] uppercase">
-                                        3 · Anything you’d like to share? <span className="normal-case">(optional)</span>
-                                    </p>
-                                    <textarea
-                                        value={data.client_note}
-                                        onChange={(event) => setData('client_note', event.target.value)}
-                                        rows={3}
-                                        placeholder="A few words about what brings you here — only your specialist will read this."
-                                        className="border-sage-200/70 text-ashen-800 placeholder:text-ashen-400 focus:border-sage-400 focus:ring-sage-300/40 w-full rounded-2xl border bg-white/60 px-4 py-3 text-sm focus:ring-2 focus:outline-none"
-                                    />
-                                    {errors.client_note && <p className="mt-2 text-sm text-red-600">{errors.client_note}</p>}
-                                </div>
-
-                                <div className="border-sage-200/60 flex flex-col gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
-                                    <p className="text-ashen-600 text-sm">
-                                        {selectedService ? (
-                                            <>
-                                                Total: <span className="font-display text-ashen-800 text-xl">${selectedService.price}</span> — payment
-                                                is arranged after confirmation.
-                                            </>
-                                        ) : (
-                                            'Select a session type to continue.'
-                                        )}
-                                    </p>
-                                    <button
-                                        type="submit"
-                                        disabled={processing || !data.scheduled_at || !data.service_id}
-                                        className="group bg-sage-700 hover:bg-sage-800 inline-flex w-fit shrink-0 items-center gap-2 rounded-full py-2.5 pr-2.5 pl-6 text-sm font-medium text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0"
-                                    >
-                                        {processing ? 'Booking…' : 'Confirm booking'}
-                                        <span className="rounded-full bg-white/20 p-1.5 transition-transform group-hover:rotate-45">
-                                            <ArrowUpRight className="size-4" />
-                                        </span>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                                </p>
+                                <button
+                                    type="submit"
+                                    disabled={processing || !data.scheduled_at || !data.service_id}
+                                    className="group bg-ashen-700 hover:bg-ashen-800 text-ashen-50 inline-flex w-fit shrink-0 items-center gap-2 rounded-full py-2.5 pr-2.5 pl-6 text-sm font-medium shadow-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:translate-y-0 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0"
+                                >
+                                    {processing ? 'Booking…' : 'Confirm booking'}
+                                    <span className="bg-ashen-50/20 rounded-full p-1.5 transition-transform group-hover:rotate-45">
+                                        <ArrowUpRight className="size-4" />
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
                     </motion.div>
                 </div>
-
-                <ClientFooter />
             </div>
         </ClientLayout>
     );

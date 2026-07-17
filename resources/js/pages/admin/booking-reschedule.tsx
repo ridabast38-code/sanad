@@ -23,7 +23,7 @@ interface Props {
 }
 
 const FIELD =
-    'border-sage-200 focus:border-sage-400 focus:ring-sage-200 text-ashen-800 w-full rounded-xl border bg-white px-4 py-2.5 text-sm transition outline-none focus:ring-2';
+    'border-ashen-200 focus:border-ashen-400 focus:ring-ashen-200 text-ashen-800 w-full rounded-xl border bg-ashen-50/80 px-4 py-2.5 text-sm transition outline-none focus:ring-2';
 
 export default function AdminBookingReschedule({ booking, slots }: Props) {
     const { data, setData, patch, processing, errors } = useForm({ scheduled_at: '' });
@@ -35,14 +35,14 @@ export default function AdminBookingReschedule({ booking, slots }: Props) {
 
     return (
         <StaffLayout title="Reschedule session">
-            <Link href="/admin/bookings" className="text-ashen-500 hover:text-sage-700 mb-4 inline-flex items-center gap-1.5 text-sm transition">
+            <Link href="/admin/bookings" className="text-ashen-500 hover:text-ashen-700 mb-4 inline-flex items-center gap-1.5 text-sm transition">
                 <ArrowLeft className="size-4" /> Back to bookings
             </Link>
 
             <PageHeader title="Reschedule session" subtitle="Move this session to another free time on the same specialist." />
 
             <form onSubmit={submit} className={`max-w-2xl space-y-6 p-6 ${CARD}`}>
-                <div className="bg-sage-50/60 rounded-xl p-4">
+                <div className="bg-ashen-50/60 rounded-xl p-4">
                     <p className="text-ashen-800 font-medium">
                         {booking.service} — {booking.client} <span className="text-ashen-400 font-normal">with</span> {booking.practitioner}
                     </p>
@@ -70,7 +70,7 @@ export default function AdminBookingReschedule({ booking, slots }: Props) {
                 <button
                     type="submit"
                     disabled={processing || !data.scheduled_at}
-                    className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
+                    className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition disabled:opacity-60"
                 >
                     <CalendarClock className="size-4" /> Move session
                 </button>

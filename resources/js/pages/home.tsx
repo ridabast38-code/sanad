@@ -1,5 +1,8 @@
+import { DustField, OliveDrops, OliveHorizon, OliveTree, type Drop, type Mote } from '@/components/olive';
 import { RevealText, SOFT_EASE } from '@/components/reveal-text';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
+import { type SharedData } from '@/types';
+import { usePage } from '@inertiajs/react';
 import {
     ArrowUpRight,
     ChevronDown,
@@ -62,7 +65,43 @@ function TiltCard({
     );
 }
 
+/**
+ * The landing's own dust placements. The shared DustField is split across two
+ * calm sections here to keep the mote count — and the animation budget — exactly
+ * where it was, and because each section's height is fixed. See components/olive.tsx.
+ */
+const DUST_UPPER: Mote[] = [
+    { l: 8, t: 12, s: 2, d: 18, delay: -2 },
+    { l: 22, t: 8, s: 1, d: 16, delay: -14 },
+    { l: 35, t: 42, s: 1, d: 24, delay: -11 },
+    { l: 70, t: 48, s: 1.5, d: 23, delay: -13 },
+];
+
+const DUST_LOWER: Mote[] = [
+    { l: 52, t: 38, s: 1, d: 21, delay: -1 },
+    { l: 86, t: 30, s: 2, d: 20, delay: -16 },
+    { l: 30, t: 70, s: 1, d: 24, delay: -19 },
+    { l: 82, t: 72, s: 1.5, d: 20, delay: -12 },
+];
+
+/** The support panel's quiet edges — it has no accordion, so percentages hold. */
+const SUPPORT_DROPS: Drop[] = [
+    { x: 3, y: '16%', fall: 150, dur: 10, delay: 0 },
+    { x: 97, y: '30%', fall: 170, dur: 12, delay: -5 },
+    { x: 2, y: '62%', fall: 140, dur: 11, delay: -7.5 },
+    { x: 98, y: '74%', fall: 160, dur: 13, delay: -2 },
+];
+
+/** The approaches panel — fixed units, because its rows expand. */
+const APPROACH_DROPS: Drop[] = [
+    { x: 4, y: '5rem', fall: 130, dur: 11, delay: -1 },
+    { x: 96, y: '11rem', fall: 150, dur: 13, delay: -6 },
+    { x: 6, y: '19rem', fall: 120, dur: 10, delay: -8.5 },
+];
+
 export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
+    const isGuest = !usePage<SharedData>().props.auth?.user;
+
     const mouseX = useMotionValue(50);
     const mouseY = useMotionValue(50);
     const spotlight = useMotionTemplate`radial-gradient(circle 450px at ${mouseX}% ${mouseY}%, rgba(176,177,171,0.22), rgba(146,147,141,0.08) 35%, transparent 70%)`;
@@ -156,7 +195,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
         // a deep warm gray on the right, behind every section from hero to footer.
         // The final color goes flat from 76% so the hero's notched corner card can
         // match it exactly at any common viewport width.
-        <div className="min-h-screen bg-[linear-gradient(to_right,#f6f4ed_0%,#e6e5dd_28%,#b8b9b1_55%,#90918a_76%,#90918a_100%)]">
+        <div className="sanad-split min-h-screen">
             {/* Always-present crisis fast lane for visitors in distress — one tap to
             a real person on WhatsApp, no sign-up needed. */}
             <a
@@ -192,7 +231,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         loop
                         playsInline
                         poster="/images/hero.jpg"
-                        className="absolute inset-0 z-0 h-full w-full scale-110 transform-gpu object-cover blur-[2px]"
+                        className="absolute inset-0 z-0 h-full w-full scale-110 transform-gpu object-cover blur-[2px] grayscale-[45%]"
                     >
                         <source src="/videos/hero.mp4" type="video/mp4" />
                     </video>
@@ -212,7 +251,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     { label: 'Contact', href: '#contact' },
                                 ].map((item) => (
                                     <li key={item.href}>
-                                        <a href={item.href} className="group relative inline-block py-1 transition hover:text-ashen-400">
+                                        <a href={item.href} className="group hover:text-ashen-400 relative inline-block py-1 transition">
                                             {item.label}
                                             <span className="bg-ashen-200 absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 transition-transform duration-300 ease-out group-hover:scale-x-100" />
                                         </a>
@@ -222,7 +261,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <div className="text-ashen-200 text-xl md:hidden">Sanad</div>
                             <div className="flex flex-1 justify-end">
                                 <motion.a
-                                    href="/register"
+                                    href="#team"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="bg-ashen-800 hover:bg-ashen-900 text-ashen-200 flex items-center gap-2 rounded-full py-1.5 pr-5 pl-2 text-sm transition md:gap-3 md:py-2"
@@ -286,11 +325,12 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         </motion.div>
 
                         {/* bottom-right CUT-OUT card (notched into the corner, like the reference) */}
-                        <motion.div
+                        <motion.a
+                            href="#approaches"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#90918a] p-6 pl-10 md:gap-6 md:pl-12"
+                            className="group absolute right-0 bottom-0 flex items-center gap-4 rounded-tl-[2.5rem] bg-[#90918a] p-6 pl-10 md:gap-6 md:pl-12"
                         >
                             {/* concave corner masks — make the notch blend smoothly into the card */}
                             <div className="pointer-events-none absolute -top-[2.5rem] right-0 h-[2.5rem] w-[2.5rem]">
@@ -305,17 +345,17 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             </div>
 
                             {/* content */}
-                            <div className="border-ashen-900/30 bg-ashen-900/10 flex h-12 w-12 items-center justify-center rounded-full border md:h-14 md:w-14">
+                            <div className="border-ashen-900/30 bg-ashen-900/10 flex h-12 w-12 items-center justify-center rounded-full border transition-transform group-hover:rotate-45 md:h-14 md:w-14">
                                 <ArrowUpRight className="text-ashen-900 h-5 w-5" />
                             </div>
                             <div>
                                 <p className="text-ashen-900 text-base md:text-xl">Our approach</p>
-                                <div className="text-ashen-900/70 hover:text-ashen-900 flex cursor-pointer items-center gap-1 transition">
+                                <div className="text-ashen-900/70 group-hover:text-ashen-900 flex items-center gap-1 transition">
                                     <span className="text-xs md:text-[15px]">How support works</span>
-                                    <ChevronRight className="h-4 w-4" />
+                                    <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                                 </div>
                             </div>
-                        </motion.div>
+                        </motion.a>
                     </div>
                 </section>
             </div>
@@ -323,64 +363,39 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
             {/* ===== CONTINUOUS CANVAS — transparent, so the page-wide light→dark
             split shows through beneath the auroras and every section ===== */}
             <div onMouseMove={handleMouseMove} className="relative overflow-hidden">
-                {/* always-on aurora spanning the WHOLE canvas (both sections) */}
-                <div
-                    className="bg-ashen-400/30 pointer-events-none absolute top-[4%] -left-40 h-[38rem] w-[38rem] rounded-full blur-3xl"
-                    style={{ animation: 'aurora-1 22s ease-in-out infinite' }}
-                />
-                <div
-                    className="bg-ashen-300/25 pointer-events-none absolute top-[26%] -right-40 h-[42rem] w-[42rem] rounded-full blur-3xl"
-                    style={{ animation: 'aurora-2 26s ease-in-out infinite' }}
-                />
-                <div
-                    className="bg-ashen-200/40 pointer-events-none absolute top-[52%] left-1/4 h-[34rem] w-[34rem] rounded-full blur-3xl"
-                    style={{ animation: 'aurora-3 28s ease-in-out infinite' }}
-                />
-                <div
-                    className="bg-ashen-300/30 pointer-events-none absolute top-[78%] -left-32 h-[34rem] w-[34rem] rounded-full blur-3xl"
-                    style={{ animation: 'aurora-2 30s ease-in-out infinite' }}
-                />
+                {/* NOTE: the auroras and dust deliberately live INSIDE individual sections
+                rather than here. Positioned against this canvas they used percentage tops,
+                so every accordion (Methods, FAQ) changed the canvas height and dragged the
+                whole background across the screen while the panel animated. Anchored to a
+                section's top edge instead, they hold still: a section's top doesn't move
+                when its own content grows downward. */}
 
                 {/* mouse spotlight across the whole canvas */}
                 <motion.div className="pointer-events-none absolute inset-0" style={{ background: spotlight }} />
 
-                {/* drifting dust across the whole canvas */}
-                <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                    {[
-                        { l: 8, t: 12, s: 2, d: 18, delay: -2 },
-                        { l: 22, t: 8, s: 1, d: 16, delay: -14 },
-                        { l: 35, t: 42, s: 1, d: 24, delay: -11 },
-                        { l: 52, t: 38, s: 1, d: 21, delay: -1 },
-                        { l: 70, t: 48, s: 1.5, d: 23, delay: -13 },
-                        { l: 86, t: 30, s: 2, d: 20, delay: -16 },
-                        { l: 30, t: 70, s: 1, d: 24, delay: -19 },
-                        { l: 82, t: 72, s: 1.5, d: 20, delay: -12 },
-                    ].map((p, i) => (
-                        <div
-                            key={i}
-                            className="absolute rounded-full bg-ashen-200"
-                            style={{
-                                left: `${p.l}%`,
-                                top: `${p.t}%`,
-                                width: `${p.s * 2.5}px`,
-                                height: `${p.s * 2.5}px`,
-                                animation: `dust-drift ${p.d}s ease-in-out infinite`,
-                                animationDelay: `${p.delay}s`,
-                                filter: 'blur(1px)',
-                                boxShadow: '0 0 8px 2px rgba(176,177,171,0.5)',
-                            }}
-                        />
-                    ))}
-                </div>
-
                 {/* ===== HOW ARE YOU FEELING — dark glowing panel ===== */}
                 <section id="support" className="relative z-10 pt-8 pb-12 md:pt-10 md:pb-16">
+                    {/* anchored to this section's top, not a % of the page — see the note on the canvas */}
+                    <div
+                        className="bg-ashen-400/14 pointer-events-none absolute top-[4rem] -left-40 h-[34rem] w-[34rem] rounded-full blur-3xl"
+                        style={{ animation: 'aurora-1 22s ease-in-out infinite' }}
+                    />
+                    <div
+                        className="bg-ashen-300/12 pointer-events-none absolute top-[42rem] -right-40 h-[36rem] w-[36rem] rounded-full blur-3xl"
+                        style={{ animation: 'aurora-2 26s ease-in-out infinite' }}
+                    />
+                    <DustField motes={DUST_UPPER} />
+
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-10">
                         <div className="sanad-border from-ashen-700 to-ashen-800 border-ashen-300/25 relative overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 md:px-12 md:py-14">
                             {/* animating light glows inside the panel */}
-                            <div className="bg-ashen-400/30 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
-                            <div className="bg-ashen-300/25 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
-                            <div className="bg-ashen-400/25 animate-breathe pointer-events-none absolute top-1/3 left-1/2 h-64 w-64 rounded-full blur-3xl [animation-delay:-7s]" />
+                            <div className="bg-ashen-400/16 animate-breathe pointer-events-none absolute top-10 -left-10 h-72 w-72 rounded-full blur-3xl" />
+                            <div className="bg-ashen-300/12 animate-breathe pointer-events-none absolute -right-10 bottom-10 h-80 w-80 rounded-full blur-3xl [animation-delay:-4s]" />
+                            <div className="bg-ashen-400/12 animate-breathe pointer-events-none absolute top-1/3 left-1/2 h-64 w-64 rounded-full blur-3xl [animation-delay:-7s]" />
+
+                            {/* oil falling through the panel's quiet edges — light-toned to
+                            carry against the dark gradient */}
+                            <OliveDrops drops={SUPPORT_DROPS} tone="light" className="z-[5]" />
 
                             {/* content above the glows */}
                             <div className="relative z-10">
@@ -585,6 +600,11 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                 {/* ===== OUR METHODS — editorial collapsible rows ===== */}
                 <section id="approaches" className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-8 md:px-8 md:pt-16 md:pb-10">
+                    {/* top-anchored: stays put when the approach rows expand below it */}
+                    <div
+                        className="bg-ashen-200/20 pointer-events-none absolute top-[6rem] left-1/4 h-[30rem] w-[30rem] rounded-full blur-3xl"
+                        style={{ animation: 'aurora-3 28s ease-in-out infinite' }}
+                    />
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -618,6 +638,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             transition={{ duration: 1.4, ease: SOFT_EASE }}
                             className="pointer-events-none absolute inset-0 h-full w-full object-cover grayscale-[15%] select-none"
                         />
+                        {/* dark-toned here: this panel is light glass over the olive branches */}
+                        <OliveDrops drops={APPROACH_DROPS} tone="dark" className="z-[5]" />
+
                         <div className="divide-ashen-700/15 relative z-10 divide-y">
                             {approaches.map((a, i) => {
                                 const isOpen = open === i;
@@ -717,68 +740,90 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== MEET THE TEAM — framed, angled specialist cards on a colored band ===== */}
-                <section id="team" className="from-ashen-700 to-ashen-800 relative z-10 bg-gradient-to-b pt-10 pb-12 md:pt-12 md:pb-16">
-                    {/* soft on-brand glow for depth (no photo) */}
-                    <div className="bg-ashen-400/20 animate-breathe pointer-events-none absolute top-10 -left-20 h-72 w-72 rounded-full blur-3xl" />
-                    <div className="bg-ashen-300/15 animate-breathe pointer-events-none absolute -right-20 bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
+                <section id="team" className="relative z-10 scroll-mt-6 pt-6 pb-7 md:pt-7 md:pb-8">
+                    {/* The band itself, feathered top and bottom. It used to be a solid block
+                    dropped between two light sections, which left a hard seam straight across
+                    the page at each edge. Everything decorative lives inside this layer, so
+                    the mask fades the glows and the tree out with it. */}
+                    <div className="from-ashen-700 to-ashen-800 pointer-events-none absolute inset-0 overflow-hidden bg-gradient-to-b [mask-image:linear-gradient(to_bottom,transparent,black_6%,black_94%,transparent)]">
+                        {/* Halved and no longer breathing. These were carrying the section's depth
+                        back when it had no image behind it; the olive does that job now, and two
+                        pulsing blooms at the edges only fought it. */}
+                        <div className="bg-ashen-400/8 absolute top-10 -left-24 h-64 w-64 rounded-full blur-3xl" />
+                        <div className="bg-ashen-300/6 absolute -right-24 bottom-10 h-64 w-64 rounded-full blur-3xl" />
+
+                        {/* The olive behind the team, sunk low so only the canopy clears the
+                        bottom edge — a treeline rather than a specimen. A whole tree piles its
+                        weight in the centre, which is exactly where the cards sit. */}
+                        <OliveHorizon />
+
+                        <DustField motes={DUST_LOWER} />
+                    </div>
 
                     <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-8">
-                        <div className="mb-8 max-w-2xl">
+                        {/* One left-aligned column: heading, then the button directly under it.
+                        The blurb and the shuffle note used to sit opposite in a second column
+                        and were saying what the cards already show — losing them lets the
+                        section close right up around the faces. */}
+                        <div className="mb-4 md:mb-5">
                             <span className="text-ashen-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                            <h2 className="font-display text-ashen-200 mt-3 text-3xl tracking-tight md:text-5xl">The people behind Sanad</h2>
-                            <p className="text-ashen-200 mt-4 max-w-xl leading-relaxed">
-                                Every Sanad psychologist is a licensed clinical psychologist, trained across all our approaches — CBT, EMDR and
-                                psychoanalysis. <span className="text-ashen-200">Real care, real credentials.</span>
-                            </p>
+                            <h2 className="font-display text-ashen-200 mt-2 text-3xl tracking-tight md:text-4xl">The people behind Sanad</h2>
+
+                            {/* Guests only. A signed-in client already has this directory inside
+                            their dashboard, with their own matches marked — sending them to the
+                            public copy would be a step backwards. */}
+                            {isGuest && (
+                                <motion.a
+                                    href="/psychologists"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="group bg-ashen-200 text-ashen-900 hover:bg-ashen-100 mt-4 inline-flex items-center gap-2 rounded-full py-2 pr-5 pl-2 text-sm font-medium transition"
+                                >
+                                    <span className="bg-ashen-900/10 rounded-full p-1 transition-transform group-hover:rotate-45">
+                                        <ArrowUpRight className="h-4 w-4" />
+                                    </span>
+                                    View all psychologists
+                                </motion.a>
+                            )}
                         </div>
 
-                        {/* steady framed cards — swipe carousel on phone, grid on desktop */}
-                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+                        {/* A drag rail at every size, not a grid. With twenty specialists a grid
+                        becomes a wall, and the cream matte that used to frame each photo was the
+                        brightest thing on the page — the eye landed on the border instead of the
+                        face. The photo is the card now. */}
+                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-3 md:gap-5">
                             {specialists.map((m) => (
                                 <motion.button
                                     key={m.slug}
                                     onClick={() => setSelected(m)}
-                                    whileHover={{ y: -4 }}
-                                    transition={{ duration: 0.3, ease: SOFT_EASE }}
-                                    className="group from-cream via-cream to-ashen-200 block w-[72%] shrink-0 snap-center rounded-[1.25rem] bg-gradient-to-b p-3 text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.7)] sm:w-full sm:shrink"
+                                    whileHover={{ y: -6 }}
+                                    transition={{ duration: 0.45, ease: SOFT_EASE }}
+                                    className="group relative aspect-[4/5] w-[78%] shrink-0 snap-center overflow-hidden rounded-[1.75rem] text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] sm:w-[45%] lg:w-[31%]"
                                 >
-                                    <div className="relative aspect-[4/5] overflow-hidden rounded-[0.85rem]">
-                                        {m.photo_path ? (
-                                            <img
-                                                src={m.photo_path}
-                                                alt={m.name}
-                                                loading="lazy"
-                                                decoding="async"
-                                                className="absolute inset-0 h-full w-full object-cover grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                                            />
-                                        ) : (
-                                            <div className="from-ashen-300 to-ashen-500 absolute inset-0 bg-gradient-to-br" />
-                                        )}
-                                        <span className="bg-ashen-100/90 text-ashen-900 absolute top-3 left-3 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
-                                            Licensed Psychologist
-                                        </span>
-                                    </div>
-                                    <div className="flex items-end justify-between gap-3 px-1 pt-3.5">
-                                        <div>
-                                            <h3 className="font-display text-ashen-900 text-xl">{m.name}</h3>
-                                            <p className="text-ashen-700 mt-0.5 text-xs">Licensed clinical psychologist</p>
-                                        </div>
-                                        <span className="text-ashen-600 shrink-0 text-sm font-medium opacity-0 transition group-hover:opacity-100">
-                                            View →
-                                        </span>
+                                    {m.photo_path ? (
+                                        <img
+                                            src={m.photo_path}
+                                            alt={m.name}
+                                            loading="lazy"
+                                            decoding="async"
+                                            className="absolute inset-0 h-full w-full object-cover grayscale-[35%] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                                        />
+                                    ) : (
+                                        <div className="from-ashen-300 to-ashen-500 absolute inset-0 bg-gradient-to-br" />
+                                    )}
+
+                                    {/* the name rests on the photo instead of on a frame below it */}
+                                    <div className="from-ashen-950/90 via-ashen-950/25 absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 group-hover:opacity-90" />
+                                    <div className="absolute inset-x-0 bottom-0 p-5">
+                                        <h3 className="font-display text-ashen-100 text-xl md:text-2xl">{m.name}</h3>
+                                        <p className="text-ashen-300 mt-1 text-xs">Licensed clinical psychologist</p>
                                     </div>
                                 </motion.button>
                             ))}
-
-                            {/* ghost card — signals more specialists to come */}
-                            <div className="border-ashen-300/40 flex min-h-[16rem] w-[72%] shrink-0 snap-center flex-col items-center justify-center gap-2 rounded-[1.25rem] border-2 border-dashed p-6 text-center sm:min-h-[20rem] sm:w-full sm:shrink">
-                                <span className="font-display text-ashen-300/60 text-4xl">+</span>
-                                <p className="text-ashen-300/80 text-sm">More specialists joining soon</p>
-                            </div>
                         </div>
 
                         {/* confident, licensed practice statement */}
-                        <p className="text-ashen-400 mt-7 max-w-3xl text-xs leading-relaxed">
+                        <p className="text-ashen-400 mt-5 max-w-3xl text-xs leading-relaxed">
                             Every Sanad clinician is a licensed clinical psychologist, and Sanad is a fully licensed, confidential clinical practice.
                             For a medical emergency or if you are in danger, please contact your local emergency number.
                         </p>
@@ -786,7 +831,15 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                 </section>
 
                 {/* ===== FAQ — "Ask away" (skewed photo + hairline list) ===== */}
-                <section id="faq" className="relative z-10 mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-16">
+                {/* z-20: sits above the closing panel so the olive crown growing up from
+                it passes BEHIND this text rather than over it. */}
+                <section id="faq" className="relative z-20 mx-auto max-w-6xl px-6 py-12 md:px-8 md:py-16">
+                    {/* top-anchored: the whole reason the background used to slide when a
+                    question opened was this blob being positioned by page percentage */}
+                    <div
+                        className="bg-ashen-300/15 pointer-events-none absolute top-[5rem] -left-32 h-[30rem] w-[30rem] rounded-full blur-3xl"
+                        style={{ animation: 'aurora-2 30s ease-in-out infinite' }}
+                    />
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-[0.85fr_1.15fr] md:gap-16">
                         {/* left — heading + angled photo + contact */}
                         <div className="md:sticky md:top-24 md:self-start">
@@ -830,7 +883,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                             <a
                                 href="/register"
-                                className="group bg-ashen-800 hover:bg-ashen-900 mt-7 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-ashen-200 text-sm font-medium transition"
+                                className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-7 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-sm font-medium transition"
                             >
                                 <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
                                     <ArrowUpRight className="h-4 w-4" />
@@ -893,11 +946,19 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                 {/* ===== FINAL CTA — calm on-brand panel to close ===== */}
                 <section className="relative z-10 px-6 pb-12 md:pb-16">
-                    {/* translucent glass — the page split stays visible behind the closing panel */}
-                    <div className="from-ashen-100/55 to-ashen-300/40 border-ashen-600/30 relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border bg-gradient-to-br px-6 py-12 text-center backdrop-blur-sm md:rounded-[3.5rem] md:py-16">
-                        <div className="bg-ashen-300/25 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
-                        <div className="bg-ashen-200/40 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
-                        <div className="relative z-10">
+                    {/* Deliberately NOT clipped: the olive tree is rooted in this panel but
+                    its crown escapes upward into the FAQ, tying the closing sections into
+                    one composition. The panel's own surface is clipped separately below. */}
+                    <div className="relative mx-auto max-w-6xl">
+                        {/* panel surface + glows — clipped to the rounded shape */}
+                        <div className="from-ashen-100/55 to-ashen-300/40 border-ashen-600/30 pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem] border bg-gradient-to-br backdrop-blur-sm md:rounded-[3.5rem]">
+                            <div className="bg-ashen-300/14 animate-breathe pointer-events-none absolute -top-10 -left-10 h-64 w-64 rounded-full blur-3xl" />
+                            <div className="bg-ashen-200/20 animate-breathe pointer-events-none absolute -right-10 -bottom-10 h-72 w-72 rounded-full blur-3xl [animation-delay:-4s]" />
+                        </div>
+
+                        <OliveTree />
+
+                        <div className="relative z-10 px-6 py-12 text-center md:py-16">
                             <span className="text-ashen-900 border-ashen-600/40 bg-ashen-100/60 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-medium tracking-[0.15em] uppercase">
                                 <span className="bg-ashen-500 h-1.5 w-1.5 rounded-full" /> Proudly Lebanese · Beirut
                             </span>
@@ -908,8 +969,8 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 Real, confidential care from licensed clinical psychologists — in your language, on your schedule, at your own pace.
                             </p>
                             <a
-                                href="/register"
-                                className="group bg-ashen-800 hover:bg-ashen-900 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-ashen-200 text-sm font-medium transition"
+                                href="#team"
+                                className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-8 inline-flex items-center gap-2.5 rounded-full py-3 pr-6 pl-3 text-sm font-medium transition"
                             >
                                 <span className="bg-ashen-200/30 rounded-full p-1.5 transition-transform group-hover:rotate-45">
                                     <ArrowUpRight className="h-5 w-5" />
@@ -922,11 +983,11 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
             </div>
 
             {/* ===== FOOTER — cinematic, Lebanese identity + trust ===== */}
-            <footer id="contact" className="bg-ashen-950 text-ashen-200 relative scroll-mt-20 overflow-hidden">
+            <footer id="contact" className="bg-ashen-800 text-ashen-200 relative scroll-mt-20 overflow-hidden">
                 {/* soft on-brand glow for a little depth — solid color, no photo */}
                 <div
                     aria-hidden
-                    className="bg-ashen-800/20 pointer-events-none absolute top-0 -left-32 h-80 w-80 rounded-full blur-3xl"
+                    className="bg-ashen-600/30 pointer-events-none absolute top-0 -left-32 h-80 w-80 rounded-full blur-3xl"
                     style={{ animation: 'aurora-1 26s ease-in-out infinite' }}
                 />
 
@@ -936,32 +997,32 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         {/* brand */}
                         <div className="col-span-2 md:col-span-1">
                             <p className="font-display text-2xl">Sanad</p>
-                            <p className="text-ashen-400 mt-3 max-w-xs text-sm leading-relaxed">
+                            <p className="text-ashen-300 mt-3 max-w-xs text-sm leading-relaxed">
                                 A safe space for your mind — real, licensed psychological care, guided with warmth.
                             </p>
                         </div>
 
                         {/* explore */}
                         <div>
-                            <p className="text-ashen-400 text-xs font-medium tracking-[0.15em] uppercase">Explore</p>
+                            <p className="text-ashen-300 text-xs font-medium tracking-[0.15em] uppercase">Explore</p>
                             <ul className="text-ashen-300 mt-4 space-y-3 text-sm">
                                 <li>
-                                    <a href="#support" className="transition hover:text-ashen-400">
+                                    <a href="#support" className="hover:text-ashen-100 transition">
                                         In-the-moment support
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#approaches" className="transition hover:text-ashen-400">
+                                    <a href="#approaches" className="hover:text-ashen-100 transition">
                                         Our approaches
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#team" className="transition hover:text-ashen-400">
+                                    <a href="#team" className="hover:text-ashen-100 transition">
                                         Our team
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#faq" className="transition hover:text-ashen-400">
+                                    <a href="#faq" className="hover:text-ashen-100 transition">
                                         FAQ
                                     </a>
                                 </li>
@@ -970,36 +1031,36 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                         {/* contact */}
                         <div>
-                            <p className="text-ashen-400 text-xs font-medium tracking-[0.15em] uppercase">Reach us</p>
+                            <p className="text-ashen-300 text-xs font-medium tracking-[0.15em] uppercase">Reach us</p>
                             <ul className="text-ashen-300 mt-4 space-y-3 text-sm">
                                 <li>
                                     <a
                                         href={whatsappUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-2.5 transition hover:text-ashen-400"
+                                        className="hover:text-ashen-100 flex items-center gap-2.5 transition"
                                     >
-                                        <MessageCircle className="text-ashen-400 h-4 w-4" /> WhatsApp us
+                                        <MessageCircle className="text-ashen-300 h-4 w-4" /> WhatsApp us
                                     </a>
                                 </li>
                                 <li className="flex items-center gap-2.5">
-                                    <MapPin className="text-ashen-400 h-4 w-4" /> Beirut, Lebanon
+                                    <MapPin className="text-ashen-300 h-4 w-4" /> Beirut, Lebanon
                                 </li>
                             </ul>
                         </div>
 
                         {/* reassurance */}
                         <div>
-                            <p className="text-ashen-400 text-xs font-medium tracking-[0.15em] uppercase">Why trust us</p>
+                            <p className="text-ashen-300 text-xs font-medium tracking-[0.15em] uppercase">Why trust us</p>
                             <ul className="text-ashen-300 mt-4 space-y-3 text-sm">
                                 <li className="flex items-center gap-2.5">
-                                    <ShieldCheck className="text-ashen-400 h-4 w-4" /> Private &amp; confidential
+                                    <ShieldCheck className="text-ashen-300 h-4 w-4" /> Private &amp; confidential
                                 </li>
                                 <li className="flex items-center gap-2.5">
-                                    <Sparkles className="text-ashen-400 h-4 w-4" /> Licensed clinical psychologists
+                                    <Sparkles className="text-ashen-300 h-4 w-4" /> Licensed clinical psychologists
                                 </li>
                                 <li className="flex items-center gap-2.5">
-                                    <Globe className="text-ashen-400 h-4 w-4" /> Arabic · English · French
+                                    <Globe className="text-ashen-300 h-4 w-4" /> Arabic · English · French
                                 </li>
                             </ul>
                         </div>
@@ -1007,22 +1068,22 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                     {/* bottom bar */}
                     <div className="border-ashen-300/15 flex flex-col gap-4 border-t pt-8 md:flex-row md:items-center md:justify-between">
-                        <p className="text-ashen-300/60 text-xs">© {new Date().getFullYear()} Sanad. All rights reserved.</p>
+                        <p className="text-ashen-200/60 text-xs">© {new Date().getFullYear()} Sanad. All rights reserved.</p>
                         <div className="text-ashen-200/70 flex items-center gap-6 text-xs">
-                            <a href="/privacy" className="transition hover:text-ashen-400">
+                            <a href="/privacy" className="hover:text-ashen-100 transition">
                                 Privacy
                             </a>
-                            <a href="/terms" className="transition hover:text-ashen-400">
+                            <a href="/terms" className="hover:text-ashen-100 transition">
                                 Terms
                             </a>
-                            <a href="#faq" className="transition hover:text-ashen-400">
+                            <a href="#faq" className="hover:text-ashen-100 transition">
                                 FAQ
                             </a>
                         </div>
                     </div>
 
                     {/* licensed-practice statement */}
-                    <p className="text-ashen-400/70 mt-6 max-w-3xl text-[11px] leading-relaxed">
+                    <p className="text-ashen-200/70 mt-6 max-w-3xl text-[11px] leading-relaxed">
                         Sanad is a fully licensed, confidential clinical practice. Every session is delivered by a licensed clinical psychologist. For
                         a medical emergency or if you are in danger, please contact your local emergency number.
                     </p>
@@ -1045,7 +1106,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="bg-cream relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl shadow-2xl md:flex-row"
+                            className="bg-ashen-50 relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl shadow-2xl md:flex-row"
                         >
                             <button
                                 onClick={() => setSelected(null)}
@@ -1057,7 +1118,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                             <div className="relative h-52 w-full shrink-0 sm:h-64 md:h-auto md:w-2/5">
                                 {selected.photo_path ? (
-                                    <img src={selected.photo_path} alt={selected.name} className="h-full w-full object-cover" />
+                                    <img src={selected.photo_path} alt={selected.name} className="h-full w-full object-cover grayscale-[15%]" />
                                 ) : (
                                     <div className="from-ashen-300 to-ashen-500 h-full w-full bg-gradient-to-br" />
                                 )}
@@ -1097,7 +1158,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
 
                                 <a
                                     href={`/book/${selected.slug}`}
-                                    className="bg-ashen-800 hover:bg-ashen-900 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-ashen-200 text-sm font-medium transition"
+                                    className="bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition"
                                 >
                                     Book a session with {selected.name.split(' ')[0]} →
                                 </a>

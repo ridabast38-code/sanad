@@ -41,11 +41,11 @@ export function AppSidebar() {
                 <div className="mt-auto px-3 pb-3">
                     <Link
                         href="/specialists"
-                        className="group/nudge border-sage-200 bg-sage-50 hover:border-sage-300 hover:bg-sage-100 block rounded-2xl border p-4 transition"
+                        className="group/nudge border-ashen-200 bg-ashen-50 hover:border-ashen-300 hover:bg-ashen-100 block rounded-2xl border p-4 transition"
                     >
                         <p className="font-display text-ashen-800 text-base leading-snug">Feeling overwhelmed?</p>
                         <p className="text-ashen-500 mt-1 text-xs leading-relaxed">A specialist is ready whenever you are.</p>
-                        <span className="text-sage-700 mt-3 inline-flex items-center gap-1.5 text-sm font-medium transition-all group-hover/nudge:gap-2.5">
+                        <span className="text-ashen-700 mt-3 inline-flex items-center gap-1.5 text-sm font-medium transition-all group-hover/nudge:gap-2.5">
                             Talk to someone today
                             <ArrowUpRight className="size-4" />
                         </span>

@@ -40,14 +40,14 @@ export function MeetingLinkEditor({ bookingId, meetingLink }: { bookingId: numbe
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && save()}
                     placeholder="https://meet.google.com/…"
-                    className="border-sage-200 focus:border-sage-400 focus:ring-sage-200 text-ashen-800 min-w-0 flex-1 rounded-full border bg-white px-4 py-2 text-sm transition outline-none focus:ring-2"
+                    className="border-ashen-200 focus:border-ashen-400 focus:ring-ashen-200 text-ashen-800 bg-ashen-50/80 min-w-0 flex-1 rounded-full border px-4 py-2 text-sm transition outline-none focus:ring-2"
                 />
                 <button
                     type="button"
                     onClick={save}
                     disabled={saving}
                     aria-label="Save link"
-                    className="bg-sage-700 hover:bg-sage-800 flex size-9 shrink-0 items-center justify-center rounded-full text-white transition disabled:opacity-60"
+                    className="bg-ashen-700 hover:bg-ashen-800 flex size-9 shrink-0 items-center justify-center rounded-full text-white transition disabled:opacity-60"
                 >
                     <Check className="size-4" />
                 </button>
@@ -73,7 +73,7 @@ export function MeetingLinkEditor({ bookingId, meetingLink }: { bookingId: numbe
                     href={meetingLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-semibold text-white transition"
+                    className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-semibold text-white transition"
                 >
                     <Video className="size-3.5" /> Open link
                 </a>
@@ -93,7 +93,7 @@ export function MeetingLinkEditor({ bookingId, meetingLink }: { bookingId: numbe
         <button
             type="button"
             onClick={() => setEditing(true)}
-            className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-dashed px-3.5 py-2 text-xs font-medium transition"
+            className="border-ashen-300 text-ashen-700 hover:bg-ashen-50 inline-flex shrink-0 items-center gap-1.5 rounded-full border border-dashed px-3.5 py-2 text-xs font-medium transition"
         >
             <Link2 className="size-3.5" /> Add meeting link
         </button>

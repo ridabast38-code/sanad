@@ -57,74 +57,86 @@ export default function PractitionerProfile({
     };
 
     return (
-        <StaffLayout title="Profile">
-            <div className="mx-auto max-w-2xl">
-                <PageHeader
-                    title="Your profile"
-                    subtitle="This is what clients see on your specialist card."
-                    action={profile.approval_status ? <Badge>{profile.approval_status}</Badge> : undefined}
-                />
+        <StaffLayout title="Profile" fitViewport>
+            {/* Two columns on desktop instead of one tall stack: the profile form and
+            the pricing form are independent, so side by side they fit the screen and
+            you can see your whole card at once. Each column scrolls its own fields
+            with its Save button pinned below — a save you have to scroll to find is
+            a save people miss. */}
+            <div className="flex flex-1 flex-col lg:min-h-0">
+                <div className="shrink-0">
+                    <PageHeader
+                        title="Your profile"
+                        subtitle="This is what clients see on your specialist card."
+                        action={profile.approval_status ? <Badge>{profile.approval_status}</Badge> : undefined}
+                    />
+                </div>
 
-                <form onSubmit={submit} className={`space-y-6 p-6 md:p-7 ${CARD}`}>
-                    <Field label="Headline" error={errors.headline}>
-                        <input
-                            type="text"
-                            value={data.headline}
-                            onChange={(e) => setData('headline', e.target.value)}
-                            placeholder="e.g. Calm, attentive psychological support"
-                            className={inputClass}
-                        />
-                    </Field>
+                <div className="grid gap-6 lg:min-h-0 lg:flex-1 lg:grid-cols-2 lg:items-stretch">
+                    <form onSubmit={submit} className={`flex flex-col p-6 md:p-7 lg:min-h-0 ${CARD}`}>
+                        <div className="scrollbar-hide space-y-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
+                            <Field label="Headline" error={errors.headline}>
+                                <input
+                                    type="text"
+                                    value={data.headline}
+                                    onChange={(e) => setData('headline', e.target.value)}
+                                    placeholder="e.g. Calm, attentive psychological support"
+                                    className={inputClass}
+                                />
+                            </Field>
 
-                    <Field label="About you" error={errors.bio}>
-                        <textarea value={data.bio} onChange={(e) => setData('bio', e.target.value)} rows={5} className={inputClass} />
-                    </Field>
+                            <Field label="About you" error={errors.bio}>
+                                <textarea value={data.bio} onChange={(e) => setData('bio', e.target.value)} rows={5} className={inputClass} />
+                            </Field>
 
-                    <div className="grid gap-6 sm:grid-cols-2">
-                        <Field label="Gender" error={errors.gender}>
-                            <select value={data.gender} onChange={(e) => setData('gender', e.target.value)} className={inputClass}>
-                                <option value="">Prefer not to say</option>
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                            </select>
-                        </Field>
-                        <Field label="Years of experience" error={errors.years_experience}>
-                            <input
-                                type="number"
-                                min={0}
-                                max={60}
-                                value={data.years_experience}
-                                onChange={(e) => setData('years_experience', Number(e.target.value))}
-                                className={inputClass}
-                            />
-                        </Field>
-                    </div>
+                            <div className="grid gap-6 sm:grid-cols-2">
+                                <Field label="Gender" error={errors.gender}>
+                                    <select value={data.gender} onChange={(e) => setData('gender', e.target.value)} className={inputClass}>
+                                        <option value="">Prefer not to say</option>
+                                        <option value="female">Female</option>
+                                        <option value="male">Male</option>
+                                    </select>
+                                </Field>
+                                <Field label="Years of experience" error={errors.years_experience}>
+                                    <input
+                                        type="number"
+                                        min={0}
+                                        max={60}
+                                        value={data.years_experience}
+                                        onChange={(e) => setData('years_experience', Number(e.target.value))}
+                                        className={inputClass}
+                                    />
+                                </Field>
+                            </div>
 
-                    <Field label="Approaches">
-                        <ChipGroup options={options.approaches} selected={data.approaches} onToggle={(v) => toggle('approaches', v)} />
-                    </Field>
+                            <Field label="Approaches">
+                                <ChipGroup options={options.approaches} selected={data.approaches} onToggle={(v) => toggle('approaches', v)} />
+                            </Field>
 
-                    <Field label="Languages">
-                        <ChipGroup options={options.languages} selected={data.languages} onToggle={(v) => toggle('languages', v)} />
-                    </Field>
+                            <Field label="Languages">
+                                <ChipGroup options={options.languages} selected={data.languages} onToggle={(v) => toggle('languages', v)} />
+                            </Field>
+                        </div>
 
-                    <div className="flex items-center gap-3 pt-2">
-                        <button
-                            type="submit"
-                            disabled={processing}
-                            className="bg-sage-700 hover:bg-sage-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
-                        >
-                            Save profile
-                        </button>
-                        {recentlySuccessful && (
-                            <span className="text-sage-700 inline-flex items-center gap-1 text-sm font-medium">
-                                <Check className="size-4" /> Saved
-                            </span>
-                        )}
-                    </div>
-                </form>
+                        {/* pinned below the scrolling fields, never out of reach */}
+                        <div className="border-ashen-300/25 mt-5 flex shrink-0 items-center gap-3 border-t pt-4">
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
+                            >
+                                Save profile
+                            </button>
+                            {recentlySuccessful && (
+                                <span className="text-ashen-700 inline-flex items-center gap-1 text-sm font-medium">
+                                    <Check className="size-4" /> Saved
+                                </span>
+                            )}
+                        </div>
+                    </form>
 
-                <ServicesCard services={services} />
+                    <ServicesCard services={services} />
+                </div>
             </div>
         </StaffLayout>
     );
@@ -147,17 +159,18 @@ function ServicesCard({ services }: { services: ServiceRow[] }) {
     };
 
     return (
-        <form onSubmit={submit} className={`mt-6 space-y-5 p-6 md:p-7 ${CARD}`}>
-            <div>
+        // no top margin on desktop: it sits beside the profile form, not under it
+        <form onSubmit={submit} className={`mt-6 flex flex-col p-6 md:p-7 lg:mt-0 lg:min-h-0 ${CARD}`}>
+            <div className="shrink-0">
                 <h2 className="font-display text-ashen-800 text-lg">Services &amp; pricing</h2>
                 <p className="text-ashen-500 mt-1 text-sm">Set your price per session. Leave a price blank to not offer that service.</p>
             </div>
 
-            <div className="space-y-3">
+            <div className="scrollbar-hide mt-5 space-y-3 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
                 {services.map((service) => {
                     const row = data.services.find((s) => s.id === service.id);
                     return (
-                        <div key={service.id} className="border-sage-100 flex items-center gap-4 rounded-xl border p-3.5">
+                        <div key={service.id} className="border-ashen-300/30 bg-ashen-50/50 flex items-center gap-4 rounded-xl border p-3.5">
                             <div className="min-w-0 flex-1">
                                 <p className="text-ashen-800 text-sm font-medium">{service.name}</p>
                                 {service.duration_minutes && <p className="text-ashen-400 text-xs">{service.duration_minutes} min</p>}
@@ -171,7 +184,7 @@ function ServicesCard({ services }: { services: ServiceRow[] }) {
                                     value={row?.price ?? ''}
                                     onChange={(e) => setPrice(service.id, e.target.value)}
                                     placeholder="—"
-                                    className="border-sage-200 text-ashen-800 w-24 rounded-lg border bg-white px-3 py-1.5 text-sm"
+                                    className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 w-24 rounded-lg border px-3 py-1.5 text-sm"
                                 />
                             </div>
                         </div>
@@ -179,16 +192,16 @@ function ServicesCard({ services }: { services: ServiceRow[] }) {
                 })}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="border-ashen-300/25 mt-5 flex shrink-0 items-center gap-3 border-t pt-4">
                 <button
                     type="submit"
                     disabled={processing}
-                    className="bg-sage-700 hover:bg-sage-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
+                    className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
                 >
                     Save pricing
                 </button>
                 {recentlySuccessful && (
-                    <span className="text-sage-700 inline-flex items-center gap-1 text-sm font-medium">
+                    <span className="text-ashen-700 inline-flex items-center gap-1 text-sm font-medium">
                         <Check className="size-4" /> Saved
                     </span>
                 )}
@@ -198,7 +211,7 @@ function ServicesCard({ services }: { services: ServiceRow[] }) {
 }
 
 const inputClass =
-    'w-full rounded-xl border border-sage-200 bg-white px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-sage-400 focus:outline-none focus:ring-2 focus:ring-sage-500/20';
+    'w-full rounded-xl border border-ashen-300/60 bg-ashen-50/80 px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-ashen-400 focus:bg-ashen-50 focus:outline-none focus:ring-2 focus:ring-ashen-500/20';
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
     return (
@@ -221,7 +234,7 @@ function ChipGroup({ options, selected, onToggle }: { options: string[]; selecte
                         type="button"
                         onClick={() => onToggle(opt)}
                         className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
-                            active ? 'border-sage-600 bg-sage-600 text-white' : 'border-sage-200 bg-sage-50 text-sage-700 hover:bg-sage-100'
+                            active ? 'border-ashen-600 bg-ashen-600 text-white' : 'border-ashen-200 bg-ashen-50 text-ashen-700 hover:bg-ashen-100'
                         }`}
                     >
                         {LABELS[opt] ?? opt}

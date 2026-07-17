@@ -44,6 +44,9 @@ trait BuildsSpecialistDirectory
 
         return [
             'id' => $practitioner->id,
+            // the public directory links by slug (book/{practitioner:slug}); the
+            // in-app one links by id — both flows read this same payload
+            'slug' => $practitioner->slug,
             'name' => $practitioner->name,
             'headline' => $profile->headline,
             'photo_path' => $profile->photo_path,
@@ -59,7 +62,32 @@ trait BuildsSpecialistDirectory
                 ->map(fn (Carbon $slot) => $slot->format('D · g:i A'))
                 ->values()
                 ->all(),
+            'slot_periods' => $this->slotPeriods($upcomingSlots),
         ];
+    }
+
+    /**
+     * Which parts of the day this practitioner actually has slots in.
+     *
+     * The directory's timing filter needs to compare against something structured,
+     * and `next_slots` is already formatted for display — re-parsing a human string
+     * like "Mon · 9:00 AM" in the browser would be both fragile and locale-bound.
+     * Bucketing here keeps the filter honest and costs nothing extra.
+     *
+     * @param  Collection<int, Carbon>  $slots
+     * @return array<int, string>
+     */
+    private function slotPeriods(Collection $slots): array
+    {
+        return $slots
+            ->map(fn (Carbon $slot) => match (true) {
+                $slot->hour < 12 => 'morning',
+                $slot->hour < 17 => 'afternoon',
+                default => 'evening',
+            })
+            ->unique()
+            ->values()
+            ->all();
     }
 
     /**

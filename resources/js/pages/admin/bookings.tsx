@@ -85,7 +85,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                 action={
                     <Link
                         href="/admin/bookings/create"
-                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition"
+                        className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition"
                     >
                         <CalendarPlus className="size-4" /> New booking
                     </Link>
@@ -114,7 +114,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                                     <button
                                         type="button"
                                         onClick={() => act(b.id, 'paid')}
-                                        className="bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold text-white transition"
+                                        className="bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold text-white transition"
                                     >
                                         <Check className="size-4" /> Accept (paid)
                                     </button>
@@ -154,17 +154,17 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                                         </div>
                                         <MeetingLinkEditor bookingId={b.id} meetingLink={b.meeting_link} />
                                     </div>
-                                    <div className="border-sage-100 mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
+                                    <div className="border-ashen-100 mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
                                         <Link
                                             href={`/admin/bookings/${b.id}/reschedule`}
-                                            className="border-sage-300 text-sage-700 hover:bg-sage-50 mr-auto inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
+                                            className="border-ashen-300 text-ashen-700 hover:bg-ashen-50 mr-auto inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
                                         >
                                             <CalendarClock className="size-3.5" /> Reschedule
                                         </Link>
                                         <button
                                             type="button"
                                             onClick={() => act(b.id, 'completed')}
-                                            className="border-sage-300 text-sage-700 hover:bg-sage-50 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
+                                            className="border-ashen-300 text-ashen-700 hover:bg-ashen-50 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
                                         >
                                             <CheckCheck className="size-3.5" /> Mark completed
                                         </button>

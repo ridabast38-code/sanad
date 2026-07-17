@@ -21,6 +21,24 @@ class PublicBookingController extends Controller
     use BuildsSpecialistDirectory;
 
     /**
+     * The public specialist directory — the landing page's "View all".
+     *
+     * Mirrors the signed-in directory, minus anything that only makes sense once
+     * you have an account. A signed-in client is sent to the in-app version for
+     * the same reason `show()` does it: theirs is the richer flow.
+     */
+    public function directory(Request $request): Response|RedirectResponse
+    {
+        if ($request->user()?->isClient()) {
+            return to_route('specialists.index');
+        }
+
+        return Inertia::render('public/specialists', [
+            'practitioners' => $this->specialistDirectory(),
+        ]);
+    }
+
+    /**
      * The public, no-login booking page for one psychologist. A visitor who
      * came from the landing page can pick a session and time, then choose to
      * create an account or simply continue as a guest — the same booking either

@@ -56,11 +56,11 @@ function ChoiceGroup({
                 const active = value === o.value;
                 const base = dark
                     ? active
-                        ? 'border-sage-400 bg-sage-500 text-white shadow-[0_10px_24px_-8px_rgba(125,160,128,0.7)]'
-                        : 'border-white/20 bg-white/5 text-ashen-200 hover:border-sage-400/60 hover:bg-white/10'
+                        ? 'border-ashen-400 bg-ashen-500 text-white shadow-[0_10px_24px_-8px_rgba(146,147,141,0.7)]'
+                        : 'border-white/20 bg-white/5 text-ashen-200 hover:border-ashen-400/60 hover:bg-ashen-50/10'
                     : active
-                      ? 'border-sage-700 bg-sage-700 text-white shadow-[0_10px_24px_-8px_rgba(79,111,82,0.7)]'
-                      : 'border-ashen-300 bg-white/70 text-ashen-700 shadow-sm hover:border-sage-400 hover:shadow-md';
+                      ? 'border-ashen-700 bg-ashen-700 text-white shadow-[0_10px_24px_-8px_rgba(73,74,69,0.7)]'
+                      : 'border-ashen-300 bg-ashen-50/70 text-ashen-700 shadow-sm hover:border-ashen-400 hover:shadow-md';
                 return (
                     <motion.button
                         key={o.value}
@@ -117,7 +117,7 @@ export default function Onboarding({ name }: { name: string }) {
             {/* glowing scroll-progress bar */}
             <motion.div
                 style={{ scaleX: scrollYProgress }}
-                className="from-sage-400 via-sage-500 fixed top-0 left-0 z-50 h-1 w-full origin-left bg-gradient-to-r to-amber-300 shadow-[0_0_14px_2px_rgba(125,160,128,0.55)]"
+                className="from-ashen-400 via-ashen-500 to-ashen-300 fixed top-0 left-0 z-50 h-1 w-full origin-left bg-gradient-to-r shadow-[0_0_14px_2px_rgba(146,147,141,0.55)]"
             />
 
             {/* ===== full-page cinematic background ===== */}
@@ -129,7 +129,7 @@ export default function Onboarding({ name }: { name: string }) {
                     loop
                     playsInline
                     poster="/images/onboarding-poster.jpg"
-                    className="h-full w-full scale-105 object-cover blur-[2px] motion-reduce:hidden"
+                    className="h-full w-full scale-105 object-cover blur-[2px] grayscale-[45%] motion-reduce:hidden"
                 >
                     <source src="/videos/onboarding.mp4" type="video/mp4" />
                 </video>
@@ -137,29 +137,29 @@ export default function Onboarding({ name }: { name: string }) {
                 <img
                     src="/images/onboarding-poster.jpg"
                     alt=""
-                    className="hidden h-full w-full scale-105 object-cover blur-[2px] motion-reduce:block"
+                    className="hidden h-full w-full scale-105 object-cover blur-[2px] grayscale-[45%] motion-reduce:block"
                 />
-                {/* darker, sage-tinted veil so it stays cinematic and on-brand */}
-                <div className="from-ashen-950/60 via-sage-900/45 to-ashen-950/70 absolute inset-0 bg-gradient-to-b" />
+                {/* darker, ashen-tinted veil so it stays cinematic and on-brand */}
+                <div className="from-ashen-950/60 via-ashen-900/45 to-ashen-950/70 absolute inset-0 bg-gradient-to-b" />
                 {/* ambient glows drifting across the whole page */}
                 <div
                     aria-hidden
-                    className="bg-sage-400/30 pointer-events-none absolute top-[6%] -left-40 h-[34rem] w-[34rem] rounded-full blur-3xl"
+                    className="bg-ashen-400/30 pointer-events-none absolute top-[6%] -left-40 h-[34rem] w-[34rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-1 24s ease-in-out infinite' }}
                 />
                 <div
                     aria-hidden
-                    className="pointer-events-none absolute top-[40%] -right-40 h-[36rem] w-[36rem] rounded-full bg-amber-300/25 blur-3xl"
+                    className="bg-ashen-300/25 pointer-events-none absolute top-[40%] -right-40 h-[36rem] w-[36rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-2 28s ease-in-out infinite' }}
                 />
                 <div
                     aria-hidden
-                    className="bg-beige/25 pointer-events-none absolute top-[72%] left-1/4 h-[30rem] w-[30rem] rounded-full blur-3xl"
+                    className="bg-ashen-200/25 pointer-events-none absolute top-[72%] left-1/4 h-[30rem] w-[30rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-3 30s ease-in-out infinite' }}
                 />
                 <div
                     aria-hidden
-                    className="bg-sage-300/25 pointer-events-none absolute top-[90%] right-1/3 h-[28rem] w-[28rem] rounded-full blur-3xl"
+                    className="bg-ashen-300/25 pointer-events-none absolute top-[90%] right-1/3 h-[28rem] w-[28rem] rounded-full blur-3xl"
                     style={{ animation: 'aurora-2 26s ease-in-out infinite', animationDelay: '-6s' }}
                 />
             </div>
@@ -172,7 +172,7 @@ export default function Onboarding({ name }: { name: string }) {
                     transition={{ duration: 0.7, ease: 'easeOut' }}
                     className="mb-10 text-center"
                 >
-                    <span className="text-sage-300 inline-flex items-center gap-2 text-xs font-medium tracking-[0.2em] uppercase">
+                    <span className="text-ashen-300 inline-flex items-center gap-2 text-xs font-medium tracking-[0.2em] uppercase">
                         <Sparkles className="h-3.5 w-3.5" /> A warm welcome
                     </span>
                     <h1 className="font-display mt-4 text-4xl leading-[1.05] tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] md:text-5xl">
@@ -187,10 +187,10 @@ export default function Onboarding({ name }: { name: string }) {
                     {/* ===== SECTION 1 — About you (light) ===== */}
                     <motion.section
                         {...reveal}
-                        className="border-ashen-200/70 rounded-[2rem] border bg-white/70 p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9"
+                        className="border-ashen-200/70 bg-ashen-50/70 rounded-[2rem] border p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9"
                     >
                         <div className="mb-6 flex items-center gap-3">
-                            <span className="bg-sage-100 text-sage-700 flex h-10 w-10 items-center justify-center rounded-full">
+                            <span className="bg-ashen-100 text-ashen-700 flex h-10 w-10 items-center justify-center rounded-full">
                                 <CalendarHeart className="h-5 w-5" />
                             </span>
                             <div>
@@ -221,11 +221,11 @@ export default function Onboarding({ name }: { name: string }) {
                     >
                         <div
                             aria-hidden
-                            className="bg-sage-500/30 animate-breathe pointer-events-none absolute bottom-0 -left-10 h-56 w-56 rounded-full blur-3xl"
+                            className="bg-ashen-500/30 animate-breathe pointer-events-none absolute bottom-0 -left-10 h-56 w-56 rounded-full blur-3xl"
                         />
                         <div className="relative z-10">
                             <div className="mb-6 flex items-center gap-3">
-                                <span className="text-sage-300 flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
+                                <span className="text-ashen-300 bg-ashen-50/10 flex h-10 w-10 items-center justify-center rounded-full">
                                     <Phone className="h-5 w-5" />
                                 </span>
                                 <div>
@@ -246,7 +246,7 @@ export default function Onboarding({ name }: { name: string }) {
                                         syncPhone(e.target.value, phoneNumber);
                                     }}
                                     disabled={processing}
-                                    className="focus:border-sage-400 focus:ring-sage-500/30 w-20 rounded-2xl border border-white/15 bg-white/10 px-3 py-3 text-center text-sm text-white transition focus:ring-2 focus:outline-none disabled:opacity-50"
+                                    className="focus:border-ashen-400 focus:ring-ashen-500/30 bg-ashen-50/10 w-20 rounded-2xl border border-white/15 px-3 py-3 text-center text-sm text-white transition focus:ring-2 focus:outline-none disabled:opacity-50"
                                 />
                                 <input
                                     type="tel"
@@ -259,7 +259,7 @@ export default function Onboarding({ name }: { name: string }) {
                                     }}
                                     disabled={processing}
                                     placeholder="70 123 456"
-                                    className="placeholder:text-ashen-400 focus:border-sage-400 focus:ring-sage-500/30 flex-1 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white transition focus:ring-2 focus:outline-none disabled:opacity-50"
+                                    className="placeholder:text-ashen-400 focus:border-ashen-400 focus:ring-ashen-500/30 bg-ashen-50/10 flex-1 rounded-2xl border border-white/15 px-4 py-3 text-sm text-white transition focus:ring-2 focus:outline-none disabled:opacity-50"
                                 />
                             </div>
                             <p className="text-ashen-300 mt-2 text-xs">Country code is editable — just type it (e.g. +961).</p>
@@ -270,7 +270,7 @@ export default function Onboarding({ name }: { name: string }) {
                     {/* ===== SECTION 3 — Your story (light) ===== */}
                     <motion.section
                         {...reveal}
-                        className="border-ashen-200/70 rounded-[2rem] border bg-white/70 p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9"
+                        className="border-ashen-200/70 bg-ashen-50/70 rounded-[2rem] border p-7 shadow-[0_18px_50px_-35px_rgba(73,74,69,0.5)] md:p-9"
                     >
                         <div className="mb-6">
                             <h2 className="font-display text-ashen-800 text-xl">In your own words</h2>
@@ -289,7 +289,7 @@ export default function Onboarding({ name }: { name: string }) {
                                     onChange={(e) => setData('support_reason', e.target.value)}
                                     disabled={processing}
                                     placeholder="Share as little or as much as you'd like — it helps us match you with the right specialist."
-                                    className="border-ashen-300 text-ashen-800 placeholder:text-ashen-400 focus:border-sage-400 focus:ring-sage-500/25 w-full rounded-2xl border bg-white/70 px-4 py-3 text-sm transition focus:ring-2 focus:outline-none disabled:opacity-50"
+                                    className="border-ashen-300 text-ashen-800 placeholder:text-ashen-400 focus:border-ashen-400 focus:ring-ashen-500/25 bg-ashen-50/70 w-full rounded-2xl border px-4 py-3 text-sm transition focus:ring-2 focus:outline-none disabled:opacity-50"
                                 />
                                 <InputError message={errors.support_reason} />
                             </div>
@@ -326,7 +326,7 @@ export default function Onboarding({ name }: { name: string }) {
                         whileHover={{ scale: processing ? 1 : 1.02, y: processing ? 0 : -2 }}
                         whileTap={{ scale: processing ? 1 : 0.98 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-                        className="group from-sage-600 to-sage-700 relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r py-3.5 text-sm font-medium text-white shadow-[0_18px_45px_-12px_rgba(79,111,82,0.95)] transition-shadow hover:shadow-[0_22px_55px_-12px_rgba(79,111,82,1)] disabled:cursor-not-allowed disabled:opacity-70"
+                        className="group from-ashen-600 to-ashen-700 relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r py-3.5 text-sm font-medium text-white shadow-[0_18px_45px_-12px_rgba(73,74,69,0.95)] transition-shadow hover:shadow-[0_22px_55px_-12px_rgba(73,74,69,1)] disabled:cursor-not-allowed disabled:opacity-70"
                     >
                         {/* shine sweep on hover */}
                         <span

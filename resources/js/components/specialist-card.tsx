@@ -3,6 +3,8 @@ import { ArrowUpRight, CalendarClock } from 'lucide-react';
 
 export interface Specialist {
     id: number;
+    /** Set for public (guest) links — see BuildsSpecialistDirectory. */
+    slug?: string;
     name: string;
     headline: string | null;
     photo_path: string | null;
@@ -14,6 +16,8 @@ export interface Specialist {
     next_available_label: string | null;
     next_available_at: string | null;
     next_slots: string[];
+    /** Which parts of the day this specialist has slots in — see BuildsSpecialistDirectory. */
+    slot_periods?: string[];
     isVirtual?: boolean;
 }
 
@@ -33,13 +37,7 @@ export function matchesPreferences(p: Specialist, preferences: MatchPreferences)
 export const APPROACH_LABELS: Record<string, string> = { cbt: 'CBT', emdr: 'EMDR', psychoanalysis: 'Psychoanalysis' };
 export const LANGUAGE_LABELS: Record<string, string> = { arabic: 'Arabic', english: 'English', french: 'French' };
 
-const GRADIENTS = [
-    'from-sage-400 to-sage-700',
-    'from-sand to-beige',
-    'from-ashen-400 to-ashen-700',
-    'from-sage-300 to-sage-600',
-    'from-beige to-sand',
-];
+const GRADIENTS = ['from-ashen-400 to-ashen-700', 'from-ashen-300 to-ashen-600', 'from-ashen-500 to-ashen-800', 'from-ashen-300 to-ashen-500'];
 
 function initials(name: string): string {
     return name
@@ -58,31 +56,53 @@ function gradientFor(name: string): string {
     return GRADIENTS[hash];
 }
 
-/** Compact directory card: warm frosted glass with an inset "album" photo — works in a carousel or a grid. */
-export function SpecialistCard({ specialist: p, matched = false }: { specialist: Specialist; matched?: boolean }) {
+/**
+ * Compact directory card: warm frosted glass with an inset "album" photo — works
+ * in a carousel or a grid.
+ *
+ * `fitHeight` is for the viewport-locked rail. Normally the photo holds a fixed
+ * 5:4 ratio, which means the card has a hard minimum height; drop that card into
+ * a container shorter than that and `overflow-hidden` silently eats the footer —
+ * taking the "View & book" button with it. With `fitHeight` the photo becomes the
+ * flexible part and the name and button are pinned, so the card survives any
+ * height instead of quietly losing the one control that matters.
+ */
+export function SpecialistCard({
+    specialist: p,
+    matched = false,
+    fitHeight = false,
+}: {
+    specialist: Specialist;
+    matched?: boolean;
+    fitHeight?: boolean;
+}) {
     return (
-        <div className="group flex h-full flex-col overflow-hidden rounded-[1.6rem] border border-white/60 bg-white/55 shadow-[0_20px_50px_-32px_rgba(58,59,55,0.45)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_60px_-30px_rgba(79,111,82,0.45)]">
+        <div className="sanad-card group flex h-full flex-col overflow-hidden rounded-[1.6rem] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_60px_-30px_rgba(20,21,15,0.5)]">
             {/* photo set inside the glass like a photo in an album */}
-            <div className="p-2.5 pb-0">
-                <div className="bg-ashen-200/70 relative aspect-[5/4] w-full overflow-hidden rounded-[1.1rem]">
+            <div className={`p-2.5 pb-0 ${fitHeight ? 'min-h-0 flex-1' : ''}`}>
+                <div
+                    className={`bg-ashen-200/70 relative w-full overflow-hidden rounded-[1.1rem] ${
+                        fitHeight ? 'h-full min-h-[7rem]' : 'aspect-[5/4]'
+                    }`}
+                >
                     {p.photo_path ? (
                         <img
                             src={p.photo_path}
                             alt={p.name}
                             loading="lazy"
                             decoding="async"
-                            className="absolute inset-0 h-full w-full object-cover object-[center_25%] transition duration-700 group-hover:scale-105"
+                            className="absolute inset-0 h-full w-full object-cover object-[center_25%] grayscale-[35%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                         />
                     ) : (
                         <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${gradientFor(p.name)}`}>
                             <span className="font-display text-5xl text-white/85">{initials(p.name)}</span>
                         </div>
                     )}
-                    <span className="bg-cream/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
+                    <span className="bg-ashen-50/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
                         Licensed Psychologist
                     </span>
                     {matched && (
-                        <span className="bg-sage-600 absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-white shadow-sm">
+                        <span className="bg-ashen-600 absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-white shadow-sm">
                             ✦ Matches you
                         </span>
                     )}
@@ -90,7 +110,7 @@ export function SpecialistCard({ specialist: p, matched = false }: { specialist:
             </div>
 
             {/* body */}
-            <div className="flex flex-1 flex-col gap-3 p-5">
+            <div className={`flex flex-col gap-3 p-5 ${fitHeight ? 'shrink-0 gap-2 p-4' : 'flex-1'}`}>
                 <div>
                     <h3 className="font-display text-ashen-800 text-xl">{p.name}</h3>
                     {p.headline && <p className="text-ashen-500 mt-0.5 line-clamp-1 text-sm">{p.headline}</p>}
@@ -98,12 +118,12 @@ export function SpecialistCard({ specialist: p, matched = false }: { specialist:
 
                 <div className="flex flex-wrap gap-1.5">
                     {p.approaches.map((a) => (
-                        <span key={a} className="bg-sage-100 text-sage-700 rounded-full px-2.5 py-0.5 text-xs font-medium">
+                        <span key={a} className="bg-ashen-100 text-ashen-700 rounded-full px-2.5 py-0.5 text-xs font-medium">
                             {APPROACH_LABELS[a] ?? a}
                         </span>
                     ))}
                     {p.languages.map((l) => (
-                        <span key={l} className="border-sage-200 text-ashen-500 rounded-full border px-2.5 py-0.5 text-xs">
+                        <span key={l} className="border-ashen-200 text-ashen-500 rounded-full border px-2.5 py-0.5 text-xs">
                             {LANGUAGE_LABELS[l] ?? l}
                         </span>
                     ))}
@@ -113,11 +133,11 @@ export function SpecialistCard({ specialist: p, matched = false }: { specialist:
                     {p.years_experience != null && <span className="text-ashen-500 text-sm">{p.years_experience} years of experience</span>}
                     {p.next_slots.length > 0 && (
                         <div className="flex flex-wrap items-center gap-1.5">
-                            <CalendarClock className="text-sage-600 size-4 shrink-0" />
+                            <CalendarClock className="text-ashen-600 size-4 shrink-0" />
                             {p.next_slots.slice(0, 2).map((slot) => (
                                 <span
                                     key={slot}
-                                    className="border-sage-200 bg-sage-50 text-sage-800 rounded-full border px-2.5 py-0.5 text-xs font-medium"
+                                    className="border-ashen-200 bg-ashen-50 text-ashen-800 rounded-full border px-2.5 py-0.5 text-xs font-medium"
                                 >
                                     {slot}
                                 </span>
@@ -128,7 +148,7 @@ export function SpecialistCard({ specialist: p, matched = false }: { specialist:
             </div>
 
             {/* footer */}
-            <div className="border-sage-200/50 flex items-center justify-between border-t px-5 py-4">
+            <div className={`border-ashen-200/50 flex shrink-0 items-center justify-between border-t px-5 ${fitHeight ? 'py-3' : 'py-4'}`}>
                 <span className="text-sm">
                     {p.from_price != null ? (
                         <>
@@ -140,20 +160,129 @@ export function SpecialistCard({ specialist: p, matched = false }: { specialist:
                     )}
                 </span>
                 {p.isVirtual ? (
-                    <span className="bg-sage-50 text-sage-600 rounded-full px-4 py-2 text-sm font-medium">Coming soon</span>
+                    <span className="bg-ashen-50 text-ashen-600 rounded-full px-4 py-2 text-sm font-medium">Coming soon</span>
                 ) : (
                     <Link
                         href={`/therapists/${p.id}`}
                         prefetch
-                        className="group/btn bg-sage-700 hover:bg-sage-800 inline-flex items-center gap-2 rounded-full py-2 pr-2 pl-4 text-sm font-medium text-white transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]"
+                        className="group/btn bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-2 rounded-full py-2 pr-2 pl-4 text-sm font-medium text-white transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]"
                     >
                         View &amp; book
-                        <span className="rounded-full bg-white/20 p-1 transition-transform group-hover/btn:rotate-45">
+                        <span className="bg-ashen-50/20 rounded-full p-1 transition-transform group-hover/btn:rotate-45">
                             <ArrowUpRight className="size-4" />
                         </span>
                     </Link>
                 )}
             </div>
         </div>
+    );
+}
+
+/**
+ * The landing's team-card treatment, for the client directory: the photo IS the
+ * card, with the name resting on it rather than on a frame below.
+ *
+ * The whole card is the link, which also removes the failure mode of the boxed
+ * variant above — there is no separate footer button left to clip when the card
+ * is squeezed. `fitHeight` fills its container instead of holding a 4:5 ratio, so
+ * inside the viewport-locked rail the photo simply crops rather than overflowing.
+ */
+export function SpecialistPortraitCard({
+    specialist: p,
+    matched = false,
+    fitHeight = false,
+    href,
+}: {
+    specialist: Specialist;
+    matched?: boolean;
+    fitHeight?: boolean;
+    /**
+     * Where the card leads. Defaults to the in-app profile, which is role:client
+     * gated — send a guest there and they just bounce to the login screen, so the
+     * public directory passes the guest booking page instead.
+     */
+    href?: string;
+}) {
+    const target = href ?? `/therapists/${p.id}`;
+
+    const inner = (
+        <>
+            {p.photo_path ? (
+                <img
+                    src={p.photo_path}
+                    alt={p.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_20%] grayscale-[35%] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                />
+            ) : (
+                <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${gradientFor(p.name)}`}>
+                    <span className="font-display text-5xl text-white/85">{initials(p.name)}</span>
+                </div>
+            )}
+
+            {matched && (
+                <span className="bg-ashen-50/90 text-ashen-800 absolute top-4 left-4 rounded-full px-2.5 py-1 text-[11px] font-medium shadow-sm backdrop-blur">
+                    ✦ Matches you
+                </span>
+            )}
+            {p.from_price != null && (
+                <span className="bg-ashen-950/55 text-ashen-100 absolute top-4 right-4 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
+                    from ${p.from_price}
+                </span>
+            )}
+
+            {/* the name rests on the photo instead of on a frame below it */}
+            <div className="from-ashen-950/90 via-ashen-950/25 absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 group-hover:opacity-90" />
+
+            <div className="absolute inset-x-0 bottom-0 p-5">
+                <h3 className="font-display text-ashen-100 text-xl md:text-2xl">{p.name}</h3>
+                <p className="text-ashen-300 mt-1 text-xs">Licensed clinical psychologist</p>
+
+                <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                    {p.approaches.map((a) => (
+                        <span key={a} className="bg-ashen-100/15 text-ashen-100 rounded-full px-2 py-0.5 text-[11px] font-medium backdrop-blur-sm">
+                            {APPROACH_LABELS[a] ?? a}
+                        </span>
+                    ))}
+                </div>
+
+                {p.next_slots.length > 0 && (
+                    <p className="text-ashen-300 mt-2.5 flex items-center gap-1.5 text-[11px]">
+                        <CalendarClock className="size-3.5 shrink-0" />
+                        {p.next_slots[0]}
+                    </p>
+                )}
+            </div>
+        </>
+    );
+
+    const shape = `group relative block overflow-hidden rounded-[1.75rem] shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] ${
+        fitHeight ? 'h-full' : 'aspect-[4/5]'
+    }`;
+
+    if (p.isVirtual) {
+        return (
+            <div className={shape}>
+                {inner}
+                <span className="bg-ashen-950/60 text-ashen-100 absolute top-4 right-4 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
+                    Coming soon
+                </span>
+            </div>
+        );
+    }
+
+    return (
+        <Link
+            href={target}
+            prefetch
+            className={`${shape} transition-transform duration-500 hover:-translate-y-1.5`}
+            aria-label={`View and book ${p.name}`}
+        >
+            {inner}
+            <span className="bg-ashen-100/20 text-ashen-100 absolute right-5 bottom-5 flex size-9 items-center justify-center rounded-full opacity-0 backdrop-blur transition duration-500 group-hover:opacity-100">
+                <ArrowUpRight className="size-4" />
+            </span>
+        </Link>
     );
 }

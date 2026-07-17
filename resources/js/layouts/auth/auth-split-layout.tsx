@@ -1,4 +1,5 @@
 import AppLogoIcon from '@/components/app-logo-icon';
+import { DUST_QUIET, DustField, EDGE_DROPS, OliveDrops } from '@/components/olive';
 import { Link } from '@inertiajs/react';
 import { motion } from 'motion/react';
 
@@ -24,15 +25,17 @@ export default function AuthSplitLayout({
     // cinematic photo panel — slides side to side when navigating login <-> register
     const photo = (
         <motion.div key="auth-photo" layout transition={slide} className="relative hidden overflow-hidden lg:block lg:w-1/2">
-            <img src="/images/auth.jpg" alt="" className="absolute inset-0 h-full w-full scale-105 object-cover" />
+            <img src="/images/auth.jpg" alt="" className="absolute inset-0 h-full w-full scale-105 object-cover grayscale-[45%]" />
             <div className="from-ashen-950/70 via-ashen-950/45 to-ashen-950/80 absolute inset-0 bg-gradient-to-b" />
             <div
                 aria-hidden
-                className="bg-sage-600/30 pointer-events-none absolute bottom-0 -left-24 h-96 w-96 rounded-full blur-3xl"
+                className="bg-ashen-600/30 pointer-events-none absolute bottom-0 -left-24 h-96 w-96 rounded-full blur-3xl"
                 style={{ animation: 'aurora-1 26s ease-in-out infinite' }}
             />
 
-            <div className="absolute inset-0 flex flex-col justify-between p-12">
+            <OliveDrops drops={EDGE_DROPS} tone="light" />
+
+            <div className="absolute inset-0 z-10 flex flex-col justify-between p-12">
                 <Link href={route('home')} className="flex items-center gap-2.5 text-white">
                     <AppLogoIcon className="size-7 fill-current text-white" />
                     <span className="font-display text-xl">Sanad</span>
@@ -51,23 +54,25 @@ export default function AuthSplitLayout({
             key="auth-form"
             layout
             transition={slide}
-            className="relative flex w-full items-center justify-center overflow-hidden px-6 py-12 sm:px-10 lg:w-1/2"
+            className="sanad-split relative flex w-full items-center justify-center overflow-hidden px-6 py-12 sm:px-10 lg:w-1/2"
         >
             {/* soft, breathing glows for a calm atmosphere */}
             <div
                 aria-hidden
-                className="bg-sage-300/25 pointer-events-none absolute top-0 -right-24 h-80 w-80 rounded-full blur-3xl"
+                className="bg-ashen-300/25 pointer-events-none absolute top-0 -right-24 h-80 w-80 rounded-full blur-3xl"
                 style={{ animation: 'breathe 9s ease-in-out infinite' }}
             />
             <div
                 aria-hidden
-                className="pointer-events-none absolute bottom-0 -left-24 h-80 w-80 rounded-full bg-amber-200/25 blur-3xl"
+                className="bg-ashen-200/30 pointer-events-none absolute bottom-0 -left-24 h-80 w-80 rounded-full blur-3xl"
                 style={{ animation: 'breathe 11s ease-in-out infinite', animationDelay: '-3s' }}
             />
 
+            <DustField motes={DUST_QUIET} />
+
             <div className="relative z-10 mx-auto w-full max-w-sm">
                 <Link href={route('home')} className="text-ashen-800 mb-8 flex items-center justify-center gap-2.5 lg:hidden">
-                    <AppLogoIcon className="text-sage-700 size-7 fill-current" />
+                    <AppLogoIcon className="text-ashen-700 size-7 fill-current" />
                     <span className="font-display text-xl">Sanad</span>
                 </Link>
 
@@ -89,7 +94,7 @@ export default function AuthSplitLayout({
     );
 
     return (
-        <div className="bg-cream flex min-h-dvh">
+        <div className="bg-ashen-100 flex min-h-dvh">
             {photoSide === 'left' ? (
                 <>
                     {photo}

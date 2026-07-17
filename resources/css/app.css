@@ -146,6 +146,118 @@ html {
     }
 }
 
+/* The page-wide light→dark split: warm light gray on the left flowing into the
+   brand gray on the right. Defined once, because it is the single thing that has
+   to read identically everywhere — landing, dashboards, auth, legal.
+
+   Horizontal on purpose. A `to right` gradient is height-independent, so a short
+   auth card and a 40-row admin table land on exactly the same tones without
+   either having to know how tall the page is. Put it on the outermost element of
+   a shell (with min-h-screen) and let every surface above it be translucent. */
+.sanad-split {
+    background: linear-gradient(to right, #f6f4ed 0%, #e6e5dd 28%, #b8b9b1 55%, #90918a 76%, #90918a 100%);
+}
+
+/* The card surface — the landing's panel recipe, available to every page.
+
+   The landing never fills a panel with a flat colour: every one is a diagonal
+   gradient over the page split, which is what stops it reading as a stack of
+   white boxes. Cards elsewhere WERE flat white, so they punched opaque holes in
+   the split and looked like a different product. These two are the light glass
+   from the closing CTA panel and the dark panel from the support section — the
+   page's whole rhythm is those two alternating.
+
+   Both stay translucent on purpose: the split has to keep moving underneath. */
+.sanad-card {
+    background-image: linear-gradient(to bottom right, rgba(236, 236, 234, 0.62), rgba(176, 177, 171, 0.42));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(93, 94, 88, 0.22);
+    box-shadow: 0 18px 45px -25px rgba(20, 21, 15, 0.4);
+}
+
+/* The dark counterpart — for the one panel on a page that should carry weight.
+   Use it sparingly: its whole job is to make the light cards around it read as
+   light. A grid where everything is dark says nothing. */
+.sanad-card-dark {
+    background-image: linear-gradient(to bottom right, #494a45, #383935);
+    border: 1px solid rgba(214, 214, 209, 0.18);
+    box-shadow: 0 22px 50px -25px rgba(20, 21, 15, 0.7);
+}
+
+/* The olive tree ships as a flat grayscale engraving with NO alpha channel, used
+   here as a luminance mask so its colour comes from CSS instead of the file.
+   Two things ruled out the alternatives:
+     - A transparent WebP costs ~2.5x more (377KB vs 164KB). WebP stores its alpha
+       plane losslessly, and thousands of leaves are pure entropy.
+     - mix-blend-multiply cannot work: the crown deliberately grows outside the
+       closing panel's stacking context, where it has no backdrop to multiply
+       against and renders as a white block.
+   Hidden unless luminance masking is supported, so the failure mode is "no tree"
+   rather than a solid rectangle. */
+.olive-mask {
+    display: none;
+}
+@supports (mask-mode: luminance) or (-webkit-mask-source-type: luminance) {
+    .olive-mask {
+        display: block;
+        -webkit-mask-image: url('/images/olive-tree.webp');
+        mask-image: url('/images/olive-tree.webp');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: bottom center;
+        mask-position: bottom center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-source-type: luminance;
+        mask-mode: luminance;
+    }
+}
+
+/* The wide olive standing behind the team — same luminance-mask trick as the
+   tree above, so its colour comes from CSS and it can sit light against the
+   dark band. See the note on .olive-mask for why the asset carries no alpha. */
+.horizon-mask {
+    display: none;
+}
+@supports (mask-mode: luminance) or (-webkit-mask-source-type: luminance) {
+    .horizon-mask {
+        display: block;
+        -webkit-mask-image: url('/images/olive-horizon.webp');
+        mask-image: url('/images/olive-horizon.webp');
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: bottom center;
+        mask-position: bottom center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-source-type: luminance;
+        mask-mode: luminance;
+    }
+}
+
+/* Olive oil falling from the tree — a slow bead gathering, releasing, and fading
+   before it lands. Reads as oil (healing, anointing) rather than tears: it must
+   stay rare and unhurried. Long delays keep only one or two in flight at once.
+   Translate + opacity only, per the note on aurora above. */
+@keyframes olive-drop {
+    0%,
+    8% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+    16% {
+        opacity: 0.95;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        transform: translateY(var(--drop-fall, 90px));
+        opacity: 0;
+    }
+}
+
 /* Living photo — each vertical "frame" (slat) of a single image slowly zooms
    in and out and drifts, so the faces breathe. Transform-only = GPU-cheap. */
 @keyframes strip-drift {
@@ -197,7 +309,7 @@ html {
     background: conic-gradient(
         from 0deg,
         transparent 0deg,
-        #7da080 55deg,
+        #92938d 55deg,
         transparent 130deg,
         transparent 230deg,
         #d6b27a 300deg,
@@ -210,7 +322,7 @@ html {
 /* Darker variant — a solid deep base with two travelling light glints, for a
    defined animated border around a whole panel. Same GPU-rotation (repaint-free). */
 .spin-ring-dark {
-    background: conic-gradient(from 0deg, #3a3b37 0deg, #7da080 60deg, #3a3b37 130deg, #3a3b37 240deg, #c9a978 300deg, #3a3b37 360deg);
+    background: conic-gradient(from 0deg, #3a3b37 0deg, #92938d 60deg, #3a3b37 130deg, #3a3b37 240deg, #c9a978 300deg, #3a3b37 360deg);
     animation: spin-ring 11s linear infinite;
     will-change: transform;
 }
@@ -252,7 +364,7 @@ html {
     pointer-events: none;
 }
 
-/* Dark animated border — a deep ashen rim with sage/sand glints travelling along
+/* Dark animated border — a deep ashen rim with warm-gray/sand glints travelling along
    it. Same masked-conic-gradient trick, on-brand and defined. Usage: a relative,
    rounded element with class `sanad-border-dark`. */
 .sanad-border-dark::before {
@@ -261,7 +373,7 @@ html {
     inset: 0;
     border-radius: inherit;
     padding: 1.5px;
-    background: conic-gradient(from var(--sanad-angle), #494a45 0deg, #7da080 55deg, #494a45 130deg, #383935 240deg, #c9a978 300deg, #494a45 360deg);
+    background: conic-gradient(from var(--sanad-angle), #494a45 0deg, #92938d 55deg, #494a45 130deg, #383935 240deg, #c9a978 300deg, #494a45 360deg);
     -webkit-mask:
         linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
@@ -293,12 +405,13 @@ html {
     /* Sanad heading font — warm display serif (use as font-display) */
     --font-display: 'Fraunces', ui-serif, Georgia, serif;
 
-    /* warm sunlit background (use as bg-cream) */
-    --color-cream: #faf6ef;
+    /* cream (#faf6ef) is gone too — it read as a warm off-white, and the page is
+       built on .sanad-split now, not on a flat background colour. Use ashen-50. */
 
-    /* warm beige / sand accent (use as text-sand, bg-sand) */
-    --color-beige: #e8d9bf;
-    --color-sand: #d4b483;
+    /* The tan accents (beige / sand) lived here and are deliberately gone, along
+       with sage: the brand is one warm-gray family, and a defined token is an
+       invitation to use it. Amber is gone too — emergencies now signal with
+       weight (near-black), not hue. */
 
     /* ashen — dusty warm-neutral gray, the brand neutral (use as bg-ashen, etc.) */
     --color-ashen-50: #f6f6f4;
@@ -313,17 +426,12 @@ html {
     --color-ashen-900: #25261f;
     --color-ashen-950: #14150f;
 
-    /* Sanad palette — sage green accent (use as bg-sage-500, text-sage-700, etc.) */
-    --color-sage-50: #f3f6f3;
-    --color-sage-100: #e3ebe3;
-    --color-sage-200: #c7d8c8;
-    --color-sage-300: #a3bfa5;
-    --color-sage-400: #7da080;
-    --color-sage-500: #6b8e6b;
-    --color-sage-600: #557355;
-    --color-sage-700: #4f6f52;
-    --color-sage-800: #3f5841;
-    --color-sage-900: #344836;
+    /* The sage green accent used to live here. It is deliberately gone: the brand
+       is one warm-gray family now, and leaving the tokens defined meant every new
+       page could quietly reintroduce green. `ashen` is the direct replacement —
+       the two ramps matched step for step in lightness, so sage-N became ashen-N.
+       Amber is still allowed, but only as a safety signal (emergency), never as
+       decoration. */
 
     /* Sanad signature — the slow breathing motion (use as animate-breathe) */
     --animate-breathe: breathe 8s ease-in-out infinite;
@@ -421,16 +529,16 @@ html {
     --chart-5: hsl(27, 87%, 67%);
     --radius: 0.75rem;
 
-    /* Sanad shell — a soft warm-cream rail with sage accents, in the same
+    /* Sanad shell — a soft warm-cream rail with warm-gray accents, in the same
        family as the page so it feels like one calm surface. */
     --sidebar-background: hsl(42, 38%, 97%);
     --sidebar-foreground: hsl(80, 6%, 28%);
-    --sidebar-primary: hsl(123, 16%, 38%);
+    --sidebar-primary: hsl(80, 4%, 28%);
     --sidebar-primary-foreground: hsl(42, 38%, 97%);
-    --sidebar-accent: hsl(120, 24%, 91%);
-    --sidebar-accent-foreground: hsl(123, 20%, 24%);
+    --sidebar-accent: hsl(60, 6%, 92%);
+    --sidebar-accent-foreground: hsl(80, 8%, 20%);
     --sidebar-border: hsl(40, 20%, 89%);
-    --sidebar-ring: hsl(123, 18%, 50%);
+    --sidebar-ring: hsl(80, 4%, 46%);
 }
 
 .dark {
