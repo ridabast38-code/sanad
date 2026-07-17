@@ -55,6 +55,7 @@ trait BuildsSpecialistDirectory
             'slug' => $practitioner->slug,
             'name' => $practitioner->name,
             'headline' => $profile->headline,
+            'bio' => $profile->bio,
             'photo_path' => $profile->photo_path,
             'approaches' => $profile->approaches ?? [],
             'languages' => $profile->languages ?? [],

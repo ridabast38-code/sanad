@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { ArrowUpRight, CalendarClock } from 'lucide-react';
+import { ArrowUpRight, CalendarClock, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 
 export interface Specialist {
     id: number;
@@ -7,6 +8,8 @@ export interface Specialist {
     slug?: string;
     name: string;
     headline: string | null;
+    /** Set on directory records, for the preview modal. */
+    bio?: string | null;
     photo_path: string | null;
     approaches: string[];
     languages: string[];
@@ -192,6 +195,7 @@ export function SpecialistPortraitCard({
     matched = false,
     fitHeight = false,
     href,
+    onSelect,
 }: {
     specialist: Specialist;
     matched?: boolean;
@@ -202,6 +206,12 @@ export function SpecialistPortraitCard({
      * public directory passes the guest booking page instead.
      */
     href?: string;
+    /**
+     * When given, the card opens a preview instead of navigating — the directories
+     * want a "read their qualifications first" step before booking. Takes priority
+     * over `href`.
+     */
+    onSelect?: (specialist: Specialist) => void;
 }) {
     const target = href ?? `/therapists/${p.id}`;
 
@@ -272,6 +282,27 @@ export function SpecialistPortraitCard({
         );
     }
 
+    const hoverArrow = (
+        <span className="bg-ashen-100/20 text-ashen-100 absolute right-5 bottom-5 flex size-9 items-center justify-center rounded-full opacity-0 backdrop-blur transition duration-500 group-hover:opacity-100">
+            <ArrowUpRight className="size-4" />
+        </span>
+    );
+
+    // opens the preview modal rather than navigating — the "see qualifications first" path
+    if (onSelect) {
+        return (
+            <button
+                type="button"
+                onClick={() => onSelect(p)}
+                className={`${shape} text-left transition-transform duration-500 hover:-translate-y-1.5`}
+                aria-label={`View ${p.name}'s profile`}
+            >
+                {inner}
+                {hoverArrow}
+            </button>
+        );
+    }
+
     return (
         <Link
             href={target}
@@ -280,9 +311,121 @@ export function SpecialistPortraitCard({
             aria-label={`View and book ${p.name}`}
         >
             {inner}
-            <span className="bg-ashen-100/20 text-ashen-100 absolute right-5 bottom-5 flex size-9 items-center justify-center rounded-full opacity-0 backdrop-blur transition duration-500 group-hover:opacity-100">
-                <ArrowUpRight className="size-4" />
-            </span>
+            {hoverArrow}
         </Link>
+    );
+}
+
+/**
+ * A quick look at a specialist before committing to booking — the "read their
+ * qualifications first" step the directories were missing.
+ *
+ * The same modal the landing has always used, made reusable. `bookHref` is where
+ * "Book a session" leads, so the caller decides between the in-app profile and the
+ * guest flow (the card can't be gated the way a page is).
+ */
+export function SpecialistPreviewModal({
+    specialist,
+    bookHref,
+    onClose,
+}: {
+    specialist: Specialist | null;
+    bookHref: (specialist: Specialist) => string;
+    onClose: () => void;
+}) {
+    return (
+        <AnimatePresence>
+            {specialist && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={onClose}
+                    className="bg-ashen-950/70 fixed inset-0 z-[80] flex items-center justify-center p-4 backdrop-blur-sm"
+                >
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
+                        onClick={(e) => e.stopPropagation()}
+                        // opaque gradient, not glass: it sits over a dark scrim, so a
+                        // translucent panel would pull that darkness up through the text
+                        className="from-ashen-50 to-ashen-200 relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-gradient-to-br shadow-2xl md:flex-row"
+                    >
+                        <button
+                            onClick={onClose}
+                            aria-label="Close"
+                            className="text-ashen-900 bg-ashen-100/90 hover:bg-ashen-100 absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur transition"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
+
+                        <div className="relative h-52 w-full shrink-0 sm:h-64 md:h-auto md:w-2/5">
+                            {specialist.photo_path ? (
+                                <img src={specialist.photo_path} alt={specialist.name} className="h-full w-full object-cover grayscale-[15%]" />
+                            ) : (
+                                <div className={`h-full w-full bg-gradient-to-br ${gradientFor(specialist.name)}`} />
+                            )}
+                        </div>
+
+                        <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
+                            <span className="bg-ashen-100 text-ashen-600 rounded-full px-3 py-1 text-xs font-medium">
+                                Licensed Clinical Psychologist
+                            </span>
+                            <h3 className="font-display text-ashen-900 mt-4 text-3xl">{specialist.name}</h3>
+                            {specialist.headline && <p className="text-ashen-600 mt-1 text-sm">{specialist.headline}</p>}
+
+                            <p className="text-ashen-700 mt-5 leading-relaxed">
+                                {specialist.bio ||
+                                    specialist.headline ||
+                                    `${specialist.name.split(' ')[0]} is a licensed clinical psychologist offering warm, confidential care across CBT, EMDR and psychoanalytic approaches.`}
+                            </p>
+
+                            <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
+                                {specialist.approaches.length > 0 && (
+                                    <div>
+                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
+                                        <p className="text-ashen-700 mt-1 text-sm">
+                                            {specialist.approaches.map((a) => APPROACH_LABELS[a] ?? a).join(' · ')}
+                                        </p>
+                                    </div>
+                                )}
+                                {specialist.languages.length > 0 && (
+                                    <div>
+                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Languages</p>
+                                        <p className="text-ashen-700 mt-1 text-sm">
+                                            {specialist.languages.map((l) => LANGUAGE_LABELS[l] ?? l).join(' · ')}
+                                        </p>
+                                    </div>
+                                )}
+                                {specialist.years_experience != null && (
+                                    <div>
+                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Experience</p>
+                                        <p className="text-ashen-700 mt-1 text-sm">{specialist.years_experience} years</p>
+                                    </div>
+                                )}
+                                {specialist.from_price != null && (
+                                    <div>
+                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">From</p>
+                                        <p className="text-ashen-700 mt-1 text-sm">${specialist.from_price} / session</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <Link
+                                href={bookHref(specialist)}
+                                className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-8 inline-flex items-center gap-2 rounded-full py-3 pr-6 pl-3 text-sm font-medium transition"
+                            >
+                                <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
+                                    <ArrowUpRight className="size-4" />
+                                </span>
+                                Book a session with {specialist.name.split(' ')[0]}
+                            </Link>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }

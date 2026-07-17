@@ -1,5 +1,11 @@
 import { EDGE_DROPS, OliveDrops, OliveHorizon } from '@/components/olive';
-import { matchesPreferences, SpecialistPortraitCard, type MatchPreferences, type Specialist } from '@/components/specialist-card';
+import {
+    matchesPreferences,
+    SpecialistPortraitCard,
+    SpecialistPreviewModal,
+    type MatchPreferences,
+    type Specialist,
+} from '@/components/specialist-card';
 import { applyFilters, EMPTY_FILTERS, SpecialistFilterBar, type SpecialistFilters } from '@/components/specialist-filters';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -298,6 +304,8 @@ function SessionsView({
 function SpecialistsView({ practitioners, preferences }: { practitioners: Specialist[]; preferences: MatchPreferences }) {
     const [filters, setFilters] = useState<SpecialistFilters>(EMPTY_FILTERS);
     const visible = useMemo(() => applyFilters(practitioners, filters), [practitioners, filters]);
+    // a look at their qualifications before the booking page
+    const [preview, setPreview] = useState<Specialist | null>(null);
 
     return (
         <div className="flex flex-1 flex-col lg:min-h-0">
@@ -356,7 +364,11 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                                     transition={{ duration: 0.28, ease: 'easeOut' }}
                                     className="w-[74%] shrink-0 snap-center sm:w-[46%]"
                                 >
-                                    <SpecialistPortraitCard specialist={specialist} matched={matchesPreferences(specialist, preferences)} />
+                                    <SpecialistPortraitCard
+                                        specialist={specialist}
+                                        matched={matchesPreferences(specialist, preferences)}
+                                        onSelect={setPreview}
+                                    />
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -378,7 +390,12 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                                     className="w-[17rem] shrink-0 snap-center xl:w-[19rem]"
                                 >
-                                    <SpecialistPortraitCard specialist={specialist} matched={matchesPreferences(specialist, preferences)} fitHeight />
+                                    <SpecialistPortraitCard
+                                        specialist={specialist}
+                                        matched={matchesPreferences(specialist, preferences)}
+                                        onSelect={setPreview}
+                                        fitHeight
+                                    />
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -390,6 +407,9 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                     </p>
                 </>
             )}
+
+            {/* signed-in clients get the richer in-app profile as the booking step */}
+            <SpecialistPreviewModal specialist={preview} bookHref={(s) => `/therapists/${s.id}`} onClose={() => setPreview(null)} />
         </div>
     );
 }

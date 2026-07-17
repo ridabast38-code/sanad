@@ -1,6 +1,6 @@
 import { AmbientBackground } from '@/components/ambient-background';
 import { DUST_QUIET, DustField, EDGE_DROPS, OliveDrops, OliveHorizon } from '@/components/olive';
-import { SpecialistPortraitCard, type Specialist } from '@/components/specialist-card';
+import { SpecialistPortraitCard, SpecialistPreviewModal, type Specialist } from '@/components/specialist-card';
 import { applyFilters, EMPTY_FILTERS, SpecialistFilterBar, type SpecialistFilters } from '@/components/specialist-filters';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, ArrowUpRight, BellRing, CalendarHeart, ShieldCheck, Sparkles, UserPlus, Users } from 'lucide-react';
@@ -22,6 +22,8 @@ import { useMemo, useState, type ComponentType } from 'react';
 export default function PublicSpecialists({ practitioners }: { practitioners: Specialist[] }) {
     const [filters, setFilters] = useState<SpecialistFilters>(EMPTY_FILTERS);
     const visible = useMemo(() => applyFilters(practitioners, filters), [practitioners, filters]);
+    // clicking a card opens a preview of their qualifications first, then books
+    const [preview, setPreview] = useState<Specialist | null>(null);
 
     return (
         <div className="sanad-split text-ashen-800 relative flex min-h-screen flex-col lg:h-screen lg:min-h-0 lg:overflow-hidden">
@@ -139,7 +141,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                             transition={{ duration: 0.28, ease: 'easeOut' }}
                                             className="w-[74%] shrink-0 snap-center sm:w-[46%]"
                                         >
-                                            <SpecialistPortraitCard specialist={specialist} href={`/book/${specialist.slug}`} />
+                                            <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} />
                                         </motion.div>
                                     ))}
                                 </AnimatePresence>
@@ -159,7 +161,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                                             className="w-[17rem] shrink-0 snap-center xl:w-[19rem]"
                                         >
-                                            <SpecialistPortraitCard specialist={specialist} href={`/book/${specialist.slug}`} fitHeight />
+                                            <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} fitHeight />
                                         </motion.div>
                                     ))}
                                 </AnimatePresence>
@@ -173,6 +175,8 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                     )}
                 </main>
             </div>
+
+            <SpecialistPreviewModal specialist={preview} bookHref={(s) => `/book/${s.slug}`} onClose={() => setPreview(null)} />
         </div>
     );
 }
