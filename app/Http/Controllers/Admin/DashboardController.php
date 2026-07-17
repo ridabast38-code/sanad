@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
+use App\Models\PractitionerProfile;
+use App\Models\Service;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -76,7 +78,18 @@ class DashboardController extends Controller
             ->sortByDesc(fn ($row) => $row['approval_status'] === 'pending' ? 1 : 0)
             ->values();
 
-        return Inertia::render('admin/practitioners', ['practitioners' => $practitioners]);
+        return Inertia::render('admin/practitioners', [
+            'practitioners' => $practitioners,
+            // Everything the "add specialist" form needs to set a full profile in
+            // one go: the approach/language options and the services to price.
+            'options' => [
+                'approaches' => PractitionerProfile::APPROACHES,
+                'languages' => PractitionerProfile::LANGUAGES,
+            ],
+            'services' => Service::where('is_active', true)
+                ->orderBy('name')
+                ->get(['id', 'name', 'duration_minutes']),
+        ]);
     }
 
     /**

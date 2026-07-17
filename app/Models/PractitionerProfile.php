@@ -12,6 +12,12 @@ class PractitionerProfile extends Model
     /** @use HasFactory<PractitionerProfileFactory> */
     use HasFactory;
 
+    /** The therapy approaches a practitioner can offer — the single source of truth. */
+    public const APPROACHES = ['cbt', 'emdr', 'psychoanalysis'];
+
+    /** The languages a practitioner can work in. */
+    public const LANGUAGES = ['arabic', 'english', 'french'];
+
     /**
      * The attributes that are mass assignable.
      *
