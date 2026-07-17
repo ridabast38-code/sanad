@@ -348,12 +348,14 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                 />
             ) : (
                 <>
-                    {/* Phones get the same horizontal drag rail as the landing team, not a
-                    vertical grid — swiping through faces reads as a directory; a tall
-                    stacked column reads as a list. Cards hold their 4:5 shape here (no
-                    fitHeight), since a phone has no fixed height to fill. */}
-                    <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 lg:hidden">
-                        <AnimatePresence mode="popLayout">
+                    {/* ONE horizontal rail at every size — the landing team's exact recipe,
+                    which never breaks. The cards hold their own 4:5 aspect (NOT fitHeight),
+                    so their height is intrinsic: it does not depend on the flex parent
+                    resolving a height, which is what left the old viewport-filling rail
+                    collapsed to zero — visible markup, invisible cards. Cards grow a little
+                    with the screen but never rely on it to exist. */}
+                    <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-6 pb-2 md:-mx-10 md:gap-5 md:px-10">
+                        <AnimatePresence mode="popLayout" initial={false}>
                             {visible.map((specialist) => (
                                 <motion.div
                                     key={specialist.id}
@@ -361,40 +363,13 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                                     initial={{ opacity: 0, scale: 0.96 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.96 }}
-                                    transition={{ duration: 0.28, ease: 'easeOut' }}
-                                    className="w-[74%] shrink-0 snap-center sm:w-[46%]"
-                                >
-                                    <SpecialistPortraitCard
-                                        specialist={specialist}
-                                        matched={matchesPreferences(specialist, preferences)}
-                                        onSelect={setPreview}
-                                    />
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                    </div>
-
-                    {/* On desktop, a drag rail — same decision the landing's team section
-                    made, and for the same reasons: a grid of twenty people is a wall, and
-                    it cannot fit a viewport at any card size. `layout` on each card means
-                    filtering slides the rail rather than snapping it. */}
-                    <div className="scrollbar-hide -mx-10 hidden min-h-0 flex-1 snap-x snap-mandatory gap-5 overflow-x-auto px-10 py-1 lg:flex">
-                        <AnimatePresence mode="popLayout" initial={false}>
-                            {visible.map((specialist) => (
-                                <motion.div
-                                    key={specialist.id}
-                                    layout
-                                    initial={{ opacity: 0, scale: 0.94 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.94 }}
                                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                                    className="w-[17rem] shrink-0 snap-center xl:w-[19rem]"
+                                    className="w-[72%] shrink-0 snap-center sm:w-[45%] lg:w-[16rem] xl:w-[18rem]"
                                 >
                                     <SpecialistPortraitCard
                                         specialist={specialist}
                                         matched={matchesPreferences(specialist, preferences)}
                                         onSelect={setPreview}
-                                        fitHeight
                                     />
                                 </motion.div>
                             ))}

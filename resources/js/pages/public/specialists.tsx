@@ -126,11 +126,13 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                         />
                     ) : (
                         <>
-                            {/* Phones get the same horizontal rail, not a vertical grid —
-                            consistent with the dashboard directory and the landing team.
-                            Cards keep their 4:5 shape here (no fitHeight). */}
-                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 lg:hidden">
-                                <AnimatePresence mode="popLayout">
+                            {/* ONE horizontal rail at every size — the landing team's recipe.
+                            Cards hold their own 4:5 aspect (NOT fitHeight), so their height is
+                            intrinsic and never depends on the flex parent resolving one, which
+                            is what previously left the viewport-filling rail collapsed to zero
+                            height — markup present, cards invisible. */}
+                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-6 pb-2 md:-mx-10 md:gap-5 md:px-10">
+                                <AnimatePresence mode="popLayout" initial={false}>
                                     {visible.map((specialist) => (
                                         <motion.div
                                             key={specialist.id}
@@ -138,30 +140,10 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                             initial={{ opacity: 0, scale: 0.96 }}
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.96 }}
-                                            transition={{ duration: 0.28, ease: 'easeOut' }}
-                                            className="w-[74%] shrink-0 snap-center sm:w-[46%]"
+                                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                            className="w-[72%] shrink-0 snap-center sm:w-[45%] lg:w-[16rem] xl:w-[18rem]"
                                         >
                                             <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} />
-                                        </motion.div>
-                                    ))}
-                                </AnimatePresence>
-                            </div>
-
-                            {/* the same drag rail as the dashboard — the page is locked to the
-                            viewport here, so the cards fill its height and scroll sideways */}
-                            <div className="scrollbar-hide -mx-10 hidden min-h-0 flex-1 snap-x snap-mandatory gap-5 overflow-x-auto px-10 py-1 lg:flex">
-                                <AnimatePresence mode="popLayout" initial={false}>
-                                    {visible.map((specialist) => (
-                                        <motion.div
-                                            key={specialist.id}
-                                            layout
-                                            initial={{ opacity: 0, scale: 0.94 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.94 }}
-                                            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                                            className="w-[17rem] shrink-0 snap-center xl:w-[19rem]"
-                                        >
-                                            <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} fitHeight />
                                         </motion.div>
                                     ))}
                                 </AnimatePresence>
