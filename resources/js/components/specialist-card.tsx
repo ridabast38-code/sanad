@@ -271,8 +271,13 @@ export function SpecialistPortraitCard({
         </>
     );
 
-    const shape = `group relative block overflow-hidden rounded-[1.75rem] shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] ${
-        fitHeight ? 'h-full' : 'aspect-[4/5]'
+    // A solid gradient base under everything. Without it the card is transparent
+    // until the photo paints, and a card whose only content is an absolutely-
+    // positioned image reads as "no card at all" the instant that image is slow,
+    // absent, or (the old bug) never fetched. The photo is object-cover on top, so
+    // this base is only ever seen when there's no photo to see.
+    const shape = `group from-ashen-400 to-ashen-700 relative block overflow-hidden rounded-[1.75rem] bg-gradient-to-br shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] ${
+        fitHeight ? 'h-full min-h-[16rem]' : 'aspect-[4/5]'
     }`;
 
     if (p.isVirtual) {
