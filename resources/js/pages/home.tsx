@@ -797,22 +797,21 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <span className="text-ashen-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
                             <h2 className="font-display text-ashen-200 mt-2 text-3xl tracking-tight md:text-4xl">The people behind Sanad</h2>
 
-                            {/* Guests only. A signed-in client already has this directory inside
-                            their dashboard, with their own matches marked — sending them to the
-                            public copy would be a step backwards. */}
-                            {isGuest && (
-                                <motion.a
-                                    href="/psychologists"
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="group bg-ashen-200 text-ashen-900 hover:bg-ashen-100 mt-4 inline-flex items-center gap-2 rounded-full py-2 pr-5 pl-2 text-sm font-medium transition"
-                                >
-                                    <span className="bg-ashen-900/10 rounded-full p-1 transition-transform group-hover:rotate-45">
-                                        <ArrowUpRight className="h-4 w-4" />
-                                    </span>
-                                    View all psychologists
-                                </motion.a>
-                            )}
+                            {/* Shown to everyone, at every size — the phone landing needs a way
+                            into the full directory too. A guest goes to the public list; a
+                            signed-in client goes to their own dashboard directory, where their
+                            matches are already marked. */}
+                            <motion.a
+                                href={isGuest ? '/psychologists' : '/dashboard?view=specialists'}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className="group bg-ashen-200 text-ashen-900 hover:bg-ashen-100 mt-4 inline-flex items-center gap-2 rounded-full py-2 pr-5 pl-2 text-sm font-medium transition"
+                            >
+                                <span className="bg-ashen-900/10 rounded-full p-1 transition-transform group-hover:rotate-45">
+                                    <ArrowUpRight className="h-4 w-4" />
+                                </span>
+                                View all psychologists
+                            </motion.a>
                         </div>
 
                         {/* A drag rail at every size, not a grid. With twenty specialists a grid

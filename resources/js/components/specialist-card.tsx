@@ -218,10 +218,14 @@ export function SpecialistPortraitCard({
     const inner = (
         <>
             {p.photo_path ? (
+                // NOT lazy. These cards live in horizontal rails inside viewport-locked,
+                // overflow-hidden layouts, where the browser reads the images as never
+                // intersecting and a lazy image simply never loads — which read as "the
+                // cards lost their photos". The landing's cards load eagerly for the same
+                // reason. A directory is a handful of faces, so the cost is trivial.
                 <img
                     src={p.photo_path}
                     alt={p.name}
-                    loading="lazy"
                     decoding="async"
                     className="absolute inset-0 h-full w-full object-cover object-[center_20%] grayscale-[35%] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
                 />

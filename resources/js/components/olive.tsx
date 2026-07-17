@@ -139,8 +139,12 @@ export function OliveTree({
     className?: string;
     opacity?: string;
 }) {
+    // Desktop only. The tree is drawn by a luminance mask (see .olive-mask in
+    // app.css); some mobile browsers report support but don't honour mask-mode, so
+    // the bare bg-ashen-950 box renders as a dark slab over the closing text. It's
+    // pure decoration, so the safe move is to not draw it on phones at all.
     return (
-        <div aria-hidden className={`pointer-events-none absolute inset-x-0 z-[1] flex justify-center ${className}`}>
+        <div aria-hidden className={`pointer-events-none absolute inset-x-0 z-[1] hidden justify-center md:flex ${className}`}>
             <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
