@@ -271,12 +271,18 @@ export function SpecialistPortraitCard({
         </>
     );
 
-    // A solid gradient base under everything. Without it the card is transparent
-    // until the photo paints, and a card whose only content is an absolutely-
-    // positioned image reads as "no card at all" the instant that image is slow,
-    // absent, or (the old bug) never fetched. The photo is object-cover on top, so
-    // this base is only ever seen when there's no photo to see.
-    const shape = `group from-ashen-400 to-ashen-700 relative block overflow-hidden rounded-[1.75rem] bg-gradient-to-br shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] ${
+    // `w-full` is load-bearing, not cosmetic. Every child of the card is
+    // absolutely positioned, so nothing contributes in-flow height — the card's
+    // whole height comes from aspect-[4/5], which only resolves against a definite
+    // WIDTH. This card is a <button>, and a block button does NOT fill its parent's
+    // width the way a div does (form controls size to their content). Without
+    // w-full the button collapsed to ~0 wide, aspect gave ~0 tall, and the card
+    // vanished — present in the DOM, zero pixels on screen. The landing's card
+    // never hit this because it carries its own width class.
+    //
+    // The gradient base shows only when there's no photo (the photo is object-cover
+    // on top), so a slow or missing image never leaves an empty hole either.
+    const shape = `group from-ashen-400 to-ashen-700 relative block w-full overflow-hidden rounded-[1.75rem] bg-gradient-to-br shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] ${
         fitHeight ? 'h-full min-h-[16rem]' : 'aspect-[4/5]'
     }`;
 
