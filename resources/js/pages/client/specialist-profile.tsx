@@ -61,8 +61,11 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
                         animate={{ opacity: 1, y: 0 }}
                         className="grid gap-6 md:grid-cols-2 md:gap-8 lg:min-h-0 lg:flex-1 lg:grid-cols-12 lg:items-stretch lg:gap-6"
                     >
-                        {/* ===== PORTRAIT ===== */}
-                        <div className={`flex flex-col overflow-hidden lg:col-span-4 lg:min-h-0 ${CARD}`}>
+                        {/* ===== PORTRAIT (desktop only) =====
+                        Hidden on a phone: a full 4:5 portrait ate the whole first screen and
+                        pushed the session type, times and Confirm button far down a scroll. The
+                        phone leads with the name and the booking instead. */}
+                        <div className={`hidden flex-col overflow-hidden md:flex lg:col-span-4 lg:min-h-0 ${CARD}`}>
                             <div className="p-2.5 lg:min-h-0 lg:flex-1">
                                 <div className="bg-ashen-200/70 relative aspect-[4/5] w-full overflow-hidden rounded-[1.3rem] lg:aspect-auto lg:h-full lg:min-h-[8rem]">
                                     {specialist.photo_path ? (

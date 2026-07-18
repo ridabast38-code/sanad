@@ -1212,7 +1212,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 <X className="h-5 w-5" />
                             </button>
 
-                            <div className="relative h-52 w-full shrink-0 sm:h-64 md:h-auto md:w-2/5">
+                            {/* Photo is desktop-only. On a phone it pushed Book far down a scroll,
+                            so the phone leads with the name and the Book action, bio underneath. */}
+                            <div className="relative hidden w-full shrink-0 md:block md:h-auto md:w-2/5">
                                 {selected.photo_path ? (
                                     <img src={selected.photo_path} alt={selected.name} className="h-full w-full object-cover grayscale-[15%]" />
                                 ) : (
@@ -1220,36 +1222,43 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 )}
                             </div>
 
-                            <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
-                                <h3 className="font-display text-ashen-900 text-3xl">{selected.name}</h3>
-                                {selected.headline && <p className="text-ashen-600 mt-1 text-sm">{selected.headline}</p>}
-                                {selected.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{selected.bio}</p>}
-
-                                <div className="mt-6 space-y-4">
-                                    {selected.approaches.length > 0 && (
-                                        <div>
-                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
-                                            <p className="text-ashen-700 mt-1 text-sm">
-                                                {selected.approaches.map((a) => APPROACH_LABELS[a] ?? a).join(' · ')}
-                                            </p>
-                                        </div>
-                                    )}
-                                    {selected.languages.length > 0 && (
-                                        <div>
-                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">Languages</p>
-                                            <p className="text-ashen-700 mt-1 text-sm">
-                                                {selected.languages.map((l) => LANGUAGE_LABELS[l] ?? l).join(' · ')}
-                                            </p>
-                                        </div>
-                                    )}
+                            <div className="flex min-h-0 flex-1 flex-col">
+                                <div className="shrink-0 px-6 pt-6 pr-14 sm:px-8 sm:pt-8">
+                                    <h3 className="font-display text-ashen-900 text-3xl">{selected.name}</h3>
+                                    {selected.headline && <p className="text-ashen-600 mt-1 text-sm">{selected.headline}</p>}
                                 </div>
 
-                                <a
-                                    href={`/book/${selected.slug}`}
-                                    className="bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition"
-                                >
-                                    Book a session with {selected.name.split(' ')[0]} →
-                                </a>
+                                <div className="md:border-ashen-300/60 md:from-ashen-100 md:to-ashen-100/60 order-1 shrink-0 px-6 pt-4 pb-1 sm:px-8 md:order-3 md:border-t md:bg-gradient-to-t md:py-5 md:backdrop-blur">
+                                    <a
+                                        href={`/book/${selected.slug}`}
+                                        className="bg-ashen-800 hover:bg-ashen-900 text-ashen-200 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition"
+                                    >
+                                        Book a session with {selected.name.split(' ')[0]} →
+                                    </a>
+                                </div>
+
+                                <div className="order-2 min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-6 sm:px-8 sm:pt-5 sm:pb-8">
+                                    {selected.bio && <p className="text-ashen-700 leading-relaxed">{selected.bio}</p>}
+
+                                    <div className="mt-6 space-y-4">
+                                        {selected.approaches.length > 0 && (
+                                            <div>
+                                                <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
+                                                <p className="text-ashen-700 mt-1 text-sm">
+                                                    {selected.approaches.map((a) => APPROACH_LABELS[a] ?? a).join(' · ')}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {selected.languages.length > 0 && (
+                                            <div>
+                                                <p className="text-ashen-600 text-xs tracking-wider uppercase">Languages</p>
+                                                <p className="text-ashen-700 mt-1 text-sm">
+                                                    {selected.languages.map((l) => LANGUAGE_LABELS[l] ?? l).join(' · ')}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     </motion.div>
