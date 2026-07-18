@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 
 test('profile page is displayed', function () {
@@ -11,6 +12,16 @@ test('profile page is displayed', function () {
 
     $response->assertOk();
 });
+
+test('staff can open the settings pages', function (UserRole $role) {
+    $user = User::factory()->create(['role' => $role]);
+
+    $this->actingAs($user)->get('/settings/profile')->assertOk();
+    $this->actingAs($user)->get('/settings/password')->assertOk();
+})->with([
+    'practitioner' => UserRole::Practitioner,
+    'admin' => UserRole::Admin,
+]);
 
 test('profile information can be updated', function () {
     $user = User::factory()->create();
