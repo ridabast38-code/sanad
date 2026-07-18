@@ -6,6 +6,7 @@ import { usePage } from '@inertiajs/react';
 import {
     ArrowUpRight,
     ChevronDown,
+    ChevronLeft,
     ChevronRight,
     Clock,
     Globe,
@@ -99,6 +100,37 @@ const APPROACH_DROPS: Drop[] = [
     { x: 6, y: '19rem', fall: 120, dur: 10, delay: -8.5 },
 ];
 
+/**
+ * A circular carousel control for the team rail: a glass disc with a chevron that
+ * keeps nudging in its travel direction, so it reads as "there's more this way"
+ * without any scrollbar. Fades in and out with `AnimatePresence` as each end is
+ * reached.
+ */
+function RailArrow({ direction, onClick }: { direction: 'prev' | 'next'; onClick: () => void }) {
+    const next = direction === 'next';
+    const Icon = next ? ChevronRight : ChevronLeft;
+
+    return (
+        <motion.button
+            type="button"
+            onClick={onClick}
+            aria-label={next ? 'See more psychologists' : 'See previous psychologists'}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            className={`bg-ashen-100/90 text-ashen-900 ring-ashen-950/10 hover:bg-ashen-50 absolute top-1/2 z-20 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full shadow-[0_12px_30px_-12px_rgba(20,21,15,0.8)] ring-1 backdrop-blur transition sm:flex ${
+                next ? 'right-1 md:right-2' : 'left-1 md:left-2'
+            }`}
+        >
+            <motion.span animate={{ x: next ? [0, 3, 0] : [0, -3, 0] }} transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}>
+                <Icon className="size-6" />
+            </motion.span>
+        </motion.button>
+    );
+}
+
 export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
     const isGuest = !usePage<SharedData>().props.auth?.user;
 
@@ -157,6 +189,27 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
     ];
 
     const [selected, setSelected] = useState<LandingSpecialist | null>(null);
+
+    // The team rail is a horizontal scroller; these drive the circular arrows that
+    // step through it three-at-a-time, so no raw scrollbar is ever needed.
+    const teamRail = useRef<HTMLDivElement>(null);
+    const [railNav, setRailNav] = useState({ prev: false, next: specialists.length > 3 });
+
+    const syncRailNav = () => {
+        const el = teamRail.current;
+        if (!el) {
+            return;
+        }
+        setRailNav({
+            prev: el.scrollLeft > 8,
+            next: el.scrollLeft + el.clientWidth < el.scrollWidth - 8,
+        });
+    };
+
+    const stepRail = (direction: 1 | -1) => {
+        // ~90% of the visible width lands the next set cleanly without skipping a face
+        teamRail.current?.scrollBy({ left: direction * teamRail.current.clientWidth * 0.9, behavior: 'smooth' });
+    };
 
     const faqs = [
         {
@@ -814,36 +867,52 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                         {/* A drag rail at every size, not a grid. With twenty specialists a grid
                         becomes a wall, and the cream matte that used to frame each photo was the
                         brightest thing on the page — the eye landed on the border instead of the
-                        face. The photo is the card now. */}
-                        <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-3 md:gap-5">
-                            {specialists.map((m) => (
-                                <motion.button
-                                    key={m.slug}
-                                    onClick={() => setSelected(m)}
-                                    whileHover={{ y: -6 }}
-                                    transition={{ duration: 0.45, ease: SOFT_EASE }}
-                                    className="group relative aspect-[4/5] w-[78%] shrink-0 snap-center overflow-hidden rounded-[1.75rem] text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] sm:w-[45%] lg:w-[31%]"
-                                >
-                                    {m.photo_path ? (
-                                        <img
-                                            src={m.photo_path}
-                                            alt={m.name}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className="absolute inset-0 h-full w-full object-cover grayscale-[35%] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
-                                        />
-                                    ) : (
-                                        <div className="from-ashen-300 to-ashen-500 absolute inset-0 bg-gradient-to-br" />
-                                    )}
+                        face. The photo is the card now. The circular arrows step through it in
+                        threes so there's never a raw scrollbar to look at. */}
+                        <div className="relative">
+                            <div
+                                ref={teamRail}
+                                onScroll={syncRailNav}
+                                className="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-3 md:gap-5"
+                            >
+                                {specialists.map((m) => (
+                                    <motion.button
+                                        key={m.slug}
+                                        onClick={() => setSelected(m)}
+                                        whileHover={{ y: -6 }}
+                                        transition={{ duration: 0.45, ease: SOFT_EASE }}
+                                        className="group relative aspect-[4/5] w-[78%] shrink-0 snap-center overflow-hidden rounded-[1.75rem] text-left shadow-[0_30px_60px_-30px_rgba(20,21,15,0.75)] sm:w-[45%] lg:w-[31%]"
+                                    >
+                                        {m.photo_path ? (
+                                            <img
+                                                src={m.photo_path}
+                                                alt={m.name}
+                                                loading="lazy"
+                                                decoding="async"
+                                                className="absolute inset-0 h-full w-full object-cover grayscale-[35%] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                                            />
+                                        ) : (
+                                            <div className="from-ashen-300 to-ashen-500 absolute inset-0 bg-gradient-to-br" />
+                                        )}
 
-                                    {/* the name rests on the photo instead of on a frame below it */}
-                                    <div className="from-ashen-950/90 via-ashen-950/25 absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 group-hover:opacity-90" />
-                                    <div className="absolute inset-x-0 bottom-0 p-5">
-                                        <h3 className="font-display text-ashen-100 text-xl md:text-2xl">{m.name}</h3>
-                                        {m.headline && <p className="text-ashen-300 mt-1 text-xs">{m.headline}</p>}
-                                    </div>
-                                </motion.button>
-                            ))}
+                                        {/* the name rests on the photo instead of on a frame below it */}
+                                        <div className="from-ashen-950/90 via-ashen-950/25 absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 group-hover:opacity-90" />
+                                        <div className="absolute inset-x-0 bottom-0 p-5">
+                                            <h3 className="font-display text-ashen-100 text-xl md:text-2xl">{m.name}</h3>
+                                            {m.headline && <p className="text-ashen-300 mt-1 text-xs">{m.headline}</p>}
+                                        </div>
+                                    </motion.button>
+                                ))}
+                            </div>
+
+                            {/* Step-through arrows — a circle with a gently nudging chevron,
+                            shown only when there's actually more to reach in that direction.
+                            They sit over the rail's edges like a carousel, so the "other three"
+                            are one tap away and no scrollbar is ever on show. */}
+                            <AnimatePresence>
+                                {railNav.prev && <RailArrow key="prev" direction="prev" onClick={() => stepRail(-1)} />}
+                                {railNav.next && <RailArrow key="next" direction="next" onClick={() => stepRail(1)} />}
+                            </AnimatePresence>
                         </div>
 
                         {/* confident, licensed practice statement */}
