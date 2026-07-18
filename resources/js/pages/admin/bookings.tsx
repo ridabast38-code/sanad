@@ -1,3 +1,4 @@
+import { BookingInfoButton, type BookingDetail } from '@/components/staff/booking-info-button';
 import { DateFilter } from '@/components/staff/date-filter';
 import { Badge, CARD, money, PageHeader, Section, Table, Td, TypeBadge } from '@/components/staff/kit';
 import { MeetingLinkEditor } from '@/components/staff/meeting-link-editor';
@@ -7,17 +8,7 @@ import { CalendarClock, CalendarPlus, Check, CheckCheck, RotateCcw, UserX, X } f
 
 type BookingAction = 'paid' | 'cancelled' | 'completed' | 'no_show';
 
-interface BookingRow {
-    id: number;
-    client: string;
-    practitioner: string;
-    service: string;
-    type: string;
-    emergency_category: string | null;
-    scheduled_label: string;
-    status: string;
-    payment_status: string;
-    price: number;
+interface BookingRow extends BookingDetail {
     meeting_link: string | null;
 }
 
@@ -111,6 +102,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                                             {b.emergency_category ? ` · ${b.emergency_category}` : ''}
                                         </p>
                                     </div>
+                                    <BookingInfoButton booking={b} />
                                     <button
                                         type="button"
                                         onClick={() => act(b.id, 'paid')}
@@ -155,6 +147,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                                         <MeetingLinkEditor bookingId={b.id} meetingLink={b.meeting_link} />
                                     </div>
                                     <div className="border-ashen-100 mt-3 flex flex-wrap items-center gap-2 border-t pt-3">
+                                        <BookingInfoButton booking={b} />
                                         <Link
                                             href={`/admin/bookings/${b.id}/reschedule`}
                                             className="border-ashen-300 text-ashen-700 hover:bg-ashen-50 mr-auto inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
@@ -198,7 +191,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
             <Section title="All bookings">
                 <DateFilter path="/admin/bookings" filters={filters} />
                 <Table
-                    head={['When', 'Client', 'Practitioner', 'Service', 'Type', 'Price', 'Status', 'Payment']}
+                    head={['When', 'Client', 'Practitioner', 'Service', 'Type', 'Price', 'Status', 'Payment', '']}
                     empty={bookings.length === 0 ? 'No bookings yet.' : undefined}
                 >
                     {bookings.map((b) => (
@@ -216,6 +209,9 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
                             </Td>
                             <Td>
                                 <Badge>{b.payment_status}</Badge>
+                            </Td>
+                            <Td>
+                                <BookingInfoButton booking={b} />
                             </Td>
                         </tr>
                     ))}

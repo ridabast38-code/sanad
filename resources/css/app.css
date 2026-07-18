@@ -158,6 +158,17 @@ html {
     background: linear-gradient(to right, #f6f4ed 0%, #e6e5dd 28%, #b8b9b1 55%, #90918a 76%, #90918a 100%);
 }
 
+/* On a phone the horizontal split has no room to breathe: the light→dark ramp
+   compresses into ~390px, so the right ~40% of every screen turns medium-gray and
+   forms and tables sit half on light, half on dark — reading as the page being cut
+   down the middle. Narrow screens scroll vertically, so the split flows top→bottom
+   instead and stays light, keeping depth without the harsh side seam. */
+@media (max-width: 767px) {
+    .sanad-split {
+        background: linear-gradient(to bottom, #f6f4ed 0%, #eceae2 55%, #dcdcd4 100%);
+    }
+}
+
 /* The card surface — the landing's panel recipe, available to every page.
 
    The landing never fills a panel with a flat colour: every one is a diagonal

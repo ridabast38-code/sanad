@@ -99,17 +99,30 @@ class DashboardController extends Controller
     {
         $clients = User::where('role', UserRole::Client)
             ->withCount('clientBookings')
+            ->with('clientProfile')
             ->get()
             ->map(function (User $client) {
                 $spend = Transaction::where('status', 'completed')->whereHas('booking', fn ($query) => $query->where('client_id', $client->id))->sum('amount');
+                $profile = $client->clientProfile;
 
                 return [
                     'id' => $client->id,
                     'name' => $client->name,
                     'email' => $client->email,
+                    'phone' => $client->phone,
                     'sessions' => $client->client_bookings_count,
                     'spent' => round((float) $spend, 2),
                     'joined' => $client->created_at?->format('M j, Y'),
+                    // Everything the client shared during onboarding, so an admin can
+                    // see who they are and what they came for at a glance.
+                    'profile' => $profile ? [
+                        'date_of_birth' => $profile->date_of_birth?->format('M j, Y'),
+                        'gender' => $profile->gender,
+                        'preferred_language' => $profile->preferred_language,
+                        'preferred_approach' => $profile->preferred_approach,
+                        'support_reason' => $profile->support_reason,
+                        'emergency_contact' => $profile->emergency_contact,
+                    ] : null,
                 ];
             })
             ->values();
@@ -177,6 +190,13 @@ class DashboardController extends Controller
             'payment_status' => $booking->payment_status,
             'price' => (float) $booking->price,
             'meeting_link' => $booking->meeting_link,
+            // Contact details for the person on the booking — a registered client's
+            // account details, or whatever a walk-in guest typed in. This is the only
+            // place an admin can reach a guest, so it's surfaced behind an info panel.
+            'is_guest' => $booking->isGuest(),
+            'email' => $booking->clientEmail(),
+            'phone' => $booking->client?->phone ?? $booking->guest_phone,
+            'client_note' => $booking->client_note,
         ];
     }
 
