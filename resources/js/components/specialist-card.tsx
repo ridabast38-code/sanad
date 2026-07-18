@@ -70,15 +70,7 @@ function gradientFor(name: string): string {
  * flexible part and the name and button are pinned, so the card survives any
  * height instead of quietly losing the one control that matters.
  */
-export function SpecialistCard({
-    specialist: p,
-    matched = false,
-    fitHeight = false,
-}: {
-    specialist: Specialist;
-    matched?: boolean;
-    fitHeight?: boolean;
-}) {
+export function SpecialistCard({ specialist: p, fitHeight = false }: { specialist: Specialist; fitHeight?: boolean }) {
     return (
         <div className="sanad-card group flex h-full flex-col overflow-hidden rounded-[1.6rem] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_60px_-30px_rgba(20,21,15,0.5)]">
             {/* photo set inside the glass like a photo in an album */}
@@ -100,11 +92,6 @@ export function SpecialistCard({
                         <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${gradientFor(p.name)}`}>
                             <span className="font-display text-5xl text-white/85">{initials(p.name)}</span>
                         </div>
-                    )}
-                    {matched && (
-                        <span className="bg-ashen-600 absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-white shadow-sm">
-                            ✦ Matches you
-                        </span>
                     )}
                 </div>
             </div>
@@ -189,13 +176,11 @@ export function SpecialistCard({
  */
 export function SpecialistPortraitCard({
     specialist: p,
-    matched = false,
     fitHeight = false,
     href,
     onSelect,
 }: {
     specialist: Specialist;
-    matched?: boolean;
     fitHeight?: boolean;
     /**
      * Where the card leads. Defaults to the in-app profile, which is role:client
@@ -232,11 +217,6 @@ export function SpecialistPortraitCard({
                 </div>
             )}
 
-            {matched && (
-                <span className="bg-ashen-50/90 text-ashen-800 absolute top-4 left-4 rounded-full px-2.5 py-1 text-[11px] font-medium shadow-sm backdrop-blur">
-                    ✦ Matches you
-                </span>
-            )}
             {p.from_price != null && (
                 <span className="bg-ashen-950/55 text-ashen-100 absolute top-4 right-4 rounded-full px-2.5 py-1 text-[11px] font-medium backdrop-blur">
                     from ${p.from_price}

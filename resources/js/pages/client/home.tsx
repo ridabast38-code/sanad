@@ -1,11 +1,5 @@
 import { EDGE_DROPS, OliveDrops, OliveHorizon } from '@/components/olive';
-import {
-    matchesPreferences,
-    SpecialistPortraitCard,
-    SpecialistPreviewModal,
-    type MatchPreferences,
-    type Specialist,
-} from '@/components/specialist-card';
+import { SpecialistPortraitCard, SpecialistPreviewModal, type MatchPreferences, type Specialist } from '@/components/specialist-card';
 import { applyFilters, EMPTY_FILTERS, SpecialistFilterBar, type SpecialistFilters } from '@/components/specialist-filters';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -366,11 +360,7 @@ function SpecialistsView({ practitioners, preferences }: { practitioners: Specia
                                     transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                                     className="w-[72%] shrink-0 snap-center sm:w-[45%] lg:w-[16rem] xl:w-[18rem]"
                                 >
-                                    <SpecialistPortraitCard
-                                        specialist={specialist}
-                                        matched={matchesPreferences(specialist, preferences)}
-                                        onSelect={setPreview}
-                                    />
+                                    <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} />
                                 </motion.div>
                             ))}
                         </AnimatePresence>
