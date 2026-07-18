@@ -15,7 +15,9 @@ Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    // Throttled: creating an account sends a confirmation email, so a per-IP limit
+    // stops the form being used to spam arbitrary inboxes or pile up pending signups.
+    Route::post('register', [RegisteredUserController::class, 'store'])->middleware('throttle:6,1');
 
     // "Check your inbox" screen, then the emailed link that actually creates
     // the account (no user exists until it's confirmed).
@@ -41,6 +43,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.request');
 
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware('throttle:6,1')
         ->name('password.email');
 
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])

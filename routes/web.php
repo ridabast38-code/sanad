@@ -54,10 +54,6 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-Route::get('/playground', function () {
-    return Inertia::render('playground');
-});
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('onboarding', [OnboardingController::class, 'show'])->name('onboarding.show');
     Route::post('onboarding', [OnboardingController::class, 'store'])->name('onboarding.store');
@@ -133,7 +129,11 @@ Route::get('psychologists', [PublicBookingController::class, 'directory'])->name
 // nudged to register; either way it lands in the same admin "accept once paid"
 // pipeline. Signed-in clients are bounced to the richer in-app flow instead.
 Route::get('book/{practitioner:slug}', [PublicBookingController::class, 'show'])->name('book.show');
-Route::post('book/{practitioner:slug}', [PublicBookingController::class, 'store'])->name('book.store');
+// Throttled: this is an open, no-login POST, so it's rate-limited per IP to stop a
+// bot squatting every slot as a guest or flooding admins with booking alerts.
+Route::post('book/{practitioner:slug}', [PublicBookingController::class, 'store'])
+    ->middleware('throttle:8,1')
+    ->name('book.store');
 Route::get('book/confirmed/{token}', [PublicBookingController::class, 'confirmed'])->name('book.confirmed');
 
 Route::get('privacy', fn () => Inertia::render('legal/privacy'))->name('privacy');

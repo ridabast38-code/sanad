@@ -250,6 +250,39 @@ test('cancelling a booking frees its slot so the time can be taken again', funct
         ->and(Booking::whereIn('status', ['pending', 'confirmed'])->count())->toBe(1);
 });
 
+test('rejecting an unpaid booking returns its time to the practitioner open slots', function () {
+    Notification::fake();
+
+    $admin = User::factory()->create(['role' => UserRole::Admin]);
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+
+    $page = $this->actingAs($client)->get(route('specialists.show', $practitioner))->viewData('page');
+    $slotIso = $page['props']['slots'][0]['iso'];
+
+    $this->actingAs($client)->post(route('bookings.store'), [
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $page['props']['services'][0]['id'],
+        'scheduled_at' => $slotIso,
+    ]);
+
+    $booking = Booking::sole();
+
+    // While the request is pending, the slot is off the board.
+    $whilePending = $this->actingAs($client)->get(route('specialists.show', $practitioner))->viewData('page')['props']['slots'];
+    expect(collect($whilePending)->pluck('iso'))->not->toContain($slotIso);
+
+    // The admin rejects the unpaid request.
+    $this->actingAs($admin)
+        ->patch(route('admin.bookings.action', $booking), ['action' => 'cancelled'])
+        ->assertRedirect();
+
+    // The time is bookable again.
+    $afterReject = $this->actingAs($client)->get(route('specialists.show', $practitioner))->viewData('page')['props']['slots'];
+    expect(collect($afterReject)->pluck('iso'))->toContain($slotIso)
+        ->and($booking->fresh()->slot_hold)->toBeNull();
+});
+
 test('cancelling a paid booking refunds it and notifies the client and practitioner', function () {
     Notification::fake();
 
