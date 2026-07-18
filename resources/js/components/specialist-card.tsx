@@ -373,7 +373,10 @@ export function SpecialistPreviewModal({
                             <X className="h-5 w-5" />
                         </button>
 
-                        <div className="relative h-40 w-full shrink-0 sm:h-56 md:h-auto md:w-2/5">
+                        {/* Photo is desktop-only. On a phone it ate the top of a small card
+                        and pushed the button into a scroll — so the phone drops it entirely and
+                        leads with the name and the Book action instead. */}
+                        <div className="relative hidden w-full shrink-0 md:block md:h-auto md:w-2/5">
                             {specialist.photo_path ? (
                                 <img src={specialist.photo_path} alt={specialist.name} className="h-full w-full object-cover grayscale-[15%]" />
                             ) : (
@@ -381,16 +384,29 @@ export function SpecialistPreviewModal({
                             )}
                         </div>
 
-                        {/* Scrollable detail above a pinned action, so the "Book" button is
-                        reachable without scrolling past the photo and bio — on a phone the column
-                        stacks under the photo, where a button living at the end of the scroll area
-                        sat below the fold. */}
+                        {/* Name pinned at the top, then the Book action, then the bio. The action
+                        uses flex `order` so it sits right under the name on a phone (visible with
+                        no scrolling) but drops to a pinned footer under the bio on desktop. */}
                         <div className="flex min-h-0 flex-1 flex-col">
-                            <div className="min-h-0 flex-1 overflow-y-auto p-6 pb-4 sm:p-8 sm:pb-5">
+                            <div className="shrink-0 px-6 pt-6 pr-14 sm:px-8 sm:pt-8">
                                 <h3 className="font-display text-ashen-900 text-3xl">{specialist.name}</h3>
                                 {specialist.headline && <p className="text-ashen-600 mt-1 text-sm">{specialist.headline}</p>}
+                            </div>
 
-                                {specialist.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{specialist.bio}</p>}
+                            <div className="md:border-ashen-300/60 md:from-ashen-100 md:to-ashen-100/60 order-1 shrink-0 px-6 pt-4 pb-1 sm:px-8 md:order-3 md:border-t md:bg-gradient-to-t md:py-5 md:backdrop-blur">
+                                <Link
+                                    href={bookHref(specialist)}
+                                    className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 inline-flex items-center gap-2 rounded-full py-3 pr-6 pl-3 text-sm font-medium transition"
+                                >
+                                    <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
+                                        <ArrowUpRight className="size-4" />
+                                    </span>
+                                    Book a session with {specialist.name.split(' ')[0]}
+                                </Link>
+                            </div>
+
+                            <div className="order-2 min-h-0 flex-1 overflow-y-auto px-6 pt-4 pb-6 sm:px-8 sm:pt-5 sm:pb-8">
+                                {specialist.bio && <p className="text-ashen-700 leading-relaxed">{specialist.bio}</p>}
 
                                 <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
                                     {specialist.approaches.length > 0 && (
@@ -422,18 +438,6 @@ export function SpecialistPreviewModal({
                                         </div>
                                     )}
                                 </div>
-                            </div>
-
-                            <div className="border-ashen-300/60 from-ashen-100 to-ashen-100/60 shrink-0 border-t bg-gradient-to-t px-6 py-4 backdrop-blur sm:px-8 sm:py-5">
-                                <Link
-                                    href={bookHref(specialist)}
-                                    className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 inline-flex items-center gap-2 rounded-full py-3 pr-6 pl-3 text-sm font-medium transition"
-                                >
-                                    <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
-                                        <ArrowUpRight className="size-4" />
-                                    </span>
-                                    Book a session with {specialist.name.split(' ')[0]}
-                                </Link>
                             </div>
                         </div>
                     </motion.div>
