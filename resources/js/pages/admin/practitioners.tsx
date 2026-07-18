@@ -1,7 +1,7 @@
 import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import StaffLayout from '@/layouts/staff-layout';
-import { router, useForm } from '@inertiajs/react';
+import { Link, router, useForm } from '@inertiajs/react';
 import { Plus, Trash2, UserPlus, X } from 'lucide-react';
 import { useState } from 'react';
 
@@ -97,6 +97,12 @@ export default function AdminPractitioners({
                             </Td>
                             <Td>
                                 <div className="flex items-center gap-2">
+                                    <Link
+                                        href={`/admin/practitioners/${p.id}/edit`}
+                                        className="border-ashen-300 text-ashen-700 hover:bg-ashen-100 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
+                                    >
+                                        Edit
+                                    </Link>
                                     {p.approval_status !== 'approved' && (
                                         <button
                                             type="button"

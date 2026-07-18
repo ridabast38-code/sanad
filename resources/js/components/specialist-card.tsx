@@ -94,7 +94,7 @@ export function SpecialistCard({
                             alt={p.name}
                             loading="lazy"
                             decoding="async"
-                            className="absolute inset-0 h-full w-full object-cover object-[center_25%] grayscale-[35%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                            className="absolute inset-0 h-full w-full object-cover object-[center_25%] grayscale-[45%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
                         />
                     ) : (
                         <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${gradientFor(p.name)}`}>
@@ -227,7 +227,7 @@ export function SpecialistPortraitCard({
                     src={p.photo_path}
                     alt={p.name}
                     decoding="async"
-                    className="absolute inset-0 h-full w-full object-cover object-[center_20%] grayscale-[35%] transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_20%] grayscale-[45%] transition duration-700 ease-out group-hover:scale-[1.04] group-hover:grayscale-0"
                 />
             ) : (
                 <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${gradientFor(p.name)}`}>

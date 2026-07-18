@@ -1,0 +1,381 @@
+import { CARD, PageHeader } from '@/components/staff/kit';
+import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
+import StaffLayout from '@/layouts/staff-layout';
+import { Link, useForm } from '@inertiajs/react';
+import { ArrowLeft, Plus, Trash2, UserPlus } from 'lucide-react';
+import { useState } from 'react';
+
+interface ServiceRow {
+    id: number;
+    name: string;
+    duration_minutes: number | null;
+    price: number | null;
+}
+
+interface Options {
+    approaches: string[];
+    languages: string[];
+}
+
+interface Window {
+    day_of_week: number;
+    start_time: string;
+    end_time: string;
+}
+
+interface Practitioner {
+    id: number;
+    name: string;
+    email: string;
+    headline: string | null;
+    bio: string | null;
+    gender: string | null;
+    years_experience: number | null;
+    approaches: string[];
+    languages: string[];
+    photo_path: string | null;
+    approval_status: string | null;
+    availability: Window[];
+}
+
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const inputClass =
+    'w-full rounded-xl border border-ashen-300/60 bg-ashen-50/80 px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-ashen-400 focus:bg-ashen-50 focus:outline-none focus:ring-2 focus:ring-ashen-500/20';
+
+// `type` (not `interface`): Inertia's useForm data type needs an index signature,
+// which object type-aliases satisfy but named interfaces don't.
+type PriceRow = {
+    id: number;
+    price: string;
+};
+
+export default function PractitionerEdit({
+    practitioner,
+    options,
+    services,
+}: {
+    practitioner: Practitioner;
+    options: Options;
+    services: ServiceRow[];
+}) {
+    const { data, setData, post, processing, errors } = useForm<{
+        name: string;
+        email: string;
+        password: string;
+        photo: File | null;
+        headline: string;
+        bio: string;
+        gender: string;
+        years_experience: string;
+        approaches: string[];
+        languages: string[];
+        services: PriceRow[];
+        availability: Window[];
+    }>({
+        name: practitioner.name,
+        email: practitioner.email,
+        password: '',
+        photo: null,
+        headline: practitioner.headline ?? '',
+        bio: practitioner.bio ?? '',
+        gender: practitioner.gender ?? '',
+        years_experience: practitioner.years_experience != null ? String(practitioner.years_experience) : '',
+        approaches: practitioner.approaches,
+        languages: practitioner.languages,
+        services: services.map((s) => ({ id: s.id, price: s.price != null ? String(s.price) : '' })),
+        availability: practitioner.availability,
+    });
+
+    const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+    const pickPhoto = (file: File | null) => {
+        setData('photo', file);
+        setPhotoPreview(file ? URL.createObjectURL(file) : null);
+    };
+
+    const toggle = (field: 'approaches' | 'languages', value: string) =>
+        setData(field, data[field].includes(value) ? data[field].filter((v) => v !== value) : [...data[field], value]);
+
+    const setPrice = (id: number, price: string) =>
+        setData(
+            'services',
+            data.services.map((s) => (s.id === id ? { ...s, price } : s)),
+        );
+
+    const addWindow = () => setData('availability', [...data.availability, { day_of_week: 1, start_time: '17:00', end_time: '20:00' }]);
+    const removeWindow = (i: number) =>
+        setData(
+            'availability',
+            data.availability.filter((_, idx) => idx !== i),
+        );
+    const setWindow = (i: number, patch: Partial<Window>) =>
+        setData(
+            'availability',
+            data.availability.map((w, idx) => (idx === i ? { ...w, ...patch } : w)),
+        );
+
+    const submit = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(`/admin/practitioners/${practitioner.id}/update`, {
+            preserveScroll: true,
+            forceFormData: true,
+        });
+    };
+
+    const currentPhoto = photoPreview ?? practitioner.photo_path;
+
+    return (
+        <StaffLayout title={`Edit ${practitioner.name}`}>
+            <PageHeader
+                title={`Edit ${practitioner.name}`}
+                subtitle="Update this specialist's profile, photo, pricing and weekly availability."
+                action={
+                    <Link
+                        href="/admin/practitioners"
+                        className="border-ashen-300 text-ashen-700 hover:bg-ashen-100 inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition"
+                    >
+                        <ArrowLeft className="size-4" /> Back
+                    </Link>
+                }
+            />
+
+            <form onSubmit={submit} className={`p-6 md:p-7 ${CARD}`}>
+                {/* ===== login basics ===== */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                    <Field label="Full name" error={errors.name}>
+                        <input type="text" value={data.name} onChange={(e) => setData('name', e.target.value)} className={inputClass} />
+                    </Field>
+                    <Field label="Email" error={errors.email}>
+                        <input type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} className={inputClass} />
+                    </Field>
+                    <Field label="New password" error={errors.password}>
+                        <input
+                            type="text"
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                            placeholder="Leave blank to keep current"
+                            className={inputClass}
+                        />
+                    </Field>
+                </div>
+
+                {/* ===== photo ===== */}
+                <div className="mt-5">
+                    <label className="text-ashen-600 mb-1.5 block text-sm font-medium">Photo</label>
+                    <div className="flex items-center gap-4">
+                        <div className="bg-ashen-50 border-ashen-300/60 size-20 shrink-0 overflow-hidden rounded-2xl border">
+                            {currentPhoto ? (
+                                <img src={currentPhoto} alt="" className="size-full object-cover" />
+                            ) : (
+                                <div className="text-ashen-400 flex size-full items-center justify-center">
+                                    <UserPlus className="size-6" />
+                                </div>
+                            )}
+                        </div>
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
+                                className="text-ashen-600 file:bg-ashen-700 hover:file:bg-ashen-800 text-sm file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+                            />
+                            <p className="text-ashen-400 mt-1.5 text-xs">Shown in the client directory. JPG, PNG or WebP, up to 4 MB. Leave alone to keep the current one.</p>
+                            {errors.photo && <p className="text-ashen-500 mt-1 text-xs">{errors.photo}</p>}
+                        </div>
+                    </div>
+                </div>
+
+                {/* ===== profile ===== */}
+                <div className="border-ashen-300/25 mt-6 border-t pt-6">
+                    <p className="text-ashen-500 mb-4 text-[11px] font-semibold tracking-[0.14em] uppercase">Profile</p>
+                    <div className="grid gap-4">
+                        <Field label="Headline" error={errors.headline}>
+                            <input
+                                type="text"
+                                value={data.headline}
+                                onChange={(e) => setData('headline', e.target.value)}
+                                placeholder="e.g. Calm, attentive psychological support"
+                                className={inputClass}
+                            />
+                        </Field>
+                        <Field label="Bio" error={errors.bio}>
+                            <textarea value={data.bio} onChange={(e) => setData('bio', e.target.value)} rows={4} className={inputClass} />
+                        </Field>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            <Field label="Gender" error={errors.gender}>
+                                <select value={data.gender} onChange={(e) => setData('gender', e.target.value)} className={inputClass}>
+                                    <option value="">Prefer not to say</option>
+                                    <option value="female">Female</option>
+                                    <option value="male">Male</option>
+                                </select>
+                            </Field>
+                            <Field label="Years of experience" error={errors.years_experience}>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    max={60}
+                                    value={data.years_experience}
+                                    onChange={(e) => setData('years_experience', e.target.value)}
+                                    className={inputClass}
+                                />
+                            </Field>
+                        </div>
+                        <Field label="Approaches">
+                            <ChipGroup options={options.approaches} labels={APPROACH_LABELS} selected={data.approaches} onToggle={(v) => toggle('approaches', v)} />
+                        </Field>
+                        <Field label="Languages">
+                            <ChipGroup options={options.languages} labels={LANGUAGE_LABELS} selected={data.languages} onToggle={(v) => toggle('languages', v)} />
+                        </Field>
+                    </div>
+                </div>
+
+                {/* ===== pricing ===== */}
+                <div className="border-ashen-300/25 mt-6 border-t pt-6">
+                    <p className="text-ashen-500 mb-1 text-[11px] font-semibold tracking-[0.14em] uppercase">Pricing</p>
+                    <p className="text-ashen-400 mb-4 text-xs">Set a price per session. Leave one blank to not offer it.</p>
+                    <div className="space-y-3">
+                        {services.map((service) => {
+                            const row = data.services.find((s) => s.id === service.id);
+                            return (
+                                <div key={service.id} className="border-ashen-300/40 bg-ashen-50/50 flex items-center gap-4 rounded-xl border p-3.5">
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-ashen-800 text-sm font-medium">{service.name}</p>
+                                        {service.duration_minutes && <p className="text-ashen-400 text-xs">{service.duration_minutes} min</p>}
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className="text-ashen-400 text-sm">$</span>
+                                        <input
+                                            type="number"
+                                            min={0}
+                                            step={1}
+                                            value={row?.price ?? ''}
+                                            onChange={(e) => setPrice(service.id, e.target.value)}
+                                            placeholder="—"
+                                            className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 w-24 rounded-lg border px-3 py-1.5 text-sm"
+                                        />
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* ===== availability ===== */}
+                <div className="border-ashen-300/25 mt-6 border-t pt-6">
+                    <div className="mb-4 flex items-center justify-between">
+                        <div>
+                            <p className="text-ashen-500 text-[11px] font-semibold tracking-[0.14em] uppercase">Weekly availability</p>
+                            <p className="text-ashen-400 mt-1 text-xs">The windows clients can book. Repeats every week.</p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={addWindow}
+                            className="border-ashen-300 text-ashen-700 hover:bg-ashen-100 inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition"
+                        >
+                            <Plus className="size-3.5" /> Add window
+                        </button>
+                    </div>
+
+                    {data.availability.length === 0 ? (
+                        <p className="text-ashen-400 text-sm">No windows yet — they won't be bookable until at least one is added.</p>
+                    ) : (
+                        <div className="space-y-2.5">
+                            {data.availability.map((w, i) => (
+                                <div key={i} className="border-ashen-300/40 bg-ashen-50/50 flex flex-wrap items-center gap-2 rounded-xl border p-2.5">
+                                    <select
+                                        value={w.day_of_week}
+                                        onChange={(e) => setWindow(i, { day_of_week: Number(e.target.value) })}
+                                        className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
+                                    >
+                                        {DAYS.map((day, idx) => (
+                                            <option key={idx} value={idx}>
+                                                {day}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <input
+                                        type="time"
+                                        value={w.start_time}
+                                        onChange={(e) => setWindow(i, { start_time: e.target.value })}
+                                        className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
+                                    />
+                                    <span className="text-ashen-400 text-sm">to</span>
+                                    <input
+                                        type="time"
+                                        value={w.end_time}
+                                        onChange={(e) => setWindow(i, { end_time: e.target.value })}
+                                        className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeWindow(i)}
+                                        className="text-ashen-400 hover:text-ashen-700 hover:bg-ashen-100 ml-auto flex size-8 items-center justify-center rounded-full transition"
+                                        aria-label="Remove window"
+                                    >
+                                        <Trash2 className="size-4" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="mt-6 flex items-center gap-3">
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
+                    >
+                        Save changes
+                    </button>
+                    <Link href="/admin/practitioners" className="text-ashen-500 hover:text-ashen-700 text-sm transition">
+                        Cancel
+                    </Link>
+                </div>
+            </form>
+        </StaffLayout>
+    );
+}
+
+function ChipGroup({
+    options,
+    labels,
+    selected,
+    onToggle,
+}: {
+    options: string[];
+    labels: Record<string, string>;
+    selected: string[];
+    onToggle: (value: string) => void;
+}) {
+    return (
+        <div className="flex flex-wrap gap-2">
+            {options.map((opt) => {
+                const active = selected.includes(opt);
+                return (
+                    <button
+                        key={opt}
+                        type="button"
+                        onClick={() => onToggle(opt)}
+                        className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+                            active ? 'border-ashen-600 bg-ashen-600 text-white' : 'border-ashen-300/60 bg-ashen-50 text-ashen-700 hover:bg-ashen-100'
+                        }`}
+                    >
+                        {labels[opt] ?? opt}
+                    </button>
+                );
+            })}
+        </div>
+    );
+}
+
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+    return (
+        <div>
+            <label className="text-ashen-600 mb-1.5 block text-sm font-medium">{label}</label>
+            {children}
+            {error && <p className="text-ashen-500 mt-1 text-xs">{error}</p>}
+        </div>
+    );
+}

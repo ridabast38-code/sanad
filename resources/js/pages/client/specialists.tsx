@@ -1,11 +1,5 @@
 import { ClientFooter } from '@/components/client-footer';
-import {
-    matchesPreferences,
-    SpecialistPortraitCard,
-    SpecialistPreviewModal,
-    type MatchPreferences,
-    type Specialist,
-} from '@/components/specialist-card';
+import { SpecialistPortraitCard, SpecialistPreviewModal, type MatchPreferences, type Specialist } from '@/components/specialist-card';
 import ClientLayout from '@/layouts/client-layout';
 import { Head } from '@inertiajs/react';
 import { ShieldCheck, Users } from 'lucide-react';
@@ -25,7 +19,7 @@ interface SpecialistsProps {
  * book. It previously used the older album card and jumped straight to booking,
  * which made it the odd one out.
  */
-export default function Specialists({ practitioners, preferences }: SpecialistsProps) {
+export default function Specialists({ practitioners }: SpecialistsProps) {
     // read their qualifications first, then on to booking
     const [preview, setPreview] = useState<Specialist | null>(null);
 
@@ -51,15 +45,10 @@ export default function Specialists({ practitioners, preferences }: SpecialistsP
                             initial={{ opacity: 0, y: 18 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, ease: 'easeOut' }}
-                            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
                         >
                             {practitioners.map((specialist) => (
-                                <SpecialistPortraitCard
-                                    key={specialist.id}
-                                    specialist={specialist}
-                                    matched={matchesPreferences(specialist, preferences)}
-                                    onSelect={setPreview}
-                                />
+                                <SpecialistPortraitCard key={specialist.id} specialist={specialist} onSelect={setPreview} />
                             ))}
                         </motion.div>
                     ) : (

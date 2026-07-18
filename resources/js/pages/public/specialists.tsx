@@ -126,12 +126,12 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                         />
                     ) : (
                         <>
-                            {/* ONE horizontal rail at every size — the landing team's recipe.
-                            Cards hold their own 4:5 aspect (NOT fitHeight), so their height is
-                            intrinsic and never depends on the flex parent resolving one, which
-                            is what previously left the viewport-filling rail collapsed to zero
-                            height — markup present, cards invisible. */}
-                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-6 pb-2 md:-mx-10 md:gap-5 md:px-10">
+                            {/* Mobile/tablet: ONE horizontal snap rail (the landing team's
+                            recipe — cards hold their own 4:5 aspect, never depending on a flex
+                            parent resolving a height). Laptop (lg+): the rail becomes a 3-per-row
+                            grid that scrolls vertically inside the viewport-locked column, so it
+                            reads the same as the signed-in /specialists directory. */}
+                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-6 pb-2 md:-mx-10 md:gap-5 md:px-10 lg:mx-0 lg:min-h-0 lg:flex-1 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-x-visible lg:overflow-y-auto lg:px-0.5">
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     {visible.map((specialist) => (
                                         <motion.div
@@ -141,7 +141,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.96 }}
                                             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                                            className="w-[72%] shrink-0 snap-center sm:w-[45%] lg:w-[16rem] xl:w-[18rem]"
+                                            className="w-[72%] shrink-0 snap-center self-start sm:w-[45%] lg:w-auto lg:shrink"
                                         >
                                             <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} />
                                         </motion.div>
@@ -149,7 +149,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                 </AnimatePresence>
                             </div>
 
-                            <p className="text-ashen-500 mt-2 flex shrink-0 items-center gap-2 text-xs">
+                            <p className="text-ashen-500 mt-2 flex shrink-0 items-center gap-2 text-xs lg:hidden">
                                 <Sparkles className="size-3.5 shrink-0" />
                                 Swipe sideways to meet everyone — or book any of them without an account.
                             </p>
