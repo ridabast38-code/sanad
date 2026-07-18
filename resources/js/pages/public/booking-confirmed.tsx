@@ -46,20 +46,26 @@ function CopyField({ label, value }: { label: string; value: string }) {
     };
 
     return (
-        <div className="border-ashen-200/70 bg-ashen-50/60 flex items-center justify-between gap-3 rounded-2xl border px-4 py-3">
+        // The whole field is the tap target — on a phone you tap the number and it's
+        // copied, ready to paste straight into Whish.
+        <button
+            type="button"
+            onClick={copy}
+            className="border-ashen-200/70 bg-ashen-50/60 hover:bg-ashen-100/70 flex w-full items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-left transition active:scale-[0.99]"
+        >
             <span className="min-w-0">
                 <span className="text-ashen-500 block text-[11px] font-medium tracking-[0.12em] uppercase">{label}</span>
-                <span className="text-ashen-800 mt-0.5 block truncate text-sm font-medium">{value}</span>
+                <span className="text-ashen-800 mt-0.5 block truncate text-base font-semibold">{value}</span>
             </span>
-            <button
-                type="button"
-                onClick={copy}
-                className="text-ashen-700 hover:bg-ashen-100 inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition active:scale-95"
+            <span
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                    copied ? 'bg-ashen-800 text-ashen-50' : 'text-ashen-700'
+                }`}
             >
                 {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                {copied ? 'Copied' : 'Copy'}
-            </button>
-        </div>
+                {copied ? 'Copied!' : 'Tap to copy'}
+            </span>
+        </button>
     );
 }
 

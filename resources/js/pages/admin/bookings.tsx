@@ -5,6 +5,15 @@ import { MeetingLinkEditor } from '@/components/staff/meeting-link-editor';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, router } from '@inertiajs/react';
 import { CalendarClock, CalendarPlus, Check, CheckCheck, RotateCcw, UserX, X } from 'lucide-react';
+import { useState } from 'react';
+
+type WhoFilter = 'all' | 'registered' | 'guest';
+
+const WHO_FILTERS: { key: WhoFilter; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'registered', label: 'Registered' },
+    { key: 'guest', label: 'Guests' },
+];
 
 type BookingAction = 'paid' | 'cancelled' | 'completed' | 'no_show';
 
@@ -20,6 +29,11 @@ interface Props {
 }
 
 export default function AdminBookings({ pending, confirmed, bookings, filters }: Props) {
+    // Client-side split of the full list by who booked — a registered account or a
+    // walk-in guest. The date range still comes from the server; this narrows what's
+    // already loaded.
+    const [who, setWho] = useState<WhoFilter>('all');
+    const visibleBookings = bookings.filter((b) => who === 'all' || (who === 'guest' ? b.is_guest : !b.is_guest));
     // Ask for a refund amount (0 to the full price). Returns the amount, or
     // null if the admin backed out. The 80/20 split recalculates on what's kept.
     const askRefund = (price: number, message: string, fallback: string): number | null => {
@@ -190,14 +204,40 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
             {/* ===== Full list ===== */}
             <Section title="All bookings">
                 <DateFilter path="/admin/bookings" filters={filters} />
+
+                {/* Registered vs guest — a quick way to pull up walk-ins or account holders. */}
+                <div className="mb-4 flex flex-wrap items-center gap-2">
+                    {WHO_FILTERS.map(({ key, label }) => (
+                        <button
+                            key={key}
+                            type="button"
+                            onClick={() => setWho(key)}
+                            className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition ${
+                                who === key ? 'border-ashen-600 bg-ashen-600 text-white' : 'border-ashen-300/60 text-ashen-600 hover:bg-ashen-100'
+                            }`}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
+
                 <Table
                     head={['When', 'Client', 'Practitioner', 'Service', 'Type', 'Price', 'Status', 'Payment', '']}
-                    empty={bookings.length === 0 ? 'No bookings yet.' : undefined}
+                    empty={visibleBookings.length === 0 ? (who === 'all' ? 'No bookings yet.' : 'No bookings match this filter.') : undefined}
                 >
-                    {bookings.map((b) => (
+                    {visibleBookings.map((b) => (
                         <tr key={b.id}>
                             <Td className="whitespace-nowrap">{b.scheduled_label}</Td>
-                            <Td className="font-medium">{b.client}</Td>
+                            <Td className="font-medium">
+                                <span className="inline-flex items-center gap-2">
+                                    {b.client}
+                                    {b.is_guest && (
+                                        <span className="bg-ashen-100 text-ashen-500 rounded-full px-2 py-0.5 text-[10px] font-medium tracking-wide uppercase">
+                                            Guest
+                                        </span>
+                                    )}
+                                </span>
+                            </Td>
                             <Td className="text-ashen-500">{b.practitioner}</Td>
                             <Td className="text-ashen-500">{b.service}</Td>
                             <Td>
