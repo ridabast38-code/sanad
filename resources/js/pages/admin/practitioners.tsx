@@ -1,3 +1,4 @@
+import { DeleteUserButton } from '@/components/staff/delete-user-button';
 import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import StaffLayout from '@/layouts/staff-layout';
@@ -121,6 +122,7 @@ export default function AdminPractitioners({
                                             {p.approval_status === 'approved' ? 'Suspend' : 'Reject'}
                                         </button>
                                     )}
+                                    <DeleteUserButton id={p.id} name={p.name} />
                                 </div>
                             </Td>
                         </tr>

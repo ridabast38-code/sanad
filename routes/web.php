@@ -95,6 +95,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('practitioners/{practitioner}/edit', [StaffController::class, 'edit'])->name('practitioners.edit');
         Route::post('practitioners/{practitioner}/update', [StaffController::class, 'update'])->name('practitioners.update');
         Route::post('staff', [StaffController::class, 'store'])->name('staff.store');
+        Route::delete('users/{user}', [StaffController::class, 'destroy'])->name('users.destroy');
         Route::get('clients', [AdminDashboardController::class, 'clients'])->name('clients');
         Route::get('bookings', [AdminDashboardController::class, 'bookings'])->name('bookings');
         Route::get('bookings/create', [ManualBookingController::class, 'create'])->name('bookings.create');

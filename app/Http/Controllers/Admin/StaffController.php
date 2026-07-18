@@ -226,6 +226,22 @@ class StaffController extends Controller
     }
 
     /**
+     * Permanently delete a user and everything attached to them. Every related
+     * table (profile, availability, bookings on either side, and those bookings'
+     * transactions and notes) is wired to cascade on the users row, so a single
+     * delete clears the lot. This is the "remove a test account" path — Suspend
+     * is the reversible option that keeps a real person's history intact.
+     */
+    public function destroy(Request $request, User $user): RedirectResponse
+    {
+        abort_if($user->id === $request->user()->id, 403, 'You cannot delete your own account.');
+
+        $user->delete();
+
+        return back();
+    }
+
+    /**
      * Attach only the services the admin actually priced. A blank or zero price
      * means the practitioner doesn't offer that one.
      *

@@ -1,3 +1,4 @@
+import { DeleteUserButton } from '@/components/staff/delete-user-button';
 import { money, PageHeader, Table, Td } from '@/components/staff/kit';
 import StaffLayout from '@/layouts/staff-layout';
 
@@ -15,7 +16,7 @@ export default function AdminClients({ clients }: { clients: Client[] }) {
         <StaffLayout title="Clients">
             <PageHeader title="Clients" subtitle="Everyone using Sanad to find support." />
 
-            <Table head={['Client', 'Sessions', 'Spent', 'Joined']} empty={clients.length === 0 ? 'No clients yet.' : undefined}>
+            <Table head={['Client', 'Sessions', 'Spent', 'Joined', 'Actions']} empty={clients.length === 0 ? 'No clients yet.' : undefined}>
                 {clients.map((c) => (
                     <tr key={c.id}>
                         <Td>
@@ -25,6 +26,9 @@ export default function AdminClients({ clients }: { clients: Client[] }) {
                         <Td>{c.sessions}</Td>
                         <Td className="text-ashen-700 font-medium">{money(c.spent)}</Td>
                         <Td className="text-ashen-500">{c.joined ?? '—'}</Td>
+                        <Td>
+                            <DeleteUserButton id={c.id} name={c.name} />
+                        </Td>
                     </tr>
                 ))}
             </Table>
