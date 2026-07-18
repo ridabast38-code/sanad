@@ -186,9 +186,11 @@ class PublicBookingController extends Controller
             ->values()
             ->all();
 
+        $reference = 'SANAD-'.str_pad((string) $booking->id, 5, '0', STR_PAD_LEFT);
+
         return Inertia::render('public/booking-confirmed', [
             'booking' => [
-                'reference' => 'SANAD-'.str_pad((string) $booking->id, 5, '0', STR_PAD_LEFT),
+                'reference' => $reference,
                 'guest_name' => $booking->guest_name,
                 'guest_email' => $booking->guest_email,
                 'practitioner_name' => $booking->practitioner->name,
@@ -198,6 +200,7 @@ class PublicBookingController extends Controller
                 'is_paid' => $booking->payment_status === 'paid',
             ],
             'methods' => $methods,
+            'whatsappUrl' => $this->paymentSupportWhatsappUrl($reference),
         ]);
     }
 }

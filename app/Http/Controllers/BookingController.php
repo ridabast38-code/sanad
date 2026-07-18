@@ -124,15 +124,18 @@ class BookingController extends Controller
             ->values()
             ->all();
 
+        $reference = 'SANAD-'.str_pad((string) $booking->id, 5, '0', STR_PAD_LEFT);
+
         return Inertia::render('client/booking-payment', [
             'booking' => [
-                'reference' => 'SANAD-'.str_pad((string) $booking->id, 5, '0', STR_PAD_LEFT),
+                'reference' => $reference,
                 'practitioner_name' => $booking->practitioner->name,
                 'service_name' => $booking->service->name,
                 'scheduled_label' => $booking->scheduled_at->format('l, M j, Y · g:i A'),
                 'price' => (float) $booking->price,
             ],
             'methods' => $methods,
+            'whatsappUrl' => $this->paymentSupportWhatsappUrl($reference),
         ]);
     }
 }

@@ -1,7 +1,7 @@
 import { ClientFooter } from '@/components/client-footer';
 import ClientLayout from '@/layouts/client-layout';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowUpRight, CalendarClock, Check, Copy, Mail, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, CalendarClock, Check, Copy, MessageCircle, ShieldCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
@@ -25,6 +25,7 @@ interface BookingPaymentProps {
         price: number;
     };
     methods: PaymentMethod[];
+    whatsappUrl: string;
 }
 
 /** A value with a one-tap copy button that briefly confirms. */
@@ -59,7 +60,7 @@ function CopyField({ label, value }: { label: string; value: string }) {
     );
 }
 
-export default function BookingPayment({ booking, methods }: BookingPaymentProps) {
+export default function BookingPayment({ booking, methods, whatsappUrl }: BookingPaymentProps) {
     return (
         <ClientLayout>
             <Head title="Confirm your session" />
@@ -128,6 +129,28 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
                         </div>
                     )}
 
+                    {/* ===== OMT / WHATSAPP SUPPORT ===== */}
+                    <motion.a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        initial={{ opacity: 0, y: 18 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                        className={`flex items-center gap-4 p-5 transition hover:-translate-y-0.5 ${CARD}`}
+                    >
+                        <span className="bg-ashen-100 text-ashen-700 flex size-11 shrink-0 items-center justify-center rounded-full">
+                            <MessageCircle className="size-5" />
+                        </span>
+                        <span className="min-w-0">
+                            <span className="text-ashen-800 block text-sm font-medium">Paying by OMT, or need a hand?</span>
+                            <span className="text-ashen-500 block text-xs leading-relaxed">
+                                Message us on WhatsApp — we’ll arrange an OMT transfer or walk you through Whish.
+                            </span>
+                        </span>
+                        <ArrowUpRight className="text-ashen-400 ml-auto size-4 shrink-0" />
+                    </motion.a>
+
                     {/* ===== REFERENCE + REASSURANCE ===== */}
                     <motion.div
                         initial={{ opacity: 0, y: 18 }}
@@ -164,10 +187,12 @@ export default function BookingPayment({ booking, methods }: BookingPaymentProps
                             </span>
                         </Link>
                         <a
-                            href="mailto:help@sanad.app"
+                            href={whatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-ashen-700 hover:bg-ashen-100 inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition"
                         >
-                            <Mail className="size-4" /> Need help paying?
+                            <MessageCircle className="size-4" /> Need help paying?
                         </a>
                     </div>
                 </div>
