@@ -156,10 +156,6 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
         },
     ];
 
-    // every specialist is trained across the same approaches — used as a gentle
-    // fallback for the modal when a practitioner hasn't listed their own yet.
-    const sharedApproaches = ['CBT', 'EMDR', 'Psychoanalysis'];
-
     const [selected, setSelected] = useState<LandingSpecialist | null>(null);
 
     const faqs = [
@@ -1160,15 +1156,14 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                 {selected.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{selected.bio}</p>}
 
                                 <div className="mt-6 space-y-4">
-                                    <div>
-                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">
-                                            {(selected.approaches.length > 0
-                                                ? selected.approaches.map((a) => APPROACH_LABELS[a] ?? a)
-                                                : sharedApproaches
-                                            ).join(' · ')}
-                                        </p>
-                                    </div>
+                                    {selected.approaches.length > 0 && (
+                                        <div>
+                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
+                                            <p className="text-ashen-700 mt-1 text-sm">
+                                                {selected.approaches.map((a) => APPROACH_LABELS[a] ?? a).join(' · ')}
+                                            </p>
+                                        </div>
+                                    )}
                                     {selected.languages.length > 0 && (
                                         <div>
                                             <p className="text-ashen-600 text-xs tracking-wider uppercase">Languages</p>
