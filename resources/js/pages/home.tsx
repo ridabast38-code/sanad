@@ -843,7 +843,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                                     <div className="from-ashen-950/90 via-ashen-950/25 absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-700 group-hover:opacity-90" />
                                     <div className="absolute inset-x-0 bottom-0 p-5">
                                         <h3 className="font-display text-ashen-100 text-xl md:text-2xl">{m.name}</h3>
-                                        <p className="text-ashen-300 mt-1 text-xs">Licensed clinical psychologist</p>
+                                        {m.headline && <p className="text-ashen-300 mt-1 text-xs">{m.headline}</p>}
                                     </div>
                                 </motion.button>
                             ))}
@@ -1155,16 +1155,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             </div>
 
                             <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
-                                <span className="bg-ashen-100 text-ashen-600 rounded-full px-3 py-1 text-xs font-medium">
-                                    Licensed Clinical Psychologist
-                                </span>
-                                <h3 className="font-display text-ashen-900 mt-4 text-3xl">{selected.name}</h3>
-                                <p className="text-ashen-600 mt-1 text-sm">Licensed clinical psychologist · Private &amp; confidential</p>
-                                <p className="text-ashen-700 mt-5 leading-relaxed">
-                                    {selected.bio ||
-                                        selected.headline ||
-                                        `${selected.name.split(' ')[0]} is a licensed clinical psychologist offering warm, confidential care across CBT, EMDR and psychoanalytic approaches.`}
-                                </p>
+                                <h3 className="font-display text-ashen-900 text-3xl">{selected.name}</h3>
+                                {selected.headline && <p className="text-ashen-600 mt-1 text-sm">{selected.headline}</p>}
+                                {selected.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{selected.bio}</p>}
 
                                 <div className="mt-6 space-y-4">
                                     <div>

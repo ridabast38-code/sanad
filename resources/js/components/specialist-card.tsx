@@ -101,9 +101,6 @@ export function SpecialistCard({
                             <span className="font-display text-5xl text-white/85">{initials(p.name)}</span>
                         </div>
                     )}
-                    <span className="bg-ashen-50/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
-                        Licensed Psychologist
-                    </span>
                     {matched && (
                         <span className="bg-ashen-600 absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-white shadow-sm">
                             ✦ Matches you
@@ -251,7 +248,7 @@ export function SpecialistPortraitCard({
 
             <div className="absolute inset-x-0 bottom-0 p-5">
                 <h3 className="font-display text-ashen-100 text-xl md:text-2xl">{p.name}</h3>
-                <p className="text-ashen-300 mt-1 text-xs">Licensed clinical psychologist</p>
+                {p.headline && <p className="text-ashen-300 mt-1 text-xs">{p.headline}</p>}
 
                 <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                     {p.approaches.map((a) => (
@@ -385,17 +382,10 @@ export function SpecialistPreviewModal({
                         </div>
 
                         <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
-                            <span className="bg-ashen-100 text-ashen-600 rounded-full px-3 py-1 text-xs font-medium">
-                                Licensed Clinical Psychologist
-                            </span>
-                            <h3 className="font-display text-ashen-900 mt-4 text-3xl">{specialist.name}</h3>
+                            <h3 className="font-display text-ashen-900 text-3xl">{specialist.name}</h3>
                             {specialist.headline && <p className="text-ashen-600 mt-1 text-sm">{specialist.headline}</p>}
 
-                            <p className="text-ashen-700 mt-5 leading-relaxed">
-                                {specialist.bio ||
-                                    specialist.headline ||
-                                    `${specialist.name.split(' ')[0]} is a licensed clinical psychologist offering warm, confidential care across CBT, EMDR and psychoanalytic approaches.`}
-                            </p>
+                            {specialist.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{specialist.bio}</p>}
 
                             <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
                                 {specialist.approaches.length > 0 && (

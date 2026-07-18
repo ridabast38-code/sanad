@@ -74,15 +74,12 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
                                     ) : (
                                         <div className="from-ashen-300 to-ashen-600 absolute inset-0 bg-gradient-to-br" />
                                     )}
-                                    <span className="bg-ashen-50/90 text-ashen-700 absolute top-3 left-3 rounded-full px-2.5 py-0.5 text-[11px] font-medium shadow-sm backdrop-blur">
-                                        Licensed Psychologist
-                                    </span>
                                 </div>
                             </div>
                             <div className="shrink-0 px-5 pb-5 lg:pt-3">
                                 <p className="text-ashen-600 flex items-start gap-2 text-xs leading-relaxed">
                                     <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                                    Licensed clinical psychologist. Private &amp; confidential.
+                                    Private &amp; confidential.
                                 </p>
                             </div>
                         </div>

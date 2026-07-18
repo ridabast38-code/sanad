@@ -280,12 +280,12 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                     <div className="border-ashen-300/25 mt-6 border-t pt-6">
                         <p className="text-ashen-500 mb-4 text-[11px] font-semibold tracking-[0.14em] uppercase">Profile</p>
                         <div className="grid gap-4">
-                            <Field label="Headline" error={errors.headline}>
+                            <Field label="Title" error={errors.headline}>
                                 <input
                                     type="text"
                                     value={data.headline}
                                     onChange={(e) => setData('headline', e.target.value)}
-                                    placeholder="e.g. Calm, attentive psychological support"
+                                    placeholder="e.g. Licensed Clinical Psychologist"
                                     className={inputClass}
                                 />
                             </Field>
