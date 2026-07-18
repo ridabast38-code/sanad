@@ -794,11 +794,12 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <h2 className="font-display text-ashen-200 mt-2 text-3xl tracking-tight md:text-4xl">The people behind Sanad</h2>
 
                             {/* Shown to everyone, at every size — the phone landing needs a way
-                            into the full directory too. A guest goes to the public list; a
-                            signed-in client goes to their own dashboard directory, where their
-                            matches are already marked. */}
+                            into the full directory too. Always the public directory, even for
+                            signed-in clients, practitioners and admins: from the landing page a
+                            visitor expects the public list, and bouncing them into a role-specific
+                            dashboard view instead reads as a confusing detour. */}
                             <motion.a
-                                href={isGuest ? '/psychologists' : '/dashboard?view=specialists'}
+                                href="/psychologists"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="group bg-ashen-200 text-ashen-900 hover:bg-ashen-100 mt-4 inline-flex items-center gap-2 rounded-full py-2 pr-5 pl-2 text-sm font-medium transition"

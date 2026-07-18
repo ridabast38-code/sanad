@@ -373,7 +373,7 @@ export function SpecialistPreviewModal({
                             <X className="h-5 w-5" />
                         </button>
 
-                        <div className="relative h-52 w-full shrink-0 sm:h-64 md:h-auto md:w-2/5">
+                        <div className="relative h-40 w-full shrink-0 sm:h-56 md:h-auto md:w-2/5">
                             {specialist.photo_path ? (
                                 <img src={specialist.photo_path} alt={specialist.name} className="h-full w-full object-cover grayscale-[15%]" />
                             ) : (
@@ -381,52 +381,60 @@ export function SpecialistPreviewModal({
                             )}
                         </div>
 
-                        <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-8">
-                            <h3 className="font-display text-ashen-900 text-3xl">{specialist.name}</h3>
-                            {specialist.headline && <p className="text-ashen-600 mt-1 text-sm">{specialist.headline}</p>}
+                        {/* Scrollable detail above a pinned action, so the "Book" button is
+                        reachable without scrolling past the photo and bio — on a phone the column
+                        stacks under the photo, where a button living at the end of the scroll area
+                        sat below the fold. */}
+                        <div className="flex min-h-0 flex-1 flex-col">
+                            <div className="min-h-0 flex-1 overflow-y-auto p-6 pb-4 sm:p-8 sm:pb-5">
+                                <h3 className="font-display text-ashen-900 text-3xl">{specialist.name}</h3>
+                                {specialist.headline && <p className="text-ashen-600 mt-1 text-sm">{specialist.headline}</p>}
 
-                            {specialist.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{specialist.bio}</p>}
+                                {specialist.bio && <p className="text-ashen-700 mt-5 leading-relaxed">{specialist.bio}</p>}
 
-                            <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
-                                {specialist.approaches.length > 0 && (
-                                    <div>
-                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">
-                                            {specialist.approaches.map((a) => APPROACH_LABELS[a] ?? a).join(' · ')}
-                                        </p>
-                                    </div>
-                                )}
-                                {specialist.languages.length > 0 && (
-                                    <div>
-                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Languages</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">
-                                            {specialist.languages.map((l) => LANGUAGE_LABELS[l] ?? l).join(' · ')}
-                                        </p>
-                                    </div>
-                                )}
-                                {specialist.years_experience != null && (
-                                    <div>
-                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">Experience</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">{specialist.years_experience} years</p>
-                                    </div>
-                                )}
-                                {specialist.from_price != null && (
-                                    <div>
-                                        <p className="text-ashen-600 text-xs tracking-wider uppercase">From</p>
-                                        <p className="text-ashen-700 mt-1 text-sm">${specialist.from_price} / session</p>
-                                    </div>
-                                )}
+                                <div className="mt-6 flex flex-wrap gap-x-10 gap-y-4">
+                                    {specialist.approaches.length > 0 && (
+                                        <div>
+                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">Approaches</p>
+                                            <p className="text-ashen-700 mt-1 text-sm">
+                                                {specialist.approaches.map((a) => APPROACH_LABELS[a] ?? a).join(' · ')}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {specialist.languages.length > 0 && (
+                                        <div>
+                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">Languages</p>
+                                            <p className="text-ashen-700 mt-1 text-sm">
+                                                {specialist.languages.map((l) => LANGUAGE_LABELS[l] ?? l).join(' · ')}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {specialist.years_experience != null && (
+                                        <div>
+                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">Experience</p>
+                                            <p className="text-ashen-700 mt-1 text-sm">{specialist.years_experience} years</p>
+                                        </div>
+                                    )}
+                                    {specialist.from_price != null && (
+                                        <div>
+                                            <p className="text-ashen-600 text-xs tracking-wider uppercase">From</p>
+                                            <p className="text-ashen-700 mt-1 text-sm">${specialist.from_price} / session</p>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
-                            <Link
-                                href={bookHref(specialist)}
-                                className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-8 inline-flex items-center gap-2 rounded-full py-3 pr-6 pl-3 text-sm font-medium transition"
-                            >
-                                <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
-                                    <ArrowUpRight className="size-4" />
-                                </span>
-                                Book a session with {specialist.name.split(' ')[0]}
-                            </Link>
+                            <div className="border-ashen-300/60 from-ashen-100 to-ashen-100/60 shrink-0 border-t bg-gradient-to-t px-6 py-4 backdrop-blur sm:px-8 sm:py-5">
+                                <Link
+                                    href={bookHref(specialist)}
+                                    className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 inline-flex items-center gap-2 rounded-full py-3 pr-6 pl-3 text-sm font-medium transition"
+                                >
+                                    <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
+                                        <ArrowUpRight className="size-4" />
+                                    </span>
+                                    Book a session with {specialist.name.split(' ')[0]}
+                                </Link>
+                            </div>
                         </div>
                     </motion.div>
                 </motion.div>

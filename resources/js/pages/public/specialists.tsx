@@ -26,7 +26,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
     const [preview, setPreview] = useState<Specialist | null>(null);
 
     return (
-        <div className="sanad-split text-ashen-800 relative flex min-h-screen flex-col lg:h-screen lg:min-h-0 lg:overflow-hidden">
+        <div className="sanad-split text-ashen-800 relative flex min-h-screen flex-col">
             <Head title="Our psychologists" />
 
             {/* atmosphere on the shell, so it runs behind the header rather than
@@ -69,7 +69,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                 </div>
             </header>
 
-            <div className="relative z-10 flex flex-1 flex-col gap-6 px-6 pb-14 md:px-10 lg:min-h-0 lg:flex-row lg:gap-0 lg:px-0 lg:pb-0">
+            <div className="relative z-10 flex flex-1 flex-col gap-6 px-6 pb-14 md:px-10 lg:flex-row lg:gap-0 lg:px-0">
                 {/* The reason to have an account, standing where the dashboard keeps its
                 daily intention — same slot, same portrait shape. It's what stops this
                 page reading as a wall of faces with nothing said around it. */}
@@ -77,7 +77,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                     <JoinPanel portrait />
                 </aside>
 
-                <main className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col lg:min-h-0 lg:px-8 lg:py-5 xl:px-10">
+                <main className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col lg:px-8 lg:py-5 xl:px-10">
                     <header className="shrink-0">
                         <span className="border-ashen-300/60 text-ashen-700 bg-ashen-50/70 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
                             <Users className="size-3.5" />
@@ -126,12 +126,15 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                         />
                     ) : (
                         <>
-                            {/* Mobile/tablet: ONE horizontal snap rail (the landing team's
-                            recipe — cards hold their own 4:5 aspect, never depending on a flex
-                            parent resolving a height). Laptop (lg+): the rail becomes a 3-per-row
-                            grid that scrolls vertically inside the viewport-locked column, so it
-                            reads the same as the signed-in /specialists directory. */}
-                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-6 pb-2 md:-mx-10 md:gap-5 md:px-10 lg:mx-0 lg:min-h-0 lg:flex-1 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-x-visible lg:overflow-y-auto lg:px-0.5">
+                            {/* ONE horizontal snap rail at every size (the landing team's recipe —
+                            cards hold their own 4:5 aspect, never depending on a flex parent
+                            resolving a height). Laptop keeps the rail rather than a viewport-locked
+                            grid: the grid trapped scrolling inside its own column, so the page only
+                            reacted to the wheel when the cursor was over the cards, and any row past
+                            the first hid below the fold. As a rail the whole page scrolls normally
+                            from anywhere, ~3 faces show at once, and the next peeks to invite a
+                            sideways scroll through everyone. */}
+                            <div className="scrollbar-hide -mx-6 flex snap-x snap-mandatory items-start gap-4 overflow-x-auto px-6 pb-2 md:-mx-10 md:gap-5 md:px-10 lg:mx-0 lg:gap-5 lg:px-0.5">
                                 <AnimatePresence mode="popLayout" initial={false}>
                                     {visible.map((specialist) => (
                                         <motion.div
@@ -141,7 +144,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                             animate={{ opacity: 1, scale: 1 }}
                                             exit={{ opacity: 0, scale: 0.96 }}
                                             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                                            className="w-[72%] shrink-0 snap-center self-start sm:w-[45%] lg:w-auto lg:shrink"
+                                            className="w-[72%] shrink-0 snap-center self-start sm:w-[45%] lg:w-[31%]"
                                         >
                                             <SpecialistPortraitCard specialist={specialist} onSelect={setPreview} />
                                         </motion.div>
@@ -149,9 +152,9 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                 </AnimatePresence>
                             </div>
 
-                            <p className="text-ashen-500 mt-2 flex shrink-0 items-center gap-2 text-xs lg:hidden">
+                            <p className="text-ashen-500 mt-2 flex shrink-0 items-center gap-2 text-xs">
                                 <Sparkles className="size-3.5 shrink-0" />
-                                Swipe sideways to meet everyone — or book any of them without an account.
+                                Scroll sideways to meet everyone — or book any of them without an account.
                             </p>
                         </>
                     )}
