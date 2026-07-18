@@ -74,7 +74,7 @@ export default function PractitionerProfile({
 
                 <div className="grid gap-6 lg:min-h-0 lg:flex-1 lg:grid-cols-2 lg:items-stretch">
                     <form onSubmit={submit} className={`flex flex-col p-6 md:p-7 lg:min-h-0 ${CARD}`}>
-                        <div className="scrollbar-hide space-y-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
+                        <div className="space-y-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
                             <Field label="Headline" error={errors.headline}>
                                 <input
                                     type="text"
@@ -111,6 +111,10 @@ export default function PractitionerProfile({
 
                             <Field label="Approaches">
                                 <ChipGroup options={options.approaches} selected={data.approaches} onToggle={(v) => toggle('approaches', v)} />
+                                <p className="text-ashen-400 mt-2 text-xs">
+                                    Tap the ones you practice. Leave them all off if none apply — your card simply won't show any, and your bio speaks
+                                    for you instead.
+                                </p>
                             </Field>
 
                             <Field label="Languages">
@@ -166,7 +170,7 @@ function ServicesCard({ services }: { services: ServiceRow[] }) {
                 <p className="text-ashen-500 mt-1 text-sm">Set your price per session. Leave a price blank to not offer that service.</p>
             </div>
 
-            <div className="scrollbar-hide mt-5 space-y-3 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
+            <div className="mt-5 space-y-3 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-2">
                 {services.map((service) => {
                     const row = data.services.find((s) => s.id === service.id);
                     return (
