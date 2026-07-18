@@ -124,7 +124,7 @@ class ManualBookingController extends Controller
         $isGuest = $validated['client_type'] === 'guest';
         $type = $validated['type'] ?? Booking::TYPE_STANDARD;
 
-        Booking::create([
+        $this->persistWithoutSlotCollision(fn () => Booking::create([
             'client_id' => $isGuest ? null : $validated['client_id'],
             'guest_name' => $isGuest ? $validated['guest_name'] : null,
             'guest_email' => $isGuest ? ($validated['guest_email'] ?? null) : null,
@@ -139,7 +139,7 @@ class ManualBookingController extends Controller
             'platform_amount' => round($price * Booking::PLATFORM_SHARE, 2),
             'practitioner_amount' => round($price * (1 - Booking::PLATFORM_SHARE), 2),
             'client_note' => $validated['client_note'] ?? null,
-        ]);
+        ]));
 
         return to_route('admin.bookings');
     }

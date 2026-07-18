@@ -78,7 +78,7 @@ class BookingRescheduleController extends Controller
             ]);
         }
 
-        $booking->update(['scheduled_at' => $scheduledAt]);
+        $this->persistWithoutSlotCollision(fn () => $booking->update(['scheduled_at' => $scheduledAt]));
 
         $booking->loadMissing(['client', 'practitioner', 'service']);
 

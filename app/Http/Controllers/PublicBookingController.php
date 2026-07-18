@@ -140,7 +140,7 @@ class PublicBookingController extends Controller
 
         $price = (float) $service->pivot->price;
 
-        $booking = Booking::create([
+        $booking = $this->persistWithoutSlotCollision(fn () => Booking::create([
             'public_token' => (string) Str::uuid(),
             'client_id' => null,
             'guest_name' => $validated['guest_name'],
@@ -155,7 +155,7 @@ class PublicBookingController extends Controller
             'platform_amount' => round($price * Booking::PLATFORM_SHARE, 2),
             'practitioner_amount' => round($price * (1 - Booking::PLATFORM_SHARE), 2),
             'client_note' => $validated['client_note'] ?? null,
-        ]);
+        ]));
 
         // Same alert admins already get for every booking awaiting payment.
         $admins = User::where('role', UserRole::Admin)->get();

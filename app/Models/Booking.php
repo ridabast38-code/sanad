@@ -30,6 +30,28 @@ class Booking extends Model
     public const TYPE_EMERGENCY = 'emergency';
 
     /**
+     * The statuses that actually occupy the practitioner's time — a booking in one
+     * of these holds its slot and blocks anyone else from taking it.
+     */
+    public const ACTIVE_STATUSES = ['pending', 'confirmed'];
+
+    /**
+     * Keep `slot_hold` in lockstep with the booking's status: it equals
+     * `scheduled_at` while the booking is live and is NULL once it's cancelled,
+     * completed or a no-show. Paired with the unique (practitioner_id, slot_hold)
+     * index, this is what makes a double-booking impossible at the database level,
+     * whatever races past the in-app checks.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (Booking $booking): void {
+            $booking->slot_hold = in_array($booking->status, self::ACTIVE_STATUSES, true)
+                ? $booking->scheduled_at
+                : null;
+        });
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -64,6 +86,7 @@ class Booking extends Model
     {
         return [
             'scheduled_at' => 'datetime',
+            'slot_hold' => 'datetime',
             'price' => 'decimal:2',
             'platform_amount' => 'decimal:2',
             'practitioner_amount' => 'decimal:2',

@@ -13,6 +13,7 @@ use App\Notifications\SessionCancelledForPractitioner;
 use App\Notifications\SessionConfirmedForPractitioner;
 use App\Notifications\SessionRescheduledForClient;
 use App\Notifications\SessionRescheduledForPractitioner;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia;
 
@@ -191,6 +192,62 @@ test('a slot that is already booked cannot be booked again and is no longer offe
     // And the taken slot is no longer offered on the profile.
     $slots = $this->actingAs($other)->get(route('specialists.show', $practitioner))->viewData('page')['props']['slots'];
     expect(collect($slots)->pluck('iso'))->not->toContain($slotIso);
+});
+
+test('the database itself refuses two active bookings on the same practitioner slot', function () {
+    $practitioner = makeBookablePractitioner();
+    $clientA = User::factory()->create();
+    $clientB = User::factory()->create();
+    $serviceId = $practitioner->services->first()->id;
+    $slot = now()->addWeek()->setTime(17, 0);
+
+    $make = fn (User $client) => Booking::create([
+        'client_id' => $client->id,
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $serviceId,
+        'scheduled_at' => $slot,
+        'status' => 'pending',
+        'price' => 40,
+        'platform_amount' => 8,
+        'practitioner_amount' => 32,
+    ]);
+
+    $make($clientA);
+
+    // Even if the in-app check is bypassed, the unique (practitioner_id, slot_hold)
+    // index is the last line of defence against a race — the second insert fails.
+    expect(fn () => $make($clientB))->toThrow(QueryException::class);
+
+    expect(Booking::whereIn('status', ['pending', 'confirmed'])->count())->toBe(1);
+});
+
+test('cancelling a booking frees its slot so the time can be taken again', function () {
+    $practitioner = makeBookablePractitioner();
+    $clientA = User::factory()->create();
+    $clientB = User::factory()->create();
+    $serviceId = $practitioner->services->first()->id;
+    $slot = now()->addWeek()->setTime(17, 0);
+
+    $make = fn (User $client) => Booking::create([
+        'client_id' => $client->id,
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $serviceId,
+        'scheduled_at' => $slot,
+        'status' => 'pending',
+        'price' => 40,
+        'platform_amount' => 8,
+        'practitioner_amount' => 32,
+    ]);
+
+    $first = $make($clientA);
+    $first->update(['status' => 'cancelled']); // slot_hold clears to null
+
+    // With the slot freed, a new booking on the same time is allowed.
+    $second = $make($clientB);
+
+    expect($first->fresh()->slot_hold)->toBeNull()
+        ->and($second->slot_hold)->not->toBeNull()
+        ->and(Booking::whereIn('status', ['pending', 'confirmed'])->count())->toBe(1);
 });
 
 test('cancelling a paid booking refunds it and notifies the client and practitioner', function () {

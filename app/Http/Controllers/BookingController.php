@@ -78,7 +78,7 @@ class BookingController extends Controller
 
         $price = (float) $service->pivot->price;
 
-        $booking = Booking::create([
+        $booking = $this->persistWithoutSlotCollision(fn () => Booking::create([
             'client_id' => $request->user()->id,
             'practitioner_id' => $practitioner->id,
             'service_id' => $service->id,
@@ -88,7 +88,7 @@ class BookingController extends Controller
             'platform_amount' => round($price * self::PLATFORM_SHARE, 2),
             'practitioner_amount' => round($price * (1 - self::PLATFORM_SHARE), 2),
             'client_note' => $validated['client_note'] ?? null,
-        ]);
+        ]));
 
         // Let every admin know a session was booked and is awaiting payment.
         $admins = User::where('role', UserRole::Admin)->get();

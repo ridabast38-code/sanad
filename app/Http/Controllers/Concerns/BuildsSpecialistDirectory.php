@@ -5,10 +5,42 @@ namespace App\Http\Controllers\Concerns;
 use App\Enums\UserRole;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 
 trait BuildsSpecialistDirectory
 {
+    /**
+     * Persist a booking (create or reschedule) so that if two requests race for
+     * the same slot and both clear the in-app availability check, the loser is
+     * turned away with a friendly message rather than a 500.
+     *
+     * The unique (practitioner_id, slot_hold) index is the real guard — this only
+     * translates the database's rejection into the same validation error the
+     * pre-flight check already raises, so the two paths are indistinguishable to
+     * the client.
+     *
+     * @template TResult
+     *
+     * @param  callable(): TResult  $persist
+     * @return TResult
+     */
+    private function persistWithoutSlotCollision(callable $persist)
+    {
+        try {
+            return $persist();
+        } catch (QueryException $exception) {
+            if (str_contains($exception->getMessage(), 'bookings_practitioner_slot_unique')) {
+                throw ValidationException::withMessages([
+                    'scheduled_at' => 'That time was just booked — please choose another slot.',
+                ]);
+            }
+
+            throw $exception;
+        }
+    }
+
     /**
      * Approved practitioners shaped for the directory, in a fresh random order.
      *
