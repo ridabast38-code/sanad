@@ -36,16 +36,12 @@ export function AppWelcome({ whatsappUrl, specialistCount = 0 }: { whatsappUrl: 
                 style={{ animation: 'breathe 9s ease-in-out infinite' }}
             />
 
-            {/* Brand + welcome */}
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }} className="relative">
-                <img src="/app-icon.png?v=7" alt="" aria-hidden className="size-16 rounded-[22%] shadow-sm" draggable={false} />
-                <h1 className="font-display text-ashen-800 mt-6 text-4xl leading-[1.05] tracking-tight">
-                    A safe space
-                    <br />
-                    for your mind
-                </h1>
+            {/* Brand + welcome — the gray hand-holding "Sanad" wordmark */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }} className="relative">
+                <img src="/images/sanad-wordmark.png?v=8" alt="Sanad" className="h-auto w-[210px] max-w-[68%] select-none" draggable={false} />
+                <h1 className="font-display text-ashen-800 mt-5 text-3xl leading-[1.08] tracking-tight">A safe space for your mind</h1>
                 <p className="text-ashen-600 mt-3 max-w-sm text-sm leading-relaxed">
-                    Real, confidential sessions with licensed clinical psychologists — online, on your schedule, guided with care.
+                    Real, confidential sessions with licensed clinical psychologists — online, on your schedule.
                 </p>
             </motion.div>
 
