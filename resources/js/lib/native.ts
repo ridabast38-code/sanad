@@ -16,6 +16,12 @@ export function isNativeApp(): boolean {
         return true;
     }
 
+    // Robust fallback: the app tags its user-agent (see capacitor.config.ts) so
+    // detection still works even when the bridge object isn't ready yet.
+    if (typeof navigator !== 'undefined' && navigator.userAgent.includes('SanadApp')) {
+        return true;
+    }
+
     // Dev/testing overrides so the app-only checkout can be previewed in a browser.
     try {
         if (new URLSearchParams(window.location.search).has('app')) {
