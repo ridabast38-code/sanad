@@ -15,6 +15,9 @@ const config: CapacitorConfig = {
     server: {
         url: 'https://oursanad.com',
         androidScheme: 'https',
+        // Keep the site's own pages (incl. a www redirect) inside the app; only
+        // truly external links (e.g. WhatsApp) hand off to the system browser.
+        allowNavigation: ['oursanad.com', 'www.oursanad.com'],
     },
     android: {
         appendUserAgent: 'SanadApp',
