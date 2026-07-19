@@ -14,6 +14,7 @@ use App\Http\Controllers\EmergencyController;
 use App\Http\Controllers\MeetingLinkController;
 use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\OngoingSupportController;
+use App\Http\Controllers\PaymentGatewayController;
 use App\Http\Controllers\Practitioner\DashboardController as PractitionerDashboardController;
 use App\Http\Controllers\Practitioner\PractitionerProfileController;
 use App\Http\Controllers\Practitioner\ScheduleController;
@@ -69,6 +70,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('how-it-works', fn () => Inertia::render('client/how-it-works'))->name('how-it-works');
         Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('bookings/{booking}/pay', [BookingController::class, 'pay'])->name('bookings.pay');
+
+        // DEMO / COMPETITION ONLY — the mobile app's in-app card checkout. Safe to
+        // delete after the competition (with PaymentGatewayController + Services/Payments).
+        Route::post('bookings/{booking}/gateway', [PaymentGatewayController::class, 'charge'])->name('bookings.gateway');
+        Route::get('bookings/{booking}/received', [PaymentGatewayController::class, 'received'])->name('bookings.received');
     });
 
     // ===== Practitioner area =====

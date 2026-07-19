@@ -1,6 +1,23 @@
 <?php
 
+use App\Services\Payments\DemoPaymentGateway;
+
 return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Payment Gateway (DEMO / COMPETITION ONLY)
+    |--------------------------------------------------------------------------
+    |
+    | The gateway used by the mobile app's in-app checkout. Ships as a demo
+    | driver that approves instantly without moving real money and leaves the
+    | booking pending for an admin to confirm. Point this at a real
+    | App\Services\Payments\PaymentGateway implementation to go live. Safe to
+    | delete this block (and app/Services/Payments) after the competition.
+    |
+    */
+
+    'gateway' => DemoPaymentGateway::class,
 
     /*
     |--------------------------------------------------------------------------
