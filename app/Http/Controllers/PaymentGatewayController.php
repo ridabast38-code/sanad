@@ -45,7 +45,7 @@ class PaymentGatewayController extends Controller
 
         if (! $result->success) {
             throw ValidationException::withMessages([
-                'number' => $result->message ?? 'Your payment could not be processed. Please try again.',
+                'card' => $result->message ?? 'Your payment could not be processed. Please try again.',
             ]);
         }
 

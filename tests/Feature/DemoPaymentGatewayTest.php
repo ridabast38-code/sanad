@@ -105,3 +105,39 @@ test('an admin still decides: accepting a demo-paid booking confirms and settles
     Notification::assertSentTo($booking->client, BookingConfirmedForClient::class);
     Notification::assertSentTo($booking->practitioner, SessionConfirmedForPractitioner::class);
 });
+
+test('a card that fails the Luhn check is rejected', function () {
+    $booking = makeGatewayBooking();
+
+    $this->actingAs($booking->client)
+        ->post(route('bookings.gateway', $booking), [
+            'name' => 'Sanad Demo', 'number' => '4242 4242 4242 4241', 'expiry' => '12 / 29', 'cvc' => '123',
+        ])
+        ->assertSessionHasErrors('card');
+
+    expect($booking->fresh()->payment_status)->toBe('unpaid');
+});
+
+test('a declined test card leaves the booking unpaid', function () {
+    $booking = makeGatewayBooking();
+
+    $this->actingAs($booking->client)
+        ->post(route('bookings.gateway', $booking), [
+            'name' => 'Sanad Demo', 'number' => '4000 0000 0000 0002', 'expiry' => '12 / 29', 'cvc' => '123',
+        ])
+        ->assertSessionHasErrors('card');
+
+    expect($booking->fresh()->payment_status)->toBe('unpaid');
+});
+
+test('an expired card is rejected', function () {
+    $booking = makeGatewayBooking();
+
+    $this->actingAs($booking->client)
+        ->post(route('bookings.gateway', $booking), [
+            'name' => 'Sanad Demo', 'number' => '4242 4242 4242 4242', 'expiry' => '01 / 20', 'cvc' => '123',
+        ])
+        ->assertSessionHasErrors('card');
+
+    expect($booking->fresh()->payment_status)->toBe('unpaid');
+});
