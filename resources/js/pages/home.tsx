@@ -1,6 +1,8 @@
 import { DustField, OliveDrops, OliveHorizon, OliveTree, type Drop, type Mote } from '@/components/olive';
 import { RevealText, SOFT_EASE } from '@/components/reveal-text';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
+import { AppWelcome } from '@/components/app-welcome';
+import { isNativeApp } from '@/lib/native';
 import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
 import {
@@ -238,6 +240,12 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
         },
     ];
     const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+    // In the native app, a logged-out visitor gets a calm app "front door" instead
+    // of the marketing landing (which stays as-is on the website). DEMO/COMPETITION.
+    if (isNativeApp() && isGuest) {
+        return <AppWelcome whatsappUrl={whatsappUrl} specialistCount={specialists.length} />;
+    }
 
     return (
         // One page-wide light→dark split: warm light gray on the left flowing into
