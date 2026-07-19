@@ -6,10 +6,8 @@
 
         <title inertia>{{ config('app.name', 'Sanad') }}</title>
 
-        <link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
-        <link rel="icon" href="/favicon-32.png?v=3" sizes="32x32" type="image/png">
-        <link rel="icon" href="/favicon-96.png?v=3" sizes="96x96" type="image/png">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
+        {{-- No favicon by design — nothing is placed in the browser tab. --}}
+        <link rel="icon" href="data:,">
 
         {{-- Social share / link preview (Open Graph + Twitter) --}}
         @php($ogTitle = 'Sanad — A safe space for your mind')
