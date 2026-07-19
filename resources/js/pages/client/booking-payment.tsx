@@ -81,11 +81,12 @@ export default function BookingPayment({ booking, methods, whatsappUrl }: Bookin
                             <Check className="size-3.5" /> Session reserved
                         </span>
                         <h1 className="font-display text-ashen-800 mt-4 text-3xl leading-tight tracking-tight md:text-4xl">
-                            One last step — send your payment
+                            One last step — pay for your session
                         </h1>
                         <p className="text-ashen-600 mx-auto mt-3 max-w-xl text-sm leading-relaxed">
-                            Your time is held. To confirm it, send the amount below via Whish or OMT. Once we receive it, we’ll confirm your session
-                            and email you the details.
+                            {isNativeApp()
+                                ? 'Your time is held. Pay by card, or by Whish / OMT — once it’s in, we’ll review and confirm your session and email you the details.'
+                                : 'Your time is held. To confirm it, send the amount below via Whish or OMT. Once we receive it, we’ll confirm your session and email you the details.'}
                         </p>
                     </motion.header>
 
