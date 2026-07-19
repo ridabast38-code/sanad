@@ -28,7 +28,13 @@ export function AppWelcome({ whatsappUrl, specialistCount = 0 }: { whatsappUrl: 
     ];
 
     return (
-        <div className="sanad-split text-ashen-800 flex min-h-dvh flex-col overflow-hidden px-6 pt-[calc(env(safe-area-inset-top)+2.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)]">
+        <div
+            className="text-ashen-800 flex min-h-dvh flex-col overflow-hidden px-6 pt-[calc(env(safe-area-inset-top)+2.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)]"
+            style={{
+                // The landing's light→dark gray split, run top→bottom for the phone.
+                background: 'linear-gradient(to bottom, #f6f4ed 0%, #e6e5dd 26%, #b8b9b1 58%, #90918a 84%, #90918a 100%)',
+            }}
+        >
             {/* soft breathing glow, matching the auth screens */}
             <div
                 aria-hidden
@@ -94,15 +100,16 @@ export function AppWelcome({ whatsappUrl, specialistCount = 0 }: { whatsappUrl: 
                 transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
                 className="mt-auto flex flex-col gap-3 pt-8"
             >
+                {/* Buttons sit on the dark end of the split, so they go light. */}
                 <Link
                     href="/login"
-                    className="bg-ashen-800 hover:bg-ashen-900 flex items-center justify-center rounded-full py-3.5 text-sm font-semibold text-white shadow-lg transition active:scale-[0.98]"
+                    className="bg-ashen-50 text-ashen-900 flex items-center justify-center rounded-full py-3.5 text-sm font-semibold shadow-lg transition hover:bg-white active:scale-[0.98]"
                 >
                     Log in
                 </Link>
                 <Link
                     href="/register"
-                    className="border-ashen-300 text-ashen-800 hover:bg-ashen-100/60 flex items-center justify-center rounded-full border py-3.5 text-sm font-semibold transition active:scale-[0.98]"
+                    className="flex items-center justify-center rounded-full border border-white/60 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10 active:scale-[0.98]"
                 >
                     Create an account
                 </Link>
