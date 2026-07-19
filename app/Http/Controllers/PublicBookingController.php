@@ -39,6 +39,20 @@ class PublicBookingController extends Controller
     }
 
     /**
+     * DEMO / COMPETITION ONLY — safe to delete after the competition.
+     *
+     * The "Find your specialist" matcher. Serves the same public directory data;
+     * the quiz + fit scoring happen client-side, and every result links into the
+     * existing public booking flow. Surfaced from the app's welcome screen.
+     */
+    public function match(): Response
+    {
+        return Inertia::render('public/match', [
+            'practitioners' => $this->specialistDirectory(),
+        ]);
+    }
+
+    /**
      * The public, no-login booking page for one psychologist. A visitor who
      * came from the landing page can pick a session and time, then choose to
      * create an account or simply continue as a guest — the same booking either

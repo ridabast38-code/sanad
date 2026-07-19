@@ -130,6 +130,9 @@ Route::get('ongoing/{type}', [OngoingSupportController::class, 'show'])->name('o
 // one sits behind role:client, so a guest sent there would just bounce to login.
 Route::get('psychologists', [PublicBookingController::class, 'directory'])->name('psychologists');
 
+// DEMO / COMPETITION ONLY — the "Find your specialist" matcher (surfaced in the app).
+Route::get('match', [PublicBookingController::class, 'match'])->name('specialists.match');
+
 // Public, no-login booking — the "book without an account" path offered from
 // the landing page. A visitor can complete a real booking as a guest, or be
 // nudged to register; either way it lands in the same admin "accept once paid"

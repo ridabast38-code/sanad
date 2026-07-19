@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { motion } from 'motion/react';
-import { ArrowUpRight, LifeBuoy, Sparkles, Users } from 'lucide-react';
+import { ArrowUpRight, HeartHandshake, LifeBuoy, Sparkles, Users } from 'lucide-react';
 
 /**
  * DEMO / COMPETITION ONLY — safe to delete after the competition.
@@ -14,6 +14,12 @@ import { ArrowUpRight, LifeBuoy, Sparkles, Users } from 'lucide-react';
 export function AppWelcome({ whatsappUrl, specialistCount = 0 }: { whatsappUrl: string; specialistCount?: number }) {
     const doors = [
         {
+            href: '/match',
+            icon: Sparkles,
+            title: 'Find your specialist',
+            sub: 'Answer 3 questions, get matched',
+        },
+        {
             href: '/psychologists',
             icon: Users,
             title: 'Browse psychologists',
@@ -21,7 +27,7 @@ export function AppWelcome({ whatsappUrl, specialistCount = 0 }: { whatsappUrl: 
         },
         {
             href: '/ongoing',
-            icon: Sparkles,
+            icon: HeartHandshake,
             title: 'Ongoing support',
             sub: 'A guided space, at your pace',
         },
@@ -29,7 +35,7 @@ export function AppWelcome({ whatsappUrl, specialistCount = 0 }: { whatsappUrl: 
 
     return (
         <div
-            className="text-ashen-800 flex min-h-dvh flex-col overflow-hidden px-6 pt-[calc(env(safe-area-inset-top)+2.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)]"
+            className="text-ashen-800 flex min-h-dvh flex-col overflow-y-auto px-6 pt-[calc(env(safe-area-inset-top)+2.5rem)] pb-[calc(env(safe-area-inset-bottom)+1.5rem)]"
             style={{
                 // The landing's light→dark gray split, run top→bottom for the phone.
                 background: 'linear-gradient(to bottom, #f6f4ed 0%, #e6e5dd 26%, #b8b9b1 58%, #90918a 84%, #90918a 100%)',
