@@ -48,29 +48,45 @@ const LANG_LABEL: Record<string, string> = { arabic: 'Arabic', english: 'English
 
 type Answers = { language?: string; approach?: string; gender?: string };
 
+/**
+ * Weighted fit: the score is the share of the points that were actually on offer
+ * for these answers, mapped onto 58–99. Scoring against what *could* be earned
+ * (rather than a flat cap) is what makes the results spread out meaningfully
+ * instead of everyone landing on the same number.
+ */
+const W = { language: 40, approach: 30, gender: 14, availability: 10 };
+
 function scoreOf(s: Specialist, a: Answers) {
-    let score = 55;
     const reasons: string[] = [];
+    let earned = 0;
+
+    // Language and availability are always in play; the other two only count
+    // when the person actually expressed a preference.
+    let available = W.language + W.availability;
+    if (a.approach && a.approach !== 'unsure') available += W.approach;
+    if (a.gender && a.gender !== 'any') available += W.gender;
 
     if (a.language && s.languages?.includes(a.language)) {
-        score += 40;
+        earned += W.language;
         reasons.push(`Speaks ${LANG_LABEL[a.language]}`);
     }
     if (a.approach && a.approach !== 'unsure' && s.approaches?.includes(a.approach)) {
-        score += 30;
+        earned += W.approach;
         reasons.push(APPROACH_LABEL[a.approach]);
     }
     if (a.gender && a.gender !== 'any' && s.gender === a.gender) {
-        score += 14;
+        earned += W.gender;
         reasons.push(a.gender === 'female' ? 'Woman' : 'Man');
     }
-    const soon =
-        s.next_available_at && (new Date(s.next_available_at).getTime() - Date.now()) / 86400000 <= 7;
+    const soon = s.next_available_at && (new Date(s.next_available_at).getTime() - Date.now()) / 86400000 <= 7;
     if (soon) {
-        score += 10;
+        earned += W.availability;
         reasons.push('Available soon');
     }
-    return { fit: Math.min(99, Math.round(score)), reasons };
+
+    const fit = Math.round(58 + (earned / Math.max(available, 1)) * 41);
+
+    return { fit: Math.min(99, fit), reasons };
 }
 
 function Avatar({ name }: { name: string }) {
