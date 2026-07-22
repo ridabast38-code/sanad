@@ -46,10 +46,16 @@ Route::get('/', function () {
         ])
         ->values();
 
+    $whatsapp = fn (string $message): string => 'https://wa.me/'.config('sanad.whatsapp').'?text='.rawurlencode($message);
+
     return Inertia::render('home', [
         // The emergency WhatsApp fast lane — for visitors in crisis who aren't
         // registered, the quickest way to reach a real person.
-        'whatsappUrl' => 'https://wa.me/'.config('sanad.whatsapp').'?text='.rawurlencode('Hi Sanad, I need urgent help.'),
+        'whatsappUrl' => $whatsapp('Hi Sanad, I need urgent help.'),
+        // The everyday "ask us something" lane. Deliberately a separate message
+        // from the crisis one so ordinary questions don't land in urgent triage
+        // pre-labelled as an emergency.
+        'supportWhatsappUrl' => $whatsapp('Hi Sanad, I have a question.'),
         'specialists' => $specialists,
     ]);
 })->name('home');

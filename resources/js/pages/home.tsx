@@ -131,7 +131,15 @@ function RailArrow({ direction, onClick }: { direction: 'prev' | 'next'; onClick
     );
 }
 
-export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: string; specialists?: LandingSpecialist[] }) {
+export default function Home({
+    whatsappUrl,
+    supportWhatsappUrl,
+    specialists = [],
+}: {
+    whatsappUrl: string;
+    supportWhatsappUrl: string;
+    specialists?: LandingSpecialist[];
+}) {
     const isGuest = !usePage<SharedData>().props.auth?.user;
 
     const mouseX = useMotionValue(50);
@@ -310,7 +318,12 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             {/* wordmark dropped on phones once the two pills are here — three
                             items crowd a narrow bar, and the hero headline already says who
                             we are. It comes back on md. */}
-                            <div className="text-ashen-200 hidden text-xl sm:block md:hidden">Sanad</div>
+                            <img
+                                src="/images/sanad-wordmark-light.png"
+                                alt="Sanad"
+                                className="hidden h-8 w-auto select-none sm:block md:hidden"
+                                draggable={false}
+                            />
                             <div className="flex flex-1 items-center justify-end gap-2 md:gap-3">
                                 {/* Guests only — the way back in for a practitioner or a
                                 returning client. We stripped login links off most sections,
@@ -975,7 +988,9 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             </TiltCard>
 
                             <a
-                                href="/register"
+                                href={supportWhatsappUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="group bg-ashen-800 hover:bg-ashen-900 text-ashen-200 mt-7 inline-flex items-center gap-2 rounded-full py-2.5 pr-5 pl-3 text-sm font-medium transition"
                             >
                                 <span className="bg-ashen-200/30 rounded-full p-1 transition-transform group-hover:rotate-45">
@@ -1089,7 +1104,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                     <div className="grid grid-cols-2 gap-10 pb-10 md:grid-cols-4">
                         {/* brand */}
                         <div className="col-span-2 md:col-span-1">
-                            <p className="font-display text-2xl">Sanad</p>
+                            <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-11 w-auto select-none" draggable={false} />
                             <p className="text-ashen-300 mt-3 max-w-xs text-sm leading-relaxed">
                                 A safe space for your mind — real, licensed psychological care, guided with warmth.
                             </p>
@@ -1128,7 +1143,7 @@ export default function Home({ whatsappUrl, specialists = [] }: { whatsappUrl: s
                             <ul className="text-ashen-300 mt-4 space-y-3 text-sm">
                                 <li>
                                     <a
-                                        href={whatsappUrl}
+                                        href={supportWhatsappUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="hover:text-ashen-100 flex items-center gap-2.5 transition"
