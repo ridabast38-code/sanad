@@ -36,7 +36,7 @@ export default function AuthSplitLayout({
 
             <div className="absolute inset-0 z-10 flex flex-col justify-between p-12">
                 <Link href={route('home')} className="flex items-center gap-2.5 text-white">
-                    <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-9 w-auto select-none" draggable={false} />
+                    <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-12 w-auto select-none" draggable={false} />
                 </Link>
                 <blockquote>
                     <p className="font-display max-w-md text-3xl leading-snug text-white">{quote}</p>
@@ -70,7 +70,7 @@ export default function AuthSplitLayout({
 
             <div className="relative z-10 mx-auto w-full max-w-sm">
                 <Link href={route('home')} className="text-ashen-800 mb-8 flex items-center justify-center gap-2.5 lg:hidden">
-                    <img src="/images/sanad-wordmark-dark.png" alt="Sanad" className="h-9 w-auto select-none" draggable={false} />
+                    <img src="/images/sanad-wordmark-dark.png" alt="Sanad" className="h-12 w-auto select-none" draggable={false} />
                 </Link>
 
                 {/* content cross-fades when the title changes (login <-> register) */}
