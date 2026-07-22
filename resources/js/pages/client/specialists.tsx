@@ -1,5 +1,5 @@
 import { ClientFooter } from '@/components/client-footer';
-import { SpecialistPortraitCard, SpecialistPreviewModal, type MatchPreferences, type Specialist } from '@/components/specialist-card';
+import { SpecialistPortraitCard, SpecialistPreviewModal, type Specialist } from '@/components/specialist-card';
 import ClientLayout from '@/layouts/client-layout';
 import { Head } from '@inertiajs/react';
 import { ShieldCheck, Users } from 'lucide-react';
@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 interface SpecialistsProps {
     practitioners: Specialist[];
-    preferences: MatchPreferences;
 }
 
 /**

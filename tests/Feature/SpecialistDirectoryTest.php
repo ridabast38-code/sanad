@@ -26,7 +26,6 @@ test('the specialists page lists approved practitioners', function () {
             ->component('client/specialists')
             ->has('practitioners', 1)
             ->where('practitioners.0.name', $practitioner->name)
-            ->has('preferences')
         );
 });
 

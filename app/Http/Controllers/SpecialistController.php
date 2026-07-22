@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\UserRole;
 use App\Http\Controllers\Concerns\BuildsSpecialistDirectory;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,16 +15,10 @@ class SpecialistController extends Controller
     /**
      * Show the full specialist directory ("View all" page).
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
-        $user = $request->user();
-
         return Inertia::render('client/specialists', [
             'practitioners' => $this->specialistDirectory(),
-            'preferences' => [
-                'language' => $user->clientProfile?->preferred_language,
-                'approach' => $user->clientProfile?->preferred_approach,
-            ],
         ]);
     }
 

@@ -24,19 +24,6 @@ export interface Specialist {
     isVirtual?: boolean;
 }
 
-export interface MatchPreferences {
-    language: string | null;
-    approach: string | null;
-}
-
-/** Does this specialist match the client's onboarding preferences? */
-export function matchesPreferences(p: Specialist, preferences: MatchPreferences): boolean {
-    return (
-        (!!preferences.language && p.languages.includes(preferences.language)) ||
-        (!!preferences.approach && preferences.approach !== 'unsure' && p.approaches.includes(preferences.approach))
-    );
-}
-
 export const APPROACH_LABELS: Record<string, string> = { cbt: 'CBT', emdr: 'EMDR', psychoanalysis: 'Psychoanalysis' };
 export const LANGUAGE_LABELS: Record<string, string> = { arabic: 'Arabic', english: 'English', french: 'French' };
 

@@ -10,7 +10,6 @@
         "lint": "eslint . --fix"
     },
     "devDependencies": {
-        "@capacitor/cli": "^8.4.2",
         "@eslint/js": "^9.19.0",
         "eslint": "^9.17.0",
         "eslint-config-prettier": "^10.0.1",
@@ -23,11 +22,6 @@
         "typescript-eslint": "^8.23.0"
     },
     "dependencies": {
-        "@capacitor/android": "^8.4.2",
-        "@capacitor/app": "^8.1.1",
-        "@capacitor/core": "^8.4.2",
-        "@capacitor/splash-screen": "^8.0.2",
-        "@capacitor/status-bar": "^8.0.3",
         "@headlessui/react": "^2.2.0",
         "@inertiajs/react": "^2.0.0",
         "@radix-ui/react-avatar": "^1.1.3",

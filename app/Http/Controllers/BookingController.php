@@ -128,7 +128,6 @@ class BookingController extends Controller
 
         return Inertia::render('client/booking-payment', [
             'booking' => [
-                'id' => $booking->id,
                 'reference' => $reference,
                 'practitioner_name' => $booking->practitioner->name,
                 'service_name' => $booking->service->name,

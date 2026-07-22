@@ -50,10 +50,6 @@ class ClientHomeController extends Controller
             // dashboard can show "also upcoming" when there's more than one).
             'upcomingSession' => $sessions->first(),
             'upcomingSessions' => $sessions->all(),
-            'preferences' => [
-                'language' => $user->clientProfile?->preferred_language,
-                'approach' => $user->clientProfile?->preferred_approach,
-            ],
         ]);
     }
 

@@ -1,6 +1,4 @@
 import { ClientFooter } from '@/components/client-footer';
-import { DemoPayByCard } from '@/components/demo-pay-by-card';
-import { isNativeApp } from '@/lib/native';
 import ClientLayout from '@/layouts/client-layout';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowUpRight, CalendarClock, Check, Copy, MessageCircle, ShieldCheck } from 'lucide-react';
@@ -20,7 +18,6 @@ interface PaymentMethod {
 
 interface BookingPaymentProps {
     booking: {
-        id: number;
         reference: string;
         practitioner_name: string;
         service_name: string;
@@ -84,9 +81,8 @@ export default function BookingPayment({ booking, methods, whatsappUrl }: Bookin
                             One last step — pay for your session
                         </h1>
                         <p className="text-ashen-600 mx-auto mt-3 max-w-xl text-sm leading-relaxed">
-                            {isNativeApp()
-                                ? 'Your time is held. Pay by card, or by Whish / OMT — once it’s in, we’ll review and confirm your session and email you the details.'
-                                : 'Your time is held. To confirm it, send the amount below via Whish or OMT. Once we receive it, we’ll confirm your session and email you the details.'}
+                            Your time is held. To confirm it, send the amount below via Whish or OMT. Once we receive it, we’ll confirm
+                            your session and email you the details.
                         </p>
                     </motion.header>
 
@@ -112,20 +108,6 @@ export default function BookingPayment({ booking, methods, whatsappUrl }: Bookin
                             </div>
                         </div>
                     </motion.div>
-
-                    {/* ===== IN-APP CARD CHECKOUT (demo, native app only) ===== */}
-                    {isNativeApp() && (
-                        <>
-                            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
-                                <DemoPayByCard bookingId={booking.id} price={booking.price} />
-                            </motion.div>
-                            <div className="flex items-center gap-3">
-                                <span className="bg-ashen-200/70 h-px flex-1" />
-                                <span className="text-ashen-500 text-xs font-medium tracking-[0.12em] uppercase">Or pay by transfer</span>
-                                <span className="bg-ashen-200/70 h-px flex-1" />
-                            </div>
-                        </>
-                    )}
 
                     {/* ===== PAYMENT METHODS ===== */}
                     {methods.length > 0 ? (

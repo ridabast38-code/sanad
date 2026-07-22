@@ -1,5 +1,5 @@
 import { EDGE_DROPS, OliveDrops, OliveHorizon } from '@/components/olive';
-import { SpecialistPortraitCard, SpecialistPreviewModal, type MatchPreferences, type Specialist } from '@/components/specialist-card';
+import { SpecialistPortraitCard, SpecialistPreviewModal, type Specialist } from '@/components/specialist-card';
 import { applyFilters, EMPTY_FILTERS, SpecialistFilterBar, type SpecialistFilters } from '@/components/specialist-filters';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -47,7 +47,6 @@ interface HomeProps {
     upcomingSession: UpcomingSession | null;
     upcomingSessions: UpcomingSession[];
     stats: { upcoming: number; completed: number };
-    preferences: MatchPreferences;
 }
 
 interface UpcomingSession {
@@ -64,7 +63,7 @@ interface UpcomingSession {
     status: string;
 }
 
-export default function ClientHome({ practitioners, upcomingSessions, preferences }: HomeProps) {
+export default function ClientHome({ practitioners, upcomingSessions }: HomeProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const rawFirstName = auth.user.name.split(' ')[0];
@@ -146,7 +145,7 @@ export default function ClientHome({ practitioners, upcomingSessions, preference
                                         onFindSpecialist={() => navigate('specialists')}
                                     />
                                 )}
-                                {view === 'specialists' && <SpecialistsView practitioners={practitioners} preferences={preferences} />}
+                                {view === 'specialists' && <SpecialistsView practitioners={practitioners} />}
                                 {view === 'notifications' && <NotificationsView sessions={upcomingSessions} />}
                                 {view === 'profile' && <ProfileView user={auth.user} />}
                             </motion.div>
@@ -295,7 +294,7 @@ function SessionsView({
 
 /* ============================ Specialists view ============================ */
 
-function SpecialistsView({ practitioners, preferences }: { practitioners: Specialist[]; preferences: MatchPreferences }) {
+function SpecialistsView({ practitioners }: { practitioners: Specialist[] }) {
     const [filters, setFilters] = useState<SpecialistFilters>(EMPTY_FILTERS);
     const visible = useMemo(() => applyFilters(practitioners, filters), [practitioners, filters]);
     // a look at their qualifications before the booking page
