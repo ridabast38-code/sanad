@@ -321,7 +321,7 @@ export default function Home({
                             <img
                                 src="/images/sanad-wordmark-light.png"
                                 alt="Sanad"
-                                className="hidden h-11 w-auto select-none sm:block md:hidden"
+                                className="hidden h-14 w-auto select-none sm:block md:hidden"
                                 draggable={false}
                             />
                             <div className="flex flex-1 items-center justify-end gap-2 md:gap-3">
@@ -1104,7 +1104,7 @@ export default function Home({
                     <div className="grid grid-cols-2 gap-10 pb-10 md:grid-cols-4">
                         {/* brand */}
                         <div className="col-span-2 md:col-span-1">
-                            <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-14 w-auto select-none" draggable={false} />
+                            <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-20 w-auto select-none" draggable={false} />
                             <p className="text-ashen-300 mt-3 max-w-xs text-sm leading-relaxed">
                                 A safe space for your mind — real, licensed psychological care, guided with warmth.
                             </p>
