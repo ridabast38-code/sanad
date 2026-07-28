@@ -1,4 +1,5 @@
 import { DUST_QUIET, DustField, EDGE_DROPS, OliveDrops } from '@/components/olive';
+import SanadLogo from '@/components/sanad-logo';
 import { Link } from '@inertiajs/react';
 import { motion } from 'motion/react';
 
@@ -35,8 +36,8 @@ export default function AuthSplitLayout({
             <OliveDrops drops={EDGE_DROPS} tone="light" />
 
             <div className="absolute inset-0 z-10 flex flex-col justify-between p-12">
-                <Link href={route('home')} className="flex items-center gap-2.5 text-white">
-                    <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-16 w-auto select-none" draggable={false} />
+                <Link href={route('home')} className="text-white">
+                    <SanadLogo className="select-none" markClassName="size-10" wordClassName="text-[1.75rem]" />
                 </Link>
                 <blockquote>
                     <p className="font-display max-w-md text-3xl leading-snug text-white">{quote}</p>
@@ -69,8 +70,8 @@ export default function AuthSplitLayout({
             <DustField motes={DUST_QUIET} />
 
             <div className="relative z-10 mx-auto w-full max-w-sm">
-                <Link href={route('home')} className="text-ashen-800 mb-8 flex items-center justify-center gap-2.5 lg:hidden">
-                    <img src="/images/sanad-wordmark-dark.png" alt="Sanad" className="h-16 w-auto select-none" draggable={false} />
+                <Link href={route('home')} className="text-ashen-800 mb-8 flex justify-center lg:hidden">
+                    <SanadLogo className="select-none" markClassName="size-10" wordClassName="text-[1.75rem]" />
                 </Link>
 
                 {/* content cross-fades when the title changes (login <-> register) */}

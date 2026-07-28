@@ -1,24 +1,13 @@
+import { SanadMark } from '@/components/sanad-logo';
 import { SVGAttributes } from 'react';
 
 /**
- * The Sanad mark — a warm serif "S". Uses `currentColor` so it adopts whatever
- * text color it's placed in (auth screens, headers, etc.).
+ * The Sanad mark on its own, for the places too tight for the full lockup.
+ *
+ * This used to be an SVG <text> node set in Fraunces, which meant the "logo" was
+ * a webfont glyph: it flashed a fallback serif before the font loaded and looked
+ * different anywhere the font failed. It now draws the real mark.
  */
 export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
-    return (
-        <svg viewBox="0 0 40 42" xmlns="http://www.w3.org/2000/svg" {...props}>
-            <text
-                x="20"
-                y="22"
-                textAnchor="middle"
-                dominantBaseline="central"
-                fontFamily="Fraunces, Georgia, 'Times New Roman', serif"
-                fontSize="34"
-                fontWeight={600}
-                fill="currentColor"
-            >
-                S
-            </text>
-        </svg>
-    );
+    return <SanadMark {...props} />;
 }

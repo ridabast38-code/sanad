@@ -1,5 +1,6 @@
 import { DustField, OliveDrops, OliveHorizon, OliveTree, type Drop, type Mote } from '@/components/olive';
 import { RevealText, SOFT_EASE } from '@/components/reveal-text';
+import SanadLogo from '@/components/sanad-logo';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import { type SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
@@ -318,12 +319,7 @@ export default function Home({
                             {/* wordmark dropped on phones once the two pills are here — three
                             items crowd a narrow bar, and the hero headline already says who
                             we are. It comes back on md. */}
-                            <img
-                                src="/images/sanad-wordmark-light.png"
-                                alt="Sanad"
-                                className="hidden h-16 w-auto select-none sm:block md:hidden"
-                                draggable={false}
-                            />
+                            <SanadLogo className="text-ashen-100 hidden select-none sm:inline-flex md:hidden" markClassName="size-8" />
                             <div className="flex flex-1 items-center justify-end gap-2 md:gap-3">
                                 {/* Guests only — the way back in for a practitioner or a
                                 returning client. We stripped login links off most sections,
@@ -1104,7 +1100,7 @@ export default function Home({
                     <div className="grid grid-cols-2 gap-10 pb-10 md:grid-cols-4">
                         {/* brand */}
                         <div className="col-span-2 md:col-span-1">
-                            <img src="/images/sanad-wordmark-light.png" alt="Sanad" className="h-24 w-auto select-none" draggable={false} />
+                            <SanadLogo className="text-ashen-100 select-none" markClassName="size-11" wordClassName="text-[2rem]" />
                             <p className="text-ashen-300 mt-3 max-w-xs text-sm leading-relaxed">
                                 A safe space for your mind — real, licensed psychological care, guided with warmth.
                             </p>

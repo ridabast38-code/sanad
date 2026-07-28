@@ -1,4 +1,5 @@
 import { EDGE_DROPS, OliveDrops, OliveHorizon } from '@/components/olive';
+import SanadLogo from '@/components/sanad-logo';
 import { SpecialistPortraitCard, SpecialistPreviewModal, type Specialist } from '@/components/specialist-card';
 import { applyFilters, EMPTY_FILTERS, SpecialistFilterBar, type SpecialistFilters } from '@/components/specialist-filters';
 import { type SharedData } from '@/types';
@@ -632,12 +633,8 @@ function TopNav({
                 isHidden ? '-translate-y-full' : 'translate-y-0'
             }`}
         >
-            <button
-                type="button"
-                onClick={() => onNavigate('sessions')}
-                className="font-display text-ashen-700 text-2xl tracking-tight sm:text-[1.65rem]"
-            >
-                Sanad
+            <button type="button" onClick={() => onNavigate('sessions')} className="text-ashen-700">
+                <SanadLogo markClassName="size-8" wordClassName="text-2xl sm:text-[1.65rem]" />
             </button>
 
             <nav className="hidden flex-1 items-center justify-center gap-5 sm:flex sm:gap-9">

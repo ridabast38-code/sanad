@@ -158,14 +158,23 @@ html {
     background: linear-gradient(to right, #f6f4ed 0%, #e6e5dd 28%, #b8b9b1 55%, #90918a 76%, #90918a 100%);
 }
 
-/* On a phone the horizontal split has no room to breathe: the light→dark ramp
-   compresses into ~390px, so the right ~40% of every screen turns medium-gray and
-   forms and tables sit half on light, half on dark — reading as the page being cut
-   down the middle. Narrow screens scroll vertically, so the split flows top→bottom
-   instead and stays light, keeping depth without the harsh side seam. */
+/* On a phone the split turns 90°: it runs top→bottom instead of left→right.
+
+   It cannot stay horizontal. The light→dark ramp would compress into ~390px, so
+   the right ~40% of every screen goes medium-gray and forms and tables sit half
+   on light, half on dark — the page reads as cut down the middle. A phone
+   scrolls vertically, so down the page is where it has room.
+
+   It walks the same five stops and lands on the same #90918a the desktop ends
+   on. An earlier pass stopped the ramp at #dcdcd4 to avoid a hard seam, but that
+   is only two shades off the starting cream — the split effectively vanished on
+   a phone, which is exactly the bug this fixes. The stops are pushed late
+   (nothing below 45%) so the fold stays light and the weight arrives as you
+   scroll, and `background-attachment: fixed` is deliberately NOT used: iOS
+   Safari ignores it and Android repaints the whole gradient every frame. */
 @media (max-width: 767px) {
     .sanad-split {
-        background: linear-gradient(to bottom, #f6f4ed 0%, #eceae2 55%, #dcdcd4 100%);
+        background: linear-gradient(to bottom, #f6f4ed 0%, #f0eee6 22%, #e6e5dd 45%, #b8b9b1 74%, #90918a 100%);
     }
 }
 

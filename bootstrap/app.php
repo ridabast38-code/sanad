@@ -15,6 +15,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        /**
+         * TLS terminates at nginx (and at Cloudflare in front of it), so PHP sees
+         * a plain http request and url() builds http:// links. That silently
+         * broke link previews: WhatsApp and iMessage refuse an http og:image and
+         * fall back to a bare link with no card.
+         */
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,

@@ -38,7 +38,10 @@ export default [
         },
     },
     {
-        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
+        // .refs is a git-ignored scratch dir for one-off Node scripts (asset
+        // generation and the like). It is not shipped, so linting it as app code
+        // only ever fails the build on `require()` in a .cjs file.
+        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js', '.refs'],
     },
     prettier, // Turn off all rules that might conflict with Prettier
 ];
