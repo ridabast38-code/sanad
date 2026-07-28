@@ -35,7 +35,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
     const [who, setWho] = useState<WhoFilter>('all');
     const visibleBookings = bookings.filter((b) => who === 'all' || (who === 'guest' ? b.is_guest : !b.is_guest));
     // Ask for a refund amount (0 to the full price). Returns the amount, or
-    // null if the admin backed out. The 80/20 split recalculates on what's kept.
+    // null if the admin backed out. The booking's split recalculates on what's kept.
     const askRefund = (price: number, message: string, fallback: string): number | null => {
         const input = window.prompt(message, fallback);
         if (input === null) {
@@ -61,7 +61,7 @@ export default function AdminBookings({ pending, confirmed, bookings, filters }:
             } else {
                 const amount = askRefund(
                     price,
-                    `Refund how much to the client? Up to $${price}. Leave the full amount for a full refund — the 80/20 split recalculates on what's kept.`,
+                    `Refund how much to the client? Up to $${price}. Leave the full amount for a full refund — the split recalculates on what's kept.`,
                     String(price),
                 );
                 if (amount === null) {

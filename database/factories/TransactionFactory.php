@@ -23,8 +23,8 @@ class TransactionFactory extends Factory
         return [
             'booking_id' => Booking::factory(),
             'amount' => $amount,
-            'platform_fee' => round($amount * 0.20, 2),
-            'practitioner_payout' => round($amount * 0.80, 2),
+            'platform_fee' => round($amount * Booking::PLATFORM_SHARE, 2),
+            'practitioner_payout' => round($amount * (1 - Booking::PLATFORM_SHARE), 2),
             'status' => 'completed',
             'paid_at' => $this->faker->dateTimeBetween('-2 months', 'now'),
         ];

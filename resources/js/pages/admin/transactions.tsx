@@ -35,7 +35,7 @@ export default function AdminTransactions({ totals, transactions, filters }: Pro
             <DateFilter path="/admin/transactions" filters={filters} />
 
             <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-                <StatCard label="Platform profit (20%)" value={money(totals.platform_profit)} icon={PiggyBank} emphasis />
+                <StatCard label="Platform profit" value={money(totals.platform_profit)} icon={PiggyBank} emphasis />
                 <StatCard label="Net kept (after refunds)" value={money(totals.gross)} icon={Coins} />
                 <StatCard label="Paid to specialists" value={money(totals.payouts)} icon={Wallet} />
                 {totals.refunded > 0 ? (

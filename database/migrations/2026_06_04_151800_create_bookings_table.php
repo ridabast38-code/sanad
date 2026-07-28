@@ -19,8 +19,10 @@ return new class extends Migration
             $table->dateTime('scheduled_at');
             $table->string('status')->default('pending'); // pending|confirmed|completed|cancelled|no_show
             $table->decimal('price', 8, 2);
-            $table->decimal('platform_amount', 8, 2);   // 20% cut
-            $table->decimal('practitioner_amount', 8, 2); // 80% cut
+            // Both halves are stored, not derived: the rate (Booking::PLATFORM_SHARE)
+            // can change, and a booking must keep the split it was sold under.
+            $table->decimal('platform_amount', 8, 2);
+            $table->decimal('practitioner_amount', 8, 2);
             $table->string('payment_status')->default('unpaid'); // unpaid|paid|refunded
             $table->string('payment_link')->nullable();  // Whish payment link
             $table->string('meeting_link')->nullable();   // video call link

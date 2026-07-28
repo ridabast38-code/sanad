@@ -26,14 +26,17 @@ interface Props {
 export default function PractitionerEarnings({ totals, monthly, transactions, filters }: Props) {
     return (
         <StaffLayout title="Earnings" fitViewport>
-            <PageHeader title="Earnings" subtitle="Every paid session, your 80% share, and what's been paid out to you." tight />
+            <PageHeader title="Earnings" subtitle="Every paid session, your share, and what's been paid out to you." tight />
 
             <div className="shrink-0">
                 <DateFilter path="/practitioner/earnings" filters={filters} />
             </div>
 
             <div className="mb-5 grid shrink-0 grid-cols-1 gap-4 sm:grid-cols-3">
-                <StatCard label="Total earned (80%)" value={money(totals.payout)} icon={Wallet} />
+                {/* No rate in the label: this is a lifetime sum, and sessions sold
+                before the rate changed keep the split they were sold under — so
+                any single percentage here would be wrong for part of the total. */}
+                <StatCard label="Total earned" value={money(totals.payout)} icon={Wallet} />
                 <StatCard label="Paid out to you" value={money(totals.paid_out)} icon={Coins} />
                 <StatCard label="Awaiting payout" value={money(totals.awaiting_payout)} icon={HandCoins} emphasis />
             </div>

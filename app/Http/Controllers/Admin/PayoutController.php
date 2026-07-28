@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class PayoutController extends Controller
 {
     /**
-     * Record whether the practitioner has actually been paid their 80% share.
+     * Record whether the practitioner has actually been paid their share.
      * Separate from the client's payment — this is money leaving the platform.
      */
     public function update(Request $request, Transaction $transaction): RedirectResponse

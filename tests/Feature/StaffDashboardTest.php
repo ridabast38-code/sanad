@@ -14,7 +14,8 @@ function practitionerWithEarnings(): User
     $service = Service::factory()->create();
     $client = User::factory()->create();
 
-    // Two paid sessions at $35 → practitioner keeps 80% = $28 each ($56 total), platform 20% = $7 each.
+    // Two paid sessions at $35, split explicitly rather than by the current rate:
+    // this fixture is about the dashboard's arithmetic, not about what the cut is.
     Booking::factory()->count(2)->create([
         'client_id' => $client->id,
         'practitioner_id' => $practitioner->id,

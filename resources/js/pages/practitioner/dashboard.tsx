@@ -83,7 +83,7 @@ export default function PractitionerDashboard({ stats, upcoming }: Props) {
                             <div className="bg-ashen-100 text-ashen-700 flex size-11 items-center justify-center rounded-xl">
                                 <Wallet className="size-5" />
                             </div>
-                            <p className="text-ashen-400 mt-4 text-[11px] font-semibold tracking-[0.16em] uppercase">Total earned (your 80%)</p>
+                            <p className="text-ashen-400 mt-4 text-[11px] font-semibold tracking-[0.16em] uppercase">Total earned</p>
                             <p className="font-display text-ashen-800 mt-1 text-4xl tracking-tight">{money(stats.earnings_total)}</p>
                             <Link
                                 href="/practitioner/earnings"

@@ -40,6 +40,14 @@ function makeBookablePractitioner(): User
     return $practitioner;
 }
 
+/**
+ * A booking at the OLD 20% rate ($40 → $8 platform / $32 practitioner).
+ *
+ * The split is written out by hand rather than taken from Booking::PLATFORM_SHARE
+ * on purpose: it stands in for the sessions already in the live database from
+ * before the cut dropped to 15%, and the refund tests below rely on it staying
+ * at the old rate. Do not "tidy" these numbers to match the current constant.
+ */
 function makePendingBooking(User $client, User $practitioner): Booking
 {
     return Booking::create([
@@ -113,8 +121,9 @@ test('a client can book an offered slot and it becomes their upcoming session', 
         ->and($booking->practitioner_id)->toBe($practitioner->id)
         ->and($booking->status)->toBe('pending')
         ->and((float) $booking->price)->toBe(40.0)
-        ->and((float) $booking->platform_amount)->toBe(8.0)
-        ->and((float) $booking->practitioner_amount)->toBe(32.0);
+        // 15% to the platform, 85% to the practitioner
+        ->and((float) $booking->platform_amount)->toBe(6.0)
+        ->and((float) $booking->practitioner_amount)->toBe(34.0);
 
     // it now appears as the upcoming session on the dashboard
     $this->actingAs($client)
@@ -327,6 +336,61 @@ test('a partial refund recomputes the platform and practitioner split on the kep
         ->and($booking->fresh()->payment_status)->toBe('partially_refunded');
 
     Notification::assertSentTo($client, BookingCancelledForClient::class);
+});
+
+/**
+ * The rate is forward-only, and refunds are where that quietly goes wrong.
+ *
+ * Booking::refund() recomputes the split on whatever the client keeps. If it
+ * reached for the current constant instead of the booking's own ratio, every
+ * pre-existing session refunded after the change would be repaid at 15% — the
+ * practitioner would take a cut of a session that was never sold that way, and
+ * the transaction would stop agreeing with the booking it came from.
+ */
+test('a session sold at the old rate is refunded at the old rate, not the current one', function () {
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+
+    $legacy = makePendingBooking($client, $practitioner); // $40 at the old 20%
+    $legacy->settle();
+
+    expect($legacy->platformShare())->toBe(0.20);
+
+    $legacy->refund(20.0); // keep $20
+
+    $transaction = $legacy->transaction->fresh();
+
+    // 20% of the $20 kept — NOT the 15% a booking sold today would get.
+    expect((float) $transaction->platform_fee)->toBe(4.0)
+        ->and((float) $transaction->practitioner_payout)->toBe(16.0);
+});
+
+test('a session sold at the current rate splits 85/15 and refunds at that rate', function () {
+    $practitioner = makeBookablePractitioner();
+    $client = User::factory()->create();
+
+    $booking = Booking::create([
+        'client_id' => $client->id,
+        'practitioner_id' => $practitioner->id,
+        'service_id' => $practitioner->services->first()->id,
+        'scheduled_at' => now()->addWeek()->setTime(15, 0),
+        'status' => 'pending',
+        'price' => 40,
+        'platform_amount' => round(40 * Booking::PLATFORM_SHARE, 2),
+        'practitioner_amount' => round(40 * (1 - Booking::PLATFORM_SHARE), 2),
+        'payment_status' => 'unpaid',
+    ]);
+    $booking->settle();
+
+    expect((float) $booking->platform_amount)->toBe(6.0)
+        ->and((float) $booking->practitioner_amount)->toBe(34.0);
+
+    $booking->refund(20.0); // keep $20 → 15% of it is $3
+
+    $transaction = $booking->transaction->fresh();
+
+    expect((float) $transaction->platform_fee)->toBe(3.0)
+        ->and((float) $transaction->practitioner_payout)->toBe(17.0);
 });
 
 test('a full refund zeroes the practitioner payout', function () {

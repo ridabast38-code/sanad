@@ -86,8 +86,8 @@ class DemoDataSeeder extends Seeder
             'scheduled_at' => $when,
             'status' => $status,
             'price' => $price,
-            'platform_amount' => round($price * 0.20, 2),
-            'practitioner_amount' => round($price * 0.80, 2),
+            'platform_amount' => round($price * Booking::PLATFORM_SHARE, 2),
+            'practitioner_amount' => round($price * (1 - Booking::PLATFORM_SHARE), 2),
             'payment_status' => $status === 'pending' ? 'unpaid' : 'paid',
             'meeting_link' => 'https://meet.sanad.app/'.fake()->uuid(),
         ]);

@@ -17,9 +17,18 @@ class Booking extends Model
     use HasFactory;
 
     /**
-     * The platform's share of every booking (the rest goes to the practitioner).
+     * The platform's share of every NEW booking (the rest goes to the practitioner).
+     *
+     * Dropped from 0.20 to 0.15 on 2026-07-28, so practitioners now keep 85%.
+     *
+     * Changing this is deliberately forward-only. Both halves of the split are
+     * written onto the bookings row when the booking is created and copied onto
+     * the transaction when it settles, so a session already sold keeps the rate
+     * it was sold under and no past payout silently moves. Read
+     * {@see self::platformShare()}, never this constant, when working out what
+     * an existing booking owes.
      */
-    public const PLATFORM_SHARE = 0.20;
+    public const PLATFORM_SHARE = 0.15;
 
     /**
      * Booking types: a calm self-booked session, or an urgent one that came
@@ -197,11 +206,32 @@ class Booking extends Model
     }
 
     /**
+     * The platform share this particular booking was actually sold under.
+     *
+     * Read back out of the amounts stored on the row rather than taken from the
+     * constant, because the constant moves. A session sold at the old 20% that
+     * gets refunded today must be recomputed at 20%: using the current rate
+     * would quietly hand the practitioner a share nobody agreed to and leave the
+     * transaction disagreeing with the booking it came from.
+     *
+     * Falls back to the current rate for a free session, where there is no ratio
+     * to read and nothing to get wrong.
+     */
+    public function platformShare(): float
+    {
+        $price = (float) $this->price;
+
+        return $price > 0
+            ? (float) $this->platform_amount / $price
+            : self::PLATFORM_SHARE;
+    }
+
+    /**
      * Refund part or all of a paid booking. The kept amount (price minus the
-     * refund) keeps the same 80/20 split, so the platform fee and practitioner
-     * payout are recomputed on what the client actually paid in the end. A full
-     * refund zeroes the payout; a partial refund leaves the transaction payable
-     * for the reduced share.
+     * refund) keeps this booking's own split, so the platform fee and
+     * practitioner payout are recomputed on what the client actually paid in the
+     * end. A full refund zeroes the payout; a partial refund leaves the
+     * transaction payable for the reduced share.
      */
     public function refund(float $refundAmount): void
     {
@@ -210,7 +240,7 @@ class Booking extends Model
         $isFull = $refundAmount >= $price;
 
         $kept = round($price - $refundAmount, 2);
-        $platformFee = round($kept * self::PLATFORM_SHARE, 2);
+        $platformFee = round($kept * $this->platformShare(), 2);
 
         $this->update([
             'payment_status' => $isFull ? 'refunded' : ($refundAmount > 0 ? 'partially_refunded' : $this->payment_status),

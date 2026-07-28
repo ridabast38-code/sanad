@@ -97,7 +97,7 @@ test('a guest can complete a booking without an account', function () {
         ->and($booking->status)->toBe('pending')
         ->and($booking->public_token)->not->toBeNull()
         ->and((float) $booking->price)->toBe(40.0)
-        ->and((float) $booking->platform_amount)->toBe(8.0);
+        ->and((float) $booking->platform_amount)->toBe(6.0);
 
     // Admins are alerted, exactly like every other booking awaiting payment.
     Notification::assertSentTo($admin, NewBookingRequested::class);

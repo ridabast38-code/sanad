@@ -34,7 +34,7 @@ export default function AdminDashboard({ stats, recent }: Props) {
             {/* money */}
             <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <StatCard label="Gross billed" value={money(stats.gross)} icon={Coins} />
-                <StatCard label="Platform profit (20%)" value={money(stats.platform_profit)} icon={PiggyBank} />
+                <StatCard label="Platform profit" value={money(stats.platform_profit)} icon={PiggyBank} />
                 <StatCard label="Profit this month" value={money(stats.profit_month)} icon={TrendingUp} emphasis />
                 <StatCard label="Practitioner payouts" value={money(stats.payouts)} icon={Wallet} />
             </div>

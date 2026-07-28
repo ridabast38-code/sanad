@@ -51,7 +51,7 @@ class BookingActionController extends Controller
     /**
      * Cancel the booking — the session can no longer happen — refund the client
      * (full unless a smaller amount is given), and tell both the client and
-     * practitioner. The refund recomputes the 80/20 split on whatever is kept,
+     * practitioner. The refund recomputes the booking's own split on whatever is kept,
      * which also removes the refunded share from the practitioner's earnings.
      */
     private function cancel(Booking $booking, ?float $refundAmount): void
