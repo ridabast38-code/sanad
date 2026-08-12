@@ -1,6 +1,7 @@
+import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import { DeleteUserButton } from '@/components/staff/delete-user-button';
 import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
-import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
+import TimeRange from '@/components/staff/time-range';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, router, useForm } from '@inertiajs/react';
 import { Plus, Trash2, UserPlus, X } from 'lucide-react';
@@ -31,6 +32,9 @@ interface Options {
 }
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+/** Days are offered Monday → Sunday; the stored `day_of_week` numbering is untouched. */
+const WEEK = [1, 2, 3, 4, 5, 6, 0];
 
 export default function AdminPractitioners({
     practitioners,
@@ -70,7 +74,10 @@ export default function AdminPractitioners({
             )}
 
             <Section title="All specialists">
-                <Table head={['Specialist', 'Sessions', 'Earned', 'Owed', 'Status', 'Actions']} empty={practitioners.length === 0 ? 'No practitioners yet.' : undefined}>
+                <Table
+                    head={['Specialist', 'Sessions', 'Earned', 'Owed', 'Status', 'Actions']}
+                    empty={practitioners.length === 0 ? 'No practitioners yet.' : undefined}
+                >
                     {practitioners.map((p) => (
                         <tr key={p.id}>
                             <Td>
@@ -314,10 +321,20 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                                 </Field>
                             </div>
                             <Field label="Approaches">
-                                <ChipGroup options={options.approaches} labels={APPROACH_LABELS} selected={data.approaches} onToggle={(v) => toggle('approaches', v)} />
+                                <ChipGroup
+                                    options={options.approaches}
+                                    labels={APPROACH_LABELS}
+                                    selected={data.approaches}
+                                    onToggle={(v) => toggle('approaches', v)}
+                                />
                             </Field>
                             <Field label="Languages">
-                                <ChipGroup options={options.languages} labels={LANGUAGE_LABELS} selected={data.languages} onToggle={(v) => toggle('languages', v)} />
+                                <ChipGroup
+                                    options={options.languages}
+                                    labels={LANGUAGE_LABELS}
+                                    selected={data.languages}
+                                    onToggle={(v) => toggle('languages', v)}
+                                />
                             </Field>
                         </div>
                     </div>
@@ -325,12 +342,17 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                     {/* ===== pricing ===== */}
                     <div className="border-ashen-300/25 mt-6 border-t pt-6">
                         <p className="text-ashen-500 mb-1 text-[11px] font-semibold tracking-[0.14em] uppercase">Pricing</p>
-                        <p className="text-ashen-400 mb-4 text-xs">Set a price per session. Leave one blank to not offer it. They can adjust these later.</p>
+                        <p className="text-ashen-400 mb-4 text-xs">
+                            Set a price per session. Leave one blank to not offer it. They can adjust these later.
+                        </p>
                         <div className="space-y-3">
                             {services.map((service) => {
                                 const row = data.services.find((s) => s.id === service.id);
                                 return (
-                                    <div key={service.id} className="border-ashen-300/40 bg-ashen-50/50 flex items-center gap-4 rounded-xl border p-3.5">
+                                    <div
+                                        key={service.id}
+                                        className="border-ashen-300/40 bg-ashen-50/50 flex items-center gap-4 rounded-xl border p-3.5"
+                                    >
                                         <div className="min-w-0 flex-1">
                                             <p className="text-ashen-800 text-sm font-medium">{service.name}</p>
                                             {service.duration_minutes && <p className="text-ashen-400 text-xs">{service.duration_minutes} min</p>}
@@ -374,30 +396,25 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                         ) : (
                             <div className="space-y-2.5">
                                 {data.availability.map((w, i) => (
-                                    <div key={i} className="border-ashen-300/40 bg-ashen-50/50 flex flex-wrap items-center gap-2 rounded-xl border p-2.5">
+                                    <div
+                                        key={i}
+                                        className="border-ashen-300/40 bg-ashen-50/50 flex flex-wrap items-center gap-2 rounded-xl border p-2.5"
+                                    >
                                         <select
                                             value={w.day_of_week}
                                             onChange={(e) => setWindow(i, { day_of_week: Number(e.target.value) })}
                                             className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
                                         >
-                                            {DAYS.map((day, idx) => (
+                                            {WEEK.map((idx) => (
                                                 <option key={idx} value={idx}>
-                                                    {day}
+                                                    {DAYS[idx]}
                                                 </option>
                                             ))}
                                         </select>
-                                        <input
-                                            type="time"
-                                            value={w.start_time}
-                                            onChange={(e) => setWindow(i, { start_time: e.target.value })}
-                                            className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
-                                        />
-                                        <span className="text-ashen-400 text-sm">to</span>
-                                        <input
-                                            type="time"
-                                            value={w.end_time}
-                                            onChange={(e) => setWindow(i, { end_time: e.target.value })}
-                                            className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
+                                        <TimeRange
+                                            start={w.start_time}
+                                            end={w.end_time}
+                                            onChange={(start_time, end_time) => setWindow(i, { start_time, end_time })}
                                         />
                                         <button
                                             type="button"

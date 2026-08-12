@@ -1,4 +1,5 @@
 import { CARD, PageHeader } from '@/components/staff/kit';
+import TimeRange from '@/components/staff/time-range';
 import StaffLayout from '@/layouts/staff-layout';
 import { useForm } from '@inertiajs/react';
 import { Check, Plus, X } from 'lucide-react';
@@ -12,12 +13,26 @@ type Slot = {
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+/** Cards read Monday → Sunday; the stored `day_of_week` numbering is untouched. */
+const WEEK = [1, 2, 3, 4, 5, 6, 0];
+
 export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
     const { data, setData, put, processing, recentlySuccessful } = useForm<{ windows: Slot[] }>({
         windows: windows.map((w) => ({ day_of_week: w.day_of_week, start_time: w.start_time, end_time: w.end_time })),
     });
 
-    const addWindow = (day: number) => setData('windows', [...data.windows, { day_of_week: day, start_time: '17:00', end_time: '20:00' }]);
+    /** A second window on a day starts where the last one ended, so they never overlap by default. */
+    const addWindow = (day: number) => {
+        const existing = data.windows.filter((w) => w.day_of_week === day);
+        const last = existing
+            .map((w) => w.end_time)
+            .sort()
+            .pop();
+        const start = last && last < '22:00' ? last : '17:00';
+        const end = `${String(Math.min(Number(start.slice(0, 2)) + 3, 23)).padStart(2, '0')}:${start.slice(3)}`;
+
+        setData('windows', [...data.windows, { day_of_week: day, start_time: start, end_time: end }]);
+    };
 
     const removeWindow = (index: number) =>
         setData(
@@ -25,10 +40,10 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
             data.windows.filter((_, i) => i !== index),
         );
 
-    const updateWindow = (index: number, field: 'start_time' | 'end_time', value: string) =>
+    const updateWindow = (index: number, start: string, end: string) =>
         setData(
             'windows',
-            data.windows.map((w, i) => (i === index ? { ...w, [field]: value } : w)),
+            data.windows.map((w, i) => (i === index ? { ...w, start_time: start, end_time: end } : w)),
         );
 
     const submit = (e: React.FormEvent) => {
@@ -62,7 +77,8 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                 />
 
                 <div className="scrollbar-hide grid gap-4 md:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-cols-3 lg:content-start lg:overflow-y-auto lg:pr-1">
-                    {DAYS.map((dayName, day) => {
+                    {WEEK.map((day) => {
+                        const dayName = DAYS[day];
                         const dayWindows = data.windows.map((w, i) => ({ ...w, index: i })).filter((w) => w.day_of_week === day);
 
                         return (
@@ -84,24 +100,19 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                                 ) : (
                                     <div className="space-y-2">
                                         {dayWindows.map((w) => (
-                                            <div key={w.index} className="bg-ashen-50 flex items-center gap-2 rounded-xl px-3 py-2">
-                                                <input
-                                                    type="time"
-                                                    value={w.start_time}
-                                                    onChange={(e) => updateWindow(w.index, 'start_time', e.target.value)}
-                                                    className="border-ashen-200 text-ashen-800 bg-ashen-50/80 rounded-lg border px-2 py-1 text-sm"
-                                                />
-                                                <span className="text-ashen-400 text-sm">–</span>
-                                                <input
-                                                    type="time"
-                                                    value={w.end_time}
-                                                    onChange={(e) => updateWindow(w.index, 'end_time', e.target.value)}
-                                                    className="border-ashen-200 text-ashen-800 bg-ashen-50/80 rounded-lg border px-2 py-1 text-sm"
-                                                />
+                                            <div key={w.index} className="bg-ashen-50 flex items-center gap-2 rounded-xl px-2.5 py-2">
+                                                <div className="min-w-0 flex-1">
+                                                    <TimeRange
+                                                        compact
+                                                        start={w.start_time}
+                                                        end={w.end_time}
+                                                        onChange={(start, end) => updateWindow(w.index, start, end)}
+                                                    />
+                                                </div>
                                                 <button
                                                     type="button"
                                                     onClick={() => removeWindow(w.index)}
-                                                    className="text-ashen-400 hover:text-ashen-700 ml-auto flex size-6 items-center justify-center rounded-full transition"
+                                                    className="text-ashen-400 hover:text-ashen-700 flex size-6 shrink-0 items-center justify-center rounded-full transition"
                                                     aria-label="Remove window"
                                                 >
                                                     <X className="size-4" />

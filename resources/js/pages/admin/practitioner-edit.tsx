@@ -1,5 +1,6 @@
-import { CARD, PageHeader } from '@/components/staff/kit';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
+import { CARD, PageHeader } from '@/components/staff/kit';
+import TimeRange from '@/components/staff/time-range';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Plus, Trash2, UserPlus } from 'lucide-react';
@@ -39,6 +40,9 @@ interface Practitioner {
 }
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+/** Days are offered Monday → Sunday; the stored `day_of_week` numbering is untouched. */
+const WEEK = [1, 2, 3, 4, 5, 6, 0];
 
 const inputClass =
     'w-full rounded-xl border border-ashen-300/60 bg-ashen-50/80 px-3.5 py-2.5 text-sm text-ashen-800 transition focus:border-ashen-400 focus:bg-ashen-50 focus:outline-none focus:ring-2 focus:ring-ashen-500/20';
@@ -180,7 +184,9 @@ export default function PractitionerEdit({
                                 onChange={(e) => pickPhoto(e.target.files?.[0] ?? null)}
                                 className="text-ashen-600 file:bg-ashen-700 hover:file:bg-ashen-800 text-sm file:mr-3 file:cursor-pointer file:rounded-full file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
                             />
-                            <p className="text-ashen-400 mt-1.5 text-xs">Shown in the client directory. JPG, PNG or WebP, up to 4 MB. Leave alone to keep the current one.</p>
+                            <p className="text-ashen-400 mt-1.5 text-xs">
+                                Shown in the client directory. JPG, PNG or WebP, up to 4 MB. Leave alone to keep the current one.
+                            </p>
                             {errors.photo && <p className="text-ashen-500 mt-1 text-xs">{errors.photo}</p>}
                         </div>
                     </div>
@@ -222,10 +228,20 @@ export default function PractitionerEdit({
                             </Field>
                         </div>
                         <Field label="Approaches">
-                            <ChipGroup options={options.approaches} labels={APPROACH_LABELS} selected={data.approaches} onToggle={(v) => toggle('approaches', v)} />
+                            <ChipGroup
+                                options={options.approaches}
+                                labels={APPROACH_LABELS}
+                                selected={data.approaches}
+                                onToggle={(v) => toggle('approaches', v)}
+                            />
                         </Field>
                         <Field label="Languages">
-                            <ChipGroup options={options.languages} labels={LANGUAGE_LABELS} selected={data.languages} onToggle={(v) => toggle('languages', v)} />
+                            <ChipGroup
+                                options={options.languages}
+                                labels={LANGUAGE_LABELS}
+                                selected={data.languages}
+                                onToggle={(v) => toggle('languages', v)}
+                            />
                         </Field>
                     </div>
                 </div>
@@ -288,24 +304,16 @@ export default function PractitionerEdit({
                                         onChange={(e) => setWindow(i, { day_of_week: Number(e.target.value) })}
                                         className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
                                     >
-                                        {DAYS.map((day, idx) => (
+                                        {WEEK.map((idx) => (
                                             <option key={idx} value={idx}>
-                                                {day}
+                                                {DAYS[idx]}
                                             </option>
                                         ))}
                                     </select>
-                                    <input
-                                        type="time"
-                                        value={w.start_time}
-                                        onChange={(e) => setWindow(i, { start_time: e.target.value })}
-                                        className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
-                                    />
-                                    <span className="text-ashen-400 text-sm">to</span>
-                                    <input
-                                        type="time"
-                                        value={w.end_time}
-                                        onChange={(e) => setWindow(i, { end_time: e.target.value })}
-                                        className="border-ashen-300/60 text-ashen-800 bg-ashen-50/80 rounded-lg border px-3 py-1.5 text-sm"
+                                    <TimeRange
+                                        start={w.start_time}
+                                        end={w.end_time}
+                                        onChange={(start_time, end_time) => setWindow(i, { start_time, end_time })}
                                     />
                                     <button
                                         type="button"
