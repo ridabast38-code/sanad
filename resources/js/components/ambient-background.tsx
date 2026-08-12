@@ -1,5 +1,5 @@
 /**
- * Sanad's ambient atmosphere: slow warm-gray auroras breathing over the page —
+ * OurSanad's ambient atmosphere: slow warm-gray auroras breathing over the page —
  * the same monochrome language as the landing. Translate/opacity-only animations
  * on blurred blobs, so it costs almost nothing.
  */

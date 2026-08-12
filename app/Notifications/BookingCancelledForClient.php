@@ -47,7 +47,7 @@ class BookingCancelledForClient extends Notification implements ShouldQueue
 
         return $mail
             ->action('Book another session', route('dashboard'))
-            ->line('We\'re here whenever you\'re ready. — Sanad');
+            ->line('We\'re here whenever you\'re ready. — OurSanad');
     }
 
     /**

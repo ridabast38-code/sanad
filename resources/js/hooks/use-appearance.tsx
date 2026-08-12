@@ -18,7 +18,7 @@ const handleSystemThemeChange = () => {
 };
 
 export function initializeTheme() {
-    // Sanad's client experience is designed warm & light — default to light
+    // OurSanad's client experience is designed warm & light — default to light
     // unless the user explicitly chooses otherwise in settings.
     const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'light';
 

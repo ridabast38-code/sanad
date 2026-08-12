@@ -9,7 +9,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
 const toISO = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
 /**
- * A calm, animated date-of-birth calendar in the Sanad palette.
+ * A calm, animated date-of-birth calendar in the OurSanad palette.
  * Emits the chosen date as a YYYY-MM-DD string; future dates are disabled.
  */
 export function BirthCalendar({ value, onChange, disabled }: { value: string; onChange: (v: string) => void; disabled?: boolean }) {

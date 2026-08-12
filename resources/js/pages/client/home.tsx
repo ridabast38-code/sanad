@@ -31,7 +31,7 @@ import { useEffect, useMemo, useState, type ComponentType } from 'react';
 /** Soft tonal card — frosted rather than solid, so the page split reads through. */
 const CARD = 'sanad-card rounded-2xl';
 
-/** Gentle affirmations in Sanad's voice — shown on the daily-intention card. */
+/** Gentle affirmations in OurSanad's voice — shown on the daily-intention card. */
 const INTENTIONS = [
     'Today, I will permit myself to rest without guilt, and acknowledge my progress, no matter how small.',
     'Asking for support is not weakness — it is the first brave step toward myself.',
@@ -284,7 +284,7 @@ function SessionsView({
                     </div>
                     <div className="space-y-5">
                         <SectionLabel>Quick resources</SectionLabel>
-                        <ResourceRow icon={FileText} label="How Sanad works" href="/how-it-works" />
+                        <ResourceRow icon={FileText} label="How OurSanad works" href="/how-it-works" />
                         <ResourceRow icon={BookOpen} label="Preparing for your first session" href="/how-it-works#first-session" />
                     </div>
                 </section>
@@ -314,7 +314,7 @@ function SpecialistsView({ practitioners }: { practitioners: Specialist[] }) {
                 </h1>
                 <p className="text-ashen-500 mt-2.5 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
                     <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                    Every Sanad psychologist is a licensed clinical psychologist — real, confidential care.
+                    Every OurSanad psychologist is a licensed clinical psychologist — real, confidential care.
                 </p>
             </header>
 
@@ -544,7 +544,7 @@ function ProfileView({ user }: { user: SharedData['auth']['user'] }) {
                 <h1 className="font-display text-ashen-800 text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-4xl">
                     Your account
                 </h1>
-                <p className="text-ashen-500 mt-3 text-lg lg:mt-2 lg:text-base">Manage your details and how Sanad works for you.</p>
+                <p className="text-ashen-500 mt-3 text-lg lg:mt-2 lg:text-base">Manage your details and how OurSanad works for you.</p>
             </header>
 
             <div className="scrollbar-hide max-w-2xl space-y-6 lg:min-h-0 lg:flex-1 lg:space-y-4 lg:overflow-y-auto lg:pr-1">
@@ -634,7 +634,7 @@ function TopNav({
             }`}
         >
             <button type="button" onClick={() => onNavigate('sessions')} className="text-ashen-700">
-                <SanadLogo markClassName="size-8" wordClassName="text-2xl sm:text-[1.65rem]" />
+                <SanadLogo markClassName="h-8 w-auto" wordClassName="text-2xl sm:text-[1.65rem]" />
             </button>
 
             <nav className="hidden flex-1 items-center justify-center gap-5 sm:flex sm:gap-9">

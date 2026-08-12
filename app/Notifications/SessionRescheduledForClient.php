@@ -41,7 +41,7 @@ class SessionRescheduledForClient extends Notification implements ShouldQueue
             ->line('New time: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->line('Service: '.$booking->service->name)
             ->action('View your sessions', route('dashboard'))
-            ->line('See you then. — Sanad');
+            ->line('See you then. — OurSanad');
     }
 
     /**

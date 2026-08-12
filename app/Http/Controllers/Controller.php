@@ -11,7 +11,7 @@ abstract class Controller
      */
     protected function paymentSupportWhatsappUrl(string $reference): string
     {
-        $message = "Hi Sanad, I'd like help with the payment for my session ({$reference}).";
+        $message = "Hi OurSanad, I'd like help with the payment for my session ({$reference}).";
 
         return 'https://wa.me/'.config('sanad.whatsapp').'?text='.rawurlencode($message);
     }

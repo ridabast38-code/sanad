@@ -29,7 +29,7 @@ interface Props {
 export default function AdminDashboard({ stats, recent }: Props) {
     return (
         <StaffLayout title="Overview">
-            <PageHeader title="Platform overview" subtitle="Everything across Sanad — people, sessions, and money." />
+            <PageHeader title="Platform overview" subtitle="Everything across OurSanad — people, sessions, and money." />
 
             {/* money */}
             <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-4">

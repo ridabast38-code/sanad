@@ -50,7 +50,7 @@ class BookingConfirmedForClient extends Notification implements ShouldQueue
                 ->line('Your meeting link will appear on your dashboard before the session.');
         }
 
-        return $mail->line('We\'re glad you\'re here. — Sanad');
+        return $mail->line('We\'re glad you\'re here. — OurSanad');
     }
 
     /**

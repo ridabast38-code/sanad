@@ -39,7 +39,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
             {/* ===== minimal public top bar ===== */}
             <header className="relative z-10 mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between px-6 py-4 md:px-10">
                 <Link href="/" className="font-display text-ashen-800 text-xl tracking-tight">
-                    Sanad
+                    OurSanad
                 </Link>
                 {/* Pills, like every other control in the app. These were bare text links
                 — the only two things on the page not speaking the landing's language. */}
@@ -93,7 +93,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                         </h1>
                         <p className="text-ashen-500 mt-2.5 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
                             <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                            Every Sanad psychologist is a licensed clinical psychologist, trained across CBT, EMDR and psychoanalysis — real,
+                            Every OurSanad psychologist is a licensed clinical psychologist, trained across CBT, EMDR and psychoanalysis — real,
                             confidential care.
                         </p>
                     </header>

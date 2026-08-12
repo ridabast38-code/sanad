@@ -139,7 +139,7 @@ function Register({ googleEnabled }: { googleEnabled?: boolean }) {
 Register.layout = (page: ReactNode) => (
     <AuthSplitLayout
         title="Begin your journey"
-        description="Welcome to Sanad — let's create your safe space together."
+        description="Welcome to OurSanad — let's create your safe space together."
         photoSide="right"
         quote="Every journey inward begins with one gentle step."
         quoteFooter="You've just taken yours."

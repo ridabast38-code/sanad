@@ -4,8 +4,8 @@ export default function Privacy() {
     return (
         <LegalPage title="Privacy Policy">
             <p>
-                Your privacy is the foundation of Sanad. Everything you share with us — your account details, your questionnaire answers, your session
-                notes — is treated as strictly confidential.
+                Your privacy is the foundation of OurSanad. Everything you share with us — your account details, your questionnaire answers, your
+                session notes — is treated as strictly confidential.
             </p>
             <h2>What we collect</h2>
             <p>
@@ -24,7 +24,7 @@ export default function Privacy() {
             </p>
             <h2>Questions</h2>
             <p>
-                Write to us at <a href="mailto:hello@sanad.com">hello@sanad.com</a> — a human reads every message.
+                Write to us at <a href="mailto:hello@oursanad.com">hello@oursanad.com</a> — a human reads every message.
             </p>
         </LegalPage>
     );

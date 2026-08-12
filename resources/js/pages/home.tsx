@@ -222,8 +222,8 @@ export default function Home({
 
     const faqs = [
         {
-            q: 'Is Sanad real therapy?',
-            a: 'Yes. Sanad connects you with licensed clinical psychologists for real, confidential sessions — a professional space to feel heard and genuinely supported. (For a medical emergency, please contact your local emergency number.)',
+            q: 'Is OurSanad real therapy?',
+            a: 'Yes. OurSanad connects you with licensed clinical psychologists for real, confidential sessions — a professional space to feel heard and genuinely supported. (For a medical emergency, please contact your local emergency number.)',
         },
         {
             q: 'How do sessions work?',
@@ -243,7 +243,7 @@ export default function Home({
         },
         {
             q: 'What if I need help right now?',
-            a: 'Sanad isn’t an emergency service. If you’re in danger or in crisis, please contact your local emergency number. For a fresh shock, our self-guided Emergency First Aid grounding tool can help you feel steadier in the moment.',
+            a: 'OurSanad isn’t an emergency service. If you’re in danger or in crisis, please contact your local emergency number. For a fresh shock, our self-guided Emergency First Aid grounding tool can help you feel steadier in the moment.',
         },
     ];
     const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -319,7 +319,7 @@ export default function Home({
                             {/* wordmark dropped on phones once the two pills are here — three
                             items crowd a narrow bar, and the hero headline already says who
                             we are. It comes back on md. */}
-                            <SanadLogo className="text-ashen-100 hidden select-none sm:inline-flex md:hidden" markClassName="size-8" />
+                            <SanadLogo className="text-ashen-100 hidden select-none sm:inline-flex md:hidden" markClassName="h-8 w-auto" />
                             <div className="flex flex-1 items-center justify-end gap-2 md:gap-3">
                                 {/* Guests only — the way back in for a practitioner or a
                                 returning client. We stripped login links off most sections,
@@ -853,7 +853,7 @@ export default function Home({
                         section close right up around the faces. */}
                         <div className="mb-4 md:mb-5">
                             <span className="text-ashen-300 text-sm font-medium tracking-[0.2em] uppercase">Meet the team</span>
-                            <h2 className="font-display text-ashen-200 mt-2 text-3xl tracking-tight md:text-4xl">The people behind Sanad</h2>
+                            <h2 className="font-display text-ashen-200 mt-2 text-3xl tracking-tight md:text-4xl">The people behind OurSanad</h2>
 
                             {/* Shown to everyone, at every size — the phone landing needs a way
                             into the full directory too. Always the public directory, even for
@@ -926,8 +926,8 @@ export default function Home({
 
                         {/* confident, licensed practice statement */}
                         <p className="text-ashen-400 mt-5 max-w-3xl text-xs leading-relaxed">
-                            Every Sanad clinician is a licensed clinical psychologist, and Sanad is a fully licensed, confidential clinical practice.
-                            For a medical emergency or if you are in danger, please contact your local emergency number.
+                            Every OurSanad clinician is a licensed clinical psychologist, and OurSanad is a fully licensed, confidential clinical
+                            practice. For a medical emergency or if you are in danger, please contact your local emergency number.
                         </p>
                     </div>
                 </section>
@@ -1100,7 +1100,7 @@ export default function Home({
                     <div className="grid grid-cols-2 gap-10 pb-10 md:grid-cols-4">
                         {/* brand */}
                         <div className="col-span-2 md:col-span-1">
-                            <SanadLogo className="text-ashen-100 select-none" markClassName="size-11" wordClassName="text-[2rem]" />
+                            <SanadLogo className="text-ashen-100 select-none" markClassName="h-11 w-auto" wordClassName="text-[2rem]" />
                             <p className="text-ashen-300 mt-3 max-w-xs text-sm leading-relaxed">
                                 A safe space for your mind — real, licensed psychological care, guided with warmth.
                             </p>
@@ -1172,7 +1172,7 @@ export default function Home({
 
                     {/* bottom bar */}
                     <div className="border-ashen-300/15 flex flex-col gap-4 border-t pt-8 md:flex-row md:items-center md:justify-between">
-                        <p className="text-ashen-200/60 text-xs">© {new Date().getFullYear()} Sanad. All rights reserved.</p>
+                        <p className="text-ashen-200/60 text-xs">© {new Date().getFullYear()} OurSanad. All rights reserved.</p>
                         <div className="text-ashen-200/70 flex items-center gap-6 text-xs">
                             <a href="/privacy" className="hover:text-ashen-100 transition">
                                 Privacy
@@ -1188,8 +1188,8 @@ export default function Home({
 
                     {/* licensed-practice statement */}
                     <p className="text-ashen-200/70 mt-6 max-w-3xl text-[11px] leading-relaxed">
-                        Sanad is a fully licensed, confidential clinical practice. Every session is delivered by a licensed clinical psychologist. For
-                        a medical emergency or if you are in danger, please contact your local emergency number.
+                        OurSanad is a fully licensed, confidential clinical practice. Every session is delivered by a licensed clinical psychologist.
+                        For a medical emergency or if you are in danger, please contact your local emergency number.
                     </p>
                 </div>
             </footer>

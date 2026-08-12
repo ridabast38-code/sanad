@@ -28,7 +28,7 @@ export function SiteNav() {
     return (
         <header className="border-ashen-300/25 sticky top-0 z-40 flex h-20 items-center justify-between gap-4 border-b px-5 backdrop-blur-xl md:px-12 lg:px-16">
             <Link href="/dashboard" className="text-ashen-800">
-                <SanadLogo markClassName="size-8" wordClassName="text-2xl sm:text-[1.65rem]" />
+                <SanadLogo markClassName="h-8 w-auto" wordClassName="text-2xl sm:text-[1.65rem]" />
             </Link>
 
             <nav className="hidden flex-1 items-center justify-center gap-5 sm:flex sm:gap-9">

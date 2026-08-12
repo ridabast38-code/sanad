@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The card WhatsApp draws when someone shares a Sanad link.
+ * The card WhatsApp draws when someone shares an OurSanad link.
  *
  * It is the first thing most clients ever see of the app — the link gets
  * forwarded long before anyone opens it — and it fails silently: a missing or
@@ -21,6 +21,14 @@ test('the page carries the tags a link preview is built from', function () {
     ] as $tag) {
         $response->assertSee($tag, escape: false);
     }
+});
+
+test('the card and the tab both carry the platform name', function () {
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('<meta property="og:site_name" content="OurSanad">', escape: false)
+        ->assertSee('OurSanad', escape: false)
+        ->assertDontSee('content="Sanad —', escape: false);
 });
 
 test('the preview image is the real file, at the size the tags promise', function () {

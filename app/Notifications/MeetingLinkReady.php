@@ -41,7 +41,7 @@ class MeetingLinkReady extends Notification implements ShouldQueue
             ->line('With: '.$booking->practitioner->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->action('Join your session', $booking->meeting_link)
-            ->line('The button opens your video room — it becomes active 15 minutes before you begin. — Sanad');
+            ->line('The button opens your video room — it becomes active 15 minutes before you begin. — OurSanad');
     }
 
     /**

@@ -43,7 +43,7 @@ class SessionConfirmedForPractitioner extends Notification implements ShouldQueu
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->line('Your share: $'.number_format((float) $booking->practitioner_amount, 2))
             ->action('View your schedule', route('practitioner.dashboard'))
-            ->line('— Sanad');
+            ->line('— OurSanad');
     }
 
     /**

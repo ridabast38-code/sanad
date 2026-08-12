@@ -4,13 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Sanad') }}</title>
+        <title inertia>{{ config('app.name', 'OurSanad') }}</title>
 
-        <link rel="icon" href="/favicon.ico?v=10" sizes="any">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=10">
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=10">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=10">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=10">
+        <link rel="icon" href="/favicon.ico?v=11" sizes="any">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=11">
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=11">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=11">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=11">
 
         {{-- Social share / link preview (Open Graph + Twitter).
 
@@ -22,13 +22,13 @@
              The URLs are forced to https outside of local. WhatsApp silently
              drops the whole preview on a plain-http image, and url() emits http
              whenever the TLS terminates at a proxy in front of PHP. --}}
-        @php($ogTitle = 'Sanad — A safe space for your mind')
+        @php($ogTitle = 'OurSanad — A safe space for your mind')
         @php($ogDescription = 'Real, confidential sessions with licensed clinical psychologists — online, on your schedule, guided with care.')
-        @php($ogImage = app()->isLocal() ? url('/og-image.jpg?v=2') : secure_url('/og-image.jpg?v=2'))
+        @php($ogImage = app()->isLocal() ? url('/og-image.jpg?v=3') : secure_url('/og-image.jpg?v=3'))
         @php($ogUrl = app()->isLocal() ? url()->current() : secure_url(request()->path()))
         <meta name="description" content="{{ $ogDescription }}">
         <meta property="og:type" content="website">
-        <meta property="og:site_name" content="Sanad">
+        <meta property="og:site_name" content="OurSanad">
         <meta property="og:locale" content="en_US">
         <meta property="og:title" content="{{ $ogTitle }}">
         <meta property="og:description" content="{{ $ogDescription }}">
@@ -38,7 +38,7 @@
         <meta property="og:image:type" content="image/jpeg">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
-        <meta property="og:image:alt" content="Sanad — a safe space for your mind">
+        <meta property="og:image:alt" content="OurSanad — a safe space for your mind">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="{{ $ogTitle }}">
         <meta name="twitter:description" content="{{ $ogDescription }}">

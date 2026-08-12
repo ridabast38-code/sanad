@@ -47,7 +47,7 @@ class EmergencyController extends Controller
      */
     private function safety(): array
     {
-        $message = rawurlencode('Hi Sanad, I need urgent help.');
+        $message = rawurlencode('Hi OurSanad, I need urgent help.');
 
         return [
             'whatsapp_url' => 'https://wa.me/'.config('sanad.whatsapp').'?text='.$message,

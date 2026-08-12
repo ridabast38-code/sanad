@@ -30,14 +30,14 @@ const PREP: string[] = [
 export default function HowItWorks() {
     return (
         <ClientLayout>
-            <Head title="How Sanad works" />
+            <Head title="How OurSanad works" />
 
             <main className="mx-auto w-full max-w-3xl px-6 py-12 md:px-8 md:py-16">
                 <header className="mb-12">
                     <span className="border-ashen-200 text-ashen-700 bg-ashen-50/80 inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-[11px] font-medium tracking-[0.18em] uppercase">
                         <Sparkles className="size-3.5" /> A gentle guide
                     </span>
-                    <h1 className="font-display text-ashen-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">How Sanad works</h1>
+                    <h1 className="font-display text-ashen-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">How OurSanad works</h1>
                     <p className="text-ashen-500 mt-3 text-lg leading-relaxed">Support that meets you where you are — in four simple steps.</p>
                 </header>
 
@@ -61,7 +61,7 @@ export default function HowItWorks() {
                 <div className="border-ashen-100 bg-ashen-50/60 mt-6 flex items-start gap-3 rounded-2xl border p-5">
                     <ShieldCheck className="text-ashen-600 mt-0.5 size-5 shrink-0" />
                     <p className="text-ashen-600 text-sm leading-relaxed">
-                        Every Sanad psychologist is a licensed clinical psychologist, offering real, confidential care. For a medical emergency,
+                        Every OurSanad psychologist is a licensed clinical psychologist, offering real, confidential care. For a medical emergency,
                         please contact your local emergency number.
                     </p>
                 </div>

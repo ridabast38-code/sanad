@@ -415,7 +415,7 @@ html {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-    /* Sanad heading font — warm display serif (use as font-display) */
+    /* OurSanad heading font — warm display serif (use as font-display) */
     --font-display: 'Fraunces', ui-serif, Georgia, serif;
 
     /* cream (#faf6ef) is gone too — it read as a warm off-white, and the page is
@@ -446,7 +446,7 @@ html {
        Amber is still allowed, but only as a safety signal (emergency), never as
        decoration. */
 
-    /* Sanad signature — the slow breathing motion (use as animate-breathe) */
+    /* OurSanad signature — the slow breathing motion (use as animate-breathe) */
     --animate-breathe: breathe 8s ease-in-out infinite;
 
     --radius-lg: var(--radius);
@@ -542,7 +542,7 @@ html {
     --chart-5: hsl(27, 87%, 67%);
     --radius: 0.75rem;
 
-    /* Sanad shell — a soft warm-cream rail with warm-gray accents, in the same
+    /* OurSanad shell — a soft warm-cream rail with warm-gray accents, in the same
        family as the page so it feels like one calm surface. */
     --sidebar-background: hsl(42, 38%, 97%);
     --sidebar-foreground: hsl(80, 6%, 28%);

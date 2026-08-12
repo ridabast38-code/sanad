@@ -2,7 +2,7 @@ import { SOFT_EASE } from '@/components/reveal-text';
 import { motion } from 'motion/react';
 
 /**
- * Sanad's olive layer — the decorative vocabulary shared by every page.
+ * OurSanad's olive layer — the decorative vocabulary shared by every page.
  *
  * These started life inside the landing page and were lifted out unchanged so
  * the rest of the app can't drift away from them. The two rules that made them

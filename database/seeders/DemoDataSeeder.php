@@ -21,7 +21,7 @@ class DemoDataSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@sanad.test'],
             [
-                'name' => 'Sanad Admin',
+                'name' => 'OurSanad Admin',
                 'password' => Hash::make('password'),
                 'role' => UserRole::Admin,
                 'onboarded_at' => now(),

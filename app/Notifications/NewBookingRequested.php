@@ -43,7 +43,7 @@ class NewBookingRequested extends Notification implements ShouldQueue
             ->line('Price: $'.number_format((float) $booking->price, 2))
             ->line('It is awaiting payment — review it to accept once the money arrives.')
             ->action('Review booking', route('admin.bookings'))
-            ->line('Sanad');
+            ->line('OurSanad');
     }
 
     /**

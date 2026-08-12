@@ -27,12 +27,12 @@ class ExistingAccountNotice extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('You already have a Sanad account')
+            ->subject('You already have a OurSanad account')
             ->greeting('Welcome back')
-            ->line('Someone (hopefully you) just tried to sign up with this email — but you already have a Sanad account.')
+            ->line('Someone (hopefully you) just tried to sign up with this email — but you already have a OurSanad account.')
             ->line('You can simply log in. If you’ve forgotten your password, you can reset it.')
             ->action('Log in', route('login'))
             ->line('If this wasn’t you, no need to worry — nothing has changed on your account.')
-            ->salutation('With care, Sanad');
+            ->salutation('With care, OurSanad');
     }
 }

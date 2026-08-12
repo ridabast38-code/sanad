@@ -18,7 +18,7 @@ export default function AuthSplitLayout({
     description,
     photoSide = 'left',
     quote = 'A safe space for your mind.',
-    quoteFooter = 'Sanad',
+    quoteFooter = 'OurSanad',
 }: AuthLayoutProps) {
     const slide = { type: 'spring', stiffness: 200, damping: 30 } as const;
 
@@ -37,7 +37,7 @@ export default function AuthSplitLayout({
 
             <div className="absolute inset-0 z-10 flex flex-col justify-between p-12">
                 <Link href={route('home')} className="text-white">
-                    <SanadLogo className="select-none" markClassName="size-10" wordClassName="text-[1.75rem]" />
+                    <SanadLogo className="select-none" markClassName="h-10 w-auto" wordClassName="text-[1.75rem]" />
                 </Link>
                 <blockquote>
                     <p className="font-display max-w-md text-3xl leading-snug text-white">{quote}</p>
@@ -71,7 +71,7 @@ export default function AuthSplitLayout({
 
             <div className="relative z-10 mx-auto w-full max-w-sm">
                 <Link href={route('home')} className="text-ashen-800 mb-8 flex justify-center lg:hidden">
-                    <SanadLogo className="select-none" markClassName="size-10" wordClassName="text-[1.75rem]" />
+                    <SanadLogo className="select-none" markClassName="h-10 w-auto" wordClassName="text-[1.75rem]" />
                 </Link>
 
                 {/* content cross-fades when the title changes (login <-> register) */}

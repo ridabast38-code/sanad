@@ -42,7 +42,7 @@ class SessionCancelledForPractitioner extends Notification implements ShouldQueu
             ->line('Service: '.$booking->service->name)
             ->line('When: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->action('View your schedule', route('practitioner.dashboard'))
-            ->line('— Sanad');
+            ->line('— OurSanad');
     }
 
     /**

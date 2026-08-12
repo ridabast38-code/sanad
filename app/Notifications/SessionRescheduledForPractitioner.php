@@ -42,7 +42,7 @@ class SessionRescheduledForPractitioner extends Notification implements ShouldQu
             ->line('Service: '.$booking->service->name)
             ->line('New time: '.$booking->scheduled_at->format('l, M j, Y · g:i A'))
             ->action('View your schedule', route('practitioner.dashboard'))
-            ->line('— Sanad');
+            ->line('— OurSanad');
     }
 
     /**

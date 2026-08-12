@@ -16,7 +16,7 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     { title: 'Visit website', url: '/', icon: Globe },
-    { title: 'Help & contact', url: 'mailto:hello@sanad.com', icon: LifeBuoy },
+    { title: 'Help & contact', url: 'mailto:hello@oursanad.com', icon: LifeBuoy },
 ];
 
 export function AppSidebar() {

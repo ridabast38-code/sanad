@@ -70,7 +70,7 @@ export default function Book({ specialist, services, slots }: BookProps) {
             {/* ===== minimal public top bar ===== */}
             <header className="relative z-10 mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between px-6 py-4 md:px-10">
                 <Link href="/" className="font-display text-ashen-800 text-xl tracking-tight">
-                    Sanad
+                    OurSanad
                 </Link>
                 <div className="flex items-center gap-2">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>

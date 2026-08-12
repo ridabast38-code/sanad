@@ -51,11 +51,11 @@ Route::get('/', function () {
     return Inertia::render('home', [
         // The emergency WhatsApp fast lane — for visitors in crisis who aren't
         // registered, the quickest way to reach a real person.
-        'whatsappUrl' => $whatsapp('Hi Sanad, I need urgent help.'),
+        'whatsappUrl' => $whatsapp('Hi OurSanad, I need urgent help.'),
         // The everyday "ask us something" lane. Deliberately a separate message
         // from the crisis one so ordinary questions don't land in urgent triage
         // pre-labelled as an emergency.
-        'supportWhatsappUrl' => $whatsapp('Hi Sanad, I have a question.'),
+        'supportWhatsappUrl' => $whatsapp('Hi OurSanad, I have a question.'),
         'specialists' => $specialists,
     ]);
 })->name('home');

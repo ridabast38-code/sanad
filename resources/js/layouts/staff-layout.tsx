@@ -68,7 +68,7 @@ export default function StaffLayout({ title, children, fitViewport = false }: { 
                 <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-5 md:px-8">
                     <div className="flex items-center gap-3">
                         <Link href={isAdmin ? '/admin' : '/practitioner'} className="text-ashen-800">
-                            <SanadLogo markClassName="size-7" wordClassName="text-xl" />
+                            <SanadLogo markClassName="h-7 w-auto" wordClassName="text-xl" />
                         </Link>
                         <span className="bg-ashen-200 text-ashen-700 rounded-full px-2.5 py-0.5 text-[11px] font-semibold tracking-wide uppercase">
                             {isAdmin ? 'Admin' : 'Specialist'}

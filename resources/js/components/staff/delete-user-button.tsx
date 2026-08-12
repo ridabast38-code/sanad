@@ -46,8 +46,8 @@ export function DeleteUserButton({ id, name }: { id: number; name: string }) {
                             <div>
                                 <h3 className="font-display text-ashen-900 text-lg">Delete {name}?</h3>
                                 <p className="text-ashen-600 mt-1 text-sm leading-relaxed">
-                                    This permanently deletes {name} and <strong>everything attached to them</strong> — their profile, availability, and
-                                    every booking, transaction and session note they're on. It cannot be undone.
+                                    This permanently deletes {name} and <strong>everything attached to them</strong> — their profile, availability,
+                                    and every booking, transaction and session note they're on. It cannot be undone.
                                 </p>
                                 <p className="text-ashen-500 mt-2 text-xs">
                                     Want to keep their history? Close this and use <strong>Suspend</strong> instead.

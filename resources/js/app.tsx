@@ -10,7 +10,7 @@ declare global {
     const route: typeof routeFn;
 }
 
-const appName = import.meta.env.VITE_APP_NAME || 'Sanad';
+const appName = import.meta.env.VITE_APP_NAME || 'OurSanad';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),

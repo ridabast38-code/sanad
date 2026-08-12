@@ -81,8 +81,8 @@ export default function BookingPayment({ booking, methods, whatsappUrl }: Bookin
                             One last step — pay for your session
                         </h1>
                         <p className="text-ashen-600 mx-auto mt-3 max-w-xl text-sm leading-relaxed">
-                            Your time is held. To confirm it, send the amount below via Whish or OMT. Once we receive it, we’ll confirm
-                            your session and email you the details.
+                            Your time is held. To confirm it, send the amount below via Whish or OMT. Once we receive it, we’ll confirm your session
+                            and email you the details.
                         </p>
                     </motion.header>
 

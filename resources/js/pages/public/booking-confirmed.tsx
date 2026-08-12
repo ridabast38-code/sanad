@@ -83,7 +83,7 @@ export default function BookingConfirmed({ booking, methods, whatsappUrl }: Book
 
             <header className="relative z-10 mx-auto flex w-full max-w-3xl items-center justify-between px-4 py-5 md:px-8">
                 <Link href="/" className="font-display text-ashen-800 text-xl tracking-tight">
-                    Sanad
+                    OurSanad
                 </Link>
                 <Link
                     href="/login"

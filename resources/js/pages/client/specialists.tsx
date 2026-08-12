@@ -35,7 +35,7 @@ export default function Specialists({ practitioners }: SpecialistsProps) {
                         <h1 className="font-display text-ashen-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">Our specialists</h1>
                         <p className="text-ashen-600 mt-3 flex max-w-2xl items-start gap-2 text-sm leading-relaxed">
                             <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                            Every Sanad psychologist is a licensed clinical psychologist — real, confidential care.
+                            Every OurSanad psychologist is a licensed clinical psychologist — real, confidential care.
                         </p>
                     </header>
 

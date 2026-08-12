@@ -6,7 +6,7 @@ import StaffLayout from '@/layouts/staff-layout';
 export default function AdminClients({ clients }: { clients: ClientDetail[] }) {
     return (
         <StaffLayout title="Clients">
-            <PageHeader title="Clients" subtitle="Everyone using Sanad to find support." />
+            <PageHeader title="Clients" subtitle="Everyone using OurSanad to find support." />
 
             {clients.length === 0 ? (
                 <div className={`p-8 text-center ${CARD}`}>

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class TherapistSeeder extends Seeder
 {
     /**
-     * Seed Sanad's real specialists with services and weekly availability.
+     * Seed OurSanad's real specialists with services and weekly availability.
      */
     public function run(): void
     {

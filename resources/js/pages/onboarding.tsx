@@ -112,7 +112,7 @@ export default function Onboarding({ name }: { name: string }) {
 
     return (
         <div className="relative min-h-screen">
-            <Head title="Welcome to Sanad" />
+            <Head title="Welcome to OurSanad" />
 
             {/* glowing scroll-progress bar */}
             <motion.div

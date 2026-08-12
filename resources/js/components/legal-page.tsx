@@ -15,7 +15,7 @@ export function LegalPage({ title, children }: { title: string; children: ReactN
 
             <div className="relative mx-auto w-full max-w-3xl px-4 py-12 md:px-8 md:py-16">
                 <Link href="/" className="text-ashen-700 hover:text-ashen-900 inline-flex items-center gap-1.5 text-sm font-medium transition">
-                    <ArrowLeft className="size-4" /> Back to Sanad
+                    <ArrowLeft className="size-4" /> Back to OurSanad
                 </Link>
 
                 <h1 className="font-display text-ashen-800 mt-6 text-4xl tracking-tight md:text-5xl">{title}</h1>

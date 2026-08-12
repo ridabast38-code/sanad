@@ -27,11 +27,11 @@ class CompleteRegistration extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Confirm your email to finish creating your Sanad account')
+            ->subject('Confirm your email to finish creating your OurSanad account')
             ->greeting('One last step')
-            ->line('Welcome to Sanad. Confirm your email address to create your account and continue.')
+            ->line('Welcome to OurSanad. Confirm your email address to create your account and continue.')
             ->action('Confirm my email', route('register.confirm', $this->token))
             ->line('This link expires in an hour. If you didn’t try to sign up, you can safely ignore this email — no account is created until you confirm.')
-            ->salutation('With care, Sanad');
+            ->salutation('With care, OurSanad');
     }
 }

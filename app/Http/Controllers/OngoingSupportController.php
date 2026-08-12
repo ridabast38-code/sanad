@@ -49,7 +49,7 @@ class OngoingSupportController extends Controller
      */
     private function safety(): array
     {
-        $message = rawurlencode('Hi Sanad, I would like ongoing support.');
+        $message = rawurlencode('Hi OurSanad, I would like ongoing support.');
 
         return [
             'whatsapp_url' => 'https://wa.me/'.config('sanad.whatsapp').'?text='.$message,
