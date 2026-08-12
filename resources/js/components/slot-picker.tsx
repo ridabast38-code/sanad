@@ -122,25 +122,33 @@ export default function SlotPicker({ slots, value, onSelect }: { slots: Slot[]; 
 
             {/* Sticky, not absolute: it rides the bottom of whichever thing is
                 doing the scrolling. Nothing else tells a client that a week they
-                cannot see is sitting under the fold. */}
+                cannot see is sitting under the fold.
+
+                A dark pill with a label was the first attempt and it shouted —
+                on a page this quiet, a badge floating over the times reads as an
+                error toast. It is one small chevron now, in the page's own
+                greys, breathing rather than blinking. It scrolls on tap, which
+                is what a person tries first anyway. */}
             <AnimatePresence>
                 {!atEnd && (
-                    <motion.div
+                    <motion.button
+                        type="button"
                         key="more"
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        aria-hidden
-                        className="pointer-events-none sticky bottom-0 -mt-8 flex justify-center pb-1"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => end.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })}
+                        aria-label="Show more times"
+                        className="sticky bottom-0 -mt-6 self-center"
                     >
                         <motion.span
                             animate={{ y: [0, 3, 0] }}
-                            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                            className="bg-ashen-800/90 text-ashen-50 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium shadow-lg backdrop-blur-sm"
+                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                            className="border-ashen-300/50 bg-ashen-50/70 text-ashen-500 hover:text-ashen-800 hover:border-ashen-400 flex size-7 items-center justify-center rounded-full border backdrop-blur-sm transition-colors"
                         >
-                            More times below <ChevronDown className="size-3.5" />
+                            <ChevronDown className="size-3.5" />
                         </motion.span>
-                    </motion.div>
+                    </motion.button>
                 )}
             </AnimatePresence>
         </div>
