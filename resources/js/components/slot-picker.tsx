@@ -1,5 +1,5 @@
 import { Check, ChevronDown } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
 export interface Slot {
@@ -61,96 +61,95 @@ export default function SlotPicker({ slots, value, onSelect }: { slots: Slot[]; 
     const days = Array.from(new Set(slots.map((slot) => slot.day)));
 
     return (
-        <div className="scrollbar-hide relative flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
-            {days.map((day, index) => {
-                const daySlots = slots.filter((slot) => slot.day === day);
-                const { day_label, date_label } = daySlots[0];
+        <div className="flex flex-col lg:min-h-0 lg:flex-1">
+            <div className="scrollbar-hide flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
+                {days.map((day, index) => {
+                    const daySlots = slots.filter((slot) => slot.day === day);
+                    const { day_label, date_label } = daySlots[0];
 
-                return (
-                    <motion.div
-                        key={day}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                        className="flex flex-col gap-2"
-                    >
-                        <div className="flex items-baseline gap-2">
-                            <span className="text-ashen-700 text-sm font-semibold">{day_label}</span>
-                            <span className="bg-ashen-300/50 h-px flex-1" />
-                            <span className="text-ashen-400 text-[11px] font-medium tracking-[0.12em] uppercase">{date_label}</span>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                            {daySlots.map((slot) => {
-                                const selected = value === slot.iso;
-
-                                return (
-                                    <motion.button
-                                        type="button"
-                                        key={slot.iso}
-                                        onClick={() => onSelect(slot.iso)}
-                                        whileHover={{ y: -2 }}
-                                        whileTap={{ scale: 0.96 }}
-                                        transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-                                        aria-pressed={selected}
-                                        className={`relative isolate h-fit rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                                            selected
-                                                ? 'border-ashen-800 text-ashen-50'
-                                                : 'border-ashen-300/60 bg-ashen-50/60 text-ashen-700 hover:border-ashen-400 hover:bg-ashen-50'
-                                        }`}
-                                    >
-                                        {selected && (
-                                            <motion.span
-                                                layoutId="slot-selection"
-                                                transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-                                                className="from-ashen-700 to-ashen-900 absolute inset-0 -z-10 rounded-full bg-gradient-to-br shadow-sm"
-                                            />
-                                        )}
-                                        <span className="flex items-center gap-1.5">
-                                            {selected && <Check className="size-3.5" />}
-                                            {slot.time_label}
-                                        </span>
-                                    </motion.button>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                );
-            })}
-
-            <div ref={end} aria-hidden className="h-px shrink-0" />
-
-            {/* Sticky, not absolute: it rides the bottom of whichever thing is
-                doing the scrolling. Nothing else tells a client that a week they
-                cannot see is sitting under the fold.
-
-                A dark pill with a label was the first attempt and it shouted —
-                on a page this quiet, a badge floating over the times reads as an
-                error toast. It is one small chevron now, in the page's own
-                greys, breathing rather than blinking. It scrolls on tap, which
-                is what a person tries first anyway. */}
-            <AnimatePresence>
-                {!atEnd && (
-                    <motion.button
-                        type="button"
-                        key="more"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => end.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })}
-                        aria-label="Show more times"
-                        className="sticky bottom-0 -mt-6 self-center"
-                    >
-                        <motion.span
-                            animate={{ y: [0, 3, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                            className="border-ashen-300/50 bg-ashen-50/70 text-ashen-500 hover:text-ashen-800 hover:border-ashen-400 flex size-7 items-center justify-center rounded-full border backdrop-blur-sm transition-colors"
+                    return (
+                        <motion.div
+                            key={day}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.35, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                            className="flex flex-col gap-2"
                         >
-                            <ChevronDown className="size-3.5" />
-                        </motion.span>
-                    </motion.button>
-                )}
-            </AnimatePresence>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-ashen-700 text-sm font-semibold">{day_label}</span>
+                                <span className="bg-ashen-300/50 h-px flex-1" />
+                                <span className="text-ashen-400 text-[11px] font-medium tracking-[0.12em] uppercase">{date_label}</span>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2">
+                                {daySlots.map((slot) => {
+                                    const selected = value === slot.iso;
+
+                                    return (
+                                        <motion.button
+                                            type="button"
+                                            key={slot.iso}
+                                            onClick={() => onSelect(slot.iso)}
+                                            whileHover={{ y: -2 }}
+                                            whileTap={{ scale: 0.96 }}
+                                            transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+                                            aria-pressed={selected}
+                                            className={`relative isolate h-fit rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                                                selected
+                                                    ? 'border-ashen-800 text-ashen-50'
+                                                    : 'border-ashen-300/60 bg-ashen-50/60 text-ashen-700 hover:border-ashen-400 hover:bg-ashen-50'
+                                            }`}
+                                        >
+                                            {selected && (
+                                                <motion.span
+                                                    layoutId="slot-selection"
+                                                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                                                    className="from-ashen-700 to-ashen-900 absolute inset-0 -z-10 rounded-full bg-gradient-to-br shadow-sm"
+                                                />
+                                            )}
+                                            <span className="flex items-center gap-1.5">
+                                                {selected && <Check className="size-3.5" />}
+                                                {slot.time_label}
+                                            </span>
+                                        </motion.button>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    );
+                })}
+
+                <div ref={end} aria-hidden className="h-px shrink-0" />
+            </div>
+
+            {/* Below the times, never over them.
+
+                Two earlier versions floated: a dark labelled pill, then a small
+                round button, both `sticky` with a `backdrop-blur` and a looping
+                JS animation. Sticky + blur repaints a translucent layer against
+                moving content on every frame of a scroll, which is what made it
+                stutter — and anything hovering over the times reads as a toast
+                on a page this quiet.
+
+                So it sits in the layout instead: a hairline rule with a chevron
+                in the middle, the same rule that separates the days above it.
+                No blur, no overlay, and the only motion is the app's own
+                `breathe` — an 8s opacity drift on the compositor, with no
+                JavaScript behind it at all. It still scrolls on tap. */}
+            <button
+                type="button"
+                onClick={() => end.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })}
+                aria-label="Show more times"
+                className={`group mt-3 flex shrink-0 items-center gap-2 transition-opacity duration-500 ${
+                    atEnd ? 'pointer-events-none h-0 opacity-0' : 'opacity-100'
+                }`}
+            >
+                <span className="bg-ashen-300/50 h-px flex-1" />
+                <span className="text-ashen-400 group-hover:text-ashen-700 animate-breathe flex items-center gap-1 text-[10px] font-medium tracking-[0.14em] uppercase transition-colors">
+                    More <ChevronDown className="size-3" />
+                </span>
+                <span className="bg-ashen-300/50 h-px flex-1" />
+            </button>
         </div>
     );
 }
