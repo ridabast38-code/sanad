@@ -13,6 +13,7 @@ use App\Notifications\SessionCancelledForPractitioner;
 use App\Notifications\SessionConfirmedForPractitioner;
 use App\Notifications\SessionRescheduledForClient;
 use App\Notifications\SessionRescheduledForPractitioner;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia;
@@ -31,11 +32,16 @@ function makeBookablePractitioner(): User
     $service = Service::factory()->create();
     $practitioner->services()->attach($service, ['price' => 40]);
 
-    Availability::factory()->for($practitioner, 'practitioner')->create([
-        'day_of_week' => 1,
-        'start_time' => '17:00',
-        'end_time' => '20:00',
-    ]);
+    // Two days, deliberately. Only the next occurrence of each window is ever
+    // offered, so a one-day practitioner has exactly one bookable slot — and the
+    // tests below need a second free time to move a booking to.
+    foreach ([1, 4] as $day) {
+        Availability::factory()->for($practitioner, 'practitioner')->create([
+            'day_of_week' => $day,
+            'start_time' => '17:00',
+            'end_time' => '20:00',
+        ]);
+    }
 
     return $practitioner;
 }
@@ -77,6 +83,32 @@ test('the specialist profile page shows services and bookable slots', function (
             ->where('services.0.price', 40)
             ->has('slots')
         );
+});
+
+test('a weekly window is offered once, not again seven days later', function () {
+    $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);
+    $practitioner->practitionerProfile()->create([
+        'headline' => 'One evening a week',
+        'approval_status' => 'approved',
+        'approaches' => ['cbt'],
+        'languages' => ['english'],
+    ]);
+    $practitioner->services()->attach(Service::factory()->create(), ['price' => 40]);
+    Availability::factory()->for($practitioner, 'practitioner')->create([
+        'day_of_week' => 4,
+        'start_time' => '17:00',
+        'end_time' => '20:00',
+    ]);
+
+    $slots = $this->actingAs(User::factory()->create())
+        ->get(route('specialists.show', $practitioner))
+        ->viewData('page')['props']['slots'];
+
+    // The schedule repeats every week, but the client is only ever shown the
+    // coming turn of it — one window, one time, inside seven days.
+    expect($slots)->toHaveCount(1)
+        ->and(Carbon::parse($slots[0]['iso'])->isBefore(now()->addDays(8)))->toBeTrue()
+        ->and($slots[0]['time_label'])->toBe('5:00 PM');
 });
 
 test('unapproved practitioners have no public profile', function () {

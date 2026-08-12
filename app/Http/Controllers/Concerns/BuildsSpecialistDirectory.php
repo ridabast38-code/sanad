@@ -130,9 +130,20 @@ trait BuildsSpecialistDirectory
     }
 
     /**
-     * Concrete upcoming occurrences of the weekly availability windows (this
-     * week and the next), soonest first — with any slots that are already
-     * booked removed, so a time is never offered twice.
+     * Concrete upcoming occurrences of the weekly availability windows — the
+     * NEXT one of each, soonest first, with already-booked times removed so a
+     * slot is never offered twice.
+     *
+     * The weekly windows repeat forever, but only one turn of the week is ever
+     * offered. This used to return each window twice, this week's occurrence
+     * and the same time seven days later, which is what put "Thu 14 Aug 5:00 PM"
+     * and "Thu 21 Aug 5:00 PM" side by side in the client's list. The repeat is
+     * how the schedule is stored, not something a client needs to see: it made
+     * the list twice as long while saying nothing new, and it quietly promised
+     * a date three weeks of life could easily invalidate.
+     *
+     * `$daysAhead` is 0-6, and the only candidate that can already be past is
+     * today's, so the horizon here is exactly one week.
      *
      * @return Collection<int, Carbon>
      */
@@ -142,7 +153,7 @@ trait BuildsSpecialistDirectory
         $bookedTimestamps = $this->bookedTimestamps($practitioner);
 
         return $practitioner->availabilities
-            ->flatMap(function ($availability) use ($now) {
+            ->map(function ($availability) use ($now) {
                 $daysAhead = ($availability->day_of_week - $now->dayOfWeek + 7) % 7;
 
                 $candidate = $now->copy()
@@ -153,7 +164,7 @@ trait BuildsSpecialistDirectory
                     $candidate->addWeek();
                 }
 
-                return [$candidate, $candidate->copy()->addWeek()];
+                return $candidate;
             })
             ->reject(fn (Carbon $slot) => in_array($slot->getTimestamp(), $bookedTimestamps, true))
             ->sort()
@@ -183,15 +194,32 @@ trait BuildsSpecialistDirectory
     /**
      * The next bookable slots as concrete datetimes with display labels.
      *
-     * @return array<int, array{iso: string, label: string}>
+     * `label` is the whole thing on one line, for the admin's select menus.
+     * The client's picker groups by day instead, so it gets the pieces already
+     * split and named here — formatting a date in the browser would drift with
+     * the visitor's locale and put "14/08" in front of some clients and
+     * "08/14" in front of others.
+     *
+     * The cap is generous because a week of windows is short by construction;
+     * it exists to stop a pathological schedule from flooding the page.
+     *
+     * @return array<int, array{iso: string, label: string, day: string, day_label: string, date_label: string, time_label: string}>
      */
-    private function upcomingSlotOptions(User $practitioner, int $count = 6): array
+    private function upcomingSlotOptions(User $practitioner, int $count = 30): array
     {
         return $this->upcomingSlots($practitioner)
             ->take($count)
             ->map(fn (Carbon $slot) => [
                 'iso' => $slot->toIso8601String(),
                 'label' => $slot->format('D, M j · g:i A'),
+                'day' => $slot->toDateString(),
+                'day_label' => match (true) {
+                    $slot->isToday() => 'Today',
+                    $slot->isTomorrow() => 'Tomorrow',
+                    default => $slot->format('l'),
+                },
+                'date_label' => $slot->format('j M'),
+                'time_label' => $slot->format('g:i A'),
             ])
             ->values()
             ->all();

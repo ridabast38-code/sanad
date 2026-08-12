@@ -1,3 +1,4 @@
+import SlotPicker, { type Slot } from '@/components/slot-picker';
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import ClientLayout from '@/layouts/client-layout';
 import { Head, useForm } from '@inertiajs/react';
@@ -26,7 +27,7 @@ interface SpecialistProfileProps {
         duration_minutes: number | null;
         price: number;
     }[];
-    slots: { iso: string; label: string }[];
+    slots: Slot[];
 }
 
 export default function SpecialistProfile({ specialist, services, slots }: SpecialistProfileProps) {
@@ -156,26 +157,9 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
                                 <p className="text-ashen-500 flex shrink-0 items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase">
                                     <CalendarClock className="text-ashen-600 size-4" /> 2 · Pick a time
                                 </p>
-                                {slots.length > 0 ? (
-                                    <div className="scrollbar-hide flex flex-wrap content-start gap-2 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
-                                        {slots.map((slot) => (
-                                            <button
-                                                type="button"
-                                                key={slot.iso}
-                                                onClick={() => setData('scheduled_at', slot.iso)}
-                                                className={`h-fit rounded-full border px-4 py-2 text-sm font-medium transition ${
-                                                    data.scheduled_at === slot.iso
-                                                        ? 'border-ashen-600 bg-ashen-600 text-ashen-50 shadow-sm'
-                                                        : 'border-ashen-300/60 bg-ashen-50/60 text-ashen-800 hover:border-ashen-400'
-                                                }`}
-                                            >
-                                                {slot.label}
-                                            </button>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-ashen-500 text-sm">No open times right now — please check back soon.</p>
-                                )}
+                                <div className="scrollbar-hide lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
+                                    <SlotPicker slots={slots} value={data.scheduled_at} onSelect={(iso) => setData('scheduled_at', iso)} />
+                                </div>
                                 {errors.scheduled_at && <p className="text-sm text-red-600">{errors.scheduled_at}</p>}
                             </div>
 
