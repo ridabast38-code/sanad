@@ -137,13 +137,14 @@ trait BuildsSpecialistDirectory
      * The weekly windows repeat forever, but only one turn of the week is ever
      * offered. This used to return each window twice, this week's occurrence
      * and the same time seven days later, which is what put "Thu 14 Aug 5:00 PM"
-     * and "Thu 21 Aug 5:00 PM" side by side in the client's list. The repeat is
-     * how the schedule is stored, not something a client needs to see: it made
-     * the list twice as long while saying nothing new, and it quietly promised
-     * a date three weeks of life could easily invalidate.
+     * and "Thu 21 Aug 5:00 PM" side by side in the client's list.
      *
-     * `$daysAhead` is 0-6, and the only candidate that can already be past is
-     * today's, so the horizon here is exactly one week.
+     * An hour that has come and gone today is DROPPED, not rolled forward. It
+     * used to bounce to the same time next week, so at 2pm on a Monday the list
+     * still said "Monday, 12:00 PM" — a line that reads as today, three hours
+     * after today's version of it had passed. What is left is simply what is
+     * still ahead: `$daysAhead` is 0-6, so the window runs from now to the same
+     * weekday next week, minus whatever today has already used up.
      *
      * @return Collection<int, Carbon>
      */
@@ -156,16 +157,13 @@ trait BuildsSpecialistDirectory
             ->map(function ($availability) use ($now) {
                 $daysAhead = ($availability->day_of_week - $now->dayOfWeek + 7) % 7;
 
-                $candidate = $now->copy()
+                return $now->copy()
                     ->addDays($daysAhead)
                     ->setTimeFromTimeString($availability->start_time);
-
-                if ($candidate->isPast()) {
-                    $candidate->addWeek();
-                }
-
-                return $candidate;
             })
+            // `<=` on purpose: the hour that is striking right now is not
+            // something anyone can still book into.
+            ->reject(fn (Carbon $slot) => $slot->lessThanOrEqualTo($now))
             ->reject(fn (Carbon $slot) => in_array($slot->getTimestamp(), $bookedTimestamps, true))
             ->sort()
             ->values();

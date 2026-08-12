@@ -14,6 +14,20 @@ type Slot = {
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+/** Opens the day's sheet. It sits in two places per row — see the row comment. */
+function AddHoursButton({ day, onOpen, className }: { day: number; onOpen: (day: number) => void; className: string }) {
+    return (
+        <button
+            type="button"
+            onClick={() => onOpen(day)}
+            aria-label={`Choose times for ${DAYS[day]}`}
+            className={`border-ashen-300/60 text-ashen-600 hover:border-ashen-500 hover:text-ashen-900 size-8 shrink-0 items-center justify-center rounded-full border transition ${className}`}
+        >
+            <Plus className="mx-auto size-4" />
+        </button>
+    );
+}
+
 /** Rows read Monday → Sunday; the stored `day_of_week` numbering is untouched. */
 const WEEK = [1, 2, 3, 4, 5, 6, 0];
 
@@ -97,15 +111,21 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                                 initial={{ opacity: 0, y: 6 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                                className="border-ashen-200/50 flex items-center gap-3 border-b px-4 py-3 last:border-b-0 sm:px-5"
+                                className="border-ashen-200/50 flex flex-col gap-2 border-b px-4 py-3 last:border-b-0 sm:flex-row sm:items-center sm:gap-3 sm:px-5"
                             >
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenDay(day)}
-                                    className="text-ashen-800 hover:text-ashen-950 w-[4.5rem] shrink-0 text-left text-sm font-semibold transition sm:w-24"
-                                >
-                                    {DAYS[day]}
-                                </button>
+                                {/* On a phone the day and its + button take the first line
+                                and the times wrap full-width underneath; squeezing all
+                                three onto one line left the chips about two words wide. */}
+                                <div className="flex items-center justify-between gap-3 sm:w-24 sm:shrink-0">
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpenDay(day)}
+                                        className="text-ashen-800 hover:text-ashen-950 text-left text-sm font-semibold transition"
+                                    >
+                                        {DAYS[day]}
+                                    </button>
+                                    <AddHoursButton day={day} onOpen={setOpenDay} className="sm:hidden" />
+                                </div>
 
                                 <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
                                     {hours.length === 0 ? (
@@ -118,7 +138,7 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                                                 layout
                                                 onClick={() => toggleHour(day, time)}
                                                 whileTap={{ scale: 0.94 }}
-                                                title="Remove this hour"
+                                                title="Remove this time"
                                                 className="bg-ashen-100 text-ashen-700 hover:bg-ashen-200 hover:text-ashen-900 group inline-flex items-center gap-1 rounded-full py-1 pr-2 pl-2.5 text-xs font-medium transition"
                                             >
                                                 {hourLabel(time)}
@@ -128,14 +148,7 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                                     )}
                                 </div>
 
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenDay(day)}
-                                    aria-label={`Choose hours for ${DAYS[day]}`}
-                                    className="border-ashen-300/60 text-ashen-600 hover:border-ashen-500 hover:text-ashen-900 flex size-8 shrink-0 items-center justify-center rounded-full border transition"
-                                >
-                                    <Plus className="size-4" />
-                                </button>
+                                <AddHoursButton day={day} onOpen={setOpenDay} className="hidden sm:flex" />
                             </motion.div>
                         );
                     })}

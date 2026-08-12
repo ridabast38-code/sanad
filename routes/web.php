@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    // Approved psychologists, so the landing team cards can deep-link straight
+    // Approved doctors, so the landing team cards can deep-link straight
     // into each one's public (no-login) booking page.
     $specialists = User::query()
         ->where('role', UserRole::Practitioner)
@@ -71,7 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:client', 'onboarded'])->group(function () {
         Route::get('dashboard', [ClientHomeController::class, 'index'])->name('dashboard');
         Route::get('specialists', [SpecialistController::class, 'index'])->name('specialists.index');
-        Route::get('therapists/{practitioner}', [SpecialistController::class, 'show'])->name('specialists.show');
+        Route::get('doctors/{practitioner}', [SpecialistController::class, 'show'])->name('specialists.show');
         Route::get('how-it-works', fn () => Inertia::render('client/how-it-works'))->name('how-it-works');
         Route::post('bookings', [BookingController::class, 'store'])->name('bookings.store');
         Route::get('bookings/{booking}/pay', [BookingController::class, 'pay'])->name('bookings.pay');
@@ -128,7 +128,14 @@ Route::get('ongoing/{type}', [OngoingSupportController::class, 'show'])->name('o
 // The public directory — the landing's "View all" for visitors who aren't signed
 // in. Deliberately a separate path from the client-only `specialists.index`: that
 // one sits behind role:client, so a guest sent there would just bounce to login.
-Route::get('psychologists', [PublicBookingController::class, 'directory'])->name('psychologists');
+Route::get('doctors', [PublicBookingController::class, 'directory'])->name('doctors');
+
+// The directory used to live at /psychologists, and that link has been shared.
+// A permanent redirect keeps every copy of it working.
+Route::permanentRedirect('psychologists', 'doctors');
+
+// Same for the signed-in profile, which used to be /therapists/{id}.
+Route::permanentRedirect('therapists/{practitioner}', 'doctors/{practitioner}');
 
 // Public, no-login booking — the "book without an account" path offered from
 // the landing page. A visitor can complete a real booking as a guest, or be

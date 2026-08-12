@@ -23,7 +23,7 @@ import {
 import { AnimatePresence, motion, useMotionTemplate, useMotionValue, useScroll, useTransform } from 'motion/react';
 import { useRef, useState } from 'react';
 
-/** An approved psychologist, as shown on the landing team cards (from the DB). */
+/** An approved doctor, as shown on the landing team cards (from the DB). */
 interface LandingSpecialist {
     name: string;
     slug: string;
@@ -115,7 +115,7 @@ function RailArrow({ direction, onClick }: { direction: 'prev' | 'next'; onClick
         <motion.button
             type="button"
             onClick={onClick}
-            aria-label={next ? 'See more psychologists' : 'See previous psychologists'}
+            aria-label={next ? 'See more doctors' : 'See previous doctors'}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
@@ -186,7 +186,7 @@ export default function Home({
         {
             abbr: 'EMDR',
             summary: 'Process difficult memories so they lose their grip.',
-            body: 'EMDR uses gentle, guided eye movements to help your mind reprocess distressing experiences, so the memory of a shock feels less overwhelming over time. Delivered only by our licensed clinical psychologists.',
+            body: 'EMDR uses gentle, guided eye movements to help your mind reprocess distressing experiences, so the memory of a shock feels less overwhelming over time. Delivered only by our licensed clinical doctors.',
             best: 'Trauma · shock · painful memories',
         },
         {
@@ -223,7 +223,7 @@ export default function Home({
     const faqs = [
         {
             q: 'Is OurSanad real therapy?',
-            a: 'Yes. OurSanad connects you with licensed clinical psychologists for real, confidential sessions — a professional space to feel heard and genuinely supported. (For a medical emergency, please contact your local emergency number.)',
+            a: 'Yes. OurSanad connects you with licensed clinical doctors for real, confidential sessions — a professional space to feel heard and genuinely supported. (For a medical emergency, please contact your local emergency number.)',
         },
         {
             q: 'How do sessions work?',
@@ -369,7 +369,7 @@ export default function Home({
                                 className="border-ashen-200/40 bg-ashen-200/15 mb-3 flex w-fit items-center gap-2 rounded-full border px-4 py-2 backdrop-blur-md"
                             >
                                 <Sparkles className="text-ashen-200 h-4 w-4" />
-                                <span className="text-ashen-200 text-sm">Licensed clinical psychologists</span>
+                                <span className="text-ashen-200 text-sm">Licensed clinical doctors</span>
                             </motion.div>
 
                             <h1 className="text-ashen-200 hover:text-ashen-400 mb-2 text-4xl leading-[1.05] font-normal tracking-tight transition-colors duration-300 sm:text-5xl md:text-6xl lg:text-[80px]">
@@ -382,7 +382,7 @@ export default function Home({
                                 transition={{ duration: 0.8, delay: 0.4 }}
                                 className="text-ashen-200/85 max-w-xl text-sm leading-relaxed sm:text-base md:text-lg"
                             >
-                                Real, confidential sessions with licensed clinical psychologists — online, on your schedule, guided with care.
+                                Real, confidential sessions with licensed clinical doctors — online, on your schedule, guided with care.
                             </motion.p>
                         </div>
 
@@ -703,7 +703,7 @@ export default function Home({
                             <RevealText text="Methods, guided by specialists" delay={0.1} />
                         </h2>
                         <p className="text-ashen-700 mt-4 max-w-xl leading-relaxed">
-                            Evidence-based approaches, explained simply. Your licensed psychologist will help choose what fits you.
+                            Evidence-based approaches, explained simply. Your licensed doctor will help choose what fits you.
                         </p>
                     </motion.div>
 
@@ -781,7 +781,7 @@ export default function Home({
                     they read as supporting evidence rather than a separate band */}
                     <div className="border-ashen-800/30 mt-10 grid grid-cols-3 gap-4 border-t pt-8 text-center md:mt-12 md:pt-10">
                         {[
-                            { n: '100%', l: 'Licensed psychologists' },
+                            { n: '100%', l: 'Licensed doctors' },
                             { n: '3', l: 'Evidence-based approaches' },
                             { n: '3', l: 'Languages · Ar · En · Fr' },
                         ].map((s, i) => (
@@ -861,7 +861,7 @@ export default function Home({
                             visitor expects the public list, and bouncing them into a role-specific
                             dashboard view instead reads as a confusing detour. */}
                             <motion.a
-                                href="/psychologists"
+                                href="/doctors"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="group bg-ashen-200 text-ashen-900 hover:bg-ashen-100 mt-4 inline-flex items-center gap-2 rounded-full py-2 pr-5 pl-2 text-sm font-medium transition"
@@ -869,7 +869,7 @@ export default function Home({
                                 <span className="bg-ashen-900/10 rounded-full p-1 transition-transform group-hover:rotate-45">
                                     <ArrowUpRight className="h-4 w-4" />
                                 </span>
-                                View all psychologists
+                                View all doctors
                             </motion.a>
                         </div>
 
@@ -926,7 +926,7 @@ export default function Home({
 
                         {/* confident, licensed practice statement */}
                         <p className="text-ashen-400 mt-5 max-w-3xl text-xs leading-relaxed">
-                            Every OurSanad clinician is a licensed clinical psychologist, and OurSanad is a fully licensed, confidential clinical
+                            Every OurSanad doctor is licensed and clinically trained, and OurSanad is a fully licensed, confidential clinical
                             practice. For a medical emergency or if you are in danger, please contact your local emergency number.
                         </p>
                     </div>
@@ -968,7 +968,7 @@ export default function Home({
                                         <div>
                                             <p className="font-display text-xl">Talk to a real person</p>
                                             <p className="text-ashen-200/75 mt-1.5 text-sm leading-relaxed">
-                                                A licensed psychologist, never a bot. We usually reply within a day.
+                                                A licensed doctor, never a bot. We usually reply within a day.
                                             </p>
                                         </div>
                                         <div className="text-ashen-200/85 flex flex-col gap-2.5 pt-1 text-sm">
@@ -1070,7 +1070,7 @@ export default function Home({
                                 Care that feels like home.
                             </h2>
                             <p className="text-ashen-700 mx-auto mt-4 max-w-md leading-relaxed">
-                                Real, confidential care from licensed clinical psychologists — in your language, on your schedule, at your own pace.
+                                Real, confidential care from licensed clinical doctors — in your language, on your schedule, at your own pace.
                             </p>
                             <a
                                 href="#team"
@@ -1161,7 +1161,7 @@ export default function Home({
                                     <ShieldCheck className="text-ashen-300 h-4 w-4" /> Private &amp; confidential
                                 </li>
                                 <li className="flex items-center gap-2.5">
-                                    <Sparkles className="text-ashen-300 h-4 w-4" /> Licensed clinical psychologists
+                                    <Sparkles className="text-ashen-300 h-4 w-4" /> Licensed clinical doctors
                                 </li>
                                 <li className="flex items-center gap-2.5">
                                     <Globe className="text-ashen-300 h-4 w-4" /> Arabic · English · French
@@ -1188,8 +1188,8 @@ export default function Home({
 
                     {/* licensed-practice statement */}
                     <p className="text-ashen-200/70 mt-6 max-w-3xl text-[11px] leading-relaxed">
-                        OurSanad is a fully licensed, confidential clinical practice. Every session is delivered by a licensed clinical psychologist.
-                        For a medical emergency or if you are in danger, please contact your local emergency number.
+                        OurSanad is a fully licensed, confidential clinical practice. Every session is delivered by a licensed clinical doctor. For a
+                        medical emergency or if you are in danger, please contact your local emergency number.
                     </p>
                 </div>
             </footer>

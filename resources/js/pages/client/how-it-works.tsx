@@ -61,8 +61,8 @@ export default function HowItWorks() {
                 <div className="border-ashen-100 bg-ashen-50/60 mt-6 flex items-start gap-3 rounded-2xl border p-5">
                     <ShieldCheck className="text-ashen-600 mt-0.5 size-5 shrink-0" />
                     <p className="text-ashen-600 text-sm leading-relaxed">
-                        Every OurSanad psychologist is a licensed clinical psychologist, offering real, confidential care. For a medical emergency,
-                        please contact your local emergency number.
+                        Every OurSanad doctor is licensed and clinically trained, offering real, confidential care. For a medical emergency, please
+                        contact your local emergency number.
                     </p>
                 </div>
 

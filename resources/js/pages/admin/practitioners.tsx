@@ -293,7 +293,7 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                                     type="text"
                                     value={data.headline}
                                     onChange={(e) => setData('headline', e.target.value)}
-                                    placeholder="e.g. Licensed Clinical Psychologist"
+                                    placeholder="e.g. Licensed Clinical Doctor"
                                     className={inputClass}
                                 />
                             </Field>

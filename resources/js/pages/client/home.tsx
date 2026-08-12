@@ -314,7 +314,7 @@ function SpecialistsView({ practitioners }: { practitioners: Specialist[] }) {
                 </h1>
                 <p className="text-ashen-500 mt-2.5 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
                     <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                    Every OurSanad psychologist is a licensed clinical psychologist — real, confidential care.
+                    Every OurSanad doctor is licensed and clinically trained — real, confidential care.
                 </p>
             </header>
 
@@ -374,7 +374,7 @@ function SpecialistsView({ practitioners }: { practitioners: Specialist[] }) {
             )}
 
             {/* signed-in clients get the richer in-app profile as the booking step */}
-            <SpecialistPreviewModal specialist={preview} bookHref={(s) => `/therapists/${s.id}`} onClose={() => setPreview(null)} />
+            <SpecialistPreviewModal specialist={preview} bookHref={(s) => `/doctors/${s.id}`} onClose={() => setPreview(null)} />
         </div>
     );
 }

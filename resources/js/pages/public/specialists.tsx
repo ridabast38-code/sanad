@@ -27,7 +27,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
 
     return (
         <div className="sanad-split text-ashen-800 relative flex min-h-screen flex-col">
-            <Head title="Our psychologists" />
+            <Head title="Our doctors" />
 
             {/* atmosphere on the shell, so it runs behind the header rather than
             starting below it and leaving a seam across the page */}
@@ -89,12 +89,11 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                                 : `${visible.length} of ${practitioners.length}`}
                         </span>
                         <h1 className="font-display text-ashen-800 mt-3 text-3xl leading-tight tracking-tight sm:text-4xl lg:text-4xl">
-                            Our <span className="italic">psychologists</span>
+                            Our <span className="italic">doctors</span>
                         </h1>
                         <p className="text-ashen-500 mt-2.5 flex max-w-2xl items-start gap-2 text-[15px] leading-relaxed">
                             <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                            Every OurSanad psychologist is a licensed clinical psychologist, trained across CBT, EMDR and psychoanalysis — real,
-                            confidential care.
+                            Every OurSanad doctor is licensed and clinically trained across CBT, EMDR and psychoanalysis — real, confidential care.
                         </p>
                     </header>
 
@@ -111,7 +110,7 @@ export default function PublicSpecialists({ practitioners }: { practitioners: Sp
                     </div>
 
                     {practitioners.length === 0 ? (
-                        <EmptyState title="Our psychologists are on their way" body="We’re carefully selecting the right people. Check back soon." />
+                        <EmptyState title="Our doctors are on their way" body="We’re carefully selecting the right people. Check back soon." />
                     ) : visible.length === 0 ? (
                         <EmptyState
                             title="No one matches those filters"
@@ -214,7 +213,7 @@ function JoinPanel({ portrait = false }: { portrait?: boolean }) {
                         Create free account
                     </Link>
                     {/* says the quiet part out loud — the account is an offer, not a toll */}
-                    <p className="text-ashen-400 mt-2.5 text-center text-[11px] leading-relaxed">Or book any psychologist without one.</p>
+                    <p className="text-ashen-400 mt-2.5 text-center text-[11px] leading-relaxed">Or book any doctor without one.</p>
                 </div>
             </div>
         </div>

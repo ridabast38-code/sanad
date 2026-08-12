@@ -45,7 +45,7 @@ test('the public directory lists approved practitioners to a guest', function ()
     $service = Service::factory()->create();
     $practitioner->services()->attach($service, ['price' => 40]);
 
-    $this->get(route('psychologists'))
+    $this->get(route('doctors'))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->component('public/specialists')
@@ -64,7 +64,7 @@ test('the public directory hides practitioners who are not approved', function (
         'languages' => ['english'],
     ]);
 
-    $this->get(route('psychologists'))
+    $this->get(route('doctors'))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page->component('public/specialists')->has('practitioners', 0));
 });
@@ -73,7 +73,7 @@ test('a signed-in client is sent to the in-app directory instead of the public o
     $client = User::factory()->create();
 
     $this->actingAs($client)
-        ->get(route('psychologists'))
+        ->get(route('doctors'))
         ->assertRedirect(route('specialists.index'));
 });
 
@@ -94,7 +94,7 @@ test('the directory exposes the parts of the day each practitioner has slots in'
         ]);
     }
 
-    $this->get(route('psychologists'))
+    $this->get(route('doctors'))
         ->assertOk()
         ->assertInertia(fn (AssertableInertia $page) => $page
             ->where('practitioners.0.slot_periods', ['morning'])

@@ -34,8 +34,8 @@ interface BookProps {
 }
 
 /**
- * The guest booking page — the same psychologist, the same three columns and the
- * same viewport fit as the signed-in profile at /therapists/{id}.
+ * The guest booking page — the same doctor, the same three columns and the
+ * same viewport fit as the signed-in profile at /doctors/{id}.
  *
  * It used to be a different page entirely: two columns, a full-width account
  * banner across the top, and the whole thing scrolling. A visitor arriving from
@@ -76,7 +76,7 @@ export default function Book({ specialist, services, slots }: BookProps) {
                 <div className="flex items-center gap-2">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Link
-                            href="/psychologists"
+                            href="/doctors"
                             className="group border-ashen-600/40 text-ashen-700 hover:border-ashen-700 hover:text-ashen-900 inline-flex items-center gap-2 rounded-full border py-1.5 pr-4 pl-2 text-sm transition md:py-2"
                         >
                             <span className="bg-ashen-900/10 rounded-full p-1 transition-transform group-hover:-translate-x-0.5">
@@ -165,7 +165,7 @@ export default function Book({ specialist, services, slots }: BookProps) {
                             {services.length === 0 && (
                                 <div className="border-ashen-300/50 text-ashen-600 bg-ashen-50/40 rounded-2xl border border-dashed px-4 py-5 text-center text-sm">
                                     {firstName} is finishing setting up their session types. Please check back shortly, or{' '}
-                                    <Link href="/psychologists" className="text-ashen-700 font-medium underline-offset-2 hover:underline">
+                                    <Link href="/doctors" className="text-ashen-700 font-medium underline-offset-2 hover:underline">
                                         choose another specialist
                                     </Link>
                                     .
@@ -215,9 +215,7 @@ export default function Book({ specialist, services, slots }: BookProps) {
                             <p className="text-ashen-500 flex shrink-0 items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase">
                                 <CalendarClock className="text-ashen-600 size-4" /> 2 · Pick a time
                             </p>
-                            <div className="scrollbar-hide lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
-                                <SlotPicker slots={slots} value={data.scheduled_at} onSelect={(iso) => setData('scheduled_at', iso)} />
-                            </div>
+                            <SlotPicker slots={slots} value={data.scheduled_at} onSelect={(iso) => setData('scheduled_at', iso)} />
                             {errors.scheduled_at && <p className="text-sm text-red-600">{errors.scheduled_at}</p>}
                         </div>
 

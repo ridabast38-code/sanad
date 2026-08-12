@@ -9,8 +9,8 @@ export default function Terms() {
             </p>
             <h2>What OurSanad is</h2>
             <p>
-                OurSanad connects you with licensed clinical psychologists for real, confidential sessions. OurSanad is a fully licensed clinical
-                practice. It is not an emergency service: for a medical emergency, please contact your local emergency number.
+                OurSanad connects you with licensed clinical doctors for real, confidential sessions. OurSanad is a fully licensed clinical practice.
+                It is not an emergency service: for a medical emergency, please contact your local emergency number.
             </p>
             <h2>In an emergency</h2>
             <p>If you are in danger or in crisis, do not wait for a session — contact your local emergency number immediately.</p>

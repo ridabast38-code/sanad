@@ -18,6 +18,12 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Testing\AssertableInertia;
 
+// Slots are now "what is still ahead" — a window whose time has passed today is
+// dropped, not rolled to next week. That makes every slot assertion below
+// depend on the wall clock, so the clock is pinned: a Monday, early, with the
+// whole of Monday's 17:00 window still in front of it.
+beforeEach(fn () => $this->travelTo(Carbon::parse('2026-01-05 08:00:00')));
+
 function makeBookablePractitioner(): User
 {
     $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);
@@ -109,6 +115,37 @@ test('a weekly window is offered once, not again seven days later', function () 
     expect($slots)->toHaveCount(1)
         ->and(Carbon::parse($slots[0]['iso'])->isBefore(now()->addDays(8)))->toBeTrue()
         ->and($slots[0]['time_label'])->toBe('5:00 PM');
+});
+
+test('an hour that has already passed today is gone, not moved to next week', function () {
+    // Monday afternoon: the noon window is spent, the evening one is not.
+    $this->travelTo(Carbon::parse('2026-01-05 14:00:00'));
+
+    $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);
+    $practitioner->practitionerProfile()->create([
+        'headline' => 'Mondays',
+        'approval_status' => 'approved',
+        'approaches' => ['cbt'],
+        'languages' => ['english'],
+    ]);
+    $practitioner->services()->attach(Service::factory()->create(), ['price' => 40]);
+
+    foreach (['12:00', '14:00', '19:00'] as $start) {
+        Availability::factory()->for($practitioner, 'practitioner')->create([
+            'day_of_week' => 1,
+            'start_time' => $start,
+        ]);
+    }
+
+    $slots = $this->actingAs(User::factory()->create())
+        ->get(route('specialists.show', $practitioner))
+        ->viewData('page')['props']['slots'];
+
+    // Noon is behind us and 2pm is striking — neither is bookable, and neither
+    // should reappear as the same weekday a week out. Only 7pm survives.
+    expect($slots)->toHaveCount(1)
+        ->and($slots[0]['time_label'])->toBe('7:00 PM')
+        ->and($slots[0]['day_label'])->toBe('Today');
 });
 
 test('unapproved practitioners have no public profile', function () {

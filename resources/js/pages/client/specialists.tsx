@@ -35,7 +35,7 @@ export default function Specialists({ practitioners }: SpecialistsProps) {
                         <h1 className="font-display text-ashen-800 mt-4 text-4xl leading-tight tracking-tight md:text-5xl">Our specialists</h1>
                         <p className="text-ashen-600 mt-3 flex max-w-2xl items-start gap-2 text-sm leading-relaxed">
                             <ShieldCheck className="text-ashen-600 mt-0.5 size-4 shrink-0" />
-                            Every OurSanad psychologist is a licensed clinical psychologist — real, confidential care.
+                            Every OurSanad doctor is licensed and clinically trained — real, confidential care.
                         </p>
                     </header>
 
@@ -62,7 +62,7 @@ export default function Specialists({ practitioners }: SpecialistsProps) {
             </div>
 
             {/* signed-in clients get the richer in-app profile as the booking step */}
-            <SpecialistPreviewModal specialist={preview} bookHref={(s) => `/therapists/${s.id}`} onClose={() => setPreview(null)} />
+            <SpecialistPreviewModal specialist={preview} bookHref={(s) => `/doctors/${s.id}`} onClose={() => setPreview(null)} />
         </ClientLayout>
     );
 }

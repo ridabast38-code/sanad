@@ -6,11 +6,20 @@
 
         <title inertia>{{ config('app.name', 'OurSanad') }}</title>
 
-        <link rel="icon" href="/favicon.ico?v=11" sizes="any">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=11">
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=11">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=11">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=11">
+        {{-- The SVG is listed FIRST and is the one modern browsers use, including
+             for history and search suggestions. A ?v= does not reliably evict a
+             favicon — Chrome keeps its own icon database keyed by URL and is slow
+             to re-ask — so the new mark ships under a filename that has never
+             existed before, which nothing can have cached. It also carries a
+             prefers-color-scheme rule, so it turns pale on a dark tab strip
+             instead of disappearing into it. The PNGs and the .ico stay for
+             Safari and anything older. --}}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=12">
+        <link rel="icon" href="/favicon.ico?v=12" sizes="any">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=12">
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=12">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=12">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=12">
 
         {{-- Social share / link preview (Open Graph + Twitter).
 
@@ -23,7 +32,7 @@
              drops the whole preview on a plain-http image, and url() emits http
              whenever the TLS terminates at a proxy in front of PHP. --}}
         @php($ogTitle = 'OurSanad — A safe space for your mind')
-        @php($ogDescription = 'Real, confidential sessions with licensed clinical psychologists — online, on your schedule, guided with care.')
+        @php($ogDescription = 'Real, confidential sessions with licensed clinical doctors — online, on your schedule, guided with care.')
         @php($ogImage = app()->isLocal() ? url('/og-image.jpg?v=3') : secure_url('/og-image.jpg?v=3'))
         @php($ogUrl = app()->isLocal() ? url()->current() : secure_url(request()->path()))
         <meta name="description" content="{{ $ogDescription }}">

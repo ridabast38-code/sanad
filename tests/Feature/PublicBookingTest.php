@@ -34,7 +34,7 @@ function makePublicBookablePractitioner(): User
     return $practitioner;
 }
 
-test('the public booking page shows an approved psychologist with services and slots', function () {
+test('the public booking page shows an approved doctor with services and slots', function () {
     $practitioner = makePublicBookablePractitioner();
 
     $this->get(route('book.show', $practitioner))
@@ -48,7 +48,7 @@ test('the public booking page shows an approved psychologist with services and s
         );
 });
 
-test('an unapproved psychologist has no public booking page', function () {
+test('an unapproved doctor has no public booking page', function () {
     $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);
     $practitioner->practitionerProfile()->create([
         'headline' => 'Pending review',
@@ -116,7 +116,7 @@ test('a guest booking requires name, email and phone', function () {
     expect(Booking::count())->toBe(0);
 });
 
-test('a guest cannot take a slot the psychologist does not offer', function () {
+test('a guest cannot take a slot the doctor does not offer', function () {
     $practitioner = makePublicBookablePractitioner();
     $serviceId = $practitioner->services->first()->id;
 

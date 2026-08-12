@@ -1,5 +1,6 @@
-import { Check } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Check, ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 
 export interface Slot {
     iso: string;
@@ -24,8 +25,30 @@ export interface Slot {
  * highlight behind it is one shared `layoutId`, so choosing a different time
  * slides the selection there rather than blinking it on and off — the one bit
  * of motion that carries meaning, not decoration.
+ *
+ * It owns its own scroller so it can own the "there is more below" hint too.
  */
 export default function SlotPicker({ slots, value, onSelect }: { slots: Slot[]; value: string; onSelect: (iso: string) => void }) {
+    const end = useRef<HTMLDivElement>(null);
+    const [atEnd, setAtEnd] = useState(true);
+
+    // A sentinel against the VIEWPORT, not against a named scroll root: the list
+    // scrolls inside its own column on a desktop and with the whole page on a
+    // phone, and an observer with a null root reports both, because being
+    // clipped by a scrolling ancestor counts as not intersecting.
+    useEffect(() => {
+        const sentinel = end.current;
+
+        if (!sentinel) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(([entry]) => setAtEnd(entry.isIntersecting), { threshold: 1 });
+        observer.observe(sentinel);
+
+        return () => observer.disconnect();
+    }, [slots.length]);
+
     if (slots.length === 0) {
         return (
             <div className="border-ashen-300/50 bg-ashen-50/40 rounded-2xl border border-dashed px-4 py-6 text-center">
@@ -38,7 +61,7 @@ export default function SlotPicker({ slots, value, onSelect }: { slots: Slot[]; 
     const days = Array.from(new Set(slots.map((slot) => slot.day)));
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="scrollbar-hide relative flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
             {days.map((day, index) => {
                 const daySlots = slots.filter((slot) => slot.day === day);
                 const { day_label, date_label } = daySlots[0];
@@ -94,6 +117,32 @@ export default function SlotPicker({ slots, value, onSelect }: { slots: Slot[]; 
                     </motion.div>
                 );
             })}
+
+            <div ref={end} aria-hidden className="h-px shrink-0" />
+
+            {/* Sticky, not absolute: it rides the bottom of whichever thing is
+                doing the scrolling. Nothing else tells a client that a week they
+                cannot see is sitting under the fold. */}
+            <AnimatePresence>
+                {!atEnd && (
+                    <motion.div
+                        key="more"
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        aria-hidden
+                        className="pointer-events-none sticky bottom-0 -mt-8 flex justify-center pb-1"
+                    >
+                        <motion.span
+                            animate={{ y: [0, 3, 0] }}
+                            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                            className="bg-ashen-800/90 text-ashen-50 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium shadow-lg backdrop-blur-sm"
+                        >
+                            More times below <ChevronDown className="size-3.5" />
+                        </motion.span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

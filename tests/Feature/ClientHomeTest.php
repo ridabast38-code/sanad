@@ -4,7 +4,14 @@ use App\Enums\UserRole;
 use App\Models\Availability;
 use App\Models\Service;
 use App\Models\User;
+use Carbon\Carbon;
 use Inertia\Testing\AssertableInertia;
+
+// Slots are now "what is still ahead" — a window whose time has passed today is
+// dropped, not rolled to next week. That makes every slot assertion below
+// depend on the wall clock, so the clock is pinned: a Monday, early, with the
+// whole of Monday's 17:00 window still in front of it.
+beforeEach(fn () => $this->travelTo(Carbon::parse('2026-01-05 08:00:00')));
 
 test('the client home lists approved practitioners with their next available slot', function () {
     $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);

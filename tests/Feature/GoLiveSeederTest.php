@@ -68,7 +68,7 @@ test('an admin can create a fully set-up, bookable practitioner in one step', fu
         ->and($practitioner->availabilities()->count())->toBe(1);
 
     // fully set up = they show in the public directory straight away
-    $this->get(route('psychologists'))
+    $this->get(route('doctors'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page->where('practitioners.0.name', 'Dr Real Practitioner'));
 

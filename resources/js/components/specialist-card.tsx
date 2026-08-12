@@ -137,7 +137,7 @@ export function SpecialistCard({ specialist: p, fitHeight = false }: { specialis
                     <span className="bg-ashen-50 text-ashen-600 rounded-full px-4 py-2 text-sm font-medium">Coming soon</span>
                 ) : (
                     <Link
-                        href={`/therapists/${p.id}`}
+                        href={`/doctors/${p.id}`}
                         prefetch
                         className="group/btn bg-ashen-700 hover:bg-ashen-800 inline-flex items-center gap-2 rounded-full py-2 pr-2 pl-4 text-sm font-medium text-white transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97]"
                     >
@@ -182,7 +182,7 @@ export function SpecialistPortraitCard({
      */
     onSelect?: (specialist: Specialist) => void;
 }) {
-    const target = href ?? `/therapists/${p.id}`;
+    const target = href ?? `/doctors/${p.id}`;
 
     const inner = (
         <>

@@ -39,7 +39,7 @@ class PublicBookingController extends Controller
     }
 
     /**
-     * The public, no-login booking page for one psychologist. A visitor who
+     * The public, no-login booking page for one doctor. A visitor who
      * came from the landing page can pick a session and time, then choose to
      * create an account or simply continue as a guest — the same booking either
      * way, the account is only an invitation.

@@ -78,8 +78,8 @@ function OngoingClosing({ lines, safety, isGuest }: ClosingProps) {
                     These steps ease the moment. A specialist helps you heal what's underneath.
                 </h3>
                 <p className="text-ashen-700 mt-4 leading-relaxed">
-                    Grounding calms the body right now. To truly move through what happened, our licensed clinical psychologists work with you over
-                    time — through approaches like <span className="text-ashen-900 font-medium">CBT</span>,{' '}
+                    Grounding calms the body right now. To truly move through what happened, our licensed clinical doctors work with you over time —
+                    through approaches like <span className="text-ashen-900 font-medium">CBT</span>,{' '}
                     <span className="text-ashen-900 font-medium">EMDR</span>, and <span className="text-ashen-900 font-medium">psychoanalysis</span> —
                     at a pace that feels right for you.
                 </p>

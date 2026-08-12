@@ -157,9 +157,7 @@ export default function SpecialistProfile({ specialist, services, slots }: Speci
                                 <p className="text-ashen-500 flex shrink-0 items-center gap-1.5 text-xs font-medium tracking-[0.12em] uppercase">
                                     <CalendarClock className="text-ashen-600 size-4" /> 2 · Pick a time
                                 </p>
-                                <div className="scrollbar-hide lg:min-h-0 lg:flex-1 lg:overflow-y-auto lg:pr-1">
-                                    <SlotPicker slots={slots} value={data.scheduled_at} onSelect={(iso) => setData('scheduled_at', iso)} />
-                                </div>
+                                <SlotPicker slots={slots} value={data.scheduled_at} onSelect={(iso) => setData('scheduled_at', iso)} />
                                 {errors.scheduled_at && <p className="text-sm text-red-600">{errors.scheduled_at}</p>}
                             </div>
 
