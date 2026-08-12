@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Database\Factories\AvailabilityFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,33 @@ class Availability extends Model
         return [
             'day_of_week' => 'integer',
         ];
+    }
+
+    /**
+     * Fill in the end of a window that was saved as a bare start time.
+     *
+     * Practitioners pick an hour, not a range: "Monday 12 PM" is one session a
+     * client can book, and the slot builder only ever reads `start_time`. The
+     * column stays because the schema and the seeders have always had it, and
+     * because a session needs a length the day an actual calendar wants one —
+     * so an hour is written here rather than leaving a hole in a NOT NULL
+     * column. Anything that passes its own `end_time` keeps it.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Availability $availability): void {
+            if ($availability->end_time !== null) {
+                return;
+            }
+
+            $end = Carbon::parse($availability->start_time)->addHour();
+
+            // 23:00 would roll into the next day and read as an end before its
+            // start; the last hour of the day simply ends with the day.
+            $availability->end_time = $end->isSameDay(Carbon::parse($availability->start_time))
+                ? $end->format('H:i')
+                : '23:59';
+        });
     }
 
     /**

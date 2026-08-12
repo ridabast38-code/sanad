@@ -1,62 +1,73 @@
+import HourPicker, { hourLabel } from '@/components/staff/hour-picker';
 import { CARD, PageHeader } from '@/components/staff/kit';
-import TimeRange from '@/components/staff/time-range';
 import StaffLayout from '@/layouts/staff-layout';
 import { useForm } from '@inertiajs/react';
 import { Check, Plus, X } from 'lucide-react';
+import { motion } from 'motion/react';
+import { useState } from 'react';
 
 type Slot = {
     day_of_week: number;
     start_time: string;
-    end_time: string;
     [key: string]: number | string;
 };
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-/** Cards read Monday → Sunday; the stored `day_of_week` numbering is untouched. */
+/** Rows read Monday → Sunday; the stored `day_of_week` numbering is untouched. */
 const WEEK = [1, 2, 3, 4, 5, 6, 0];
 
+/**
+ * A practitioner's weekly hours.
+ *
+ * One hour is one bookable session, which is the whole model: there is no
+ * start-and-end to fill in, because a range never meant anything here — the
+ * booking page only ever offered the time a window began. Saying "5 PM" and
+ * meaning one session at 5 PM is what the founder and the software already
+ * agreed on; the form was the only thing still asking for more.
+ *
+ * Seven tall cards of dropdowns became seven rows, and picking hours moved into
+ * a sheet over a blurred page (see HourPicker). The whole week now fits a phone
+ * screen without scrolling, which is where practitioners actually set this.
+ */
 export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
     const { data, setData, put, processing, recentlySuccessful } = useForm<{ windows: Slot[] }>({
-        windows: windows.map((w) => ({ day_of_week: w.day_of_week, start_time: w.start_time, end_time: w.end_time })),
+        windows: windows.map((w) => ({ day_of_week: w.day_of_week, start_time: w.start_time })),
     });
 
-    /** A second window on a day starts where the last one ended, so they never overlap by default. */
-    const addWindow = (day: number) => {
-        const existing = data.windows.filter((w) => w.day_of_week === day);
-        const last = existing
-            .map((w) => w.end_time)
-            .sort()
-            .pop();
-        const start = last && last < '22:00' ? last : '17:00';
-        const end = `${String(Math.min(Number(start.slice(0, 2)) + 3, 23)).padStart(2, '0')}:${start.slice(3)}`;
+    const [openDay, setOpenDay] = useState<number | null>(null);
 
-        setData('windows', [...data.windows, { day_of_week: day, start_time: start, end_time: end }]);
+    const hoursFor = (day: number) =>
+        data.windows
+            .filter((w) => w.day_of_week === day)
+            .map((w) => String(w.start_time))
+            .sort();
+
+    /** Adding and removing are the same gesture — the chip is either on or off. */
+    const toggleHour = (day: number, time: string) => {
+        const exists = data.windows.some((w) => w.day_of_week === day && w.start_time === time);
+
+        setData(
+            'windows',
+            exists
+                ? data.windows.filter((w) => !(w.day_of_week === day && w.start_time === time))
+                : [...data.windows, { day_of_week: day, start_time: time }],
+        );
     };
-
-    const removeWindow = (index: number) =>
-        setData(
-            'windows',
-            data.windows.filter((_, i) => i !== index),
-        );
-
-    const updateWindow = (index: number, start: string, end: string) =>
-        setData(
-            'windows',
-            data.windows.map((w, i) => (i === index ? { ...w, start_time: start, end_time: end } : w)),
-        );
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         put('/practitioner/schedule', { preserveScroll: true });
     };
 
+    const total = data.windows.length;
+
     return (
         <StaffLayout title="Schedule" fitViewport>
             <form onSubmit={submit} className="flex flex-1 flex-col lg:min-h-0">
                 <PageHeader
-                    title="Your schedule"
-                    subtitle="Set the weekly windows when clients can book you. They repeat every week."
+                    title="Your hours"
+                    subtitle="Pick the hours you're free each week. Each one is a single session a client can book, and it repeats every week — clients are shown the coming seven days."
                     action={
                         <div className="flex items-center gap-3">
                             {recentlySuccessful && (
@@ -76,56 +87,75 @@ export default function PractitionerSchedule({ windows }: { windows: Slot[] }) {
                     tight
                 />
 
-                <div className="scrollbar-hide grid gap-4 md:grid-cols-2 lg:min-h-0 lg:flex-1 lg:grid-cols-3 lg:content-start lg:overflow-y-auto lg:pr-1">
-                    {WEEK.map((day) => {
-                        const dayName = DAYS[day];
-                        const dayWindows = data.windows.map((w, i) => ({ ...w, index: i })).filter((w) => w.day_of_week === day);
+                <div className={`scrollbar-hide overflow-hidden lg:min-h-0 lg:flex-1 lg:overflow-y-auto ${CARD}`}>
+                    {WEEK.map((day, index) => {
+                        const hours = hoursFor(day);
 
                         return (
-                            <div key={day} className={`p-5 ${CARD}`}>
-                                <div className="mb-3 flex items-center justify-between">
-                                    <h2 className="font-display text-ashen-800 text-lg">{dayName}</h2>
-                                    <button
-                                        type="button"
-                                        onClick={() => addWindow(day)}
-                                        className="text-ashen-700 hover:bg-ashen-50 flex size-7 items-center justify-center rounded-full transition"
-                                        aria-label={`Add window to ${dayName}`}
-                                    >
-                                        <Plus className="size-4" />
-                                    </button>
+                            <motion.div
+                                key={day}
+                                initial={{ opacity: 0, y: 6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: index * 0.04, ease: [0.22, 1, 0.36, 1] }}
+                                className="border-ashen-200/50 flex items-center gap-3 border-b px-4 py-3 last:border-b-0 sm:px-5"
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenDay(day)}
+                                    className="text-ashen-800 hover:text-ashen-950 w-[4.5rem] shrink-0 text-left text-sm font-semibold transition sm:w-24"
+                                >
+                                    {DAYS[day]}
+                                </button>
+
+                                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+                                    {hours.length === 0 ? (
+                                        <span className="text-ashen-300 text-sm">Not available</span>
+                                    ) : (
+                                        hours.map((time) => (
+                                            <motion.button
+                                                type="button"
+                                                key={time}
+                                                layout
+                                                onClick={() => toggleHour(day, time)}
+                                                whileTap={{ scale: 0.94 }}
+                                                title="Remove this hour"
+                                                className="bg-ashen-100 text-ashen-700 hover:bg-ashen-200 hover:text-ashen-900 group inline-flex items-center gap-1 rounded-full py-1 pr-2 pl-2.5 text-xs font-medium transition"
+                                            >
+                                                {hourLabel(time)}
+                                                <X className="size-3 opacity-40 transition group-hover:opacity-100" />
+                                            </motion.button>
+                                        ))
+                                    )}
                                 </div>
 
-                                {dayWindows.length === 0 ? (
-                                    <p className="text-ashen-400 text-sm">Unavailable</p>
-                                ) : (
-                                    <div className="space-y-2">
-                                        {dayWindows.map((w) => (
-                                            <div key={w.index} className="bg-ashen-50 flex items-center gap-2 rounded-xl px-2.5 py-2">
-                                                <div className="min-w-0 flex-1">
-                                                    <TimeRange
-                                                        compact
-                                                        start={w.start_time}
-                                                        end={w.end_time}
-                                                        onChange={(start, end) => updateWindow(w.index, start, end)}
-                                                    />
-                                                </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeWindow(w.index)}
-                                                    className="text-ashen-400 hover:text-ashen-700 flex size-6 shrink-0 items-center justify-center rounded-full transition"
-                                                    aria-label="Remove window"
-                                                >
-                                                    <X className="size-4" />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenDay(day)}
+                                    aria-label={`Choose hours for ${DAYS[day]}`}
+                                    className="border-ashen-300/60 text-ashen-600 hover:border-ashen-500 hover:text-ashen-900 flex size-8 shrink-0 items-center justify-center rounded-full border transition"
+                                >
+                                    <Plus className="size-4" />
+                                </button>
+                            </motion.div>
                         );
                     })}
                 </div>
+
+                <p className="text-ashen-400 mt-3 shrink-0 text-xs">
+                    {total === 0
+                        ? 'No hours yet — clients cannot book you until you add some.'
+                        : `${total} bookable hour${total === 1 ? '' : 's'} a week.`}
+                </p>
             </form>
+
+            {openDay !== null && (
+                <HourPicker
+                    dayName={DAYS[openDay]}
+                    selected={hoursFor(openDay)}
+                    onToggle={(time) => toggleHour(openDay, time)}
+                    onClose={() => setOpenDay(null)}
+                />
+            )}
         </StaffLayout>
     );
 }

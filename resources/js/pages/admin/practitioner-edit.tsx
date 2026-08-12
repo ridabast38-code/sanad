@@ -1,6 +1,6 @@
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
+import { HourSelect } from '@/components/staff/hour-picker';
 import { CARD, PageHeader } from '@/components/staff/kit';
-import TimeRange from '@/components/staff/time-range';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, Plus, Trash2, UserPlus } from 'lucide-react';
@@ -18,11 +18,12 @@ interface Options {
     languages: string[];
 }
 
-interface Window {
+// `type` (not `interface`), same reason as PriceRow below: Inertia's useForm
+// data type needs an index signature, which named interfaces don't satisfy.
+type Window = {
     day_of_week: number;
     start_time: string;
-    end_time: string;
-}
+};
 
 interface Practitioner {
     id: number;
@@ -107,7 +108,7 @@ export default function PractitionerEdit({
             data.services.map((s) => (s.id === id ? { ...s, price } : s)),
         );
 
-    const addWindow = () => setData('availability', [...data.availability, { day_of_week: 1, start_time: '17:00', end_time: '20:00' }]);
+    const addWindow = () => setData('availability', [...data.availability, { day_of_week: 1, start_time: '17:00' }]);
     const removeWindow = (i: number) =>
         setData(
             'availability',
@@ -310,11 +311,7 @@ export default function PractitionerEdit({
                                             </option>
                                         ))}
                                     </select>
-                                    <TimeRange
-                                        start={w.start_time}
-                                        end={w.end_time}
-                                        onChange={(start_time, end_time) => setWindow(i, { start_time, end_time })}
-                                    />
+                                    <HourSelect value={w.start_time} onChange={(start_time) => setWindow(i, { start_time })} />
                                     <button
                                         type="button"
                                         onClick={() => removeWindow(i)}

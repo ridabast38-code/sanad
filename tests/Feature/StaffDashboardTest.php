@@ -63,20 +63,25 @@ test('the admin sees platform-wide money, others are bounced away', function () 
         ->assertRedirect('/dashboard');
 });
 
-test('a practitioner can replace their availability windows', function () {
+test('a practitioner saves bare hours and the end of each fills itself in', function () {
     $practitioner = User::factory()->create(['role' => UserRole::Practitioner]);
     $practitioner->practitionerProfile()->create(['approval_status' => 'approved']);
 
     $this->actingAs($practitioner)
         ->put('/practitioner/schedule', [
             'windows' => [
-                ['day_of_week' => 1, 'start_time' => '17:00', 'end_time' => '20:00'],
-                ['day_of_week' => 3, 'start_time' => '09:00', 'end_time' => '12:00'],
+                ['day_of_week' => 1, 'start_time' => '17:00'],
+                ['day_of_week' => 3, 'start_time' => '09:00'],
             ],
         ])
         ->assertRedirect('/practitioner/schedule');
 
-    expect($practitioner->availabilities()->count())->toBe(2);
+    // An hour is one session, so the form only ever sends where it starts.
+    $windows = $practitioner->availabilities()->orderBy('day_of_week')->get();
+
+    expect($windows)->toHaveCount(2)
+        ->and(substr((string) $windows[0]->end_time, 0, 5))->toBe('18:00')
+        ->and(substr((string) $windows[1]->end_time, 0, 5))->toBe('10:00');
 });
 
 test('the admin can approve a practitioner', function () {

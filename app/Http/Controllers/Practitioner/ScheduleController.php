@@ -24,7 +24,6 @@ class ScheduleController extends Controller
                 'id' => $window->id,
                 'day_of_week' => $window->day_of_week,
                 'start_time' => substr((string) $window->start_time, 0, 5),
-                'end_time' => substr((string) $window->end_time, 0, 5),
             ]);
 
         return Inertia::render('practitioner/schedule', ['windows' => $windows]);
@@ -39,18 +38,17 @@ class ScheduleController extends Controller
             'windows' => ['present', 'array'],
             'windows.*.day_of_week' => ['required', 'integer', 'between:0,6'],
             'windows.*.start_time' => ['required', 'date_format:H:i'],
-            'windows.*.end_time' => ['required', 'date_format:H:i', 'after:windows.*.start_time'],
         ]);
 
         $user = $request->user();
 
         $user->availabilities()->delete();
 
+        // An hour, not a range — the end fills itself in (see Availability).
         foreach ($validated['windows'] as $window) {
             $user->availabilities()->create([
                 'day_of_week' => $window['day_of_week'],
                 'start_time' => $window['start_time'],
-                'end_time' => $window['end_time'],
             ]);
         }
 

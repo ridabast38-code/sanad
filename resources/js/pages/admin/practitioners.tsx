@@ -1,7 +1,7 @@
 import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import { DeleteUserButton } from '@/components/staff/delete-user-button';
+import { HourSelect } from '@/components/staff/hour-picker';
 import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
-import TimeRange from '@/components/staff/time-range';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, router, useForm } from '@inertiajs/react';
 import { Plus, Trash2, UserPlus, X } from 'lucide-react';
@@ -153,7 +153,6 @@ type PriceRow = {
 type Window = {
     day_of_week: number;
     start_time: string;
-    end_time: string;
 };
 
 function AddAccountForm({ options, services, onDone }: { options: Options; services: ServiceOption[]; onDone: () => void }) {
@@ -204,7 +203,7 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
             data.services.map((s) => (s.id === id ? { ...s, price } : s)),
         );
 
-    const addWindow = () => setData('availability', [...data.availability, { day_of_week: 1, start_time: '17:00', end_time: '20:00' }]);
+    const addWindow = () => setData('availability', [...data.availability, { day_of_week: 1, start_time: '17:00' }]);
     const removeWindow = (i: number) =>
         setData(
             'availability',
@@ -411,11 +410,7 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                                                 </option>
                                             ))}
                                         </select>
-                                        <TimeRange
-                                            start={w.start_time}
-                                            end={w.end_time}
-                                            onChange={(start_time, end_time) => setWindow(i, { start_time, end_time })}
-                                        />
+                                        <HourSelect value={w.start_time} onChange={(start_time) => setWindow(i, { start_time })} />
                                         <button
                                             type="button"
                                             onClick={() => removeWindow(i)}

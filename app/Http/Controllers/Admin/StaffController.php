@@ -55,7 +55,6 @@ class StaffController extends Controller
             'availability' => ['array'],
             'availability.*.day_of_week' => ['required_with:availability', 'integer', 'between:0,6'],
             'availability.*.start_time' => ['required_with:availability', 'date_format:H:i'],
-            'availability.*.end_time' => ['required_with:availability', 'date_format:H:i', 'after:availability.*.start_time'],
         ]);
 
         $user = User::create([
@@ -131,7 +130,6 @@ class StaffController extends Controller
                     ->map(fn ($window) => [
                         'day_of_week' => $window->day_of_week,
                         'start_time' => substr((string) $window->start_time, 0, 5),
-                        'end_time' => substr((string) $window->end_time, 0, 5),
                     ])
                     ->values(),
             ],
@@ -183,7 +181,6 @@ class StaffController extends Controller
             'availability' => ['array'],
             'availability.*.day_of_week' => ['required_with:availability', 'integer', 'between:0,6'],
             'availability.*.start_time' => ['required_with:availability', 'date_format:H:i'],
-            'availability.*.end_time' => ['required_with:availability', 'date_format:H:i', 'after:availability.*.start_time'],
         ]);
 
         $practitioner->name = $validated['name'];
@@ -263,7 +260,7 @@ class StaffController extends Controller
     /**
      * Create the weekly availability windows the admin entered.
      *
-     * @param  array<int, array{day_of_week: int, start_time: string, end_time: string}>  $windows
+     * @param  array<int, array{day_of_week: int, start_time: string}>  $windows
      */
     private function syncAvailability(User $user, array $windows): void
     {
@@ -271,7 +268,6 @@ class StaffController extends Controller
             $user->availabilities()->create([
                 'day_of_week' => $window['day_of_week'],
                 'start_time' => $window['start_time'],
-                'end_time' => $window['end_time'],
             ]);
         }
     }

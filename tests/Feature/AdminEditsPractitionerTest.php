@@ -40,7 +40,7 @@ test('an admin can update a practitioner profile, pricing and availability', fun
         'approaches' => ['cbt', 'emdr'],
         'languages' => ['english'],
         'services' => [['id' => $service->id, 'price' => 150]],
-        'availability' => [['day_of_week' => 1, 'start_time' => '17:00', 'end_time' => '20:00']],
+        'availability' => [['day_of_week' => 1, 'start_time' => '17:00']],
     ])->assertRedirect(route('admin.practitioners'));
 
     $practitioner->refresh();
@@ -81,8 +81,8 @@ test('editing replaces the full weekly availability set', function () {
         'name' => $practitioner->name,
         'email' => $practitioner->email,
         'availability' => [
-            ['day_of_week' => 2, 'start_time' => '16:00', 'end_time' => '19:00'],
-            ['day_of_week' => 4, 'start_time' => '10:00', 'end_time' => '13:00'],
+            ['day_of_week' => 2, 'start_time' => '16:00'],
+            ['day_of_week' => 4, 'start_time' => '10:00'],
         ],
     ])->assertRedirect(route('admin.practitioners'));
 
