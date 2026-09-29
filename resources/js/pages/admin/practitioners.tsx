@@ -2,10 +2,11 @@ import { APPROACH_LABELS, LANGUAGE_LABELS } from '@/components/specialist-card';
 import { DeleteUserButton } from '@/components/staff/delete-user-button';
 import { HourSelect } from '@/components/staff/hour-picker';
 import { Badge, CARD, money, PageHeader, Section, Table, Td } from '@/components/staff/kit';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import StaffLayout from '@/layouts/staff-layout';
 import { Link, router, useForm } from '@inertiajs/react';
 import { Plus, Trash2, UserPlus, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Practitioner {
     id: number;
@@ -187,7 +188,14 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
     });
 
     const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+    const errorSummary = useRef<HTMLDivElement>(null);
     const isPractitioner = data.role === 'practitioner';
+
+    useEffect(() => {
+        if (Object.keys(errors).length > 0) {
+            errorSummary.current?.focus();
+        }
+    }, [errors]);
 
     const pickPhoto = (file: File | null) => {
         setData('photo', file);
@@ -229,7 +237,7 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
     };
 
     return (
-        <form onSubmit={submit} className={`p-6 md:p-7 ${CARD}`}>
+        <form noValidate onSubmit={submit} className={`p-6 md:p-7 ${CARD}`}>
             <div className="mb-5 flex items-center gap-2">
                 <span className="bg-ashen-100 text-ashen-700 flex size-9 items-center justify-center rounded-full">
                     <UserPlus className="size-5" />
@@ -237,13 +245,36 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                 <h3 className="font-display text-ashen-800 text-lg">New account</h3>
             </div>
 
+            {Object.keys(errors).length > 0 && (
+                <Alert ref={errorSummary} tabIndex={-1} variant="destructive" className="mb-5" aria-labelledby="account-errors-title">
+                    <AlertTitle id="account-errors-title">Account could not be created</AlertTitle>
+                    <AlertDescription>
+                        <p>Please correct the following and try again. Your entries have been kept.</p>
+                        <ul className="mt-2 list-disc space-y-1 pl-5">
+                            {Object.entries(errors).map(([field, message]) => (
+                                <li key={field}>{message}</li>
+                            ))}
+                        </ul>
+                    </AlertDescription>
+                </Alert>
+            )}
+
             {/* ===== login basics ===== */}
             <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Full name" error={errors.name}>
                     <input type="text" value={data.name} onChange={(e) => setData('name', e.target.value)} className={inputClass} />
                 </Field>
-                <Field label="Email" error={errors.email}>
-                    <input type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} className={inputClass} />
+                <Field label="Email" error={errors.email} htmlFor="staff-email" errorId="staff-email-error">
+                    <input
+                        id="staff-email"
+                        type="email"
+                        autoComplete="off"
+                        aria-invalid={Boolean(errors.email)}
+                        aria-describedby={errors.email ? 'staff-email-error' : undefined}
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
+                        className={inputClass}
+                    />
                 </Field>
                 <Field label="Temporary password" error={errors.password}>
                     <input type="text" value={data.password} onChange={(e) => setData('password', e.target.value)} className={inputClass} />
@@ -433,7 +464,7 @@ function AddAccountForm({ options, services, onDone }: { options: Options; servi
                     disabled={processing}
                     className="bg-ashen-700 hover:bg-ashen-800 rounded-full px-6 py-2.5 text-sm font-semibold text-white transition disabled:opacity-60"
                 >
-                    Create account
+                    {processing ? 'Creating account…' : 'Create account'}
                 </button>
                 <p className="text-ashen-400 text-xs">They sign in at /login with this email &amp; password, then change it under Account.</p>
             </div>
@@ -473,12 +504,30 @@ function ChipGroup({
     );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({
+    label,
+    error,
+    htmlFor,
+    errorId,
+    children,
+}: {
+    label: string;
+    error?: string;
+    htmlFor?: string;
+    errorId?: string;
+    children: React.ReactNode;
+}) {
     return (
         <div>
-            <label className="text-ashen-600 mb-1.5 block text-sm font-medium">{label}</label>
+            <label htmlFor={htmlFor} className="text-ashen-600 mb-1.5 block text-sm font-medium">
+                {label}
+            </label>
             {children}
-            {error && <p className="text-ashen-500 mt-1 text-xs">{error}</p>}
+            {error && (
+                <p id={errorId} className="mt-1 text-sm text-red-700">
+                    {error}
+                </p>
+            )}
         </div>
     );
 }
